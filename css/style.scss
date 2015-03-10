@@ -1,0 +1,1268 @@
+$red:#FF0000;
+
+body {
+    background: #C6CEBF;
+    margin: 0;
+    font-family: "Open Sans", arial;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#wrapper {
+    width: 1100px;
+    margin: 0 auto;
+}
+#header {
+    width: 100%;
+    height: 100px;
+    background:#f7f2f2;
+    float: left;
+    position: relative;
+}
+
+#logo{
+    height: 100px;
+    background: url(../img/logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 200px;
+    float: left;
+    position: relative;
+}
+
+#menu-top{
+	float:right;
+	position:relative;
+	width: 900px;
+	height: 100px;
+
+
+	ul {
+		float: right;
+		position: relative;
+		display:inline-block;
+		list-style: none;
+		margin:0;
+	}
+
+	li{
+		display: inline;
+		line-height: 100px;
+		height: 100px;
+		margin:5px;
+		text-decoration: none !important;
+	}
+
+	li , a {
+		text-decoration: none;
+		color:$red;
+	}
+}
+
+.menu-info {
+	@extend #menu-top;
+	li{
+		line-height: 50px;
+	}
+}
+
+.menu-info li{
+    line-height: 50px;
+}
+
+.menu-settings {
+    background: #FF0000 !important;
+}
+
+.menu-settings *{
+    color: #FFF !important;
+}
+
+.menu-info {
+    width: 100%;
+    height: 50px;
+    float: left;
+    position: relative;
+    background: #586969;
+}
+
+#slide_competitions{
+	width: 20%;
+	float:right;
+	position: relative;
+	margin:1%;
+	height: 30px;
+}
+
+#select_competition{
+	float:right;
+	position: relative;
+	height: 30px;
+	width: 100%;
+}
+
+
+.main{
+    position: relative;
+    float: left;
+    width: 1080px;
+    margin: 10px 10px 0 10px;
+    padding: 10px;
+    background: #FFF;
+}
+
+.half_size{
+    width: 50% !important;
+    float: left;
+    position: relative;
+    padding: 10px;
+}
+
+#content {
+    position: relative;
+    float: left;
+    width: 100%;
+    background: #ededed;
+    padding:0 0 10px 0;
+}
+
+#footer{
+	float:left;
+	position: relative;
+	width: 100%;
+	background: #FF0000;
+	height: 100px;
+}
+
+#team-info {
+    position: relative;
+    float: left;
+    height: 40px;
+	height: 40px;
+	width: 100%;
+    background: #FFF;
+    padding: 5px;
+}
+.name-team {
+    position: relative;
+    float: left;
+    font-size: 25px;
+    color: #0f2bf8;
+    height: 100%;
+    line-height: 30px;
+    
+	a {
+	    text-decoration: none;
+	    color: #0006f8;
+	    font-size: 16px;
+	    background: #FFFFDD;
+	    padding: 0 3px 0 3px;
+	    margin: 2px;
+	    float: left;
+	    position: relative;
+	}
+	
+}
+
+a.current-round{
+	background: #dfe7ff;
+}
+
+
+.balance {
+    position: relative;
+    float: right;
+    font-size: 25px;
+    height: 100%;
+    line-height: 30px;
+}
+#balance-display {
+    float: right;
+}
+.market-select {
+    margin: 8px;
+}
+
+.market-select-button {
+
+}
+.select-calc , .select-current-round{
+    float: left;
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
+#side-roster {
+    position: relative;
+    float: left;
+    margin: 10px;
+    width: 320px;
+    background: #FFF;
+    padding: 10px;
+}
+#side-players {
+    position: relative;
+    float: left;
+    margin: 10px 10px 10px 0;
+    width: 750px;
+}
+
+
+.roster-item{
+	float: left;
+	position: relative;
+	width: 100%;
+}
+
+.old-player{
+    border-bottom: 1px solid #f8f8f8;
+    height: 40px;
+    float:left;
+    position: relative;
+    width: 100%;
+}
+
+.role-icon{
+	float: left;
+	position: relative;
+	width: auto;
+	margin:5px;
+	
+	span{
+		padding: 5px 10px;
+		float: left; 
+	}
+}
+
+.name-player-item{
+	margin: 5px 5px 5px 0;
+	float: left;
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+}
+
+.value-player-item{
+	margin: 5px 5px 5px 0;
+	float: left;
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+}
+
+.info-player-item{
+	float: right;
+	position: relative;
+}
+
+.info-player-link-item{
+	@extend .value-player-item;
+}
+
+.new-player{
+	@extend .old-player;
+	width: 50%;
+	list-style: none;
+	display: block;
+	
+}
+
+
+
+
+.td-name {
+    float: left;
+}
+.td-cost {
+    float: right;
+}
+#utility-row {
+    position: relative;
+    float: left;
+    padding: 10px;
+    width: 100%;
+    background: #FFF;
+    margin-bottom: 10px;
+}
+
+#change-left{
+    position: relative;
+    float: left;
+}
+
+.but {
+    position: relative;
+    float: left;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+.but-role {
+    padding: 5px 10px;
+    font-size: 20px;
+    color: #FFF;
+}
+.but-over {
+    width: 100%;
+    margin-top: 3px;
+    height: 3px;
+    display: none;
+}
+.p-but {
+    background: #f8081f;
+}
+.d-but {
+    background: #1df84a;
+}
+.c-but {
+    background: #f8d300
+}
+.a-but {
+    background: #0006f8
+}
+
+.role-icon {
+    color: #FFF;
+    float: left;
+}
+
+
+.role-icon span {
+    padding: 5px 10px;
+    float: left;
+}
+
+.icon{
+    padding: 5px 10px;
+    margin: 5px;
+    color: #FFF;
+}
+#value-selector {
+    width: 400px;
+    float: right;
+    position: relative;
+    padding: 3px;
+}
+#players {
+    position: relative;
+    float: left;
+    width: 100%;
+}
+#search-box {
+    position: relative;
+    float: left;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #FFF;
+}
+
+#search-element {
+    width: 50%;
+}
+
+.competition_creation #search-box{
+    height: 52px;
+}
+
+.competition_creation #search-element{
+    width: 100%;
+}
+
+.competition_creation h3{
+    width: 100%;
+    margin: 0;
+}
+
+.sort {
+    width: 24%;
+    padding: 5px;
+}
+
+.list {
+    position: relative;
+    float: left;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    background: #FFF;
+}
+
+.new-player {
+    width: 50%;
+}
+
+td.name-role {
+    padding: 5px;
+    color: #FFF;
+    margin-bottom: 5px;
+}
+table.roster-item {
+    width: 100%;
+    background: white;
+    float: left;
+    position: relative;
+}
+.in-roster-player td, .in-team-player td, .in-reserve-player td {
+    padding: 5px;
+}
+.type_name {
+    float: left;
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 18px;
+    background: #FFF;
+    padding: 5px;
+}
+#save , #mod-button {
+    margin-bottom: 10px;
+    height: 35px;
+    font-size: 20px;
+    color: #FFF;
+    text-align: center;
+    background: #246BB2;
+    cursor: pointer;
+    line-height: 35px;
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+.disabled_but{
+    background: #9F9F9F;
+    color:#FFF;
+}
+
+
+#market {
+    padding: 5px;
+    width: 100%;
+    float: left;
+    position: relative;
+    background: #FFF;
+    margin-bottom: 10px;
+}
+.market-player {
+    float: left;
+    position: relative;
+    padding: 10px;
+    width: 45%;
+}
+.market-player span {
+    padding: 5px 10px;
+    color: #FFF;
+}
+
+.market-player .name{
+    color:#000 !important;
+}
+
+#market-cost {
+    padding: 5px 10px;
+    width: 80%;
+    float: left;
+    position: relative;
+}
+
+#mod-form #market-cost{
+    height: 35px;
+    line-height: 25px;
+}
+
+#mod-button {
+    float: right;
+    position: relative;
+    width: 20%;
+    border: 0;
+}
+#mod-form {
+    float: left;
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    line-height: 35px;
+}
+
+.formation {
+    float: left;
+    position: relative;
+    background: #FFF;
+    height: auto;
+}
+
+.standing{
+    height: auto;
+    margin:10px 0 0 0;
+}
+
+.user_position{
+    background: rgba(255,0,0,0.5);
+    color: #FFF;
+}
+
+.dots{
+    text-align: center;
+}
+
+.old-player.finalvote{
+    text-align: right;
+    background: rgba(81,81,81,0.5) !important;
+}
+
+.no_formation{
+    height: auto;
+    max-height: 140px;
+    /*margin-bottom: 810px;*/
+}
+
+.row_formation{
+    float: left;
+    position: relative;
+    margin: 10px 0 0 0 ;
+}
+
+.title_formation {
+    padding: 1% 1% 1% 2%;
+    background: #246BB2;
+    color: #FFF;
+    font-size: 22px;
+    position: relative;
+    float: left;
+    width: 100%;
+}
+
+.formation .old-player img {
+    max-height: 18px;
+    width: auto;
+}
+
+tr {
+  border-bottom: 1px solid #cccccc;
+}
+tr:last-child {
+  border-bottom: 0px;
+}
+
+.panchina_info{
+    background: #CCCCCC;
+    text-align: center;
+    color: #FFF;
+    line-height: 40px;
+}
+
+.total_info {
+    background: #246BB2;
+    text-align: right;
+    color: #FFF;
+    line-height: 30px;
+	padding:5px;
+}
+.finalvote,.vote{
+	padding: 5px; 
+	width: 40px;
+	margin:0 !important;
+	height:40px;
+	text-align: center;
+}
+
+.finalvote{
+    background: #515151;
+    color: #FFF;
+}
+
+.complete-standing{
+	width: 100%;
+}
+
+.value_player{
+    text-align: center;
+}
+#team table, #reserve_team table {
+    width: 100%;
+    position: relative;
+    float: left;
+    padding: 1%;
+    background: #FFF;
+}
+#team, #reserve_team {
+    width: 49%;
+    float: left;
+    position: relative;
+    margin-bottom: 10px;
+}
+#reserve_team {
+    margin-left: 2%;
+}
+
+.username_title {
+    float: left;
+    position: relative;
+}
+.tactic_title {
+    float: right;
+    position: relative;
+}
+
+
+.P {
+    background: #ed5565;
+}
+.D {
+    background: #ff0;
+}
+.C {
+    background: #ffcccc;
+}
+.A {
+    background: #ccffff
+}
+.panca {
+    background: #cc33ff;
+}
+
+.error_display{
+    /*background: #FF0000;
+    opacity: 0.5;*/
+    width: 98%;
+    margin:1%;
+    /*padding: 1%;
+    color:#FFF;
+    float:left;
+	position:relative;*/
+}
+
+.login_form{
+	width: 30%;
+	margin:5% 35%;
+	float:left;
+	position: relative;
+}
+
+.signup_form{
+    width: 90%;
+    margin: 0 5% 5% 5%;
+}
+
+.signup_form hr{
+    float: left;
+    position: relative;
+    width: 99%;
+    margin: 5px;
+}
+
+.signup_form a.half_size{
+    text-align: center;
+}
+
+.login_form input{
+	width:100%;
+	margin: 10px 0;
+}
+
+.signup_form input{
+    width: auto;
+    margin: 0;
+}
+
+.login_form h3{
+	margin:0;
+}
+
+.box{
+	float: left;
+	position: relative;
+	color:#000;
+	margin: 10px;
+}
+
+.value_box{
+	width: 1080px;
+	/* opacity:0.5; */
+	height: 100px;
+	background: #FFFFFF;
+}
+
+.value_map_box{
+	width: 620px;
+	height: 200px;
+}
+
+.value_info_box{
+	width: 1080px;
+	height: auto;
+}
+
+.value_chart{
+	height:auto;
+	width: 1080px !important;
+	margin: 0px 10px 0px 0px;
+	padding: 10px;
+	background: #FFFFFF;
+	float:left;
+	position:relative;
+}
+
+.value_chart .ct-point,.value_chart .ct-line{
+	stroke:  #0065fb !important;
+}
+
+.vote_chart .ct-point,.vote_chart .ct-line{
+	stroke:#933131 !important ;
+}
+
+.value_chart .ct-area{
+	fill:  #0065fb !important;
+}
+
+
+
+.vote_chart .ct-area{
+	fill:#933131 !important ;
+}
+
+.tables_box{
+	width: 1080px;
+	height: auto;
+	float: left;
+	position: relative;
+
+}
+
+
+.value_info_table_box{
+	width: 535px;
+	height: auto;
+	float: left;
+	position: relative;
+	background: #FFFFFF;
+	margin-right: 5px;
+	padding: 10px;
+
+}
+
+.vote_info_table_box{
+	margin-left: 5px;
+	margin-right: 0
+
+}
+
+.value_stat_box{
+	width: 1080px;
+	padding: 5px;
+	background: #FFFFFF;
+}
+
+.name_box{
+	width: 25%;
+	float: left;
+	position: relative;
+	height: 100%;
+	padding: 10px;
+	background: #FFFFFF;
+}
+
+.name_item{
+	height: 50px;
+	line-height: 50px;
+	width:100%;
+	float:left;
+	position:relative;
+	font-size: 36px;
+	text-align: center;
+	color:#000;
+}
+
+.role_item{
+	height: 30px;
+	line-height: 30px;
+	width:100%;
+	float:left;
+	position:relative;
+	font-size: 25px;
+	text-align: center;
+	color:#000;
+}
+
+.team_box{
+	width: 25%;
+	float: left;
+	position: relative;
+	height: 100%;
+	padding: 10px;
+	background: #FFFFFF;
+}
+
+.team_box img{
+	max-height: 100%;
+	height: auto;
+	width: auto;
+	float: left;
+	position: relative;
+}
+
+.team_item{
+	height: 100%;
+	line-height: 80px;
+	margin-left: 5px;
+	float:left;
+	position:relative;
+	font-size: 26px;
+	text-align: center;
+	color:#000;
+}
+
+
+.role_box{
+	float:left;
+	position:relative;
+	width: 50%;
+	height: 33%;
+	padding: 1%;
+	background: #FFF;
+	color:#000;
+
+}
+
+.media_box{
+	float:left;
+	position:relative;
+	width: 25%;
+	height: 50%;
+	background: #9c4c4c;
+	color:#fff;
+}
+
+.presenze_box{
+	background: #933131 !important ;
+}
+
+.current_value_box{
+	float:left;
+	position:relative;
+	width: 25%;
+	height: 50%;
+	background: #5291f0;
+	color:#FFF;
+}
+
+
+
+.first_value_box{
+	background: #0065fb;
+}
+
+.value_item{
+	height: 100%;
+	line-height: 50px;
+	width:50%;
+	float:left;
+	position:relative;
+	font-size: 36px;
+	text-align: center;
+}
+
+.descript_item{
+	width: 50%;
+	float:left;
+	position:relative;
+	text-align: center;
+	height: 100%;
+	line-height: 50px;
+}
+
+
+
+.media_item{
+
+}
+
+.media_value_item{
+
+}
+
+.value_tr td{
+	text-align: center;
+}
+
+.value_info_table_box table{
+	width: 100%;
+}
+
+.value_stat_box table{
+	width: 100%;
+}
+
+.settings{
+    float: left;
+    position: relative;
+}
+
+.setting_item{
+    float: left;
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    height: 40px;
+}
+
+.setting_item_name{
+    float:left;
+    position: relative;
+    margin-right: 10px;
+    font-size: 21px;
+    line-height: 30px;
+    color: #0f2bf8;
+    min-width: 270px;
+}
+
+.setting_item_descript{
+    float: left;
+    position: relative;
+    margin-right: 10px;
+    font-style: italic;
+    line-height: 21px;
+    line-height: 30px;
+}
+
+.setting_item_input{
+    float: right;
+    position: relative;
+    height: 30px;
+}
+
+.setting_item_element{
+    float: left;
+    position: relative;
+    height: 30px;
+}
+
+.settings #save{
+    border: none;
+}
+
+
+
+/* SQUARED FOUR */
+.squaredFour {
+	width: 50%;	
+    margin: 20px auto;
+	position: relative;
+    float: left;
+}
+  
+input[type=checkbox] {
+    float: left;
+    position: relative;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+/* end .squaredFour */
+
+
+.competition_creation .user_name{
+    float:left;
+    position: relative;
+}
+
+.competition_creation #users{
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+.competition_creation ul{
+    float: left;
+    position: relative;
+    width: 100%;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+}
+
+.competition_creation li{
+    float: left;
+    position: relative;
+    width: 50%;
+    padding: 5px;
+    margin: 0;
+}
+
+#users input[type="button"] {
+    width: 49%;
+    padding: 5px;
+    float: left;
+    position: relative;
+    margin: 5px 0;
+}
+
+#select_all{
+    margin-right: 1% !important;
+}
+
+#deselect_all{
+    margin-left: 1% !important;
+}
+
+/* TEAM LIST */
+
+.team_list{
+    background: none;
+    padding: 0;
+}
+
+.team_item_list{
+    height: auto;
+    position: relative;
+    float: left;
+    background: #FFFFFF;
+    margin: 0 1% 10px 0;
+    width: 49% !important;
+}
+
+.team_item_list.margin_left{
+    margin: 0 0 10px 1%;
+}
+
+.team_list .name_team{
+    width: 90%;
+    margin: 5px 5%;
+    float: left;
+    position: relative;
+    font-size: 26px;
+    height: 30px;
+    line-height: 30px;
+    color:#000000;
+}
+
+.team_list .name_user{
+    font-size: 18px;
+    height: 24px;
+    line-height: 24px;
+}
+
+.team_list .bottom_team{
+    
+}
+
+.team_list a{
+    text-decoration: none;
+    color:#000000;
+}
+
+.bottom_team .credits{
+    float: left;
+    position: relative;
+    height: 26px;
+    /* padding: 3px; */
+    margin: 0 1% 0 0;
+    line-height: 26px;
+    color: #FF0000;
+    width: 49%;
+}
+
+.team_single #side-roster{
+    margin: 0px;
+}
+
+.team_single .half_size{
+    width:49% !important;
+}
+
+.team_single #side-roster{
+    margin:0 1% 0 0;
+}
+
+.title_team_single{
+    background: #FF0000;
+    font-size: 25px;
+    color: #FFF;
+    text-align: center;
+    margin:0 1% 0 0;
+}
+
+.title_transfers_single{
+   background: #586969;
+    margin:0 0 0 1%;
+}
+
+.transfers{
+    margin:0 0 0 1%;
+    padding: 0;
+}
+
+.name_market{
+    background: #FF0000;
+    opacity: 0.5;
+    color: #FFF;
+    padding: 10px;
+    float: left;
+    width: 100%;
+}
+
+.operation{
+    float: left;
+    position: relative;
+    background: #FFF;
+    width: 100%;
+    padding: 0 10px 10px 10px;
+}
+
+.operation .role-icon{
+    padding: 0;
+    width: auto !important;
+}
+
+.operation .role-icon , .operation .p-but , .operation .d-but , .operation .c-but , .operation .a-but {
+    float: left;
+    position: relative;
+}
+
+.player_name{
+    line-height: 32px;
+    margin-left: 5px;
+    float: left;
+    position: relative;
+}
+
+.transfers_player{
+    width: 100%;
+    float: left;
+    position: relative;
+    margin-top: 10px;
+}
+
+.info_transfer{
+    float: right;
+    position: relative;
+}
+
+.value_transfer{
+    float: right;
+    position: relative;
+}
+
+
+/* HOME PAGE */
+
+.home_page{
+    float: left;
+    position: relative;
+}
+
+.row_home{
+    float: left;
+    position: relative;
+    margin: 10px 0 0 0;
+    //width: 1080px;
+}
+
+.box_home{
+    background: #FFF;
+    float:left;
+    position: relative;
+    width: 100%;
+}
+
+.box_home .name_market{
+    text-align:center;
+    margin-bottom:10px;
+    background: rgba(255,0,0,1);
+    opacity: 1;
+}
+
+.three_quarter{
+    //width: 63%;
+    position: relative;
+    //float: left;
+    padding: 10px;
+}
+
+.first_row_home{
+    height: 170px;
+}
+
+.welcome{
+    //margin: 0 1% 0 0;
+    background: rgba(255,0,0,1);
+    color: #FFF;
+    font-size: 35px;
+	height: 170px;
+}
+
+.punti_highlight{
+    color: rgba(81,81,81,1);
+}
+
+.minor{
+    font-size: 28px;
+}
+
+.click_to_reg{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.welcome.not_logged{
+    cursor: pointer;
+}
+
+.one_quarter{
+    //width: 36%;
+    padding: 10px;
+    float: left;
+    position: relative;
+}
+
+.count_closing_time{
+    
+}
+
+.recap_last_round , .recap_standings{
+    //width: 49.5% !important;
+    padding: 10px;
+    //margin: 0 1% 0 0;
+}
+
+.standings_last_round{
+    //width: 49.5% !important;
+    padding: 10px;
+    //margin: 0;
+}
+
+.standings_general{
+    //width: 49.5% !important;
+    padding: 10px;
+    //margin: 0;
+}
+
+.standings_general tr:nth-last-child(2){
+    border-bottom: none;
+}
+
+#clock{
+    width: 100% !important;
+    float: left;
+    position: relative;
+}
+
+#clock *{
+    box-sizing: content-box !important;
+}
+
+.county-label-days,.county-label-hours,.county-label-minutes,.county-label-seconds{
+    width: 70px !important;
+}
+
+.first, .first .county-days, .county-hours,.county-minutes,.county-seconds ,.county-hours-wrapper,.county-minutes-wrapper,.county-seconds-wrapper{
+    width: 45px !important;
+}
+
+span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
+	font-size: 40px;
+}
+

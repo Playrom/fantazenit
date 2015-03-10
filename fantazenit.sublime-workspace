@@ -1,0 +1,777 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"menu",
+				"menu-top"
+			],
+			[
+				"ex",
+				"extend	@extend"
+			],
+			[
+				"FF",
+				"FF0000"
+			],
+			[
+				"c",
+				"color"
+			],
+			[
+				"dum",
+				"dumpConfig〔function〕"
+			],
+			[
+				"data",
+				"$database〔variable〕"
+			],
+			[
+				"du",
+				"dumpStats〔function〕"
+			],
+			[
+				"P",
+				"PhpConsole"
+			],
+			[
+				"str",
+				"strcasecmp〔function〕"
+			],
+			[
+				"id_com",
+				"$id_competition〔variable〕"
+			],
+			[
+				"dump",
+				"dumpPlayerById〔function〕"
+			],
+			[
+				"stamp",
+				"stamp_now"
+			],
+			[
+				"roun",
+				"roundOf"
+			],
+			[
+				"id_",
+				"id_competition"
+			],
+			[
+				"curren",
+				"current_round"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"balance",
+				"balance-display"
+			],
+			[
+				"im",
+				"important"
+			],
+			[
+				"user",
+				"user_data"
+			],
+			[
+				"row",
+				"row2"
+			],
+			[
+				"qu",
+				"query"
+			],
+			[
+				"sta",
+				"stats_coll"
+			],
+			[
+				"stat",
+				"stats"
+			],
+			[
+				"pass",
+				"password"
+			],
+			[
+				"id",
+				"id_transfer"
+			],
+			[
+				"TeamPlayer",
+				"TeamPlayerList"
+			],
+			[
+				"strt",
+				"strtolower"
+			],
+			[
+				"faceb",
+				"facebookId"
+			],
+			[
+				"grap",
+				"graphObject"
+			],
+			[
+				"gra",
+				"graphObject"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"redire",
+				"redirectUrl"
+			],
+			[
+				"login",
+				"loginUrl"
+			],
+			[
+				"ajax",
+				"ajaxOptions"
+			],
+			[
+				"json",
+				"json_decode"
+			],
+			[
+				"getElement",
+				"getElementsByTagName"
+			],
+			[
+				"getElem",
+				"getElementById"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/header.tpl",
+			"settings":
+			{
+				"buffer_size": 5754,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/nav.tpl",
+			"settings":
+			{
+				"buffer_size": 1151,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/SASS Build/SASS.sublime-build",
+	"command_palette":
+	{
+		"height": 380.0,
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"sublimelinter",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"sublimelin",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"html",
+				"HTMLPrettify"
+			]
+		],
+		"width": 528.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/dev/PHP/fantazenit",
+		"/D/dev/PHP/fantazenit/class",
+		"/D/dev/PHP/fantazenit/css",
+		"/D/dev/PHP/fantazenit/fonts",
+		"/D/dev/PHP/fantazenit/js"
+	],
+	"file_history":
+	[
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/cms.tpl",
+		"/D/Dropbox/Archivi Siti Web/NTProfessional/form/index.php",
+		"/D/Archivi Siti Web/NTProfessional/form/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/global.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/layout.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/Mail.php",
+		"/D/Dropbox/Archivi Siti Web/NTProfessional/form.php",
+		"/D/Dropbox/Archivi Siti Web/allianz/index.php",
+		"/D/dev/PHP/fantazenit/header.php",
+		"/D/dev/PHP/fantazenit/footer.php",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/SublimeOnSaveBuild/SublimeOnSaveBuild.sublime-settings",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/SassBeautify/SassBeautify.sublime-settings",
+		"/D/dev/PHP/fantazenit/css/style.scss",
+		"/D/Downloads/category_2015-03-01_182349.csv",
+		"/D/dev/PHP/fantazenit/css/style.css",
+		"/D/dev/PHP/fantazenit/cron.php",
+		"/D/dev/PHP/fantazenit/index.php",
+		"/D/dev/PHP/fantazenit/formations.php",
+		"/D/dev/PHP/fantazenit/class/ConnectDatabaseFiles.php",
+		"/D/dev/PHP/fantazenit/class/ConnectDatabaseRounds.php",
+		"/D/dev/PHP/fantazenit/style.css",
+		"/D/dev/PHP/fantazenit/playersinfo.php",
+		"/D/dev/PHP/fantazenit/functions.php",
+		"/D/dev/PHP/fantazenit/createroster.php",
+		"/D/dev/PHP/fantazenit/curlLISTA.txt",
+		"/D/dev/PHP/fantazenit/loadfile.php",
+		"/D/dev/PHP/fantazenit/class/ConnectDatabasePlayers.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/quotazioni-7.xml",
+		"/D/dev/PHP/fantazenit/class/ConnectDatabase.php",
+		"/D/dev/PHP/fantazenit/sftp-config.json",
+		"/D/dev/PHP/fantazenit/BASE CONNECT OLD.php",
+		"/D/dev/PHP/fantazenit/changeroster.php",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/SublimeCodeIntel/SublimeCodeIntel.sublime-settings",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/SublimeCodeIntel.sublime-settings",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_php-5.5.21-nts-Win32-VC11-x86.zip/install.txt",
+		"/D/dev/PHP/fantazenit/todo.txt",
+		"/D/Downloads/Backup-codes-giorgio.romano93.txt",
+		"/D/dev/JAVA/sorteggi/lista.csv",
+		"/D/dev/PHP/fantazenit/js/countdown/READ ME.txt",
+		"/D/dev/PHP/fantazenit/js/countdown/tests.html",
+		"/D/dev/PHP/fantazenit/js/countdown/examples 1.html",
+		"/D/dev/PHP/fantazenit/js/countdown/examples 3.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/zimport.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/zimport.funzioni.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/synch.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/danea.csv",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/custom.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/config.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/install/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/settings.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/register.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/mail-templates/your-lost-password.txt",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/class.user.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/funcs.general.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/funcs.user.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/db/dbal.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/db/mysql.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/install/sql.txt",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/KNOWN ISSUES.txt",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/ArticoliMOD.csv",
+		"/D/Dropbox/Universita/Sistemi Elettronici/8535def.inc",
+		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/Fattoriale/Fattoriale.asm",
+		"/D/Dropbox/Universita/Sistemi Elettronici/8535_basic.asm",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/Best Practices.txt",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.html",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/Fornitori.csv",
+		"/C/Users/Giorgio/Desktop/Prodotti.xml",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/Documenti.DefXml",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/provaimp.xml",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/Misure.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/Famiglie.csv",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/changeroster.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_es_autentphp.zip/uploadarticoli.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_es_autentphp.zip/downloadordini.php",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/Colori.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/DettaglioIva.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/TabellaMisure.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/VariantiArticoli.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/PAL.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/EtichetteFashionTMP.csv",
+		"/C/Users/Giorgio/Desktop/Backup Max Magma/EtichetteFashionTMP2.csv",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/footer.php",
+		"/C/Users/Giorgio/Desktop/Documenti.DefXml",
+		"/D/Backup Max Magma/EtichetteFashionTMP2.csv",
+		"/D/Backup Max Magma/Fornitori.csv",
+		"/D/Backup Max Magma/Movimenti.csv",
+		"/D/Backup Max Magma/ArticoliMOD.csv",
+		"/D/Dropbox/Università/sistemi elettronici/progetti/OndaQuadra/OndaQuadra.asm",
+		"/D/Backup Max Magma/EtichetteFashionTMP.csv",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/prezzi.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ElencoFatturelist.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu 3.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu 2.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/calendariolist.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6_aruba 2.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6.php",
+		"/D/Dropbox/Archivi Siti Web/Club Nautico Baia Azzurra/Info Database.txt",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6_aruba.php",
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 6.txt",
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 5.txt",
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 4.txt",
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 3.txt",
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 2.txt",
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 1.txt",
+		"/D/Dropbox/dev/JAVA/sorteggi/lista.csv",
+		"/D/Dropbox/datidominio.txt",
+		"/D/Downloads/Apple - Supporto - Conferma.html",
+		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/PollingPorte/PollingPorte.asm",
+		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/IntermittenzaLed/IntermittenzaLed.asm",
+		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/VisualizzaSecondi/VisualizzaSecondi.asm",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/.htaccess",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/wp-config.php",
+		"/C/Users/Giorgio/Desktop/wordpress/wp-content/themes/avada/functions.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/functions.php",
+		"/C/Users/Giorgio/iCloudDrive/com~apple~TextEdit/datidominio.txt",
+		"/D/Dropbox/pi.txt",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/ConnectDatabase.php",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/style.css",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/changeroster.php",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/formations.php",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/createroster.php",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/maketeam.php",
+		"/D/dev/PHP/Fantacalcio PHP Nuovo/gestionegiornate.php",
+		"/D/Downloads/Voti_Fantagazzetta_(MILANO)_alla_8_Giornata.xls"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"logo",
+			"6u",
+			"50%",
+			"$round",
+			"$arr_stat[$round]",
+			"realroun",
+			"gettea",
+			"#menu-info",
+			"menu-info",
+			"role-ic",
+			"role",
+			"formation",
+			"openroun",
+			"timestamp",
+			"console.l",
+			"date",
+			"fromat",
+			"timestamp",
+			"date_in",
+			"paths",
+			"r1",
+			",",
+			"resetsl",
+			"select",
+			"resetsl",
+			"select_ro",
+			"€",
+			",",
+			";",
+			"date",
+			"current",
+			"team",
+			"balance",
+			";",
+			",",
+			";",
+			"private function",
+			";",
+			"checkLo",
+			"helper",
+			"extno",
+			"secre",
+			"app_sec",
+			"helper",
+			"mercato di apertu",
+			"mercato",
+			"regolamento",
+			"fb_appsecre",
+			"fb_app",
+			"fb.log",
+			"I",
+			"<",
+			"fb.lo",
+			"fb.get",
+			"fb.lo",
+			"x-recent-posts",
+			"recent",
+			"count",
+			"x-rece",
+			"comple",
+			"x-recent",
+			"x-recen",
+			"with-ima",
+			"with-",
+			"with",
+			"with-",
+			"x-rece",
+			"focus",
+			"count",
+			"max",
+			"x-rece",
+			"day",
+			"round",
+			"day",
+			"round",
+			"day",
+			";",
+			",",
+			"/([^a-z]|^)([a-z])(?=[a-z]{2}",
+			";",
+			","
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"12u",
+			"100%",
+			"$arr_stat[$real_round]",
+			".menu-info",
+			";",
+			",",
+			";",
+			",",
+			"public function",
+			",",
+			".",
+			",",
+			"."
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/header.tpl",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5754,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"function_name_status_row": 0,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 720.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/nav.tpl",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1073,
+								1073
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"function_name_status_row": 15,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 100.0
+	},
+	"project": "fantazenit.sublime-project",
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 246.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

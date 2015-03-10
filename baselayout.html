@@ -1,0 +1,320 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Change Roster</title>
+    <link href="css/ion.rangeSlider.css" rel="stylesheet" />
+    <link href="css/normalize.min.css" rel="stylesheet"/>
+    <link href="css/ion.rangeSlider.skinFlat.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+       
+</head>
+<body>
+
+ <div id="wrapper">
+
+    <div id="header">
+        
+        <div id="logo"></div>
+        <div id="menu-top"></div>
+
+    </div>
+
+    <div id="menu-settings"></div>
+
+    <div id="menu-info"></div>
+
+    <div id="content">
+        <table>
+        <tr><th>Prova1</th><th>Prova2</th><th>Prova3</th></tr>
+        <tr><td>CONSIGLI <img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_ball.png"><img src="img/gol_taken.png"><img src="img/yellow_card.png"></td>
+        <tr><td>/jquery-1.11.0.min.js</td><td>bdsyadguysagdyuas</td></tr>
+        </table>
+
+    <div id="footer"></div>
+
+</div>
+
+<script src="js/jquery-1.11.0.min.js"></script>
+<script src="js/ion.rangeSlider.min.js"></script>
+<script>
+    var resetSlide;
+
+    $(document).ready(function(){
+
+        $("#range_1").ionRangeSlider({
+            min: 1,
+            max: 50,
+            from: 1,
+            to: 50,
+            type: 'double',
+            step: 1,
+            maxPostfix: "+",
+            prettify: true,
+            hasGrid: true,
+            onChange: function(obj) {
+                change(obj);
+            }
+        });
+
+
+
+        $(function() { 
+
+            function my_fun(){ 
+               $("#range_1").ionRangeSlider("update", {
+                    min: 1,                        // change min value
+                    max: 50,                        // change max value
+                    from: 1,                       // change default FROM setting
+                    to: 50,                         // change default TO setting
+                });
+            }  
+            resetSlide= my_fun;
+        }) 
+        
+    });
+    
+    var disable_but=function(bo){
+        var mod_button=document.getElementById("mod-button");
+        mod_button.disabled=bo;
+    };
+    
+    var change = function(obj){
+        var min=obj["fromNumber"];
+        var max=obj["toNumber"];
+        console.log(min);
+        console.log(max);
+        var players=document.getElementsByClassName("new-player");
+        var dis="none";
+
+        var element=document.getElementsByClassName('but-over');
+        var role_select;
+        for(i=0;i<element.length;++i){
+            if(element[i].style.display=="none") {
+                
+            }else{
+                role=element[i].parentNode.getElementsByClassName("but-role")[0].innerHTML;
+            }
+            
+        }
+
+
+        for (var i = 0; i < players.length; ++i) {
+            var player = players[i];  
+            var value=player.getAttribute("data-value");
+            if(value<min || value>max){
+                player.style.display="none";
+
+            }else{
+                if(role.toLowerCase()==player.getAttribute("role").toLowerCase()){
+                    player.style.display="inline";
+                }else{
+                    player.style.display="none";
+                }
+
+            }
+
+            
+        }
+
+
+
+
+        
+        
+    };
+
+
+    
+
+    
+
+
+    var hover=function(obj){
+        var element=obj.getElementsByClassName('but-over');
+        element[0].style.display="block";
+    }
+
+    var stophover=function(obj){
+        var element=obj.getElementsByClassName('but-over');
+        element[0].style.display="none";
+    }
+
+    var select_role=function(role,obj){
+
+        var element=document.getElementsByClassName('but-over');
+        for(i=0;i<element.length;i++){
+            element[i].style.display="none";
+            element[i].parentNode.setAttribute("onmouseout","stophover(this)");
+        }
+
+        element=obj.getElementsByClassName('but-over');
+        obj.removeAttribute("onmouseout");
+        element[0].style.display="block";
+        
+
+        var free_table=document.getElementById("free-table");
+        var arr=free_table.rows;
+        for (i = 0; i < arr.length; i++) {
+            var element=arr[i];
+            if(element.getAttribute("role").toLowerCase() != role.toLowerCase()){
+                element.style.display="none";
+
+            }else{
+                if(element.getAttribute("in-roster")=="yes"){
+                    element.style.display="none";
+                }else{
+                    element.style.display="inline";
+                }
+            }
+        };
+
+        
+        resetSlide();
+
+    }
+
+
+
+
+    var ol=null,ne=null;
+    var remove_roster=function(pass){
+        var obj=pass.currentTarget;
+        var free_table=document.getElementById("free-table");
+        var id=+obj.id+"_free";
+        var table_element=document.getElementById(id);
+
+        var element=document.getElementsByClassName('but-over');
+        var role_select;
+        for(i=0;i<element.length;++i){
+            if(element[i].style.display=="none") {
+                
+            }else{
+                role=element[i].parentNode.getElementsByClassName("but-role")[0].innerHTML;
+            }
+            
+        }
+
+
+        if(role.toLowerCase()==table_element.getAttribute("role").toLowerCase()){
+            table_element.style.display="inline";
+            table_element.setAttribute("in-roster","none");
+        }else{
+            table_element.setAttribute("in-roster","none");
+        }
+
+
+
+        
+        var index=obj.rowIndex;
+        
+        obj.parentNode.removeChild(obj);
+        cost_change(obj.getAttribute("data-value"),false);
+        
+    };
+    
+    var add_roster=function(pass){
+        var obj=pass.currentTarget;
+        var table=document.getElementById(obj.getAttribute("role")+"_free");
+        var value=obj.getAttribute("data-value");
+        console.log("balance "+balance());
+        console.log("value "+parseInt(value));
+        if((balance()-parseInt(value))>=0){
+            var max=parseInt(table.getAttribute("max"));
+            var lenght_table=table.rows.length;
+            console.log(table);
+            console.log(max);
+            console.log(lenght_table);
+            if(lenght_table<max){
+                var row=table.insertRow();
+                row.className="old-player";
+                row.id=obj.getAttribute("id_player");
+                row.setAttribute("data-value",obj.getAttribute("data-value"));
+                row.setAttribute("name",obj.getAttribute("name"));
+                //row.setAttribute("onclick","javascript:alert(1);");
+                var namecell=row.insertCell();
+                namecell.innerHTML=obj.getAttribute("name");
+                var valuecell=row.insertCell();
+                valuecell.innerHTML=obj.getAttribute("data-value");
+                obj.style.display="none";
+                obj.setAttribute("in-roster","yes");
+                cost_change(value,true);
+            };
+        };
+
+    };
+    
+    var getValues=function(){
+        var jsonObj = [];
+        var jsonString;
+        var table = document.getElementById("P_free");
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            var item = table.rows[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+        
+        var table = document.getElementById("D_free");
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            var item = table.rows[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+        
+        var table = document.getElementById("C_free");
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            var item = table.rows[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+        
+        var table = document.getElementById("A_free");
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            var item = table.rows[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+        
+        jsonString = JSON.stringify(jsonObj);
+       
+       var url = 'createroster.php';
+       var text='<form action="' + url + '" method="post">';
+       
+       for(var i=0, n=jsonObj.length;i<n;i++){
+           text=text+'<input type="hidden" name="ids[]" value="'+jsonObj[i]+'" />';
+       }
+       console.log(text);
+        var form = $(text + '</form>');
+        console.log(form);
+        $('body').append(form);  // This line is not necessary
+        $(form).submit();
+      
+
+    };
+    
+    var balance=function(){
+        var item=document.getElementById("market-cost");
+        return parseInt(item.innerHTML);
+    };
+    
+    var cost_change=function(cost,add){
+        if(add){
+            var item=document.getElementById("market-cost");
+            var balance=item.innerHTML;
+            item.innerHTML=parseInt(balance)-parseInt(cost);
+            var value=parseInt(item.innerHTML);
+            if(value<0) disable_but(true); else disable_but(false);
+
+        }else{
+           var item=document.getElementById("market-cost");
+            var balance=item.innerHTML;
+            item.innerHTML=parseInt(balance)+parseInt(cost); 
+            var value=parseInt(item.innerHTML);
+            if(value<0) disable_but(true); else disable_but(false);
+
+        }
+    };
+    
+    
+    $("body").on('click','.old-player',remove_roster);
+        
+      
+    $("body").on('click','.new-player',add_roster);
+
+</script>
+</body>
