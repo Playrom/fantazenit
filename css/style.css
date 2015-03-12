@@ -149,6 +149,9 @@ a.current-round {
 .market-select {
   margin: 8px; }
 
+.left-label {
+  text-align: left !important; }
+
 .select-calc, .select-current-round {
   float: left;
   position: relative;

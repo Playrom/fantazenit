@@ -47,52 +47,81 @@ include('header.php');
         sort($rounds);
 
         $not_available=$config['already-calc'];
-        $not_calc=explode(";", $not_available);
+        $already_calc=explode(";", $not_available);
 
-        sort($not_calc);
+        sort($already_calc);
 
         if($user->getAuth()==1){ ?>
         <div class="main">
-            <form class="settings" action="gestionegiornate.php" method="post">
-                <div class="setting_item">
-                    <div class="setting_item_name">Seleziona Giornata da Calcolare</div>
-                    <div class="setting_item_input">
-                        <select name="calc" class="market-select">
+            <form class="form-horizontal" action="gestionegiornate.php" method="post">
+                <div class="form-group">
+                    <label class="col-md-8 control-label left-label">Seleziona Giornata da Calcolare</label>
+                    
+                    <div class="col-md-2">
+                        <select name="calc" class="form-control">
                         <?php foreach($rounds as $round){
                             echo "<option value=\"".$round."\" >".$round."</option>";
                         } ?>
                         </select>
-                        <input class="" type="submit" value="Calcola Giornata">
+                    </div>
+                    
+                    <div class="col-md-2">
+	                    <button type="submit" class="btn btn-default">Calcola Giornata</button>
                     </div>
                 </div>
             </form>
 
-            <form class="select-calc" action="gestionegiornate.php" method="post">
-                <div class="name-team">Seleziona Giornata da Annullare</div>
-                <div class="balance">
-                    <select name="uncalc" class="market-select">
-                    <?php foreach($not_calc as $round){
-                        echo "<option value=\"".$round."\" >".$round."</option>";
-                    } ?>
-                    </select>
-                    <input class="market-select-button" type="submit" value="Annulla Giornata">
+            <form class="form-horizontal" action="gestionegiornate.php" method="post">
+                <div class="form-group">
+                    <label class="col-md-8 control-label left-label">Seleziona Giornata da Annullare</label>
+                    
+                    <div class="col-md-2">
+	                    <select name="uncalc" class="form-control">
+	                    <?php foreach($already_calc as $round){
+	                        echo "<option value=\"".$round."\" >".$round."</option>";
+	                    } ?>
+	                    </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+	                    <button type="submit" class="btn btn-default">Annulla Giornata</button>
+                    </div>
                 </div>
             </form>
 
-            <form class="select-current-round" action="gestionegiornate.php" method="post">
-                <div class="name-team">Aggiungi una giornata</div>
-                <div class="balance">
-                    <input type="number" name="add_round" min="1" max="38" size="2" class="market-select">
-                    <input class="market-select-button" type="submit" value="Crea Giornata">
+            <form class="form-horizontal" action="gestionegiornate.php" method="post">
+                <div class="form-group">
+                    <label class="col-md-8 control-label left-label">Aggiungi una Giornata</label>
+                    
+                    <div class="col-md-2">
+                    	<input type="number" name="add_round" min="1" max="38" size="2" class="form-control">
+                    </div>
+                    
+                    <div class="col-md-2">
+	                    <button type="submit" class="btn btn-default">Crea Giornata</button>
+                    </div>
                 </div>
             </form>
 
-             <form class="select-current-round" action="gestionegiornate.php" method="post">
-                <div class="name-team">Seleziona Giornata Attuale</div>
-                <div class="balance">
-                    <input type="number" name="current_round" min="1" max="38" size="2" class="market-select">
-                    <input type="datetime" id="datetimepicker" name="time_close" class="market-select">
-                    <input class="market-select-button" type="submit" value="Imposta Giornata">
+             <form class="form-horizontal"  action="gestionegiornate.php" method="post">
+                <div class="form-group">
+                    <label class="col-md-6 control-label left-label">Seleziona Giornata Attuale</label>
+
+                    <div class="col-md-2">
+                    	<select name="current_round" class="form-control">
+	                    <?php foreach($rounds as $round){
+                            echo "<option value=\"".$round."\" >".$round."</option>";
+                        } ?>
+	                    </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+                    	<input type="datetime" id="datetimepicker" name="time_close" class="form-control">
+                    </div>
+                    
+                    <div class="col-md-2">
+	                    <button type="submit" class="btn btn-default">Imposta Giornata</button>
+                    </div>
                 </div>
             </form>
         </div>
