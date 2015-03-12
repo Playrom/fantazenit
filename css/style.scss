@@ -904,7 +904,7 @@ tr:last-child {
     position: relative;
 }
 
-.setting_item{
+/*.setting_item{
     float: left;
     position: relative;
     width: 100%;
@@ -947,7 +947,14 @@ tr:last-child {
     border: none;
 }
 
+*/
 
+.form-group{
+    h3{
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+}
 
 /* SQUARED FOUR */
 .squaredFour {

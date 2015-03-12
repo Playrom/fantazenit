@@ -528,10 +528,10 @@ tr:last-child {
 
 .error_display {
   /*background: #FF0000;
-    opacity: 0.5;*/
+  opacity: 0.5;*/
   width: 98%;
   margin: 1%;
-  /*padding: 1%;
+    /*padding: 1%;
     color:#FFF;
     float:left;
 	position:relative;*/ }
@@ -745,42 +745,53 @@ tr:last-child {
   float: left;
   position: relative; }
 
-.setting_item {
-  float: left;
-  position: relative;
-  width: 100%;
-  padding: 5px;
-  height: 40px; }
+/*.setting_item{
+    float: left;
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    height: 40px;
+}
 
-.setting_item_name {
-  float: left;
-  position: relative;
-  margin-right: 10px;
-  font-size: 21px;
-  line-height: 30px;
-  color: #0f2bf8;
-  min-width: 270px; }
+.setting_item_name{
+    float:left;
+    position: relative;
+    margin-right: 10px;
+    font-size: 21px;
+    line-height: 30px;
+    color: #0f2bf8;
+    min-width: 270px;
+}
 
-.setting_item_descript {
-  float: left;
-  position: relative;
-  margin-right: 10px;
-  font-style: italic;
-  line-height: 21px;
-  line-height: 30px; }
+.setting_item_descript{
+    float: left;
+    position: relative;
+    margin-right: 10px;
+    font-style: italic;
+    line-height: 21px;
+    line-height: 30px;
+}
 
-.setting_item_input {
-  float: right;
-  position: relative;
-  height: 30px; }
+.setting_item_input{
+    float: right;
+    position: relative;
+    height: 30px;
+}
 
-.setting_item_element {
-  float: left;
-  position: relative;
-  height: 30px; }
+.setting_item_element{
+    float: left;
+    position: relative;
+    height: 30px;
+}
 
-.settings #save {
-  border: none; }
+.settings #save{
+    border: none;
+}
+
+*/
+.form-group h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important; }
 
 /* SQUARED FOUR */
 .squaredFour {
@@ -1028,3 +1039,5 @@ input[type=checkbox] {
 
 span.county-days, span.county-minutes, span.county-hours, span.county-seconds {
   font-size: 40px; }
+
+/*# sourceMappingURL=style.css.map */

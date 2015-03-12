@@ -62,55 +62,74 @@ include('header.php');
         </div>
 
         <div class="main">
-            <form class="settings" action="settings.php" method="post">
-                <div class="setting_item">
-                    <div class="setting_item_name">Tattiche Disponibili</div>
-                    <div class="setting_item_descript">Esempio:343;442 etc.</div>
-                    <input class="setting_item_input" size="30" type="text" name="tactics" <?php echo "value=\"".$config['available-tactics']."\""; ?> >
+            <form class="form-horizontal" action="settings.php" method="post">
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Tattiche Disponibili&nbsp;&nbsp;<small>Esempio:343;442 etc.</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" size="30" type="text" name="tactics" <?php echo "value=\"".$config['available-tactics']."\""; ?> >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Numero Portieri&nbsp;&nbsp;<small>Numero dei portieri in rosa</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" maxlength="2" size="2" type="text" name="max_por" <?php echo "value=\"".$config['max_por']."\""; ?> >
+                    </div>
                 </div>
                 
-                <div class="setting_item">
-                    <div class="setting_item_name">Numero Difensori</div>
-                    <div class="setting_item_descript">Numero dei difensori in rosa</div>
-                    <input class="setting_item_input" maxlength="2" size="2" type="text" name="max_def" <?php echo "value=\"".$config['max_def']."\""; ?> >
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Numero Difensori&nbsp;&nbsp;<small>Numero dei difensori in rosa</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" maxlength="2" size="2" type="text" name="max_def" <?php echo "value=\"".$config['max_def']."\""; ?> >
+                    </div>
                 </div>
 
-                <div class="setting_item">
-                    <div class="setting_item_name">Numero Centrocampisti</div>
-                    <div class="setting_item_descript">Numero dei centrocampisti in rosa</div>
-                    <input class="setting_item_input" maxlength="2" size="2" type="text" name="max_cen" <?php echo "value=\"".$config['max_cen']."\""; ?> >
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Numero Centrocampisti&nbsp;&nbsp;<small>Numero dei centrocampisti in rosa</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" maxlength="2" size="2" type="text" name="max_cen" <?php echo "value=\"".$config['max_cen']."\""; ?> >
+                    </div>
                 </div>
 
-                <div class="setting_item">
-                    <div class="setting_item_name">Numero Attaccanti</div>
-                    <div class="setting_item_descript">Numero degli attaccanti in rosa</div>
-                    <input class="setting_item_input" maxlength="2" size="2" type="text" name="max_att" <?php echo "value=\"".$config['max_att']."\""; ?> >
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Numero Attaccanti&nbsp;&nbsp;<small>Numero dei attaccanti in rosa</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" maxlength="2" size="2" type="text" name="max_att" <?php echo "value=\"".$config['max_att']."\""; ?> >
+                    </div>
                 </div>
 
-                <div class="setting_item">
-                    <div class="setting_item_name">Numero Panchinari</div>
-                    <div class="setting_item_descript">Numero dei giocatori in panchina tranne portieri</div>
-                    <input class="setting_item_input" maxlength="2" size="2" type="text" name="max-role-reserve" <?php echo "value=\"".$config['max-role-reserve']."\""; ?> >
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Numero Panchinari&nbsp;&nbsp;<small>Numero dei panchinari per ogni partita (esclusi portieri)</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" maxlength="2" size="2" type="text" name="max-role-reserve" <?php echo "value=\"".$config['max-role-reserve']."\""; ?> >
+                    </div>
                 </div>
 
-                <div class="setting_item">
-                    <div class="setting_item_name">Numero Sostituzioni</div>
-                    <div class="setting_item_descript">Numero massimo di sostituzioni in una giornata</div>
-                    <input class="setting_item_input" maxlength="2" size="2" type="text" name="max_sub" <?php echo "value=\"".$config['max_sub']."\""; ?> >
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Numero Sostituzioni&nbsp;&nbsp;<small>Numero massimo di sostituzioni in una giornata</small></h3>
+                    <div class="col-md-4">
+                        <input class="form-control" maxlength="2" size="2" type="text" name="max_sub" <?php echo "value=\"".$config['max_sub']."\""; ?> >
+                    </div>
                 </div>
 
-                <div class="setting_item">
-                    <div class="setting_item_name">Competizione di Default</div>
-                    <div class="setting_item_descript">La Competizione principale della Lega</div>
-                    <?php $competitions=$database->getCompetitions(); $comp=$database->getCompetition($config['default_competition']); ?>
-                    <select class="setting_item_input"  name="default_competition" >
-                        <?php foreach($competitions as $competition){ ?>
-                            <option <?php echo "value=\"".$competition->getId()."\""; if($comp!=null && $competition->getId()==$comp->getId()) echo " selected"; ?> ><?php echo $competition->getName(); ?></option> 
-                        <?php } ?>
-                    </select>
+                <div class="form-group">
+                    <h3 class="col-md-8 control-label left-label">Competizione di Default&nbsp;&nbsp;<small>La Competizione principale della Lega</small></h3>
+                    <div class="col-md-4">
+                        <?php $competitions=$database->getCompetitions(); $comp=$database->getCompetition($config['default_competition']); ?>
+                        <select class="form-control"  name="default_competition" >
+                            <?php foreach($competitions as $competition){ ?>
+                                <option <?php echo "value=\"".$competition->getId()."\""; if($comp!=null && $competition->getId()==$comp->getId()) echo " selected"; ?> ><?php echo $competition->getName(); ?></option> 
+                            <?php } ?>
+                        </select>
+                    </div>
                 </div>
 
-            <input id="save" type="submit" value="Modifica" />
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-default col-md-12">Modifica</button>
+                    </div>
+                </div>
             </form>
         </div>
         <?php }
