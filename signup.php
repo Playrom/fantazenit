@@ -46,7 +46,7 @@ if(isset($_SESSION['username'])) {
             $user=$database->signupUser(new User(-1,$username,$name,$surname,$pass,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb));
             if($user) {
                 session_destroy();
-                header("Location:index.php");
+                header("Location:login.php?reg_complete");
             }
         }else{
             $_SESSION['wrong_username']=true;
@@ -69,58 +69,83 @@ if(isset($_SESSION['username'])) {
         <div class="error_display esecution_error">Errore: Username o Email già utilizzati</div>
     <?php } ?>
 
-    <form action="signup.php" name="signup" class="login_form signup_form" method="post">
+    <form action="signup.php" name="signup" class="signup_form form-horizontal" method="post">
         <h3>Registrazione al Fanta Zenit</h3>
-        <div class="setting_item">
-            <div class="setting_item_name">Username</div>
-            <input class="setting_item_input" size="30" type="text" name="user" <?php if(isset($_SESSION['user_temp']) &&!isset($_SESSION['wrong_username'])) echo "value=\"".$_SESSION['user_temp']."\""; ?> >
+        <div class="form-group">
+            <label class="col-md-2 control-label">Username</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="user" name="user" placeholder="Username" <?php if(isset($_SESSION['user_temp']) &&!isset($_SESSION['wrong_username'])) echo "value=\"".$_SESSION['user_temp']."\""; ?>>
+            </div>
         </div>
     
-        <div class="setting_item">
-            <div class="setting_item_name">Password</div>
-            <input class="setting_item_input" size="30" type="password" name="pass1" >
+        <div class="form-group">
+            <label class="col-md-2 control-label">Password</label>
+            <div class="col-md-10">
+              <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Password">
+            </div>
         </div>
         
-        <div class="setting_item">
-            <div class="setting_item_name">Ripeti Password</div>
-            <input class="setting_item_input" size="30" type="password" name="pass2" >
+        <div class="form-group">
+            <label class="col-md-2 control-label">Conferma Password</label>
+            <div class="col-md-10">
+              <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Conferma Password" >
+            </div>
         </div>
-        
-        <div class="setting_item">
-            <div class="setting_item_name">Email</div>
-            <input class="setting_item_input" size="30" type="text" name="email" <?php if(isset($_SESSION['email_temp'])  &&!isset($_SESSION['wrong_username'])) echo "value=\"".$_SESSION['email_temp']."\""; ?> >
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Email</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="email" name="email" placeholder="Email"  <?php if(isset($_SESSION['email_temp'])  &&!isset($_SESSION['wrong_username'])) echo "value=\"".$_SESSION['email_temp']."\""; ?>>
+            </div>
         </div>
         
         <hr>
         
-        <div class="setting_item">
-            <div class="setting_item_name">Nome</div>
-            <input class="setting_item_input" size="30" type="text" name="name" <?php if(isset($_SESSION['name_temp'])) echo "value=\"".$_SESSION['name_temp']."\""; ?> >
+        <div class="form-group">
+            <label class="col-md-2 control-label">Nome</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Nome" <?php if(isset($_SESSION['name_temp'])) echo "value=\"".$_SESSION['name_temp']."\""; ?> >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Cognome</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="surname" name="surname" placeholder="Cognome" <?php if(isset($_SESSION['surname_temp'])) echo "value=\"".$_SESSION['surname_temp']."\""; ?> >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Nome Squadra</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="name_team" name="name_team" placeholder="Nome Squadra" <?php if(isset($_SESSION['name_team_temp'])) echo "value=\"".$_SESSION['name_team_temp']."\""; ?> >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Telefono</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="telephone" name="telephone" placeholder="Telefono"<?php if(isset($_SESSION['telephone_temp'])) echo "value=\"".$_SESSION['telephone_temp']."\""; ?> >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">Url Profilo Facebook<small> Campo Non Richiesto</small></label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="url_fb" name="url_fb" placeholder="Url" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6">
+                <a  class="col-md-12" href="login.php">Sei già registrato? Effettua il Login</a>
+            </div>
+
+            <div class="col-md-6">
+                <button type="submit" disabled="true" id="reg_button" class="btn btn-default col-md-12">Registrati</button>
+            </div>
         </div>
         
-        <div class="setting_item">
-            <div class="setting_item_name">Cognome</div>
-            <input class="setting_item_input" size="30" type="text" name="surname" <?php if(isset($_SESSION['surname_temp'])) echo "value=\"".$_SESSION['surname_temp']."\""; ?> >
-        </div>
-        
-        <div class="setting_item">
-            <div class="setting_item_name">Nome Squadra</div>
-            <input class="setting_item_input" size="30" type="text" name="name_team" <?php if(isset($_SESSION['name_team_temp'])) echo "value=\"".$_SESSION['name_team_temp']."\""; ?> >
-        </div>
-        
-        <div class="setting_item">
-            <div class="setting_item_name">Telefono</div>
-            <input class="setting_item_input" size="30" type="text" name="telephone" <?php if(isset($_SESSION['telephone_temp'])) echo "value=\"".$_SESSION['telephone_temp']."\""; ?> >
-        </div>
-        
-        <div class="setting_item">
-            <div class="setting_item_name">Url Profilo Facebook</div>
-            <div class="setting_item_descript">Campo non richiesto</div>
-            <input class="setting_item_input" size="30" type="text" name="url_fb" >
-        </div>
-        
-		<a class="half_size" href="login.php">Sei già registrato? Effettua il Login</a>
-        <input disabled="true" class="half_size" id="reg_button" type="submit" name="Registrati" value="Registrati">
         
     </form>
 
@@ -132,7 +157,7 @@ if(isset($_SESSION['username'])) {
 
 <script>
 
-    $("body").on('change', 'input.setting_item_input', buttonSignup);
+    $("body").on('change', 'input', buttonSignup);
 </script>
 
 <?php include('footer.php'); ?>

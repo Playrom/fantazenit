@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"wid",
+				"width"
+			],
+			[
+				"num",
+				"$num_rounds〔variable〕"
+			],
+			[
 				"impo",
 				"important"
 			],
@@ -160,18 +168,50 @@
 	"buffers":
 	[
 		{
-			"file": "settings.php",
+			"file": "signup.php",
 			"settings":
 			{
-				"buffer_size": 6524,
+				"buffer_size": 6098,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "settings-competitions.php",
+			"file": "login.php",
 			"settings":
 			{
-				"buffer_size": 10423,
+				"buffer_size": 2487,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "header.php",
+			"settings":
+			{
+				"buffer_size": 6688,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/scripts-validation-forms.js",
+			"settings":
+			{
+				"buffer_size": 1196,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "css/style.scss",
+			"settings":
+			{
+				"buffer_size": 16880,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "css/style.css",
+			"settings":
+			{
+				"buffer_size": 16206,
 				"line_ending": "Windows"
 			}
 		}
@@ -179,7 +219,7 @@
 	"build_system": "Packages/SASS Build/SASS.sublime-build",
 	"command_palette":
 	{
-		"height": 311.0,
+		"height": 265.0,
 		"selected_items":
 		[
 			[
@@ -215,7 +255,7 @@
 				"HTMLPrettify"
 			]
 		],
-		"width": 528.0
+		"width": 416.0
 	},
 	"console":
 	{
@@ -236,19 +276,39 @@
 	},
 	"expanded_folders":
 	[
+		"/D/dev/PHP/fantazenit git/fantazenit",
+		"/D/dev/PHP/fantazenit git/fantazenit/css",
+		"/D/dev/PHP/fantazenit git/fantazenit/js"
 	],
 	"file_history":
 	[
-		"/C/Program Files (x86)/Steam/SteamApps/common/Cities_Skylines/Files/Locale/en.locale",
-		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.php",
+		"/C/Users/Giorgio/Desktop/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-3/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/nav.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockuserinfo.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockuserinfo 2.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockuserinfo.tpl",
+		"/D/dev/PHP/fantazenit git/fantazenit/js/scripts-made.js",
+		"/D/dev/PHP/fantazenit git/fantazenit/settings-competitions.php",
+		"/C/Users/Giorgio/Desktop/pergmail.txt",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/prezzi.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.html",
+		"/D/dev/PHP/fantazenit git/fantazenit/index.php",
+		"/D/dev/PHP/fantazenit git/fantazenit/headerlista.php",
+		"/D/dev/PHP/fantazenit git/fantazenit/settings.php",
 		"/D/dev/PHP/fantazenit git/fantazenit/css/style.css",
+		"/D/dev/PHP/fantazenit git/fantazenit/css/style.scss",
+		"/D/Archivi Siti Web/Salina/site/index.html",
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/D/dev/PHP/fantazenit git/fantazenit/header.php",
+		"/C/Program Files (x86)/Steam/SteamApps/common/Cities_Skylines/Files/Locale/en.locale",
 		"/D/dev/PHP/fantazenit git/fantazenit/gestionegiornate.php",
 		"/D/Dropbox/Apps/Sublime/User/Preferences.sublime-settings",
-		"/D/dev/PHP/fantazenit git/fantazenit/css/style.scss",
 		"/D/Dropbox/Apps/Sublime/User/Package Control.sublime-settings",
 		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/SublimeOnSaveBuild/README.md",
 		"/D/Archivi Siti Web/NTProfessional/form/index.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.php",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/header.tpl",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/nav.tpl",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/cms.tpl",
@@ -316,7 +376,6 @@
 		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/Fattoriale/Fattoriale.asm",
 		"/D/Dropbox/Universita/Sistemi Elettronici/8535_basic.asm",
 		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/Best Practices.txt",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.html",
 		"/C/Users/Giorgio/Desktop/Backup Max Magma/Fornitori.csv",
 		"/C/Users/Giorgio/Desktop/Prodotti.xml",
 		"/C/Users/Giorgio/Desktop/Backup Max Magma/Documenti.DefXml",
@@ -341,7 +400,6 @@
 		"/D/Backup Max Magma/ArticoliMOD.csv",
 		"/D/Dropbox/Università/sistemi elettronici/progetti/OndaQuadra/OndaQuadra.asm",
 		"/D/Backup Max Magma/EtichetteFashionTMP.csv",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/prezzi.html",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ElencoFatturelist.php",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu 3.php",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu 2.php",
@@ -351,22 +409,7 @@
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6.php",
 		"/D/Dropbox/Archivi Siti Web/Club Nautico Baia Azzurra/Info Database.txt",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6_aruba.php",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 6.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 5.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 4.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 3.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 2.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 1.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/lista.csv",
-		"/D/Dropbox/datidominio.txt",
-		"/D/Downloads/Apple - Supporto - Conferma.html",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/PollingPorte/PollingPorte.asm",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/IntermittenzaLed/IntermittenzaLed.asm",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/VisualizzaSecondi/VisualizzaSecondi.asm",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/.htaccess",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/wp-config.php",
-		"/C/Users/Giorgio/Desktop/wordpress/wp-content/themes/avada/functions.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/functions.php"
+		"/D/Dropbox/dev/JAVA/sorteggi/Girone 6.txt"
 	],
 	"find":
 	{
@@ -385,6 +428,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"-md-",
+			"checkbo",
+			"#users",
 			"\"setting_item\"",
 			"setting",
 			".form-gr",
@@ -478,6 +524,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"-sm-",
 			"\"form-group\"",
 			"12u",
 			"100%",
@@ -507,354 +554,24 @@
 			[
 				{
 					"buffer": 0,
-					"file": "settings.php",
+					"file": "signup.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6524,
+						"buffer_size": 6098,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6108,
-								6325
+								5925,
+								5556
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
 							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content"
-							],
-							"codeintel": true,
-							"codeintel_database_dir": "~/.codeintel",
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Node.js",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_exclude_scopes_from_complete_triggers":
-							[
-								"comment"
-							],
-							"codeintel_language_settings":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_exclude_dir":
-									[
-										"/build/",
-										"/min/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": false,
-									"codeintel_selected_catalogs":
-									[
-										"jQuery"
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 15,
-									"codeintel_scan_exclude_dir":
-									[
-										"/Applications/MAMP/bin/php/php5.5.3/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": true,
-									"php": "/Applications/MAMP/bin/php/php5.5.3/bin/php"
-								},
-								"Python3":
-								{
-									"codeintel_scan_extra_dir":
-									[
-										"/Applications/Sublime Text.app/Contents/MacOS",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/arch",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/libs"
-									],
-									"codeintel_scan_files_in_project": true,
-									"codeintel_selected_catalogs":
-									[
-									],
-									"python3": "/usr/local/bin/python3.3"
-								}
-							},
-							"codeintel_live": true,
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							[
-							],
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-							],
-							"codeintel_snippets": false,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"codeintel_word_completions": "buffer",
-							"function_name_status_row": 133,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 1230.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "settings-competitions.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10423,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5526,
-								5526
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"codeintel": true,
-							"codeintel_database_dir": "~/.codeintel",
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Node.js",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_exclude_scopes_from_complete_triggers":
-							[
-								"comment"
-							],
-							"codeintel_language_settings":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_exclude_dir":
-									[
-										"/build/",
-										"/min/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": false,
-									"codeintel_selected_catalogs":
-									[
-										"jQuery"
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 15,
-									"codeintel_scan_exclude_dir":
-									[
-										"/Applications/MAMP/bin/php/php5.5.3/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": true,
-									"php": "/Applications/MAMP/bin/php/php5.5.3/bin/php"
-								},
-								"Python3":
-								{
-									"codeintel_scan_extra_dir":
-									[
-										"/Applications/Sublime Text.app/Contents/MacOS",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/arch",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/libs"
-									],
-									"codeintel_scan_files_in_project": true,
-									"codeintel_selected_catalogs":
-									[
-									],
-									"python3": "/usr/local/bin/python3.3"
-								}
-							},
-							"codeintel_live": true,
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							[
-							],
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-							],
-							"codeintel_snippets": false,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"codeintel_word_completions": "buffer",
-							"function_name_status_row": 217,
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
@@ -863,10 +580,175 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 575.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "login.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2487,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1204,
+								1204
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "header.php",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 6688,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6017,
+								6254
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 1922.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "js/scripts-validation-forms.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1196,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1024,
+								1024
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "css/style.scss",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16880,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8859,
+								8859
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/SCSS/SCSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9319.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16206,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6,
+								6
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -915,7 +797,7 @@
 	{
 		"height": 100.0
 	},
-	"project": "fantazenit.sublime-project",
+	"project": "PROGETTO.sublime-project",
 	"replace":
 	{
 		"height": 62.0

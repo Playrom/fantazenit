@@ -79,8 +79,9 @@
     };
     
     var select_all_teams = function(bo){
-        
+
         var items=document.querySelectorAll('.select_teams');
+        console.log(items);
         
         
         for(var i=0;i<items.length;i++){

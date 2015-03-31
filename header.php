@@ -44,7 +44,7 @@ if(isset($config['current_round'])){
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Fanta Zenit<?php if(isset($title)){ echo " - ".$title; } ?></title>
+        <title>Fanta Zenit BETA - <?php if(isset($title)){ echo " - ".$title; } ?></title>
         
         <link href="css/ion.rangeSlider.css" rel="stylesheet" />
         <link href="css/normalize.min.css" rel="stylesheet"/>
@@ -139,7 +139,7 @@ if(isset($config['current_round'])){
 	                	<li><a href="formations.php">Formazioni</a></li>
 	                	<li><a href="teams.php">Squadre</a></li>
 	                	<li><a href="standings.php">Classifiche</a></li>
-		                <?php if($user!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">LLogin</a></li><?php } ?>
+		                <?php if($user!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
 	                </ul>
                 </div>
             </div>
@@ -163,7 +163,7 @@ if(isset($config['current_round'])){
             <div id="content">
                 <div class="alert alert-danger error_display" role="alert">
 					<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-					<span class="sr-only">Error:</span>ATTENZIONE SITO NON FUNZIONANTE PER MODIFICHE IN CORSO
+					<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
 				</div>
 				                
                 <?php if($user!=null && !$database->isValidFormation(intval($user->getId()),intval($round))) { ?>

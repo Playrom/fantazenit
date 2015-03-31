@@ -37,11 +37,37 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
      header("Location:index.php");
 }else if($_SERVER['REQUEST_METHOD']=='GET'){ ?>
 
-    <form action="login.php" class="login_form" method="post">
-        <h3>Username: </h3><input name="user" type="text">
-        <h3>Pass: </h3><input name="pass" type="password">
-        <input type="submit" name="Login">
-		<a href="signup.php">Non sei ancora registrato? Iscriviti</a>
+    <?php if(isset($_GET['reg_complete'])) { ?>
+        <div class="alert alert-success error_display" role="alert">
+            <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>Registrazione Completata!
+        </div>
+    <?php } ?>
+
+    <form action="login.php" class="login_form form-horizontal" method="post">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Username</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="user" name="user" placeholder="Username" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Password</label>
+            <div class="col-md-10">
+              <input type="password" class="form-control" id="pass" name="pass" placeholder="Password">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6">
+                <a  class="col-md-12" href="signup.php">Non sei ancora registrato? Iscriviti</a>
+            </div>
+
+            <div class="col-md-6">
+                <button type="submit"  class="btn btn-default col-md-12">Login</button>
+            </div>
+        </div>
     </form>
 
 <?php

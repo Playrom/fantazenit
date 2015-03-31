@@ -23,7 +23,7 @@ include('header.php');
 	                        <?php if($database->getTeam($user->getId(),$config['current_round'])->getPlayers()!=null){ ?>
 	                            Hai già inserito la Formazione per la <?php echo $config['current_round'] ?>° Giornata
 	                        <?php }else{ ?>
-	                            Devi inserire la Formazione per la <?php echo $config['current_round'] ?>° Giornata, clicca qui per farlo
+	                            Devi inserire la Formazione per la <?php echo $config['current_round'] ?>° Giornata
 	                        <?php } ?>
 	                        
 	                        </span>

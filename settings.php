@@ -19,6 +19,12 @@ include('header.php');
             $database->editConfig($name,$value);
         }
 
+        if(isset($_POST['max_por'])){
+            $value=$_POST['max_por'];
+            $name="max_por";
+            $database->editConfig($name,$value);
+        }
+
         if(isset($_POST['max_def'])){
             $value=$_POST['max_def'];
             $name="max_def";

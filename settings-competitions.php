@@ -50,56 +50,70 @@ include('header.php');
             $users=$database->getUsers();
             
 ?>
-            <form action="settings-competitions.php" method="post">
+            <form action="settings-competitions.php" method="post" class="form-horizontal">
                 <div class="main">
                     <input type="hidden" name="id" <?php echo "value=\"".$competition->getId()."\" "; ?> >
-                    <div class="setting_item">
-                        <div class="setting_item_name">Modifica Competizione</div>
+
+                    <div class="form-group">
+                        <label class="col-md-12">Modifica Competizione</label>
                     </div>
-                    <div class="setting_item">
-                        <div class="setting_item_descript">Nome Competizione</div>
-                        <input class="setting_item_input" type="text" name="name" class="market-select" <?php echo "value=\"".$competition->getName()."\" "; ?> >
+
+                    <div class="form-group">
+                        <label class="col-md-4">Nome Competizione</label>
+                        <div class=" col-md-8">
+                            <input class="form-control" type="text" name="name"  <?php echo "value=\"".$competition->getName()."\" "; ?> >
+                        </div>
                     </div>
-                    <div class="setting_item">
-                        <div class="setting_item_descript">Prima Giornata di Serie A</div>
-                        <input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$competition->getFirstRound()."\" "; ?> >
-                    </div>
-                    <div class="setting_item">
-                        <div class="setting_item_descript">Numero Giornate</div>
-                        <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$competition->getNumRounds()."\" "; ?>>
-                    </div>
+
+                    <input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$competition->getFirstRound()."\" "; ?> >
+                    <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$competition->getNumRounds()."\" "; ?>>
+                    
                 </div>
 
                 <div class="main competition_creation">
-                    <div class="half_size">
-                        <h3>Partecipanti</h3>
-                        <div id="number_users_selected">0</div>
+                    
+                    <div class="form-group">
+                        <label class="col-md-4">Partecipanti</label>
+                        <div class="col-md-8">
+                            <div id="number_users_selected">0</div>
+                        </div>
                     </div>
-                    <div class="half_size">
-                        <div id="users">
-                            <div id="search_box">
-                                <div id="search_element">
-                                    <input class="search" id="search-element" placeholder="Cerca">
-                                </div>
+
+                    <div id="users" >
+                        <div id="search_box" class="form-group">
+                            <div id="search_element"  class="col-md-12">
+                                <input class="search form-control" id="search-element" placeholder="Cerca">
                             </div>
-                            <input type="button" id="select_all" value="Seleziona Tutti" />
-                            <input type="button" id="deselect_all" value="Deseleziona Tutti" />
-                            <ul class="list">
-                            <?php foreach($users as $team){ ?>
-                                <li class="squaredFour">
-                                    <input type="checkbox" class="select_teams" <?php echo "value=\"".$team->getId()."\""; ?> name="users[]"
-                                           
-                                           <?php if($database->isUserInCompetition($team->getId(),$competition->getId())) echo "checked=\"checked\""; ?>
-                                           
-                                           >
-                                    <label for="squaredFour"></label>
-                                    <div class="user_name"><?php echo $team->getNameTeam(); ?></div>
-                                </li>
-                            <?php } ?>
-                            </ul>
                         </div>
 
-                        <input class="setting_item_input" name="modified" type="submit" value="Modifica" >
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <input type="button" id="select_all" value="Seleziona Tutti" class="btn btn-default col-md-12" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="button" id="deselect_all" value="Deseleziona Tutti" class="btn btn-default col-md-12" />
+                            </div>
+                        </div>
+
+                        <ul class="list">
+                            <div class="form-group">
+                                <?php foreach($users as $team){ ?>
+                                    <div class="checkbox-inline cold-md-6">
+                                      <label>
+                                        <input clas=s"select_teams" type="checkbox" <?php echo "value=\"".$team->getId()."\""; ?> name="users[]" 
+                                        <?php if($database->isUserInCompetition($team->getId(),$competition->getId())) echo "checked=\"checked\""; ?> >
+                                        <?php echo $team->getNameTeam(); ?>
+                                      </label>
+                                    </div>
+                                <?php } ?>
+                        </ul>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="button" name="modified" type="submit" value="Modifica" class="btn btn-default col-md-12" />
+                            </div>
+                        </div>
                     </div>    
                 </div>
             </form>
@@ -111,42 +125,40 @@ include('header.php');
 
         <div class="main">
             <form action="creation-competition.php" method="post">
-                <div class="setting_item">
-                    <div class="setting_item_name">Crea Competizione</div>
-                </div>
-                <div class="setting_item">
-                    <div class="setting_item_descript">Nome Competizione</div>
-                    <input class="setting_item_input" type="text" name="name" class="market-select" <?php echo "value=\"".$name."\" "; ?> >
-                </div>
-				 <div class="setting_item">
-                    <div class="setting_item_descript">Prima Giornata di Serie A</div>
-                    <input class="setting_item_input" type="text" name="first_round" class="market-select" <?php echo "value=\"".$first_round."\" "; ?> readonly="readonly">
-                </div>
-                <div class="setting_item">
-                    <div class="setting_item_descript">Numero Giornate</div>
-                    <input class="setting_item_input" type="text" name="num_rounds" class="market-select" <?php echo "value=\"".$num_rounds."\" "; ?> readonly="readonly">
+                <div class="form-group">
+                    <label>Crea una nuova Competizione</label>
                 </div>
 
-                <div class="setting_item">
-	                <div class="setting_item_input">
-			            <div class="setting_item_element" type="text" class="market-select" >Round Serie A</div>
-	                </div>
-                </div>
+                    <input type="hidden" name="create" value="1">
+                    
+                    <div class="form-group col-md-4">
+                        <label>Nome</label>
+                        <input class="form-control" type="text" name="name" <?php echo "value=\"".$name."\""; ?> >
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <label>1° Giornata</label>
+                        <input class="form-control" type="text" name="first_round" <?php echo "value=\"".$first_round."\""; ?> readonly="readonly" >
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label>Numero Giornate</label>
+                        <input class="form-control" type="text" name="num_rounds" <?php echo "value=\"".$num_rounds."\""; ?> readonly="readonly" >
+                    </div>
                 
 
                 <?php
 	                for($i=0;$i<$num_rounds;$i++){
 		        ?>
-		        <div class="setting_item">
-                    <div class="setting_item_descript">Giornata <?php echo $i+1; ?></div>
-                    <div class="setting_item_input">
-	                    <select class="setting_item_element market-select selection_round" name="rounds[]">
-		                    <option value=""></option>
-		                    <?php foreach($gen_rounds as $ele){ ?>
-			                    <option <?php echo "value=\"".$ele."\""; if($ele==$first_round) { echo "selected=\"selected\""; } ?> ><?php echo $ele; ?></option>
-		                   <?php }   $first_round++;  ?>
-	                    </select>
-                    </div>
+		        <div class="form-group col-md-12">
+                    <label>Giornata <?php echo $i+1; ?></label>
+                    
+                    <select class="form-control selection_round" name="rounds[]">
+	                    <option value=""></option>
+	                    <?php foreach($gen_rounds as $ele){ ?>
+		                    <option <?php echo "value=\"".$ele."\""; if($ele==$first_round) { echo "selected=\"selected\""; } ?> ><?php echo $ele; ?></option>
+	                   <?php }   $first_round++;  ?>
+                    </select>
                 </div>
 
 		        <?php	reset($gen_rounds);
@@ -155,8 +167,8 @@ include('header.php');
 
 
 
-                <div class="setting_item">
-                    <input class="setting_item_input" type="submit" value="Crea" >
+                <div class="form-group col-md-12  input-lg">
+                    <button type="submit" class="btn btn-default col-md-12">Crea</button>
                 </div>
             </form>
         </div>
@@ -166,42 +178,59 @@ include('header.php');
             <?php
             $competitions=$database->getCompetitions();
             foreach($competitions as $competition){ ?>
-                <div class="setting_item">
-                    <div class="setting_item_name"><?php echo $competition->getName(); ?></div>
                    <!--  <div class="setting_item_descript"></div> -->
-                    <form action="settings-competitions.php" method="get">
-                        <input class="setting_item_input" type="submit" value="Modifica" >
-                        <input type="hidden" name="edit" <?php echo "value=\"".$competition->getId()."\""; ?> >
-                    </form>
-                    <form  action="settings-competitions.php" method="get">
-                        <input class="setting_item_input" type="submit" value="Cancella" >
-                        <input type="hidden" name="delete" <?php echo "value=\"".$competition->getId()."\""; ?> >
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <h3 class="col-md-8 control-label left-label"><?php echo $competition->getName(); ?></h3>
+
+                        <form class="form-horizontal" action="settings-competitions.php" method="get">
+
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-default col-md-12">Modifica</button>
+                            </div>
+                            <input type="hidden" name="edit" <?php echo "value=\"".$competition->getId()."\""; ?> >
+
+                        </form>
+
+                        <form class="form-horizontal" action="settings-competitions.php" method="get">
+
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-default col-md-12">Cancella</button>
+                            </div>
+
+                            <input type="hidden" name="delete" <?php echo "value=\"".$competition->getId()."\""; ?> >
+                        </form>
+                    </div>
             <?php } ?>
         </div>
 
         <div class="main">
-            <form action="settings-competitions.php" method="post">
+           
+            <div class="form-group">
+                <label>Crea una nuova Competizione</label>
+            </div>
+
+            <form class="form-inline" action="settings-competitions.php" method="post">
                 <input type="hidden" name="create" value="1">
-                <div class="setting_item">
-                    <div class="setting_item_name">Crea una nuova Competizione</div>
-                </div>
-                <div class="setting_item">
-                    <div class="setting_item_descript">Nome</div>
-                    <input class="setting_item_input" type="text" name="name" class="market-select">
-                </div>
-                <div class="setting_item">
-                    <div class="setting_item_descript">Prima Giornata di Serie A</div>
-                    <input class="setting_item_input" type="text" name="first_round" class="market-select" >
-                </div>
-				<div class="setting_item">
-                    <div class="setting_item_descript">Numero Giornate</div>
-                    <input class="setting_item_input" type="text" name="num_rounds" class="market-select" >
+                
+                <div class="form-group col-md-3">
+                    <label>Nome</label>
+                    <input class="form-control" type="text" name="name">
                 </div>
                 
-                <div class="setting_item">
-                    <input class="setting_item_input" type="submit" value="Crea" >
+                <div class="form-group col-md-3">
+                    <label>1° Giornata</label>
+                    <input class="form-control" type="text" name="first_round">
+                </div>
+
+				<div class="form-group col-md-3">
+                    <label>Numero Giornate</label>
+                    <input class="form-control" type="text" name="num_rounds">
+                </div>
+
+                <div class="form-group col-md-3  input-lg">
+                    <button type="submit" class="btn btn-default col-md-12">Crea</button>
+                </div>
+
             </form>
         </div>
         <?php }
