@@ -1,4 +1,5 @@
 <?php
+	$title="Classifica";
 	include('header.php');
     $id_competition;
 
@@ -91,8 +92,5 @@
 	    </div>
 	<?php } ?>
 
-<script type="text/javascript">
-
-</script>
 
 <?php include('footer.php'); ?>

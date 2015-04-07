@@ -136,6 +136,33 @@ class ConnectDatabaseBase {
 
 	}
 
+	function getLastStat(){
+		$query="select MAX(round) as mx from `stats` ";
+			try{
+				if (!($stmt = $this->mysqli->prepare($query))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+
+
+				while ($row = $res->fetch_assoc()) {
+					return $row['mx'];
+				}
+
+			}catch(exception $e) {
+				echo "\nERRORE DUMP PLAYER BY ID: ".$e;
+				return 0;
+			}
+
+			return 0;
+	}
+
 }
 
 function is_num($number) {

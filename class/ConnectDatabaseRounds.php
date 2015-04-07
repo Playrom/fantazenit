@@ -623,7 +623,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 					$first=true;
 
-					var_dump($available);
 
 					$mod=strval($round);
 					$nuova=null;
@@ -642,7 +641,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 					}
 
 
-					var_dump($nuova);
 
 					$tempQuery="UPDATE `settings` SET value=? where name='already-calc' ";
 
@@ -804,7 +802,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 				$nextSub=true;
 			}else{
 				$ret=array('vote'=>$vote,'id'=>$roling[$step]->getPlayer()->getId());
-				var_dump($ret);
 				return $ret;
 			}
 		}else{

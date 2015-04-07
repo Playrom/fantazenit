@@ -1,4 +1,5 @@
 <?php
+$title="Formazioni";
 include('header.php');
 
 function calc($stat,$role){
@@ -64,8 +65,6 @@ function calc($stat,$role){
     }else if(isset($_SESSION['last_competition'])){
         $round=$config['current_round'];
         $competition=$_SESSION['last_competition'];
-        var_dump($round);
-       var_dump($competition);
         $round=$database->getRoundCompetitionByRealRound($round,$competition);
 
     }else{

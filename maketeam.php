@@ -1,4 +1,5 @@
 <?php
+$title="Inserisci Formazione";
 include('header.php');
 ?>
 
@@ -77,261 +78,287 @@ include('header.php');
 
     ?>
 
-    
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="team-info">
+                            <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
+                            <div class="balance">Giornata <?php echo $round; ?></div>
+                        </div>
+                    </div>
+                </div>
 
-    <div id="team-info">
-        <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
-        <div class="balance">Giornata <?php echo $round; ?></div>
-    </div>
+                <div class="row">
+                    <div class="side-element col-md-4">
+                        <div class="roster-item" id="P_free" <?php echo "max=\"".$max_por."\""; ?> >
 
-    <div id="side-roster">
-        <table class="roster-item" id="P" max="1">
-            <tr class="p-but"><td class="name-role">Portieri</td></tr>
-            <?php foreach($roster as $player){
-            if(strtolower($player->getPlayer()->getRole())=="p"){
+                            <?php foreach($roster as $player){
+                                if(strtolower($player->getPlayer()->getRole())=="p"){
 
-            ?>
-            <tr <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?> class="in-roster-player"
-             <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?> <?php echo "id=\"".$player->getPlayer()->getId()."_roster\" "; ?>
-             <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> <?php echo "id_player=\"".$player->getPlayer()->getId()."\" "; ?> >
-                  <td><?php echo $player->getPlayer()->getName(); ?></td>
-              </tr>
-           <?php }
-            } ?>
-        </table>
+                            ?>
+                              <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
+                                <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
+                                <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  >
+                                  <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
+                                  <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+                                  <div class="info-player-item">
+                                    <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                                </div>
+                              </div>
+                           <?php }
+                            } ?>
 
-        <table class="roster-item" id="D" max="3">
-            <tr class="d-but"><td class="name-role">Difensori</td></tr>
-            <?php foreach($roster as $player){
-            if(strtolower($player->getPlayer()->getRole())=="d"){
+                        </div>
 
-            ?>
-            <tr <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?> class="in-roster-player"
-             <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?> <?php echo "id=\"".$player->getPlayer()->getId()."_roster\" "; ?>
-             <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> <?php echo "id_player=\"".$player->getPlayer()->getId()."\" "; ?> >
-                  <td><?php echo $player->getPlayer()->getName(); ?></td>
-              </tr>
-           <?php }
-            } ?>
-        </table>
+                        <div class="roster-item" id="D_free" <?php echo "max=\"".$max_def."\""; ?>>
 
+                            <?php foreach($roster as $player){
 
-        <table class="roster-item" id="C" max="4">
-            <tr class="c-but"><td class="name-role">Centrocampisti</td></tr>
-            <?php foreach($roster as $player){
-            if(strtolower($player->getPlayer()->getRole())=="c"){
+                                if(strtolower($player->getPlayer()->getRole())=="d"){
 
-            ?>
-            <tr <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?> class="in-roster-player"
-             <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?> <?php echo "id=\"".$player->getPlayer()->getId()."_roster\" "; ?>
-             <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> <?php echo "id_player=\"".$player->getPlayer()->getId()."\" "; ?> >
-                  <td><?php echo $player->getPlayer()->getName(); ?></td>
-              </tr>
-           <?php }
-            } ?>
-        </table>
+                            ?>
+                            <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
+                                <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
+                                <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> >
+                                <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
+                                <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+                                <div class="info-player-item">
+                                    <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                                </div>
+                            </div>
+                           <?php }
+                            } ?>
 
+                        </div>
 
-        <table class="roster-item" id="A" max="3">
-            <tr class="a-but"><td class="name-role">Attaccanti</td></tr>
-            <?php foreach($roster as $player){
-            if(strtolower($player->getPlayer()->getRole())=="a"){
+                        <div class="roster-item" id="C_free" <?php echo "max=\"".$max_cen."\""; ?>>
 
-            ?>
-            <tr <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?> class="in-roster-player"
-             <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?> <?php echo "id=\"".$player->getPlayer()->getId()."_roster\" "; ?>
-             <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> <?php echo "id_player=\"".$player->getPlayer()->getId()."\" "; ?> >
-                  <td><?php echo $player->getPlayer()->getName(); ?></td>
-              </tr>
-           <?php }
-            } ?>
-        </table>
+                            <?php foreach($roster as $player){
 
+                                if(strtolower($player->getPlayer()->getRole())=="c"){
 
-    </div>
+                            ?>
+                            <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
+                                <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
+                                <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> >
+                                <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
+                                <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+                                <div class="info-player-item">
+                                    <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                                </div>
+                            </div>
+                           <?php }
+                            } ?>
 
-    <div id="side-players">
-        <div id="utility-row">
-            <select name="module" id="module" <?php echo "round=\"".$round."\""; ?> onchange="changemodule(this)">
-                  <?php
-                  if(isset($config["available-tactics"])){
-                    $modules=explode(";",$config["available-tactics"]);
-                  }
-                  foreach($modules as $module){
-                    if(strtolower($tactic)==strtolower($module)){
-                  ?>
-                    <option selected="selected" <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
-                  <?php } else { ?>
-                    <option <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
-                  <?php } } ?>
-            </select>
-            <?php if($rescued_team) { ?><span class="rescued">Formazione Recuperata dal Turno Precedente</span><?php } ?>
-        </div>
+                        </div>
 
-        <div id="save" onclick="getValues();">Salva Formazione</div>
+                        <div class="roster-item" id="A_free" <?php echo "max=\"".$max_att."\""; ?>>
 
-        <div id="team">
+                            <?php foreach($roster as $player){
 
-            <table id="P_table" max="1">
-                <tr class="p-but"><td class="name-role">Portieri</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("p") as $pla){
-                    if($pla->getPosition()==0){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="P" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td>
-				</tr>
+                                if(strtolower($player->getPlayer()->getRole())=="a"){
 
-                    <?php }
+                            ?>
+                            <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
+                                <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
+                                <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> >
+                                <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
+                                <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+                                <div class="info-player-item">
+                                    <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                                </div>
+                            </div>
+                           <?php }
+                            } ?>
 
-                }
-                
-            }
-                ?>
+                        </div>
+                    </div> <!-- side roster end -->
 
-            </table>
+                    <div class="side-element col-md-8">
+                        <div id="utility-row">
+                            <select name="module" id="module" <?php echo "round=\"".$round."\""; ?> onchange="changemodule(this)">
+                                  <?php
+                                  if(isset($config["available-tactics"])){
+                                    $modules=explode(";",$config["available-tactics"]);
+                                  }
+                                  foreach($modules as $module){
+                                    if(strtolower($tactic)==strtolower($module)){
+                                  ?>
+                                    <option selected="selected" <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
+                                  <?php } else { ?>
+                                    <option <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
+                                  <?php } } ?>
+                            </select>
+                            <?php if($rescued_team) { ?><span class="rescued">Formazione Recuperata dal Turno Precedente</span><?php } ?>
+                        </div>
 
-            <table id="D_table" <?php echo "max=\"".$dif."\" "; ?>>
-                <tr class="d-but"><td class="name-role">Difensori</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("d") as $pla){
-                    if($pla->getPosition()==0){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="D" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td></tr>
+                        <div id="save" onclick="getValues();">Salva Formazione</div>
 
-                    <?php }
+                        <div id="team">
 
-                }
-            }
-                ?>
+                            <table id="P_table" max="1">
+                                <tr class="p-but"><td class="name-role">Portieri</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("p") as $pla){
+                                    if($pla->getPosition()==0){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="P" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td>
+                				</tr>
 
-            </table>
+                                    <?php }
 
-            <table id="C_table" <?php echo "max=\"".$cen."\" "; ?>>
-                <tr class="c-but"><td class="name-role">Centrocampisti</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("c") as $pla){
-                    if($pla->getPosition()==0){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="C" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td></tr>
+                                }
+                                
+                            }
+                                ?>
 
-                    <?php }
+                            </table>
 
-                }
-            }
-                ?>
+                            <table id="D_table" <?php echo "max=\"".$dif."\" "; ?>>
+                                <tr class="d-but"><td class="name-role">Difensori</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("d") as $pla){
+                                    if($pla->getPosition()==0){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="D" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td></tr>
 
-            </table>
+                                    <?php }
 
-            <table id="A_table" <?php echo "max=\"".$att."\" "; ?>>
-                <tr class="a-but"><td class="name-role">Attaccanti</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("a") as $pla){
-                    if($pla->getPosition()==0){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="A" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td></tr>
+                                }
+                            }
+                                ?>
 
-                    <?php }
+                            </table>
 
-                }
-            }
-                ?>
+                            <table id="C_table" <?php echo "max=\"".$cen."\" "; ?>>
+                                <tr class="c-but"><td class="name-role">Centrocampisti</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("c") as $pla){
+                                    if($pla->getPosition()==0){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="C" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td></tr>
 
-            </table>
+                                    <?php }
 
-        </div>
+                                }
+                            }
+                                ?>
 
-        <div id="reserve_team">
-            <div class="type_name">Panchina</div>
+                            </table>
 
-            <table id="P_reserve" max="1">
-                <tr class="p-but"><td class="name-role">Portieri</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("p") as $pla){
+                            <table id="A_table" <?php echo "max=\"".$att."\" "; ?>>
+                                <tr class="a-but"><td class="name-role">Attaccanti</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("a") as $pla){
+                                    if($pla->getPosition()==0){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-team-player" position="0" <?php echo "id=\"".$player->getId()."_team\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?>  role="A" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td></tr>
 
-                    if($pla->getPosition()==1){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?> role="P" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td></tr>
-                    <?php }
+                                    <?php }
 
-                }
-            }
-                ?>
-            </table>
+                                }
+                            }
+                                ?>
 
-            <table id="D_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
-                <tr class="d-but"><td class="name-role">Difensori</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("d") as $pla){
+                            </table>
 
-                    if($pla->getPosition()==1){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?> role="D" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td></tr>
-                    <?php }
+                        </div> <!-- end team -->
 
-                }
-            }
-                ?>
-            </table>
+                        <div id="reserve_team">
+                            <div class="type_name">Panchina</div>
 
-            <table id="C_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
-                <tr class="c-but"><td class="name-role">Centrocampisti</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("c") as $pla){
+                            <table id="P_reserve" max="1">
+                                <tr class="p-but"><td class="name-role">Portieri</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("p") as $pla){
 
-                    if($pla->getPosition()==1){ ?>
-                    <?php $player=$pla->getPlayer(); ?>
-                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                    <?php echo "name=\"".$player->getName()."\" "; ?> role="C" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                    <td><?php echo $player->getName(); ?></td></tr>
-                    <?php }
+                                    if($pla->getPosition()==1){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?> role="P" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td></tr>
+                                    <?php }
 
-                }
-            }
-                ?>
-            </table>
+                                }
+                            }
+                                ?>
+                            </table>
 
-            <table id="A_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
-                <tr class="a-but"><td class="name-role">Attaccanti</td></tr>
-                <?php
-            if($team->getPlayers()!=null){
-                foreach($team->getPlayers()->getByRole("a") as $pla){
+                            <table id="D_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
+                                <tr class="d-but"><td class="name-role">Difensori</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("d") as $pla){
 
-                    if($pla->getPosition()==1){ ?>
-                        <?php $player=$pla->getPlayer(); ?>
-                        <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                        <?php echo "name=\"".$player->getName()."\" "; ?> role="A" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                        <td><?php echo $player->getName(); ?></td></tr>
-                    <?php }
+                                    if($pla->getPosition()==1){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?> role="D" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td></tr>
+                                    <?php }
 
-                }
-            }
-                ?>
-            </table>
+                                }
+                            }
+                                ?>
+                            </table>
 
-        </div>
+                            <table id="C_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
+                                <tr class="c-but"><td class="name-role">Centrocampisti</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("c") as $pla){
+
+                                    if($pla->getPosition()==1){ ?>
+                                    <?php $player=$pla->getPlayer(); ?>
+                                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
+                                    <?php echo "name=\"".$player->getName()."\" "; ?> role="C" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                    <td><?php echo $player->getName(); ?></td></tr>
+                                    <?php }
+
+                                }
+                            }
+                                ?>
+                            </table>
+
+                            <table id="A_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
+                                <tr class="a-but"><td class="name-role">Attaccanti</td></tr>
+                                <?php
+                            if($team->getPlayers()!=null){
+                                foreach($team->getPlayers()->getByRole("a") as $pla){
+
+                                    if($pla->getPosition()==1){ ?>
+                                        <?php $player=$pla->getPlayer(); ?>
+                                        <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
+                                        <?php echo "name=\"".$player->getName()."\" "; ?> role="A" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
+                                        <td><?php echo $player->getName(); ?></td></tr>
+                                    <?php }
+
+                                }
+                            }
+                                ?>
+                            </table>
+
+                        </div> <!-- reserve end -->
+                    </div>
+                </div> <!-- row end -->
+            </div> <!-- container end -->
         <?php }else{ ?>
-        <div id="team-info">
-            <div class="name-team">Non è piu possibile inserire la formazione per questa giornata</div>
-            <div class="balance">Giornata <?php echo $round; ?></div>
+        <div class="alert alert-danger error_display" role="alert">
+            <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+            <span class="sr-only"></span>Attenzione , non è piu possibile inserire la formazione
         </div>
       <?php } ?>
 <?php }

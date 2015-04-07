@@ -1,5 +1,5 @@
 body {
-  background: #C6CEBF;
+  background: #F7F2F2 !important;
   margin: 0;
   font-family: "Open Sans", arial; }
 
@@ -172,10 +172,14 @@ a.current-round {
   margin: 10px 10px 10px 0;
   width: 750px; }
 
+.side-element {
+  margin-top: 10px; }
+
 .roster-item {
   float: left;
   position: relative;
-  width: 100%; }
+  width: 100%;
+  background: #FFF; }
 
 .old-player, .new-player {
   border-bottom: 1px solid #f8f8f8;
@@ -411,7 +415,8 @@ table.roster-item {
   float: left;
   position: relative;
   background: #FFF;
-  height: auto; }
+  height: auto;
+  width: 100%; }
 
 .standing {
   height: auto;
@@ -433,9 +438,11 @@ table.roster-item {
   max-height: 140px;
   /*margin-bottom: 810px;*/ }
 
+.no_formation .old-player, .no_formation .new-player {
+  line-height: 40px;
+  margin-left: 10px; }
+
 .row_formation {
-  float: left;
-  position: relative;
   margin: 10px 0 0 0; }
 
 .title_formation {
@@ -803,22 +810,14 @@ input[type=checkbox] {
   margin-left: 1% !important; }
 
 /* TEAM LIST */
-.team_list {
-  background: none;
-  padding: 0; }
-
 .team_item_list {
   height: auto;
   position: relative;
   float: left;
   background: #FFFFFF;
-  margin: 0 1% 10px 0;
-  width: 49% !important; }
+  width: 100%; }
 
-.team_item_list.margin_left {
-  margin: 0 0 10px 1%; }
-
-.team_list .name_team {
+.team_item_list .name_team {
   width: 90%;
   margin: 5px 5%;
   float: left;
@@ -828,12 +827,12 @@ input[type=checkbox] {
   line-height: 30px;
   color: #000000; }
 
-.team_list .name_user {
+.team_item_list .name_user {
   font-size: 18px;
   height: 24px;
   line-height: 24px; }
 
-.team_list a {
+.team_item_list a {
   text-decoration: none;
   color: #000000; }
 
@@ -848,20 +847,18 @@ input[type=checkbox] {
   width: 49%; }
 
 .team_single #side-roster {
-  margin: 0px; }
+  margin: 0;
+  width: 100%; }
 
-.team_single .half_size {
-  width: 49% !important; }
-
-.team_single #side-roster {
-  margin: 0 1% 0 0; }
+.team_single .vote {
+  width: 50px; }
 
 .title_team_single {
   background: #FF0000;
   font-size: 25px;
   color: #FFF;
   text-align: center;
-  margin: 0 1% 0 0; }
+  margin: 0; }
 
 .title_transfers_single {
   background: #586969;

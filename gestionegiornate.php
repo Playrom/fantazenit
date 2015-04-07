@@ -60,7 +60,9 @@ include('header.php');
                     <div class="col-md-2">
                         <select name="calc" class="form-control">
                         <?php foreach($rounds as $round){
-                            echo "<option value=\"".$round."\" >".$round."</option>";
+                            if ($round<=intval($database->getLastStat())){
+                                echo "<option value=\"".$round."\" >".$round."</option>";
+                            }
                         } ?>
                         </select>
                     </div>

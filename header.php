@@ -44,7 +44,7 @@ if(isset($config['current_round'])){
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Fanta Zenit BETA - <?php if(isset($title)){ echo " - ".$title; } ?></title>
+        <title>Fanta Zenit BETA <?php if(isset($title)){ echo " - ".$title; } ?></title>
         
         <link href="css/ion.rangeSlider.css" rel="stylesheet" />
         <link href="css/normalize.min.css" rel="stylesheet"/>
