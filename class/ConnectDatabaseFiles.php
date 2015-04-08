@@ -1,7 +1,7 @@
 <?php
 
 
-class ConnectDatabaseFiles extends ConnectDatabaseBase{
+class ConnectDatabaseFiles extends ConnectDatabase{
     
     function loadStatsToDatabase($round,$file){
 		$dom = new DOMDocument;

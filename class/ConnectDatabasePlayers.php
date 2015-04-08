@@ -1,5 +1,5 @@
 <?php 
-class ConnectDatabasePlayers extends ConnectDatabaseMarkets{
+class ConnectDatabasePlayers extends ConnectDatabase{
     
     public function __call($method_name , $parameter){
 		if($method_name == "dumpPlayer"){ //Function overloading logic for function name overlodedFunction

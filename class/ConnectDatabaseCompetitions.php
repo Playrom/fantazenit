@@ -1,5 +1,5 @@
 <?php
-class ConnectDatabaseCompetitions extends ConnectDatabaseFiles {
+class ConnectDatabaseCompetitions extends ConnectDatabase {
     
     function getTeamsByRoundAndCompetition($round,$id_competition,$players){
 		$arr=array();
@@ -377,7 +377,10 @@ class ConnectDatabaseCompetitions extends ConnectDatabaseFiles {
     }
 
 	function getStandings($id_competition){
-		$rounds=$this->getRoundsByCompetition($id_competition);
+
+		$data_rounds=new ConnectDatabaseCompetitions($this->mysqli);
+
+		$rounds=$data_rounds->getRoundsByCompetition($id_competition);
 		$results=array();
 
 

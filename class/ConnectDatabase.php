@@ -1,17 +1,61 @@
 <?php
 
-class ConnectDatabase extends ConnectDatabaseRounds{
-    function signupUser(User $user){
+class ConnectDatabase {
 
-		$query="select * from `users` where email LIKE ?";
-		$queryInsert="insert into `users`( `name`, `surname`, `username`, `password`, `email`,`balance`,`name_team`,`telephone`,`url_fb`) VALUES (?,?,?,?,?,?,?,?,?)";
+	public $username;
+	public $password;
+	public $ip;
+	public $port;
+	public $database_name;
+
+	public $mysqli;
+
+	function __construct5($ip,$username,$password,$database_name,$port){
+		$this->username=$username;
+		$this->password=$password;
+		$this->ip=$ip;
+		$this->port=$port;
+		$this->database_name=$database_name;
+
+		$this->mysqli = new mysqli($ip,$username,$password,$database_name,$port);
+		if ($this->mysqli->connect_errno) {
+		    echo "Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . $this->mysqli->connect_error;
+		}
+
+
+	}
+
+	public function __construct() {
+        $get_arguments       = func_get_args();
+        $number_of_arguments = func_num_args();
+
+        if (method_exists($this, $method_name = '__construct'.$number_of_arguments)) {
+            call_user_func_array(array($this, $method_name), $get_arguments);
+        }
+    }
+
+
+	function __construct1($mysqli){
+		$this->mysqli = $mysqli;
+		if ($this->mysqli->connect_errno) {
+		    echo "Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . $this->mysqli->connect_error;
+		}
+	}
+
+
+	
+	
+
+	function close(){
+		$this->mysqli->close();
+	}
+
+	
+	function dumpConfig(){
+		$query="select * from `settings`";
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-			}
-
-			if (!$stmt->bind_param("s", strtolower($user->getEmail()))) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
@@ -20,264 +64,103 @@ class ConnectDatabase extends ConnectDatabaseRounds{
 
 			$res=$stmt->get_result();
 			$res->data_seek(0);
+
+			$config=array();
+
 			while ($row = $res->fetch_assoc()) {
-				return false;
+				$id=$row['id'];
+				$name=$row['name'];
+				$value=$row['value'];
+				$config[$name]=$value;
 			}
 
-			if (!($stmt = $this->mysqli->prepare($queryInsert))) {
+
+		}catch(exception $e) {
+			echo "\nERRORE DUMP CONFIG: ".$e;
+			return null;
+		}
+
+		return $config;
+	}
+
+    function editConfig($name,$value){
+        $query="UPDATE settings SET value='".$value."' WHERE name='".$name."' ";
+        try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("sssssisss", $user->getName(),$user->getSurname(),$user->getUsername(),$user->getPassword(),strtolower($user->getEmail()),$user->getBalance(),$user->getNameTeam(),$user->getTelephone(),$user->getUrlFb())) {
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+		}catch(exception $e) {
+			echo "\nERRORE EDIT CONFIG: ".$e;
+			return false;
+		}
+        return true;
+	}
+
+
+	function setCurrentRound($round,$date_in){
+		$date=DateTime::createFromFormat('d-m-Y H:i', $date_in);
+		$query="UPDATE `rounds` SET closetime='".$date->format("Y-m-d H:i:00")."' WHERE round=".$round;
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+            $query="UPDATE `settings` SET value='".$round."' WHERE name='current_round' ";
+
+            if (!($stmt2 = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt2->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+			
+			$settings=$this->dumpConfig();
+
+			$tempQuery="UPDATE `settings` SET value=? where name='last-round' ";
+			
+			$round=$round-1;
+
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("s", $round)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-			    return false;
 			}
 
-				return true;
+			return true;
+
 
 		}catch(exception $e) {
-			echo "\nERRORE REGISTRAZIONE UTENTE: ".$e;
+			echo "\nERRORE DUMP CONFIG: ".$e;
 			return false;
 		}
 
-		return true;
-
-	}
-    
-    function getUsers(){
-
-		$query="select * , UNIX_TIMESTAMP(reg_date) as time from `users` order by username ASC";
-		try{
-			if (!($stmt = $this->mysqli->prepare($query))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-			}
-
-			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			$res=$stmt->get_result();
-			$res->data_seek(0);
-            $users=array();
-            
-			while ($row = $res->fetch_assoc()) {
-
-				$id=$row['id'];
-				$name=$row['name'];
-				$surname=$row['surname'];
-				$username=$row['username'];
-				$auth=$row['auth'];
-				$balance=$row['balance'];
-				$password=$row['password'];
-				$name_team=$row['name_team'];
-				$email=$row['email'];
-                $telephone=$row['telephone'];
-                $url_fb=$row['url_fb'];
-                
-                
-				$datetemp = date ("Y-m-d H:i:s", $row['time']);
-				$date=new DateTime($datetemp);
-
-				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
-				$roster=new RosterList();
-				while ($row2 = $res2->fetch_assoc()) {
-					$cost=$row2['cost'];
-					$player=$this->dumpPlayer(intval($row2['id_player']));
-					$roster[]=new RosterPlayer($player,$cost);
-				}
-
-
-				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
-                $this->getTransfers($us,$this->dumpSingoliToList(null,null));
-                $users[]=$us;
-            }
-            return $users;
-
-
-
-		}catch(exception $e) {
-			echo "\nERRORE DUMP USER BY EMAIL: ".$e;
-			return null;
-		}
-
-		return null;
 
 	}
 
-
-	function getUserByEmail($email){
-
-		$query="select * , UNIX_TIMESTAMP(reg_date) as time from `users` where email LIKE ?";
-		try{
-			if (!($stmt = $this->mysqli->prepare($query))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-			}
-
-			if (!$stmt->bind_param("s", strtolower($email))) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			$res=$stmt->get_result();
-			$res->data_seek(0);
-			while ($row = $res->fetch_assoc()) {
-
-				$id=$row['id'];
-				$name=$row['name'];
-				$surname=$row['surname'];
-				$username=$row['username'];
-				$auth=$row['auth'];
-				$balance=$row['balance'];
-				$password=$row['password'];
-				$name_team=$row['name_team'];
-                $telephone=$row['telephone'];
-                $url_fb=$row['url_fb'];
-
-				$datetemp = date ("Y-m-d H:i:s", $row['time']);
-				$date=new DateTime($datetemp);
-
-				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
-				$roster=new RosterList();
-				while ($row2 = $res2->fetch_assoc()) {
-					$cost=$row2['cost'];
-					$player=$this->dumpPlayer(intval($row2['id_player']));
-					$roster[]=new RosterPlayer($player,$cost);
-				}
-
-
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
-			}
-
-
-
-		}catch(exception $e) {
-			echo "\nERRORE DUMP USER BY EMAIL: ".$e;
-			return null;
-		}
-
-		return null;
-
-	}
-
-
-	function getUserByUsername($username){
-
-		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where username LIKE ?";
-		try{
-			if (!($stmt = $this->mysqli->prepare($query))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-			}
-
-			if (!$stmt->bind_param("s", $username)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			$res=$stmt->get_result();
-			$res->data_seek(0);
-			while ($row = $res->fetch_assoc()) {
-
-				$id=$row['id'];
-				$name=$row['name'];
-				$surname=$row['surname'];
-				$email=$row['email'];
-				$auth=$row['auth'];
-				$balance=$row['balance'];
-				$password=$row['password'];
-				$name_team=$row['name_team'];
-                $telephone=$row['telephone'];
-                $url_fb=$row['url_fb'];
-
-				$datetemp = date ("Y-m-d H:i:s", $row['time']);
-				$date=new DateTime($datetemp);
-
-				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
-				$roster=new RosterList();
-				while ($row2 = $res2->fetch_assoc()) {
-					$cost=$row2['cost'];
-					$player=$this->dumpPlayer(intval($row2['id_player']));
-					$roster[]=new RosterPlayer($player,$cost);
-				}
-
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
-			}
-
-
-
-		}catch(exception $e) {
-			echo "\nERRORE DUMP USER BY NAME: ".$e;
-			return null;
-		}
-
-		return null;
-
-	}
-
-	function getUserById($id){
-
-		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where id=?";
-		try{
-			if (!($stmt = $this->mysqli->prepare($query))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-			}
-
-			if (!$stmt->bind_param("i", $id)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			$res=$stmt->get_result();
-			$res->data_seek(0);
-			while ($row = $res->fetch_assoc()) {
-
-				$username=$row['username'];
-				$name=$row['name'];
-				$surname=$row['surname'];
-				$email=$row['email'];
-				$auth=$row['auth'];
-				$balance=$row['balance'];
-				$password=$row['password'];
-				$name_team=$row['name_team'];
-                $telephone=$row['telephone'];
-                $url_fb=$row['url_fb'];
-
-				$datetemp = date ("Y-m-d H:i:s", $row['time']);
-				$date=new DateTime($datetemp);
-
-				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
-				$roster=new RosterList();
-				while ($row2 = $res2->fetch_assoc()) {
-					$cost=$row2['cost'];
-					$player=$this->dumpPlayer(intval($row2['id_player']));
-					$roster[]=new RosterPlayer($player,$cost);
-				}
-
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
-			}
-
-
-
-		}catch(exception $e) {
-			echo "\nERRORE DUMP USER BY ID: ".$e;
-			return null;
-		}
-
-		return null;
-
-	}
 }
-    
-    ?>
+
+function is_num($number) {
+  if(!is_numeric($number)) {
+    throw new Exception("Value is not number");
+  }
+  return true;
+}
+
+?>

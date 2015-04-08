@@ -1,14 +1,21 @@
 <?php
+
 function __autoload($class_name) {
     require_once 'class/'.$class_name . '.php';
 }
+
 ob_start();
 session_start();
 setlocale(LC_ALL, 'it_IT.UTF-8'); 
 
 
-$database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-$competitions=$database->getCompetitions();
+$database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+$database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
+$database_users = new ConnectDatabaseUsers($database->mysqli);
+$database_rounds = new ConnectDatabaseRounds($database->mysqli);
+
+$competitions=$database_competitions->getCompetitions();
+
 $config=$database->dumpConfig();
 
 require_once 'functions.php';
@@ -21,15 +28,15 @@ if(isset($_POST['competition_change'])){
 if(!isset($_SESSION['last_competition'])){
     $_SESSION['last_competition']=$config['default_competition'];
 }
+
 $id_comp=$_SESSION['last_competition'];
 
 $user=null;
-
 $id_user=-1;
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
-        $user=$database->getUserByUsername($username);
+        $user=$database_users->getUserByUsername($username);
         $id_user=$user->getId();
 }
 
@@ -127,6 +134,7 @@ if(isset($config['current_round'])){
 			        </script>
 
     </head>
+
     <body>
 
         <div id="wrapper">
@@ -166,7 +174,7 @@ if(isset($config['current_round'])){
 					<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
 				</div>
 				                
-                <?php if($user!=null && !$database->isValidFormation(intval($user->getId()),intval($round))) { ?>
+                <?php if($user!=null && !$database_rounds->isValidFormation(intval($user->getId()),intval($round))) { ?>
                     <div class="alert alert-danger error_display" role="alert">
 						<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
 						<span class="sr-only"></span>Attenzione , Hai modificato la tua rosa dall'ultima formazione inserita

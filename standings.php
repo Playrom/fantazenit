@@ -8,7 +8,6 @@
 		$user=$database->getUserByUsername($username);
 	}
 
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
     $config=$database->dumpConfig();
 
     if(!isset($_SESSION['last_competition'])){
@@ -16,7 +15,7 @@
     }
     if(isset($_GET['competition'])){
         $id_competition=$_GET['competition'];
-        $_SESSION['last_competition']=$competition;
+        $_SESSION['last_competition']=$id_competition;
     }else{
        $id_competition=-1;
     }
@@ -31,9 +30,9 @@
     if($id_competition!=-1){
 	    
 	    
-		$rounds_list=$database->getRoundsOfCompetition($id_competition);
+		$rounds_list=$database_rounds->getRoundsOfCompetition($id_competition);
     
-		$competition=$database->getCompetition($id_competition);
+		$competition=$database_competitions->getCompetition($id_competition);
 	    if($competition!=null){ // START ESISTE COMPETITION
 	
 	
@@ -74,15 +73,15 @@
 	<?php }else{ ?>
 		<div class="container-fluid">
 	        <div class="row">
-		        <?php $competitions=$database->getCompetitions();
+		        <?php $competitions=$database_competitions->getCompetitions();
 			    		foreach($competitions as $competition){    
 			    ?>
 		            <div class="col-md-6">
 						<div id="team-info">
 				            <div class="name_team"><a <?php echo "href=\"?competition=".$competition->getId()."\""; ?>><?php echo $competition->getName(); ?></a></div>
-			                <!--<div class="name_user name_team"><?php echo $team->getName()." ".$team->getSurname(); ?></div>
+			                <!--<div class="name_user name_team"><?php //echo $team->getName()." ".$team->getSurname(); ?></div>
 			                <div class="bottom_team name_team">
-			                    <div class="credits"><?php echo $team->getBalance(); ?> Crediti</div>
+			                    <div class="credits"><?php //echo $team->getBalance(); ?> Crediti</div>
 			                    <div class="position"></div>
 			                </div> -->
 				        </div>

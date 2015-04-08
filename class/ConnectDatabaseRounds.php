@@ -1,6 +1,6 @@
 <?php
 
-class ConnectDatabaseRounds extends ConnectDatabasePlayers{
+class ConnectDatabaseRounds extends ConnectDatabase{
     function updateStats($stats_coll,$round){
 		try{
 			$tempQuery="DELETE from `stats` where round=?";
@@ -75,9 +75,12 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 	}
 
     function insertTeam($id_user,$ids,$reserves,$round,$tactic){
+
+    	$data_players=new ConnectDatabasePlayers($this->mysqli);
+
 		try{
 
-			$players=$this->dumpSingoliToList(null,null);
+			$players=$data_players->dumpSingoliToList(null,null);
 
 			$query="DELETE from `teams` where id_user=? and round=?;";
 
@@ -247,8 +250,10 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
     }
     
     function getTeam($id_user,$round){
+
+    	$data_players=new ConnectDatabasePlayers($this->mysqli);
         
-		$players=$this->dumpSingoliToList(null,null);
+		$players=$data_players->dumpSingoliToList(null,null);
 		try{
 
 			$tempQuery="SELECT * from `teams` where id_user=? and round=?;";
@@ -367,7 +372,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 			$settings=$this->dumpConfig();
 
-
 			$available=$settings['available-round'];
 
 			$rounds=explode(";",$available);
@@ -417,8 +421,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 			$first=true;
 
-
-
 			if($available!=null){
 				$mod=strval($round);
 				$nuova=null;
@@ -455,9 +457,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
-
-
-
 		}catch(exception $e) {
 			echo "\nERRORE CHIUSURA ROUND: ".$e;
 			return null;
@@ -492,8 +491,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 	function addRound($round){
 		try{
-
-
 				$tempQuery="INSERT INTO `rounds` (`round`) VALUES (?) ";
 
 				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
@@ -552,9 +549,7 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 				}
 			}
 
-
 			return true;
-
 
 		}catch(exception $e) {
 			echo "\nERRORE Creazione ROUND: ".$e;
@@ -565,7 +560,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 	function openRound($round){
 		try{
-
 
 			if(!$this->isOpenRound($round)){
 				$settings=$this->dumpConfig();
@@ -620,13 +614,9 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 					$mod=strval($round);
 					$nuova=null;
-
 					$first=true;
-
-
 					$mod=strval($round);
 					$nuova=null;
-
 					$first=true;
 
 					foreach($rounds as $temp){
@@ -639,8 +629,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 							}
 						}
 					}
-
-
 
 					$tempQuery="UPDATE `settings` SET value=? where name='already-calc' ";
 
@@ -659,7 +647,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 				}
 			}
 
-
 		}catch(exception $e) {
 			echo "\nERRORE APERTURA ROUND: ".$e;
 			return null;
@@ -675,7 +662,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 		$mod=strval($round);
 		$nuova=null;
-
 		$ret=false;
 
 		foreach($rounds as $temp){
@@ -693,7 +679,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 		$mod=strval($round);
 		$nuova=null;
-
 		$ret=false;
 
 		foreach($rounds as $temp){
@@ -705,7 +690,9 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
     
     function calcRound($round){
 
-		$players=$this->dumpSingoliToList(null,null);
+    	$data_players=new ConnectDatabasePlayers($this->mysqli);
+
+		$players=$data_players->dumpSingoliToList(null,null);
 		$tempQuery="SELECT stats.* , pla.role  FROM stats LEFT OUTER JOIN (  SELECT *  FROM (SELECT id as t, MAX(round) AS time FROM players GROUP BY t ) l JOIN players b
 					ON b.id = l.t AND b.round = l.time GROUP BY b.round, b.id  ) as pla ON pla.id=stats.id_player WHERE stats.round=?";
 
@@ -726,8 +713,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 			$res=$stmt->get_result();
 			$res->data_seek(0);
 			$arr=array();
-
-
 
 			while ($row = $res->fetch_assoc()) {
 				$id_player=$row['id_player'];
@@ -760,9 +745,7 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 					}
 				}
 
-
 				$final_vote=$this->calc($stats_coll,$row['role']);
-
 
 				$query="UPDATE stats SET final=? where id_player=? and round=?";
 
@@ -779,10 +762,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 				}
 			}
 
-
-
-
-
 			return true;
 		}catch(exception $e) {
 			echo "ex: ".$e;
@@ -793,8 +772,11 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 	}
 
 	function substitute($roling,$round,$alread_in,$max_sub,$step=0){
+
+		$data_players=new ConnectDatabasePlayers($this->mysqli);
+
         if($step>1) return 0;
-		$stat=$this->dumpStatsByRound($roling[$step]->getPlayer()->getId(),$round);
+		$stat=$data_players->dumpStatsByRound($roling[$step]->getPlayer()->getId(),$round);
 		$nextSub=false;
 		if($stat!=null && !isset($alread_in[$roling[$step]->getPlayer()->getId()])){
 			$vote=$stat['final']->getValue();
@@ -814,11 +796,12 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 		$step++;
 
-
 		return $this->substitute($roling,$round,$alread_in,$max_sub,$step);
 	}
 
 	function calcRoundUser($round){
+
+			$data_players=new ConnectDatabasePlayers($this->mysqli);
 
 			$tempQuery="SELECT *  FROM users ";
 			$config=$this->dumpConfig();
@@ -828,7 +811,7 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 			try{
 
-				$players=$this->dumpSingoliToList(null,null);
+				$players=$data_players->dumpSingoliToList(null,null);
 
 				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -872,7 +855,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 
 			            $this->insertTeam($id_user,$ids,$reserves,$round,$tactic);
 
-
 					}
 
 
@@ -885,7 +867,7 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 							$player=$pla->getPlayer();
 							$id_player=$player->getId();
 							$position=$pla->getPosition();
-							$stat=$this->dumpStatsByRound($id_player,$round);
+							$stat=$data_players->dumpStatsByRound($id_player,$round);
 
 							$enterSub=false;
 
@@ -1146,8 +1128,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 				$datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['closetime'])));
 				$date=new DateTime($datetemp);
 
-
-
 				$now=new DateTime("now");
 				$date->sub(new DateInterval("PT15M"));
 
@@ -1200,8 +1180,6 @@ class ConnectDatabaseRounds extends ConnectDatabasePlayers{
 			while ($row = $res->fetch_assoc()) {
 				$datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['closetime'])));
 				$date=new DateTime($datetemp);
-
-
 
 				$now=new DateTime("now");
 				$date->sub(new DateInterval("PT15M"));

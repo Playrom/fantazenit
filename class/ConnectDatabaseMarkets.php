@@ -1,6 +1,6 @@
 <?php
 
-class ConnectDatabaseMarkets extends ConnectDatabaseCompetitions{
+class ConnectDatabaseMarkets extends ConnectDatabase{
     function createRoster($user,$players,$ids){
 		try{
 
@@ -108,7 +108,7 @@ class ConnectDatabaseMarkets extends ConnectDatabaseCompetitions{
 			$num_pla=count($user->getPlayers()->getByRole($new_player->getRole()));
 			$old_num_pla=count($user->getPlayers()->getByRole($old_player->getRole()));
 			
-			$config=$this->dumpConfig();
+			$config=$this->dumpConfig(); 
 			
 			$num=0;
 			

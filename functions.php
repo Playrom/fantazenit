@@ -6,8 +6,11 @@
  * @return string
  */
 function getStandings($id_competition){
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-    $results=$database->getStandings($id_competition);
+    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database_users = new ConnectDatabaseUsers($database->mysqli);
+    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
+
+    $results=$database_competitions->getStandings($id_competition);
     
     
     $pos=1;
@@ -17,7 +20,7 @@ function getStandings($id_competition){
 
     
         foreach($results as $team){
-            $teamData=$database->getUserById($team['id_user']);
+            $teamData=$database_users->getUserById($team['id_user']);
 
             $ret.="<div class=\"old-player\" id=\"".$teamData->getId()."\" >";
             $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
@@ -43,8 +46,11 @@ function getStandings($id_competition){
  * @return [type]
  */
 function getStandingsByIdUser($id_competition,$id_user){
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-    $results=$database->getStandings($id_competition);
+    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database_users = new ConnectDatabaseUsers($database->mysqli);
+    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
+
+    $results=$database_competitions->getStandings($id_competition);
         
     $pos=1;
     $dots=false;
@@ -54,7 +60,7 @@ function getStandingsByIdUser($id_competition,$id_user){
 
     
         foreach($results as $team){
-            $teamData=$database->getUserById($team['id_user']);
+            $teamData=$database_users->getUserById($team['id_user']);
             
             if($pos>3 && $team['id_user']!=$id_user){
                 if(!$dots){
@@ -83,12 +89,16 @@ function getStandingsByIdUser($id_competition,$id_user){
 
 
 function getStandingsRound($id_competition,$id_round){
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database_users = new ConnectDatabaseUsers($database->mysqli);
+    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
+    $database_rounds = new ConnectDatabaseRounds($database->mysqli);
+    
     $config=$database->dumpConfig();
     
     if($id_round==-1) $id_round=$config['last-round'];
-    else $id_round=$database->getRealRoundByRoundCompetition($id_round,$id_competition);
-    $results=$database->getRoundStandings($id_competition,$id_round);
+    else $id_round=$database_rounds->getRealRoundByRoundCompetition($id_round,$id_competition);
+    $results=$database_rounds->getRoundStandings($id_competition,$id_round);
     
     
     $pos=1;
@@ -98,7 +108,7 @@ function getStandingsRound($id_competition,$id_round){
     $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">Punti</div><div class=\"finalvote vote value-player-item\">Gol</div></div></div>";
 
         foreach($results as $team){
-            $teamData=$database->getUserById($team['id_user']);
+            $teamData=$database_users->getUserById($team['id_user']);
 
             $ret.="<div class=\"old-player\" id=\"".$teamData->getId()."\" >";
             $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
@@ -118,17 +128,21 @@ function getStandingsRound($id_competition,$id_round){
 }
 
 function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database_users = new ConnectDatabaseUsers($database->mysqli);
+    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
+    $database_rounds = new ConnectDatabaseRounds($database->mysqli);
+
     $config=$database->dumpConfig();
 
     $base_round=$id_round;
     if($id_round==-1) { 
         $id_round=$config['last-round'];
-        $base_round=$database->getRoundCompetitionByRealRound($id_round,$id_competition);
+        $base_round=$database_rounds->getRoundCompetitionByRealRound($id_round,$id_competition);
     }else{
-        $id_round=$database->getRealRoundByRoundCompetition($id_round,$id_competition);
+        $id_round=$database_rounds->getRealRoundByRoundCompetition($id_round,$id_competition);
     }
-    $results=$database->getRoundStandings($id_competition,$id_round);
+    $results=$database_rounds->getRoundStandings($id_competition,$id_round);
     
     
     $pos=1;
@@ -139,7 +153,7 @@ function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){
 
     
         foreach($results as $team){
-            $teamData=$database->getUserById($team['id_user']);
+            $teamData=$database_users->getUserById($team['id_user']);
             
             if($pos>3 && $team['id_user']!=$id_user){
                 if(!$dots){

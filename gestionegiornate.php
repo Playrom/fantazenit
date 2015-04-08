@@ -4,6 +4,7 @@ include('header.php');
 
     <?php
 
+
     if(isset($_POST['calc'])){
 	    $round=$_POST['calc'];
 	}else if(isset($_POST['uncalc'])){
@@ -15,29 +16,33 @@ include('header.php');
 
     if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
 
         if(isset($_POST['calc'])){
+
             $round=$_POST['calc'];
-            $database->closeRound($round);
+            $database_rounds->closeRound($round);
 
         }else if(isset($_POST['uncalc'])){
 
             $round=$_POST['uncalc'];
-            $database->openRound($round);
+            $database_rounds->openRound($round);
 
         }else if(isset($_POST['current_round'])){
+
             $current_round=$_POST['current_round'];
             $time=$_POST['time_close'];
             $database->setCurrentRound($current_round,$time);
+
         }else if(isset($_POST['add_round'])){
+
             $add_round=$_POST['add_round'];
-            $database->addRound($add_round);
+            $database_rounds->addRound($add_round);
+
         }
 
 
 
-        $user=$database->getUserByUsername($username);
+        $user=$database_users->getUserByUsername($username);
 
         $config=$database->dumpConfig();
 
@@ -60,7 +65,7 @@ include('header.php');
                     <div class="col-md-2">
                         <select name="calc" class="form-control">
                         <?php foreach($rounds as $round){
-                            if ($round<=intval($database->getLastStat())){
+                            if ($round<=intval($database_rounds->getLastStatRound())){
                                 echo "<option value=\"".$round."\" >".$round."</option>";
                             }
                         } ?>
