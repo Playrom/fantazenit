@@ -1433,7 +1433,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     
     function getRoundStandings($id_competition,$id_round){
 		$results=array();
-        
+
+		$data_competitions=new ConnectDatabaseCompetitions($this->mysqli);
+
 
         $tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
 
@@ -1472,7 +1474,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
         }
         
 		$classifica=array();
-		$users=$this->getUsersInCompetition($id_competition);
+		$users=$data_competitions->getUsersInCompetition($id_competition);
 
 		foreach($users as $user){
 			$gols=0;

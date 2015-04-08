@@ -378,7 +378,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 	function getStandings($id_competition){
 
-		$data_rounds=new ConnectDatabaseCompetitions($this->mysqli);
+		$data_rounds=new ConnectDatabaseRounds($this->mysqli);
 
 		$rounds=$data_rounds->getRoundsByCompetition($id_competition);
 		$results=array();

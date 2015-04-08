@@ -5,7 +5,7 @@
 
     if(isset($_SESSION['username'])){
     	$username=$_SESSION['username'];
-		$user=$database_user->getUserByUsername($username);
+		$user=$database_users->getUserByUsername($username);
 	}
 
     $config=$database->dumpConfig();

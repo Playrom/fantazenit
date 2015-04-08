@@ -14,9 +14,10 @@
 * Aggiunta funzione getLastStat che segnala la giornata dei ultimi voti disponibili
 * Limitato calcolo a solo giornate con statistiche in database
 
-# Alpha 0.3.2
+# Alpha 0.3.2 - Work in Progress
 
 * Bugfix: standings.php
+* Edit: Pulizia dei file e delle cartelle
 * Edit: Rimosso getLastStat , ridondante con getLastStatRound in ConnectDatabaseRounds
 * Edit: Modificati classi ConnectDatabase, parente unico con classi differenziate
 * Edit _ConnectDatabase_: gestionegiornate.php
