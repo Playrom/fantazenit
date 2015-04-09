@@ -5,77 +5,69 @@ include('header.php');
 
 <?php
 
-    if(!isset($_SESSION['username'])) {
-        $_SESSION['old_url']=$_SERVER['REQUEST_URI'];
-        header("Location:login.php");
-    }else if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids'])){
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-        $user=$database->getUserByUsername($_SESSION['username']);
+if(!isset($_SESSION['username'])) {
 
-        $players=$database->dumpSingoliToList(null,null);
-        $ids_string=$_POST['ids'];
+    $_SESSION['old_url']=$_SERVER['REQUEST_URI'];
+    header("Location:login.php");
 
-        $database->createRoster($user,$players,$ids_string);
-        $database->close();
+}else if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids'])){
 
+    $user=$database_users->getUserByUsername($_SESSION['username']);
 
+    $players=$database_players->dumpSingoliToList(null,null);
+    $ids_string=$_POST['ids'];
+
+    $database_markets->createRoster($user,$players,$ids_string);
+
+}
+
+if($config['creation_market']==0){ ?>
+
+    <div class="alert alert-danger error_display" role="alert">
+        <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>Non è piu possibile modificare liberamente la rosa
+    </div>
+
+<?php }else if(isset($_SESSION['username'])){
+
+    $username=$_SESSION['username'];
+    $user=$database_users->getUserByUsername($username);
+
+    $players=$database_players->dumpSingoliToList(null, null);
+    $roster=$user->getPlayers();
+
+    $max_por=3;
+    $max_def=7;
+    $max_cen=7;
+    $max_att=6;
+
+    if(isset($config['max_por'])){
+        $max_por=intval($config["max_por"]);
     }
 
-    if($config['creation_market']==0){ ?>
+    if(isset($config['max_def'])){
+        $max_def=intval($config["max_def"]);
+    }
 
-        <div class="alert alert-danger error_display" role="alert">
-            <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>Non è piu possibile modificare liberamente la rosa
-        </div>
+    if(isset($config['max_cen'])){
+        $max_cen=intval($config["max_cen"]);
+    }
 
+    if(isset($config['max_att'])){
+        $max_att=intval($config["max_att"]);
+    }
 
+    if(isset($_SESSION['roster_not_completed'])){  unset($_SESSION['roster_not_completed']); ?>
+       <div class="error_display">Attenzione, hai provato ad inserire una formazione ma la tua Rosa non è completa</div>
+    <?php } ?>
 
-
-    <?php }else if(isset($_SESSION['username'])){
-
-            $username=$_SESSION['username'];
-            $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-            $user=$database->getUserByUsername($username);
-
-            $players=$database->dumpSingoliToList(null, null);
-            $roster=$user->getPlayers();
-
-            $max_por=3;
-            $max_def=7;
-            $max_cen=7;
-            $max_att=6;
-
-            if(isset($config['max_por'])){
-                $max_por=intval($config["max_por"]);
-            }
-
-            if(isset($config['max_def'])){
-                $max_def=intval($config["max_def"]);
-            }
-
-            if(isset($config['max_cen'])){
-                $max_cen=intval($config["max_cen"]);
-            }
-
-            if(isset($config['max_att'])){
-                $max_att=intval($config["max_att"]);
-            }
-        
-            if(isset($_SESSION['roster_not_completed'])){  unset($_SESSION['roster_not_completed']); ?>
-               <div class="error_display">Attenzione, hai provato ad inserire una formazione ma la tua Rosa non è completa</div>
-            <?php } ?>
-
-
-    <?php
-            $database->close();
-    ?>
      <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-			    <div id="team-info">
-			        <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
-			        <div class="balance">Soldi Disponibili:<div id="balance-display"><?php echo $user->getBalance(); ?></div></div>
-			    </div>
+    		    <div id="team-info">
+    		        <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
+    		        <div class="balance">Soldi Disponibili:<div id="balance-display"><?php echo $user->getBalance(); ?></div></div>
+    		    </div>
             </div>
         </div>
 
@@ -211,15 +203,7 @@ include('header.php');
         </div><!-- row -->
     </div><!-- container-->
 
-
-
-
-
-
-    <?php }
-
-    ?>
-
+<?php } ?>
 
 <script src="js/jquery-1.11.0.min.js"></script>
 <script src="js/ion.rangeSlider.min.js"></script>

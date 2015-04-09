@@ -13,6 +13,9 @@ $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306)
 $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
 $database_users = new ConnectDatabaseUsers($database->mysqli);
 $database_rounds = new ConnectDatabaseRounds($database->mysqli);
+$database_players = new ConnectDatabasePlayers($database->mysqli);
+$database_markets = new ConnectDatabaseMarkets($database->mysqli);
+
 
 $competitions=$database_competitions->getCompetitions();
 

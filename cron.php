@@ -4,7 +4,8 @@ function __autoload($class_name) {
     require_once 'class/'.$class_name . '.php';
 }
 
-$database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+$database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+$database_files = new ConnectDatabaseFiles($database->mysqli);
 
 $config=$database->dumpConfig();
 
@@ -33,7 +34,7 @@ for($round=1;$round<39;$round++){
 	$myfile = fopen($path, "w+") or die("Unable to open file!");
 	fwrite($myfile, $data);
 
-	$ret=$database->loadPlayersToDatabase($path,$round);
+	$ret=$database_files->loadPlayersToDatabase($path,$round);
 
 	fclose($myfile);
 
@@ -59,7 +60,7 @@ for($round=1;$round<39;$round++){
 	$myfile = fopen($path, "w+") or die("Unable to open file!");
 	fwrite($myfile, $data);
 
-	$database->loadStatsToDatabase($round,$path);
+	$database_files->loadStatsToDatabase($round,$path);
 
 	fclose($myfile);
 

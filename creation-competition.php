@@ -3,53 +3,52 @@ $title="Creazione Competizione";
 include('header.php');
 
 
-    if(isset($_SESSION['username'])){
+if(isset($_SESSION['username'])){
 
-        $username=$_SESSION['username'];
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $username=$_SESSION['username'];
 
-        $user=$database->getUserByUsername($username);
+    $user=$database_users->getUserByUsername($username);
+    $config=$database->dumpConfig();
 
-        $config=$database->dumpConfig();
+    if($user->getAuth()==1){
 
+        $name="";
+        $first_round=0;
+        $num_rounds=0;
+        $id=-1;
 
-        if($user->getAuth()==1){
+        if(isset($_POST['created']) && isset($_POST['users'])){
+            $users=$_POST['users'];
+            $rounds=null;
+            $name=$_POST['name'];
+            $first_round=$_POST['first_round'];
+            $num_rounds=$_POST['num_rounds'];
+            
+            $id=$database_competitions->createCompetition($name,$first_round,$num_rounds);
+            
+            if(isset($_SESSION['rounds'])) {
 
-	        $name="";
-	        $first_round=0;
-	        $num_rounds=0;
-	        $id=-1;
+                $rounds=$_SESSION['rounds'];
+                $database_competitions->setRoundsCompetition($id,$rounds);
+                unset($_SESSION['rounds']);
 
-            if(isset($_POST['created']) && isset($_POST['users'])){
-                $users=$_POST['users'];
-                $rounds=null;
-                $name=$_POST['name'];
-                $first_round=$_POST['first_round'];
-                $num_rounds=$_POST['num_rounds'];
-                
-                $id=$database->createCompetition($name,$first_round,$num_rounds);
-                
-                if(isset($_SESSION['rounds'])) {
-                    $rounds=$_SESSION['rounds'];
-                    $database->setRoundsCompetition($id,$rounds);
-                  unset($_SESSION['rounds']);
-                }
-                
-                $database->setUsersInCompetition($id,$users);
-                
-                header("Location:settings-competitions.php");
+            }
+            
+            $database_competitions->setUsersInCompetition($id,$users);
+            
+            header("Location:settings-competitions.php");
+            
+        }else if(isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds']) && isset($_POST['rounds'])){
 
-                
-            }else if(isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds']) && isset($_POST['rounds'])){
-                $name=$_POST['name'];
-                $first_round=$_POST['first_round'];
-                $num_rounds=$_POST['num_rounds'];
-                //$id=$database->createCompetition($name,$first_round,$num_rounds);
-                $rounds=$_POST['rounds'];
-                //$database->setRoundsCompetition($id,$rounds);
-                $_SESSION['rounds']=$rounds;
-                $users=$database->getUsers();
-        ?>
+            $name=$_POST['name'];
+            $first_round=$_POST['first_round'];
+            $num_rounds=$_POST['num_rounds'];
+            //$id=$database->createCompetition($name,$first_round,$num_rounds);
+            $rounds=$_POST['rounds'];
+            //$database->setRoundsCompetition($id,$rounds);
+            $_SESSION['rounds']=$rounds;
+            $users=$database_users->getUsers();
+            ?>
 
             <div class="main competition_creation">
                 <div class="half_size">
@@ -82,20 +81,20 @@ include('header.php');
                     </div>
 
                     <input class="setting_item_input" name="created" type="submit" value="Crea" >
-
-
+                    
                 </form>    
             </div>
 
-<?php
-                
-            }else{
-                header("Location:settings-competitions.php");
-            }
+        <?php     
+        }else{
+            header("Location:settings-competitions.php");
+        }
         
     }else{
+
         $_SESSION['old_url']=$_SERVER['REQUEST_URI'];
         header("Location:login.php");
+
     } // FINE SE ADMIN
         
 } // FINE USERNAME GET

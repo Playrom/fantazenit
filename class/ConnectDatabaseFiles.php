@@ -4,6 +4,9 @@
 class ConnectDatabaseFiles extends ConnectDatabase{
     
     function loadStatsToDatabase($round,$file){
+
+    	$database_rounds = new ConnectDatabaseRounds($this->mysqli);
+
 		$dom = new DOMDocument;
 		$dom->loadHTMLFile($file);
 
@@ -99,7 +102,7 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 
 
 		}
-		$this->calcRound($round);
+		$database_rounds->calcRound($round);
 
 		return true;
 

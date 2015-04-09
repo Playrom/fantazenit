@@ -26,6 +26,13 @@
 * Edit _ConnectDatabase_: functions.php
 * Edit _ConnectDatabase_: standings.php
 
+* Edit: Connessioni al database chiuse in footer.php
+* Edit _ConnectDatabase_: changeroster.php
+* Edit _ConnectDatabase_: createroster.php
+* Edit _ConnectDatabase_: creation-competition.php
+* Edit _ConnectDatabase_: cron.php
+
+
 
 # Da Fare
  
