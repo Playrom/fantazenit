@@ -403,7 +403,7 @@ a.current-round{
     width: 50%;
 }
 
-td.name-role {
+.name-role {
     padding: 5px;
     color: #FFF;
     margin-bottom: 5px;
@@ -883,7 +883,7 @@ tr:last-child {
 
 }
 
-.value_tr td{
+.value_tr td, .value_tr th{
 	text-align: center;
 }
 

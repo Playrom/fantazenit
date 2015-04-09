@@ -327,7 +327,7 @@ a.current-round {
 .new-player {
   width: 50%; }
 
-td.name-role {
+.name-role {
   padding: 5px;
   color: #FFF;
   margin-bottom: 5px; }
@@ -728,7 +728,7 @@ tr:last-child {
   height: 100%;
   line-height: 50px; }
 
-.value_tr td {
+.value_tr td, .value_tr th {
   text-align: center; }
 
 .value_info_table_box table {

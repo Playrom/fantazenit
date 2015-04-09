@@ -5,14 +5,13 @@ include('header.php');
 <?php
     $round;
     $competition;
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
     $config=$database->dumpConfig();
 
     
     if(isset($_GET['id'])){
         $id=$_GET['id']; 
-        $team=$database->getUserById($id);
-        $database->getTransfers($team,$database->dumpSingoliToList(null,null));
+        $team=$database_users->getUserById($id);
+        $database_markets->getTransfers($team,$database_players->dumpSingoliToList(null,null));
         $roster=$team->getPlayers();
         $transfers=$team->getTransfers();
     ?>
@@ -128,10 +127,10 @@ include('header.php');
                 
                 <div class="transfers">
                     <?php foreach($transfers as $transfer){
-                    $market=$database->getMarketById($transfer->getIdMarket());
+                    $market=$database_markets->getMarketById($transfer->getIdMarket());
                     $date=ucwords(strftime("%A %e %B %Y , %H:%M",$transfer->getDate()->getTimestamp()));
-                    $old=$database->dumpPlayerById(intval($transfer->getOldPlayer()->getPlayer()->getId()));
-                    $new=$database->dumpPlayerById(intval($transfer->getNewPlayer()->getPlayer()->getId()));
+                    $old=$database_players->dumpPlayerById(intval($transfer->getOldPlayer()->getPlayer()->getId()));
+                    $new=$database_players->dumpPlayerById(intval($transfer->getNewPlayer()->getPlayer()->getId()));
                     ?>
                     <div class="name_market"><?php echo $market->getName(); ?> - <?php echo $date ?></div>
                     <div class="operation">
@@ -182,7 +181,7 @@ include('header.php');
             <div class="row">
         <?php
             
-            $users=$database->getUsers();
+            $users=$database_users->getUsers();
             $count=0;
             foreach($users as $team){ $count++;  ?>
                 <div class="row_formation col-md-6">

@@ -220,6 +220,40 @@ function calc($stat,$role){
 
 
 
+function role($string){
+    if($string=='P') return 'Portiere';
+    if($string=='D') return 'Difensore';
+    if($string=='C') return 'Centrocampista';
+    if($string=='A') return 'Attaccante';
+}
+
+function media($statistics){
+    $vote=0;
+    $number=0;
+    foreach($statistics as $stat){
+        if(isset($stat['final'])){
+            if($stat['final']->getValue()!=-1){
+                $vote=$vote+$stat['final']->getValue();
+                $number++;
+            }
+        }
+    }
+
+    if($vote!=0) return ($vote/$number);
+    return "N.D.";
+}
+
+function presenze($statistics){
+    $number=0;
+    foreach($statistics as $stat){
+        if(isset($stat['final']) && $stat['final']->getValue()!=-1){
+            $number++;
+        }
+    }
+
+    return $number;
+}
+
 
 
 

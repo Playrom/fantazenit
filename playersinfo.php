@@ -1,78 +1,6 @@
 <?php
 include('header.php');
 
-function calc($stat,$role){
-    $vote=$stat['vote']->getValue();
-    $scored=3*$stat['scored']->getValue();
-    $taken=1*$stat['taken']->getValue();
-    $free_keep=3*$stat['free_kick_keeped']->getValue();
-    $free_miss=1*$stat['free_kick_missed']->getValue();
-    $free_score=3*$stat['free_kick_scored']->getValue();
-    $auto=2*$stat['autogol']->getValue();
-    $yellow=0.5*$stat['yellow_card']->getValue();
-    $red=1*$stat['red_card']->getValue();
-    $assist=1*$stat['assist']->getValue();
-    $stop_assist=1*$stat['stop_assist']->getValue();
-    $gdp=0*$stat['gdp']->getValue();
-    $gdv=0*$stat['gdv']->getValue();
-    if($vote!=-1){
-        $vote=$vote+$scored-$taken+$free_keep-$free_miss+$free_score-$auto-$yellow-$red+$assist+$stop_assist+$gdp+$gdv;
-    }else if($vote==-1 && strtolower($role)=="p"){
-        if($stat['red_card']->getValue()==1){
-            $vote=4;
-        } // DA CONTROLLARE IL MINUTAGGIO
-        //$vote=$vote+$scored-$taken+$free_keep-$free_miss+$free_score-$auto-$yellow-$red+$assist+$stop_assist+$gdp+$gdv;
-    }else if($vote==-1 && strtolower($role)!="p"){
-        if($stat['red_card']->getValue()==1){
-            $vote=4;
-        }else if($stat['scored']->getValue()>0 || $stat['free_kick_keeped']->getValue()>0 || $stat['free_kick_scored']->getValue()>0 || $stat['assist']->getValue()>0 || $stat['stop_assist']->getValue()>0){
-            $vote=6;
-            $vote=$vote+$scored+$free_keep+$free_score+$assist+$stop_assist;
-        }else if($stat['free_kick_missed']->getValue()>0 || $stat['autogol']->getValue()>0){
-            $vote=6;
-            $vote=$vote-$free_miss-$autogol;
-        }else{
-            $vote=-1;
-        }
-    }
-    return $vote;
-}
-
-
-function role($string){
-	if($string=='P') return 'Portiere';
-	if($string=='D') return 'Difensore';
-	if($string=='C') return 'Centrocampista';
-	if($string=='A') return 'Attaccante';
-}
-
-function media($statistics){
-	$vote=0;
-	$number=0;
-	foreach($statistics as $stat){
-		if(isset($stat['final'])){
-			if($stat['final']->getValue()!=-1){
-				$vote=$vote+$stat['final']->getValue();
-				$number++;
-			}
-		}
-	}
-
-	if($vote!=0) return ($vote/$number);
-	return "N.D.";
-}
-
-function presenze($statistics){
-	$number=0;
-	foreach($statistics as $stat){
-		if(isset($stat['final']) && $stat['final']->getValue()!=-1){
-			$number++;
-		}
-	}
-
-	return $number;
-}
-
 ?>
 <script>
 	var val=new Array();
@@ -91,16 +19,14 @@ function presenze($statistics){
 </script>
 <?php
 
-
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
     $config=$database->dumpConfig();
 
     if(isset($_GET['id'])){
         $id_player=$_GET['id'];
     }
 
-    if($player=$database->dumpPlayerById($id_player)){
-	    $values=$database->getValuesOfPlayer($id_player);
+    if($player=$database_players->dumpPlayerById($id_player)){
+	    $values=$database_players->getValuesOfPlayer($id_player);
 	    
 
 		$votes=array();
@@ -108,7 +34,7 @@ function presenze($statistics){
 		$item=false;
 		$it=1;
 
-		$last_round=$database->getLastStatRound();
+		$last_round=$database_rounds->getLastStatRound();
 
 		foreach($player->getStat() as $stat){
 			if(isset($stat['final'])){

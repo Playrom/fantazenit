@@ -10,7 +10,6 @@ if(isset($_SESSION['username'])) {
 
 }else if(isset($_POST['user']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['email']) && isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['name_team']) &&      isset($_POST['telephone'])){
     
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
     $config=$database->dumpConfig();
     
     $pass1=$_POST['pass1'];
@@ -42,8 +41,8 @@ if(isset($_SESSION['username'])) {
         $url_fb="NULL";
         if(isset($_POST['url_fb'])) $url_fb=$_POST['url_fb'];
         
-        if($database->getUserByEmail($email)==null && $database->getUserByUsername($username)==null){
-            $user=$database->signupUser(new User(-1,$username,$name,$surname,$pass,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb));
+        if($database_users->getUserByEmail($email)==null && $database_users->getUserByUsername($username)==null){
+            $user=$database_users->signupUser(new User(-1,$username,$name,$surname,$pass,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb));
             if($user) {
                 session_destroy();
                 header("Location:login.php?reg_complete");

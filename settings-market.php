@@ -3,39 +3,44 @@ $title="Impostazioni Mercato";
 include('header.php');
 
 
-    if(isset($_SESSION['username'])){
-        
-        $username=$_SESSION['username'];
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+if(isset($_SESSION['username'])){
+    
+    $username=$_SESSION['username'];
 
-        $user=$database->getUserByUsername($username);
+    $user=$database_users->getUserByUsername($username);
 
-        $config=$database->dumpConfig();
-        
-        if($user->getAuth()==1){ 
-        
-        if(isset($_GET['delete'])){
-            $id=$_GET['delete'];
-            $database->deleteMarket($id);
-        }else if(isset($_POST['start_date']) && isset($_POST['finish_date']) && isset($_POST['max_change']) && isset($_POST['name'])){
-            $start_date=$_POST['start_date'];
-            $finish_date=$_POST['finish_date'];
-            $max_change=$_POST['max_change'];
-            $name=$_POST['name'];
-            if(isset($_POST['id'])){
-                $id=$_POST['id'];
-                $database->editMarket($id,$name,$max_change,$start_date,$finish_date);
-            }else{
-                $database->createMarket($name,$max_change,$start_date,$finish_date);
-            }
+    $config=$database->dumpConfig();
+    
+    if($user->getAuth()==1){ 
+    
+    if(isset($_GET['delete'])){
+
+        $id=$_GET['delete'];
+        $database_markets->deleteMarket($id);
+
+    }else if(isset($_POST['start_date']) && isset($_POST['finish_date']) && isset($_POST['max_change']) && isset($_POST['name'])){
+
+        $start_date=$_POST['start_date'];
+        $finish_date=$_POST['finish_date'];
+        $max_change=$_POST['max_change'];
+        $name=$_POST['name'];
+
+        if(isset($_POST['id'])){
+
+            $id=$_POST['id'];
+            $database_markets->editMarket($id,$name,$max_change,$start_date,$finish_date);
+
+        }else{
+            $database_markets->createMarket($name,$max_change,$start_date,$finish_date);
         }
-        
-        
-        
+    }
+    
+    
+    
 
-        if(isset($_GET['edit'])){
-            $edit=$_GET['edit'];
-            $market=$database->getMarketById($edit);
+    if(isset($_GET['edit'])){
+        $edit=$_GET['edit'];
+        $market=$database_markets->getMarketById($edit);
 ?>
             
         <div class="main">
@@ -90,7 +95,7 @@ include('header.php');
         <div class="main">
             <div class="container-fluid">
                 <?php 
-                $markets=$database->getMarkets();
+                $markets=$database_markets->getMarkets();
                 foreach($markets as $market){ ?>
                     <div class="row">
 

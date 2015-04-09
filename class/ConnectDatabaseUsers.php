@@ -96,7 +96,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 
 
 				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
-                $data_markets->getTransfers($us,$this->dumpSingoliToList(null,null));
+                $data_markets->getTransfers($us,$data_players->dumpSingoliToList(null,null));
                 $users[]=$us;
             }
             return $users;

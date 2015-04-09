@@ -5,7 +5,6 @@ include('header.php');
 
     if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
 
         if(isset($_POST['tactics'])){
             $value=$_POST['tactics'];
@@ -56,7 +55,7 @@ include('header.php');
         }
 
 
-        $user=$database->getUserByUsername($username);
+        $user=$database_users->getUserByUsername($username);
 
         $config=$database->dumpConfig();
         
@@ -121,7 +120,7 @@ include('header.php');
                 <div class="form-group">
                     <h3 class="col-md-8 control-label left-label">Competizione di Default&nbsp;&nbsp;<small>La Competizione principale della Lega</small></h3>
                     <div class="col-md-4">
-                        <?php $competitions=$database->getCompetitions(); $comp=$database->getCompetition($config['default_competition']); ?>
+                        <?php $competitions=$database_competitions->getCompetitions(); $comp=$database_competitions->getCompetition($config['default_competition']); ?>
                         <select class="form-control"  name="default_competition" >
                             <?php foreach($competitions as $competition){ ?>
                                 <option <?php echo "value=\"".$competition->getId()."\""; if($comp!=null && $competition->getId()==$comp->getId()) echo " selected"; ?> ><?php echo $competition->getName(); ?></option> 

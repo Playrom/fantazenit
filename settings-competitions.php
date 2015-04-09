@@ -6,9 +6,8 @@ include('header.php');
     if(isset($_SESSION['username'])){
 
         $username=$_SESSION['username'];
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
 
-        $user=$database->getUserByUsername($username);
+        $user=$database_users->getUserByUsername($username);
 
         $config=$database->dumpConfig();
 
@@ -21,19 +20,26 @@ include('header.php');
 	        $id=-1;
 
         if(isset($_GET['delete'])){
+
             $id=$_GET['delete'];
-            $database->deleteCompetition($id);
+            $database_competitions->deleteCompetition($id);
+
         }else if(isset($_POST['modified']) && isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds'])){
+
             $name=$_POST['name'];
             $first_round=$_POST['first_round'];
             $num_rounds=$_POST['num_rounds'];
+
             if(isset($_POST['id']) && isset($_POST['users'])){
+
                 $id=$_POST['id'];
                 $users_in_competition=$_POST['users'];
-                $database->editCompetition($id,$name,$first_round,$num_rounds);
-                $database->setUsersInCompetition($id,$users_in_competition);
+                $database_competitions->editCompetition($id,$name,$first_round,$num_rounds);
+                $database_competitions->setUsersInCompetition($id,$users_in_competition);
             }
+
         }else if(isset($_POST['create']) && isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds'])){
+
             $name=$_POST['name'];
             $first_round=$_POST['first_round'];
             $num_rounds=$_POST['num_rounds'];
@@ -44,10 +50,10 @@ include('header.php');
 
         if(isset($_GET['edit'])){
             $edit=$_GET['edit'];
-            $competition=$database->getCompetition($edit);
+            $competition=$database_competitions->getCompetition($edit);
             $first_round=$competition->getFirstRound();
             $gen_rounds=range($first_round,38);
-            $users=$database->getUsers();
+            $users=$database_users->getUsers();
             
 ?>
             <form action="settings-competitions.php" method="post" class="form-horizontal">
@@ -102,7 +108,7 @@ include('header.php');
                                     <div class="checkbox-inline cold-md-6">
                                       <label>
                                         <input clas=s"select_teams" type="checkbox" <?php echo "value=\"".$team->getId()."\""; ?> name="users[]" 
-                                        <?php if($database->isUserInCompetition($team->getId(),$competition->getId())) echo "checked=\"checked\""; ?> >
+                                        <?php if($database_competitions->isUserInCompetition($team->getId(),$competition->getId())) echo "checked=\"checked\""; ?> >
                                         <?php echo $team->getNameTeam(); ?>
                                       </label>
                                     </div>
@@ -176,7 +182,7 @@ include('header.php');
         <?php }else{ ?>
         <div class="main">
             <?php
-            $competitions=$database->getCompetitions();
+            $competitions=$database_competitions->getCompetitions();
             foreach($competitions as $competition){ ?>
                    <!--  <div class="setting_item_descript"></div> -->
                     <div class="form-group">
