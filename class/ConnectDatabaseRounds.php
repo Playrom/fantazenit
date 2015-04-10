@@ -904,6 +904,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 						}
 						$gol=0;
 
+						
+
 						if($result>=66){
 							$gol=floor(($result-66)/6)+1;
 						}
@@ -1435,6 +1437,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		$results=array();
 
 		$data_competitions=new ConnectDatabaseCompetitions($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 
 
         $tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
@@ -1458,10 +1461,28 @@ class ConnectDatabaseRounds extends ConnectDatabase{
             $round_result=array();
 
             while ($row = $res->fetch_assoc()) {
-                $id_user=$row['id_user'];
-                $round_result[$id_user]['points']=$row['points'];
-                $round_result[$id_user]['gol']=$row['gol'];
-                $round_result[$id_user]['user']=$row['id_user'];
+
+            	$id_user=$row['id_user'];
+
+            	$handicaps=$data_handicaps->getHandicapsRoundsByUserId($id_user);
+
+            	$result=$row['points'];
+				$gol=$row['gol'];
+
+	        	foreach($handicaps as $handicap){
+					if(intval($handicap->getRound())==intval($id_round)){
+						$round_handicap=$handicap->getPoints();
+						$result=$result+$round_handicap;
+						var_dump($result);
+						if($result>=66){
+							$gol=floor(($result-66)/6)+1;
+						}
+					}
+				}
+
+                $round_result[$id_user]['points']=$result;
+                $round_result[$id_user]['gol']=$gol;
+                $round_result[$id_user]['user']=$id_user;
             }
 
             $results[]=$round_result;

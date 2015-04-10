@@ -46,6 +46,13 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit _ConnectDatabase_: signup.php
 * Edit _ConnectDatabase_: teams.php
 
+# Alpha 0.4 - 
+
+* Nuove Classi Base : Handicap.php e figlie , servono a gestire le penalizzazioni
+* Nuova Classe di Connessione al Database : ConnectDatabaseHandicaps
+* Modificate Classi di Connessione al Database per utilizzare le nuove classi create
+* Le Classifiche in standings.php ora tengono conto delle penalizzazioni per le giornate ( non ancora per quelle alla competizione )
+
 # Da Fare
  
 * Modificare colori alert a seconda del tema
