@@ -34,9 +34,6 @@
     
 		$competition=$database_competitions->getCompetition($id_competition);
 	    if($competition!=null){ // START ESISTE COMPETITION
-
-	    	$real_round=$database_rounds->getRealRoundByRoundCompetition($round,$id_competition);
-	    	
 	
 	
 	         ?>
@@ -60,50 +57,14 @@
 				    </div>
 	            </div>
 	        </div>
-
+	      
 			<div class="row standing">
 				<div class="col-md-12">
 				    <div class="formation">
-				        <?php if($round!=-1) { 
-				        	echo getStandingsRound($id_competition,$round); 
-				        	$handicaps=$database_handicaps->getHandicapsRoundsByRoundId($real_round);
-				        }else{ 
-				        	echo getStandings($id_competition); 
-				        	$handicaps=$database_handicaps->getHandicapsCompetitionsByCompetitionId($id_competition);
-				        } ?>
+				        <?php if($round!=-1) { echo getStandingsRound($id_competition,$round); }else{ echo getStandings($id_competition); } ?>
 				    </div>
 				</div>
 			</div>
-
-			<div class="row standing">
-				<div class="col-md-12">
-				    <div class="formation">
-				    	<div class="roster-item">
-
-				    		<div class="old-player" id="14">
-		        				<div class="role-icon"><!--<span class="p-but">1</span> --></div>
-
-		        				<div class="name-player-item">Bonus e Malus</div>
-		        			</div>
-
-				    		<?php foreach($handicaps as $handicap) { ?>
-
-			        			<div class="old-player" id="14">
-			        				<div class="role-icon"><!--<span class="p-but">1</span> --></div>
-
-			        				<div class="name-player-item"><span style="color:#FF0000;"><?php echo $handicap->getUser()->getNameTeam(); ?></span> - <?php echo $handicap->getDescription(); ?></div>
-			        				<div class="info-player-item">
-			        					<div class="finalvote vote value-player-item"><?php echo $handicap->getPoints(); ?></div>
-			        				</div>
-			        			</div>
-
-				        	<?php } ?>
-
-				        </div>
-				    </div>
-				</div>
-			</div>
-
 	    </div>
 	
 		<?php } else { //FINE SE COMPETITION EXIST ?>

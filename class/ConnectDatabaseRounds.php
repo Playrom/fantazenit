@@ -1503,10 +1503,6 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 					if(intval($handicap->getRound())==intval($id_round)){
 						$round_handicap=$handicap->getPoints();
 						$result=$result+$round_handicap;
-<<<<<<< HEAD
-=======
-						var_dump($result);
->>>>>>> origin/master
 						if($result>=66){
 							$gol=floor(($result-66)/6)+1;
 						}

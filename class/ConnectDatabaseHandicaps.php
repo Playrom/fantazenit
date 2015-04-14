@@ -29,11 +29,7 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		
 		try{
-<<<<<<< HEAD
 			$tempQuery="SELECT * FROM handicaps_rounds order by id_round,id_user ";
-=======
-			$tempQuery="SELECT * FROM handicaps_rounds order by id_user ";
->>>>>>> origin/master
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -73,21 +69,13 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-<<<<<<< HEAD
 	function getHandicapsCompetitions(){
-=======
-	function getHandicapsStandings(){
->>>>>>> origin/master
 		
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
 		
 		try{
-<<<<<<< HEAD
 			$tempQuery="SELECT * FROM handicaps_competitions order by id_competition,id_user  ";
-=======
-			$tempQuery="SELECT * FROM handicaps_standings order by id_user,id_competition  ";
->>>>>>> origin/master
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -171,21 +159,13 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-<<<<<<< HEAD
 	function getHandicapsCompetitionsByUserId($id_user){
-=======
-	function getHandicapsStandingsByUserId($id_user){
->>>>>>> origin/master
 
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
 
 		try{
-<<<<<<< HEAD
 			$tempQuery="SELECT * FROM handicaps_competitions where id_user=? order by id_competition ";
-=======
-			$tempQuery="SELECT * FROM handicaps_standings where id_user=? order by id_competition ";
->>>>>>> origin/master
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -224,7 +204,6 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-<<<<<<< HEAD
 	function getHandicapsRoundsByRoundId($id_round){
 
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
@@ -317,8 +296,6 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-=======
->>>>>>> origin/master
 	function setHandicapRound($id_user,$id_round,$description,$points){
 
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
@@ -347,21 +324,13 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-<<<<<<< HEAD
 	function setHandicapCompetition($id_user,$id_competition,$description,$points){
-=======
-	function setHandicapStanding($id_user,$id_competition,$description,$points){
->>>>>>> origin/master
 
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
 
 		try{
-<<<<<<< HEAD
 			$tempQuery="INSERT INTO `handicaps_competitions`( `id_user`, `id_competition`, `description`, `points`) VALUES (?,?,?,?)";
-=======
-			$tempQuery="INSERT INTO `handicaps_standings`( `id_user`, `id_competition`, `description`, `points`) VALUES (?,?,?,?)";
->>>>>>> origin/master
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -383,7 +352,6 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-<<<<<<< HEAD
 	function deleteHandicapRound($id_handicap){
 
 		try{
@@ -434,8 +402,6 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 		}
 	}
 
-=======
->>>>>>> origin/master
 
 }
 

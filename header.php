@@ -15,7 +15,6 @@ $database_users = new ConnectDatabaseUsers($database->mysqli);
 $database_rounds = new ConnectDatabaseRounds($database->mysqli);
 $database_players = new ConnectDatabasePlayers($database->mysqli);
 $database_markets = new ConnectDatabaseMarkets($database->mysqli);
-$database_handicaps = new ConnectDatabaseHandicaps($database->mysqli);
 
 
 $competitions=$database_competitions->getCompetitions();

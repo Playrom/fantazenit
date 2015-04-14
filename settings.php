@@ -64,7 +64,6 @@ include('header.php');
         <div class="main">
             <a href="settings-competitions.php">Impostazioni Competizioni</a>
             <a href="settings-market.php">Impostazioni Mercati</a>
-            <a href="settings-handicaps.php">Impostazioni Handicap</a>
         </div>
 
         <div class="main">
