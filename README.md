@@ -56,7 +56,6 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * Edit: Le Classifiche in standings.php ora tengono conto dei bonus e malus sia per giornate sia di classifica generale
 * Edit: Le Formazioni calcolate tengono ora conto di bonus e malus di giornata
-*
 
 # Da Fare
  

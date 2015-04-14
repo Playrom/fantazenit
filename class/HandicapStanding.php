@@ -14,7 +14,11 @@ class HandicapStanding extends Handicap{
     }
 
     public function setCompetition($competition){
+<<<<<<< HEAD
         $this->competition=$competition->getId();
+=======
+        $this->competition=$id;
+>>>>>>> origin/master
         return $this;
     }
 

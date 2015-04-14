@@ -424,6 +424,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 						}
 					}
 
+<<<<<<< HEAD
 					$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserId($id_user);
 
 					foreach($handicaps_competitions as $handicap){
@@ -436,6 +437,8 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 						}
 					}
 
+=======
+>>>>>>> origin/master
 					$round_result[$id_user]['points']=$result;
 					$round_result[$id_user]['gol']=$gol;
 					$round_result[$id_user]['user']=$row['id_user'];
