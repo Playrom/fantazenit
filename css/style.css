@@ -484,7 +484,7 @@ tr:last-child {
   height: 40px;
   text-align: center; }
 
-.finalvote {
+.finalvote, .handicap-formation {
   background: #515151;
   color: #FFF; }
 

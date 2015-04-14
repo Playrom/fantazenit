@@ -5,9 +5,7 @@ include('header.php');
 
 $round;
 $competition;
-$username=$_SESSION['username'];
 
-$user=$database_users->getUserByUsername($username);
 $config=$database->dumpConfig();
 
 if(!isset($_SESSION['last_competition'])){
@@ -238,9 +236,29 @@ $possibleToEdit=$database_rounds->isPossibleToEditFormation($real_round);
                         <?php } //FOREACH PANCHINA ?>
 
                         <?php if($isCalc) {  ?>
+                      
+                            <?php
+                            $handicaps=$database_handicaps->getHandicapsRoundsByUserId($id_user);
+                            $tot_points=$info_round[$id_user]['points'];
+                            foreach($handicaps as $handicap){
+                                if(intval($handicap->getRound())==intval($real_round)){
+                                    $round_handicap=$handicap->getPoints();
+                                    $tot_points=$tot_points+$round_handicap;
+                                    /*if($result>=66){
+                                        $gol=floor(($result-66)/6)+1;
+                                    }*/
+                                    ?>
+                                    <div class="old-player handicap-formation" style="border: none;">
+                                        <div class="name-player-item"><span style="color:#CCCCCC;">
+                                        <?php if($round_handicap<0) { ?>Penalizzazione<?php }else{?>Bonus<?php } ?> di <?php echo $round_handicap." punti</span> : ".$handicap->getDescription(); ?></div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
 
                             <div class="old-player total_info">
-                                Totale:<?php echo $info_round[$id_user]['points']; ?>
+                                Totale:<?php echo $tot_points; ?>
                             </div>
 
                         <?php }else{ ?>

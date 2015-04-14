@@ -379,6 +379,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	function getStandings($id_competition){
 
 		$data_rounds=new ConnectDatabaseRounds($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 
 		$rounds=$data_rounds->getRoundsByCompetition($id_competition);
 		$results=array();
@@ -407,8 +408,36 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 				while ($row = $res->fetch_assoc()) {
 					$id_user=$row['id_user'];
-					$round_result[$id_user]['points']=$row['points'];
-					$round_result[$id_user]['gol']=$row['gol'];
+
+					$handicaps=$data_handicaps->getHandicapsRoundsByUserId($id_user);
+
+					$result=$row['points'];
+					$gol=$row['gol'];
+
+					foreach($handicaps as $handicap){
+						if(intval($handicap->getRound())==intval($round)){
+							$round_handicap=$handicap->getPoints();
+							$result=$result+$round_handicap;
+							if($result>=66){
+								$gol=floor(($result-66)/6)+1;
+							}
+						}
+					}
+
+					$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserId($id_user);
+
+					foreach($handicaps_competitions as $handicap){
+						if(intval($handicap->getCompetition()->getId())==intval($id_competition)){
+							$points_handicap=$handicap->getPoints();
+							$result=$result+$points_handicap;
+							if($result>=66){
+								$gol=floor(($result-66)/6)+1;
+							}
+						}
+					}
+
+					$round_result[$id_user]['points']=$result;
+					$round_result[$id_user]['gol']=$gol;
 					$round_result[$id_user]['user']=$row['id_user'];
 				}
 
