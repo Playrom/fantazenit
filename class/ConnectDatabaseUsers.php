@@ -108,6 +108,46 @@ class ConnectDatabaseUsers extends ConnectDatabase{
         return false;
 
 }
+
+    /*
+     * Get user By Api Key
+     *
+     * @param $apiKey String
+     *
+     * @return User
+     */
+
+    function getUserByApiKey($apiKey){
+
+        $query="select * from `users` where `apiKey`=?";
+
+        try{
+            if (!($stmt = $this->mysqli->prepare($query))) {
+                echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+            }
+
+            if (!$stmt->bind_param("s", $apiKey)) {
+                echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            if (!$stmt->execute()) {
+                echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            $res=$stmt->get_result();
+            $res->data_seek(0);
+            while ($row = $res->fetch_assoc()) {
+                return $this->getUserById($row['id']);
+            }
+
+        }catch(exception $e) {
+            echo $e;
+            return false;
+        }
+
+        return false;
+
+    }
     
     function getUsers(){
 

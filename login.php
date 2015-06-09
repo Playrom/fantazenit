@@ -13,26 +13,51 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
         $encoded_pass=md5($pass);
 
-        $user_data=$database_users->getUserByUsername($user);
+        $data = array();
 
-        if($user_data!=null){
-            if($encoded_pass==$user_data->getPassword()){
+        $data['username']=$user;
+        $data['password']=$encoded_pass;
 
-                session_regenerate_id();
-                $_SESSION['username'] = $user_data->getUsername();
-                $_SESSION['auth'] = $user_data->getAuth();
-                session_write_close();
+        $data= json_encode($data);
 
-                if(isset($_SESSION['old_url'])){
-                    header("Location:".$_SESSION['old_url']);
-                }else{
-                    header("Location:index.php");
-                }
+        $ch = curl_init('http://associazionezenit.it/fantazenit/api/v1/login');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data))
+        );
 
-            }else{
-                error_log("Password Non Corretta $encoded_pass-".$user_data->getPassword()."--normale=".$pass);
+        $json = curl_exec($ch);
+
+        $result = json_decode($json,true);
+
+        var_dump($result);
+
+        if($result['error']==true){
+            error_log("Password Non Corretta");
+        }else {
+
+            if (isset($result['apiKey'])) {
+                $token = $result['apiKey'];
+                $_SESSION['token'] = $token;
+            }
+
+
+            session_regenerate_id();
+            $_SESSION['username'] = $result['response']['username'];
+            $_SESSION['userAuth'] = $result['response']['auth'];
+            $_SESSION['userId'] = $result['response']['id'];
+            session_write_close();
+
+            if (isset($_SESSION['old_url'])) {
+                header("Location:" . $_SESSION['old_url']);
+            } else {
+                header("Location:index.php");
             }
         }
+
     }
 
 }else if(isset($_SESSION['username'])) {

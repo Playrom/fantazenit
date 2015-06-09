@@ -46,14 +46,16 @@ class User{
         $arr['email']=  $this->email;
         $arr['auth'] = $this->auth;
         $arr['balance'] = $this->balance;
-        //$arr['players'] = $this->players->map();
+        $arr['players'] = $this->players->map();
         //$arr['transfers'] = $this->transfers->map();
         $arr['name_team'] = $this->name_team;
         $arr['telephone'] = $this->telephone;
         $arr['url_fb'] = $this->url_fb;
         
         $arr['apiKey'] = $this->apiKey;
-        
+
+
+
         return $arr;
         
     }

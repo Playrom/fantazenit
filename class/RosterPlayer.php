@@ -43,7 +43,7 @@ class RosterPlayer{
     /**
      * Gets the value of cost.
      *
-     * @return mixed
+     * @return int
      */
     public function getCost()
     {
@@ -53,7 +53,7 @@ class RosterPlayer{
     /**
      * Sets the value of cost.
      *
-     * @param mixed $cost the cost 
+     * @param int $cost
      *
      * @return self
      */
@@ -62,5 +62,20 @@ class RosterPlayer{
         $this->cost = $cost;
 
         return $this;
+    }
+
+    /**
+     * Map the Object to Associative Array
+     *
+     * @return mixed|mixed
+     */
+
+    public function map(){
+        $arr=array();
+
+        $arr['player']=$this->player->map();
+        $arr['cost']=$this->cost;
+
+        return $arr;
     }
 }

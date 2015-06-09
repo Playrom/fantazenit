@@ -32,6 +32,24 @@ class StatisticsCollection extends ArrayObject{
 
         return $this;
     }
+
+    /**
+     * Map the Object to Associative Array
+     *
+     *
+     * @return String|mixed
+     */
+    public function map()
+    {
+        $arr=array();
+
+        foreach($this as  $item){
+
+            $arr[$item->getName()]=$item->map();
+        }
+
+        return $arr;
+    }
 }
 
 ?>

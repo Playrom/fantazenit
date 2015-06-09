@@ -17,16 +17,15 @@ $app->get('/hello/:name', function ($name) {
     echoRespnse(200, $response);
 });
 
-$app->get('/status/:id', function ($id) use ($app) {
+$app->get('/me', function () use ($app) {
     
     $apiKey = $app->request->headers->get('Token');
-    
-    
+
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
     
     if($db->checkApi($apiKey)){
         $response["error"] = false;
-        $response["message"]="Hello, $id";
+        $response["message"]=$db->getUserByApiKey($apiKey)->map();
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -46,7 +45,7 @@ $app->get('/status/:id', function ($id) use ($app) {
  * method - POST
  * params - email, password
  */
-$app->post('/login/', function() use ($app) {
+$app->post('/login', function() use ($app) {
     // check for required params
     verifyRequiredParams(array('username', 'password'),$app);
 
@@ -62,17 +61,19 @@ $app->post('/login/', function() use ($app) {
     
     $response['apiKey'] = null;
 
+
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
     // check for correct email and password
     if (checkLogin($username, $password)) {
         // get the user by email
         $user = $db->getUserByUsername($username);
 
+
         if ($user != NULL) {
             $response["error"] = false;
             
             $mapped=$user->map();
-            
+
             $response['response']=$mapped;
             
             
@@ -96,7 +97,7 @@ $app->post('/login/', function() use ($app) {
         $response['error'] = true;
         $response['message'] = 'Login failed. Incorrect credentials';
     }
-    
+
     echoRespnse(200, $response);
 
     
@@ -122,6 +123,7 @@ function verifyRequiredParams($required_fields,$app) {
     $error_fields = "";
     $request_params = array();
     $request_params = $_REQUEST;
+
     
     $json = $app->request->getBody();
     

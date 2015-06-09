@@ -15,12 +15,12 @@ $seconds=$database_rounds->secondsToClosingTime();
     <div class="row">
         <div class="first_row_home">
             <div class="col-md-8">
-            <?php if($user!=null){ ?>
-                <div class="welcome three_quarter box_home" <?php if($database_rounds->getTeam($user->getId(),$config['current_round'])->getPlayers()==null) echo "onclick=\"javascript:location.href='maketeam.php'\""; ?> >
+            <?php if($userId!=null){ ?>
+                <div class="welcome three_quarter box_home" <?php if($database_rounds->getTeam($userId,$config['current_round'])->getPlayers()==null) echo "onclick=\"javascript:location.href='maketeam.php'\""; ?> >
                     
-                    Benvenuto <?php echo $user->getUsername(); ?><br>
-                    <span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $database_rounds->getInfoRound($config['last-round'])[$user->getId()]['points']; ?></span> punti nella <?php echo $config['last-round']; ?>° Giornata<br>
-                    <?php if($database_rounds->getTeam($user->getId(),$config['current_round'])->getPlayers()!=null){ ?>
+                    Benvenuto <?php echo $username; ?><br>
+                    <span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $database_rounds->getInfoRound($config['last-round'])[$userId]['points']; ?></span> punti nella <?php echo $config['last-round']; ?>° Giornata<br>
+                    <?php if($database_rounds->getTeam($userId,$config['current_round'])->getPlayers()!=null){ ?>
                         Hai già inserito la Formazione per la <?php echo $config['current_round'] ?>° Giornata
                     <?php }else{ ?>
                         Devi inserire la Formazione per la <?php echo $config['current_round'] ?>° Giornata
@@ -50,13 +50,13 @@ $seconds=$database_rounds->secondsToClosingTime();
             <div class="col-md-6">
                 <div class="standings_last_round box_home">
                     <div class="name_market">Classifica della <?php echo $config['last-round']; ?>° Giornata</div>
-                    <?php echo getStandingsRoundByIdUser($id_competition,-1,$id_user); ?>
+                    <?php echo getStandingsRoundByIdUser($id_competition,-1,$userId); ?>
                 </div>
             </div>	
             <div class="col-md-6">
                 <div class="standings_general box_home">
                     <div class="name_market">Classifica Generale del Fanta Zenit</div>
-                    <?php echo getStandingsByIdUser($id_competition,$id_user); ?>
+                    <?php echo getStandingsByIdUser($id_competition,$userId); ?>
                 </div>
             </div>
         </div>

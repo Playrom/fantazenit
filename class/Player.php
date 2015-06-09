@@ -32,7 +32,7 @@ class Player{
      */
     private $diff;
     /**
-     * @var $stat Array
+     * @var StatisticsCollection $stat
      */
     private $stat=array();
 
@@ -52,11 +52,33 @@ class Player{
 		return false;
 	}
 
+    public function map(){
+        $arr=array();
+        $arr['id']=$this->id;
+        $arr['name']=$this->name;
+        $arr['team']=$this->team;
+        $arr['role']=$this->role;
+        $arr['value']=$this->value;
+        $arr['first_value']=  $this->first_value;
+        $arr['diff']=  $this->diff;
+
+        $second_arr=array();
+
+        foreach($this->stat as  $item){
+            $second_arr[$item->getRound()]=$item->map();
+        }
+
+        $arr['stat']=$second_arr;
+
+        return $arr;
+
+    }
+
 
     /**
      * Gets the value of id.
      *
-     * @return mixed
+     * @return Int
      */
     public function getId()
     {
@@ -66,7 +88,7 @@ class Player{
     /**
      * Sets the value of id.
      *
-     * @param mixed $id the id 
+     * @param Int
      *
      * @return self
      */
@@ -80,7 +102,7 @@ class Player{
     /**
      * Gets the value of name.
      *
-     * @return mixed
+     * @return String
      */
     public function getName()
     {
@@ -90,7 +112,7 @@ class Player{
     /**
      * Sets the value of name.
      *
-     * @param mixed $name the name 
+     * @param String
      *
      * @return self
      */
@@ -104,7 +126,7 @@ class Player{
     /**
      * Gets the value of team.
      *
-     * @return mixed
+     * @return String
      */
     public function getTeam()
     {
@@ -114,7 +136,7 @@ class Player{
     /**
      * Sets the value of team.
      *
-     * @param mixed $team the team 
+     * @param String
      *
      * @return self
      */
@@ -128,7 +150,7 @@ class Player{
     /**
      * Gets the value of role.
      *
-     * @return mixed
+     * @return String
      */
     public function getRole()
     {
@@ -138,7 +160,7 @@ class Player{
     /**
      * Sets the value of role.
      *
-     * @param mixed $role the role 
+     * @param String
      *
      * @return self
      */
@@ -152,7 +174,7 @@ class Player{
     /**
      * Gets the value of value.
      *
-     * @return mixed
+     * @return Int
      */
     public function getValue()
     {
@@ -162,7 +184,7 @@ class Player{
     /**
      * Sets the value of value.
      *
-     * @param mixed $value the value 
+     * @param Int
      *
      * @return self
      */
@@ -176,7 +198,7 @@ class Player{
     /**
      * Gets the value of first_value.
      *
-     * @return mixed
+     * @return Int
      */
     public function getFirstValue()
     {
@@ -186,7 +208,7 @@ class Player{
     /**
      * Sets the value of first_value.
      *
-     * @param mixed $first_value the first  value 
+     * @param Int
      *
      * @return self
      */
@@ -200,7 +222,7 @@ class Player{
     /**
      * Gets the value of diff.
      *
-     * @return mixed
+     * @return Int
      */
     public function getDiff()
     {
@@ -210,7 +232,7 @@ class Player{
     /**
      * Sets the value of diff.
      *
-     * @param mixed $diff the diff 
+     * @param Int
      *
      * @return self
      */
@@ -224,7 +246,7 @@ class Player{
     /**
      * Gets the value of stat.
      *
-     * @return mixed
+     * @return StatisticsCollection
      */
     public function getStat()
     {
@@ -234,7 +256,7 @@ class Player{
     /**
      * Sets the value of stat.
      *
-     * @param mixed $stat the stat 
+     * @param StatisticsCollection]
      *
      * @return self
      */

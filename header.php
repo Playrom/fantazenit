@@ -35,13 +35,17 @@ if(!isset($_SESSION['last_competition'])){
 $id_comp=$_SESSION['last_competition'];
 
 $user=null;
-$id_user=-1;
+$userId=null;
+$userAuth=null;
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
-        $user=$database_users->getUserByUsername($username);
-        $id_user=$user->getId();
+        //$user=$database_users->getUserByUsername($username);
+        $userId=$_SESSION['userId'];
+        $userAuth=$_SESSION['userAuth'];
 }
+
+var_dump($userId);
 
 $round=1;
 
@@ -150,12 +154,12 @@ if(isset($config['current_round'])){
 	                	<li><a href="formations.php">Formazioni</a></li>
 	                	<li><a href="teams.php">Squadre</a></li>
 	                	<li><a href="standings.php">Classifiche</a></li>
-		                <?php if($user!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
+		                <?php if(userId!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
 	                </ul>
                 </div>
             </div>
             <!-- <div id="menu-settings"></div> -->
-            <?php if($user!=null) { ?>
+            <?php if($userId!=null) { ?>
 	            <div class="menu-info">
 	                <li><a href="maketeam.php">Inserisci Formazione</a></li>
 	                <li><a href="createroster.php">Crea Rosa</a></li>
@@ -163,7 +167,7 @@ if(isset($config['current_round'])){
 	            </div>
 	        <?php } ?>
 
-	        <?php if($user!=null && $user->getAuth()==1) { ?>
+	        <?php if($userId!=null && $userAuth==1) { ?>
 	            <div class="menu-info menu-settings">
 	                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
 	                <li><a href="loadfile.php">Carica Dati</a></li>
@@ -177,7 +181,7 @@ if(isset($config['current_round'])){
 					<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
 				</div>
 				                
-                <?php if($user!=null && !$database_rounds->isValidFormation(intval($user->getId()),intval($round))) { ?>
+                <?php if($userId!=null && !$database_rounds->isValidFormation(intval($userId),intval($round))) { ?>
                     <div class="alert alert-danger error_display" role="alert">
 						<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
 						<span class="sr-only"></span>Attenzione , Hai modificato la tua rosa dall'ultima formazione inserita

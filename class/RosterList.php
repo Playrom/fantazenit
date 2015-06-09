@@ -53,4 +53,21 @@ class RosterList extends ArrayObject{
 	 	
  	}
 
+    /**
+     * Map object to Array
+     *
+     * @return int|RosterPlayer
+     */
+
+    public function map(){
+        $arr=array();
+        foreach($this as $item){
+            $arr[$item->getPlayer()->getId()]=$item->map();
+        }
+
+
+
+        return $arr;
+    }
+
 }

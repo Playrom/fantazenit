@@ -38,6 +38,15 @@ class Statistic{
 		$this->date_modified=$date;
 		return $this;
 	}
+
+    public function map(){
+        $second_arr=array();
+        $second_arr['name']=$this->getName();
+        $second_arr['value']=$this->getValue();
+        $second_arr['date_modified']=$this->getDateModified();
+
+        return $second_arr;
+    }
 }
 
 //Test

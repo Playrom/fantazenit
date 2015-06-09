@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         $user=$_POST['username'];
         $pass=$_POST['password'];
 
+
         $encoded_pass=md5($pass);
 
         $data = array();
@@ -28,17 +29,14 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
             'Content-Type: application/json',                                                                                
             'Content-Length: ' . strlen($data))                                                                       
-        );                                                                                                                   
+        );
 
         $json = curl_exec($ch);
-        
-        
+
         $result = json_decode($json,true);
-        
-        
+
         if(isset($result['apiKey'])){
             $token=$result['apiKey'];
-            echo $token;
             $_SESSION['token']=$token;
         }
     }
@@ -52,7 +50,7 @@ if(isset($_SESSION['token'])){ $token=$_SESSION['token'] ?>
     
 <?php
 
-    $ch = curl_init('http://associazionezenit.it/fantazenit/api/v1/status/5');                                                                      
+    $ch = curl_init('http://associazionezenit.it/fantazenit/api/v1/me');
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");                                                                 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(  
@@ -60,8 +58,11 @@ if(isset($_SESSION['token'])){ $token=$_SESSION['token'] ?>
     ));
     
     $json = curl_exec($ch);
+
+    $data=json_decode($json,true);
     
-    echo $json;
+    var_dump($data);
+
 
 }else{
 
