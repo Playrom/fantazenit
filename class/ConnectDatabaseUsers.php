@@ -47,6 +47,67 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 		return true;
 
 	}
+        
+    function setApikey($username,$apiKey){
+        
+
+        $query="UPDATE `users` SET apiKey=? where username LIKE ?";
+        try{
+                if (!($stmt = $this->mysqli->prepare($query))) {
+                    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+                }
+
+                if (!$stmt->bind_param("ss", $apiKey , $username)) {
+                    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+                }
+
+                if (!$stmt->execute()) {
+                    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+                }
+
+                return true;
+
+        }catch(exception $e) {
+                echo "\nERRORE MODIFICA API KEY: ".$e;
+                return false;
+        }
+
+        return true;
+
+    }
+        
+        
+    function checkApi($apiKey){
+
+        $query="select * from `users` where `apiKey`=?";
+        
+        try{
+            if (!($stmt = $this->mysqli->prepare($query))) {
+                echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+            }
+
+            if (!$stmt->bind_param("s", $apiKey)) {
+                echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            if (!$stmt->execute()) {
+                echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            $res=$stmt->get_result();
+            $res->data_seek(0);
+            while ($row = $res->fetch_assoc()) {
+                return true;
+            }
+
+        }catch(exception $e) {
+            echo $e;
+            return false;
+        }
+
+        return false;
+
+}
     
     function getUsers(){
 
@@ -79,8 +140,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$password=$row['password'];
 				$name_team=$row['name_team'];
 				$email=$row['email'];
-                $telephone=$row['telephone'];
-                $url_fb=$row['url_fb'];
+                                $telephone=$row['telephone'];
+                                $url_fb=$row['url_fb'];
+                                
+                                $apiKey=$row['apiKey'];
                 
                 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
@@ -95,7 +158,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
+				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
                 $data_markets->getTransfers($us,$data_players->dumpSingoliToList(null,null));
                 $users[]=$us;
             }
@@ -143,8 +206,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$balance=$row['balance'];
 				$password=$row['password'];
 				$name_team=$row['name_team'];
-                $telephone=$row['telephone'];
-                $url_fb=$row['url_fb'];
+                                $telephone=$row['telephone'];
+                                $url_fb=$row['url_fb'];
+                                
+                                $apiKey=$row['apiKey'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -158,7 +223,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 
@@ -205,6 +270,8 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$name_team=$row['name_team'];
                 $telephone=$row['telephone'];
                 $url_fb=$row['url_fb'];
+                
+                                $apiKey=$row['apiKey'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -217,7 +284,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 
@@ -263,6 +330,8 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$name_team=$row['name_team'];
                 $telephone=$row['telephone'];
                 $url_fb=$row['url_fb'];
+                
+                                $apiKey=$row['apiKey'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -275,7 +344,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 

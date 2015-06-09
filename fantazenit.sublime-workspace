@@ -4,6 +4,62 @@
 		"selected_items":
 		[
 			[
+				"backgr",
+				"background-size"
+			],
+			[
+				"visi",
+				"visibility: 〔property〕"
+			],
+			[
+				"wi",
+				"width=\"820"
+			],
+			[
+				"font",
+				"font-weight: 〔property〕"
+			],
+			[
+				"id_",
+				"$id_handicap〔variable〕"
+			],
+			[
+				"com",
+				"$competition〔variable〕"
+			],
+			[
+				"comp",
+				"competition"
+			],
+			[
+				"database_handi",
+				"$database_handicaps〔variable〕"
+			],
+			[
+				"hand",
+				"$handicaps〔variable〕"
+			],
+			[
+				"final",
+				"finalvote"
+			],
+			[
+				"round",
+				"round_handicap"
+			],
+			[
+				"tot",
+				"$tot_points〔variable〕"
+			],
+			[
+				"database",
+				"$database_handicaps〔variable〕"
+			],
+			[
+				"data",
+				"$data_handicaps〔variable〕"
+			],
+			[
 				"impo",
 				"important"
 			],
@@ -26,10 +82,6 @@
 			[
 				"dum",
 				"dumpConfig〔function〕"
-			],
-			[
-				"data",
-				"$database〔variable〕"
 			],
 			[
 				"du",
@@ -58,10 +110,6 @@
 			[
 				"roun",
 				"roundOf"
-			],
-			[
-				"id_",
-				"id_competition"
 			],
 			[
 				"curren",
@@ -160,26 +208,31 @@
 	"buffers":
 	[
 		{
-			"file": "settings.php",
+			"file": "/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/13.html",
 			"settings":
 			{
-				"buffer_size": 6524,
+				"buffer_size": 2980,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "settings-competitions.php",
+			"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
 			"settings":
 			{
-				"buffer_size": 10423,
+				"buffer_size": 10891,
 				"line_ending": "Windows"
 			}
 		}
 	],
 	"build_system": "Packages/SASS Build/SASS.sublime-build",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 311.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -236,9 +289,89 @@
 	},
 	"expanded_folders":
 	[
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/css"
 	],
 	"file_history":
 	[
+		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/12.html",
+		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/11.html",
+		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/10.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/foto-048.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
+		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/9.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/8.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 2.html",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/header.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/appartamenti.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/history.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/footer.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/defines.inc.php",
+		"/D/Sync Online/Archivi Siti Web/Club Nautico Baia Azzurra/Backup Deface/index.php",
+		"/G/W7ULTMT_x86_UPDT_it_06_2010_PSSTR/INFO.txt",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/global.css",
+		"/D/Downloads/TPL_ORARI.csv",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/contatti.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/postinfo.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/dove-siamo.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/prezzi.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/fotogallery.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/thalasso-terapy.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/thalasso1x_it.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/thalasso2xcentro_it.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/thalasso3xcos'è_it.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/thalasso4xcome funziona_it.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/thalasso5xhammam_it.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/vulcano-mare.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/vulcano-natura.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/vulcano-terra.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/nav.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockuserinfo.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/nav 2.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockmyaccount.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockcms.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockcontactinfos.tpl",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/blockcontact.tpl",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/README.md",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/prova.html",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/js/superfish.js",
+		"/D/Sync Online/Archivi Siti Web/NTProfessional/form/index.php",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/js/scripts.js",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/index.html",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/header.tpl",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/js/bgSlider.js",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/index (1).html",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/css/style.css",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/css/jquery.fancybox-1.3.4.css",
+		"/D/Sync Online/Archivi Siti Web/Salina/site/css/layout.css",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/HandicapStanding.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/HandicapRound.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/Handicap.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabaseUsers.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabaseRounds.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabasePlayers.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabaseMarkets.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabaseCompetitions.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabaseFiles.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabaseHandicaps.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/functions.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/gestionegiornate.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/settings.php",
+		"/D/Downloads/Backup-codes-me.txt",
+		"/D/Downloads/Backup-codes-giorgio.romano93.txt",
+		"/C/Users/Giorgio/Desktop/GitHubLog.txt",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/settings-handicaps.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/css/style.css",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/formations.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/standings.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/risorse/provahandicap.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/css/style.scss",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/User.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/class/ConnectDatabase.php",
+		"/D/Sync Online/dev/PHP/fantazenit git/fantazenit/settings-competitions.php",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Cities_Skylines/Files/Locale/en.locale",
 		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
 		"/D/dev/PHP/fantazenit git/fantazenit/css/style.css",
@@ -288,85 +421,8 @@
 		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
 		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_php-5.5.21-nts-Win32-VC11-x86.zip/install.txt",
 		"/D/dev/PHP/fantazenit/todo.txt",
-		"/D/Downloads/Backup-codes-giorgio.romano93.txt",
 		"/D/dev/JAVA/sorteggi/lista.csv",
-		"/D/dev/PHP/fantazenit/js/countdown/READ ME.txt",
-		"/D/dev/PHP/fantazenit/js/countdown/tests.html",
-		"/D/dev/PHP/fantazenit/js/countdown/examples 1.html",
-		"/D/dev/PHP/fantazenit/js/countdown/examples 3.html",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/zimport.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/zimport.funzioni.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/synch.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/danea.csv",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/custom.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/config.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/install/index.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/settings.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/register.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/mail-templates/your-lost-password.txt",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/class.user.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/funcs.general.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/funcs.user.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/db/dbal.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/models/db/mysql.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/install/sql.txt",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/KNOWN ISSUES.txt",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/ArticoliMOD.csv",
-		"/D/Dropbox/Universita/Sistemi Elettronici/8535def.inc",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/Fattoriale/Fattoriale.asm",
-		"/D/Dropbox/Universita/Sistemi Elettronici/8535_basic.asm",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_UserPie-master.zip/UserPie-master/Best Practices.txt",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/index.html",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/Fornitori.csv",
-		"/C/Users/Giorgio/Desktop/Prodotti.xml",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/Documenti.DefXml",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/provaimp.xml",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/Misure.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/Famiglie.csv",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/changeroster.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_es_autentphp.zip/uploadarticoli.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_es_autentphp.zip/downloadordini.php",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/Colori.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/DettaglioIva.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/TabellaMisure.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/VariantiArticoli.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/PAL.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/EtichetteFashionTMP.csv",
-		"/C/Users/Giorgio/Desktop/Backup Max Magma/EtichetteFashionTMP2.csv",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/footer.php",
-		"/C/Users/Giorgio/Desktop/Documenti.DefXml",
-		"/D/Backup Max Magma/EtichetteFashionTMP2.csv",
-		"/D/Backup Max Magma/Fornitori.csv",
-		"/D/Backup Max Magma/Movimenti.csv",
-		"/D/Backup Max Magma/ArticoliMOD.csv",
-		"/D/Dropbox/Università/sistemi elettronici/progetti/OndaQuadra/OndaQuadra.asm",
-		"/D/Backup Max Magma/EtichetteFashionTMP.csv",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/prezzi.html",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ElencoFatturelist.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu 3.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu 2.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/calendariolist.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6_aruba 2.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewmenu.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6.php",
-		"/D/Dropbox/Archivi Siti Web/Club Nautico Baia Azzurra/Info Database.txt",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/ewcfg6_aruba.php",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 6.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 5.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 4.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 3.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 2.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/Girone 1.txt",
-		"/D/Dropbox/dev/JAVA/sorteggi/lista.csv",
-		"/D/Dropbox/datidominio.txt",
-		"/D/Downloads/Apple - Supporto - Conferma.html",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/PollingPorte/PollingPorte.asm",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/IntermittenzaLed/IntermittenzaLed.asm",
-		"/D/Dropbox/Universita/Sistemi Elettronici/progetti/VisualizzaSecondi/VisualizzaSecondi.asm",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/.htaccess",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/wp-config.php",
-		"/C/Users/Giorgio/Desktop/wordpress/wp-content/themes/avada/functions.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-1/functions.php"
+		"/D/dev/PHP/fantazenit/js/countdown/READ ME.txt"
 	],
 	"find":
 	{
@@ -377,6 +433,8 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"D:\\Sync Online\\dev\\PHP\\fantazenit git\\fantazenit",
+			"<project>",
 			""
 		]
 	},
@@ -385,6 +443,40 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"analy",
+			"dev",
+			"header",
+			"#111111",
+			"header",
+			"@tiscali",
+			"reg",
+			"visibility",
+			"body-",
+			"body",
+			"body-bg",
+			"body-",
+			"url",
+			"Penalizzazioni",
+			"getHandicapsStandings",
+			"handicaps_standings",
+			"action=\"settings-market.php\"",
+			"setHandicapStanding",
+			"getHandicapsStandings",
+			"database_handicap",
+			"getrounds",
+			"`rounds`",
+			"addround",
+			"getrounds",
+			"finalvo",
+			"old-player finalvote",
+			"$user",
+			"$username",
+			"real",
+			"getName",
+			"getstandingsround",
+			"getsta",
+			"getstandings",
+			"getsta",
 			"\"setting_item\"",
 			"setting",
 			".form-gr",
@@ -478,6 +570,11 @@
 		"regex": false,
 		"replace_history":
 		[
+			"getHandicapsCompetitions",
+			"handicaps_competitions",
+			"action=\"settings-handicaps.php\"",
+			"setHandicapCompetition",
+			"getHandicapsCompetitions",
 			"\"form-group\"",
 			"12u",
 			"100%",
@@ -507,181 +604,32 @@
 			[
 				{
 					"buffer": 0,
-					"file": "settings.php",
+					"file": "/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/13.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6524,
+						"buffer_size": 2980,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6108,
-								6325
+								2594,
+								2594
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
 							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content"
-							],
-							"codeintel": true,
-							"codeintel_database_dir": "~/.codeintel",
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Node.js",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_exclude_scopes_from_complete_triggers":
-							[
-								"comment"
-							],
-							"codeintel_language_settings":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_exclude_dir":
-									[
-										"/build/",
-										"/min/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": false,
-									"codeintel_selected_catalogs":
-									[
-										"jQuery"
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 15,
-									"codeintel_scan_exclude_dir":
-									[
-										"/Applications/MAMP/bin/php/php5.5.3/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": true,
-									"php": "/Applications/MAMP/bin/php/php5.5.3/bin/php"
-								},
-								"Python3":
-								{
-									"codeintel_scan_extra_dir":
-									[
-										"/Applications/Sublime Text.app/Contents/MacOS",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/arch",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/libs"
-									],
-									"codeintel_scan_files_in_project": true,
-									"codeintel_selected_catalogs":
-									[
-									],
-									"python3": "/usr/local/bin/python3.3"
-								}
-							},
-							"codeintel_live": true,
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							[
-							],
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-							],
-							"codeintel_snippets": false,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"codeintel_word_completions": "buffer",
-							"function_name_status_row": 133,
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
-						"translation.x": -0.0,
-						"translation.y": 1230.0,
+						"translation.x": 0.0,
+						"translation.y": 480.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -689,181 +637,32 @@
 				},
 				{
 					"buffer": 1,
-					"file": "settings-competitions.php",
+					"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10423,
+						"buffer_size": 10891,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5526,
-								5526
+								1285,
+								1285
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
 							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"codeintel": true,
-							"codeintel_database_dir": "~/.codeintel",
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Node.js",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_exclude_scopes_from_complete_triggers":
-							[
-								"comment"
-							],
-							"codeintel_language_settings":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_exclude_dir":
-									[
-										"/build/",
-										"/min/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": false,
-									"codeintel_selected_catalogs":
-									[
-										"jQuery"
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 15,
-									"codeintel_scan_exclude_dir":
-									[
-										"/Applications/MAMP/bin/php/php5.5.3/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": true,
-									"php": "/Applications/MAMP/bin/php/php5.5.3/bin/php"
-								},
-								"Python3":
-								{
-									"codeintel_scan_extra_dir":
-									[
-										"/Applications/Sublime Text.app/Contents/MacOS",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/arch",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/libs"
-									],
-									"codeintel_scan_files_in_project": true,
-									"codeintel_selected_catalogs":
-									[
-									],
-									"python3": "/usr/local/bin/python3.3"
-								}
-							},
-							"codeintel_live": true,
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							[
-							],
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-							],
-							"codeintel_snippets": false,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"codeintel_word_completions": "buffer",
-							"function_name_status_row": 217,
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 60.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -915,6 +714,7 @@
 	{
 		"height": 100.0
 	},
+	"pinned_build_system": "",
 	"project": "fantazenit.sublime-project",
 	"replace":
 	{
@@ -924,6 +724,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -932,6 +733,7 @@
 	"select_project":
 	{
 		"height": 500.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -940,6 +742,7 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],

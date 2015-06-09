@@ -34,6 +34,7 @@ if($config['creation_market']==0){ ?>
     $user=$database_users->getUserByUsername($username);
 
     $players=$database_players->dumpSingoliToList(null, null);
+    /* @var RosterList $roster */
     $roster=$user->getPlayers();
 
     $max_por=3;
@@ -178,7 +179,7 @@ if($config['creation_market']==0){ ?>
                     </div>
 
                     <ul class="list" id="free-table">
-                          <?php  foreach($players as $player){   ?>
+                          <?php /* @var Player $player */  foreach($players as $player){   ?>
         	                <li class="new-player" <?php echo "id=\"".$player->getId()."_free\" "; 
         		            	echo " id_player=\"".$player->getId()."\" "; ?>
         	                    class="free-player"

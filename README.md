@@ -46,7 +46,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit _ConnectDatabase_: signup.php
 * Edit _ConnectDatabase_: teams.php
 
-# Alpha 0.4 - 
+# Alpha 0.4 -  9 Giugno 2015
 
 * Feature: Bonus e Malus per le giornate, e per le classifiche generali
 * New: Nuove Classi Base : Handicap.php e figlie , servono a gestire i bonus e malus
@@ -57,9 +57,9 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Le Classifiche in standings.php ora tengono conto dei bonus e malus sia per giornate sia di classifica generale
 * Edit: Le Formazioni calcolate tengono ora conto di bonus e malus di giornata
 
+* New: Modificate alcune classi per poter supportare il login tramite API che arriverà in una nuova brench
+
 
 # Da Fare
  
-* Handicap in formazioni
-* pagina modifica handicap
 * pagina aggiunta crediti

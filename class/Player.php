@@ -1,13 +1,40 @@
 <?php
+    
 class Player{
-	private $id;
-	private $name;
-	private $team;
-	private $role;
-	private $value;
-	private $first_value;
-	private $diff;
-	private $stat=array();
+    
+        
+    /**
+     * @var $id Int
+     */
+    private $id;
+    /**
+     * @var $name String
+     */
+    private $name;
+    /**
+     * @var $team String
+     */
+    private $team;
+    /**
+     * @var $role String
+     */
+    private $role;
+    /**
+     * @var $value Int
+     */
+    private $value;
+    /**
+     * @var $first_value Int
+     */
+    private $first_value;
+    /**
+     * @var $diff Int
+     */
+    private $diff;
+    /**
+     * @var $stat Array
+     */
+    private $stat=array();
 
 	function __construct($id,$name,$team,$role,$value,$first_value,$diff,$stat=NULL){
 		$this->id=$id;

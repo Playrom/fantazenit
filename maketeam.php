@@ -82,7 +82,6 @@ if(!isset($_SESSION['username'])) {
 
     if($database_rounds->isPossibleToEditFormation($round)){
 
-
     ?>
     <div id="official_players" <?php echo "number=\"".$official_players."\""; ?> ></div>
 

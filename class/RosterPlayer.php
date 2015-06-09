@@ -1,7 +1,14 @@
 <?php 
+
 class RosterPlayer{
-	private $player;
-	private $cost;
+    /**
+     * @var Player  $player
+     */
+    private $player;
+    /**
+     * @var int cost
+     */
+    private $cost;
 
 	function __construct($player,$cost){
 		$this->player=$player;
@@ -12,7 +19,7 @@ class RosterPlayer{
     /**
      * Gets the value of player.
      *
-     * @return mixed
+     * @return Player
      */
     public function getPlayer()
     {
@@ -22,7 +29,7 @@ class RosterPlayer{
     /**
      * Sets the value of player.
      *
-     * @param mixed $player the player 
+     * @param $player Player
      *
      * @return self
      */

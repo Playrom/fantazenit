@@ -1,37 +1,62 @@
 <?php
 
 class User{
-	private $id;
-	private $balance;
-	private $username;
-	private $name;
-	private $surname;
-	private $password;
-	private $email;
-	private $reg_date;
-	private $auth;
-	private $players; // RosterList
-	private $transfers;
+    private $id;
+    private $balance;
+    private $username;
+    private $name;
+    private $surname;
+    private $password;
+    private $email;
+    private $reg_date;
+    private $auth;
+    private $players; // RosterList
+    private $transfers;
     private $name_team;
     private $telephone;
     private $url_fb;
+    private $apiKey;
 
-	public function __construct($id=-1,$username,$name,$surname,$password,$email,$reg_date=NULL,$auth=0,$balance,$players=NULL,$transfers=NULL,$name_team,$telephone,$url_fb=NULL){
-		$this->id=$id;
-		$this->username=$username;
-		$this->name=$name;
-		$this->surname=$surname;
-		$this->password=$password;
-		$this->email=$email;
-		$this->reg_date=$reg_date;
-		$this->auth=$auth;
-		$this->balance=$balance;
-		$this->players=$players;
-		$this->transfers=$transfers;
+    public function __construct($id=-1,$username,$name,$surname,$password,$email,$reg_date=NULL,$auth=0,$balance,$players=NULL,$transfers=NULL,$name_team,$telephone,$url_fb=NULL,$apiKey=NULL){
+        $this->id=$id;
+        $this->username=$username;
+        $this->name=$name;
+        $this->surname=$surname;
+        $this->password=$password;
+        $this->email=$email;
+        $this->reg_date=$reg_date;
+        $this->auth=$auth;
+        $this->balance=$balance;
+        $this->players=$players;
+        $this->transfers=$transfers;
         $this->name_team=$name_team;
         $this->telephone=$telephone;
         $this->url_fb=$url_fb;
-	}
+        
+        $this->apiKey=$apiKey;
+    }
+    
+    public function map(){
+        $arr=array();
+        $arr['id']=$this->id;
+        $arr['username']=$this->username;
+        $arr['name']=$this->name;
+        $arr['surname']=$this->surname;
+        $arr['password']=  $this->password;
+        $arr['email']=  $this->email;
+        $arr['auth'] = $this->auth;
+        $arr['balance'] = $this->balance;
+        //$arr['players'] = $this->players->map();
+        //$arr['transfers'] = $this->transfers->map();
+        $arr['name_team'] = $this->name_team;
+        $arr['telephone'] = $this->telephone;
+        $arr['url_fb'] = $this->url_fb;
+        
+        $arr['apiKey'] = $this->apiKey;
+        
+        return $arr;
+        
+    }
 
 	
 
@@ -323,6 +348,15 @@ class User{
 
     public function setUrlFb($url_fb){
         $this->url_fb=$url_fb;
+        return $this;
+    }
+    
+    public function getApiKey(){
+        return $this->apiKey;
+    }
+    
+    public function setApiKey($apiKey){
+        $this->apiKey=$apiKey;
         return $this;
     }
 }

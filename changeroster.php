@@ -163,6 +163,7 @@ if($error_code==-1){  ?>
     	            <?php 
     		        foreach($roster as $player){
                     	unset($players[$player->getPlayer()->getId()]);
+
     	
     	            ?>
     		            <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>

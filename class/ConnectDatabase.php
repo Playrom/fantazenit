@@ -1,16 +1,44 @@
 <?php
 
+/**
+ * Class ConnectDatabase
+ */
 class ConnectDatabase {
 
-	public $username;
-	public $password;
-	public $ip;
-	public $port;
-	public $database_name;
+    /**
+     * @var String
+     */
+    public $username;
+    /**
+     * @var String
+     */
+    public $password;
+    /**
+     * @var String
+     */
+    public $ip;
+    /**
+     * @var String
+     */
+    public $port;
+    /**
+     * @var String
+     */
+    public $database_name;
 
-	public $mysqli;
+    /**
+     * @var mysqli
+     */
+    public $mysqli;
 
-	function __construct5($ip,$username,$password,$database_name,$port){
+    /**
+     * @param $ip
+     * @param $username
+     * @param $password
+     * @param $database_name
+     * @param $port
+     */
+    function __construct5($ip,$username,$password,$database_name,$port){
 		$this->username=$username;
 		$this->password=$password;
 		$this->ip=$ip;
@@ -25,7 +53,10 @@ class ConnectDatabase {
 
 	}
 
-	public function __construct() {
+    /**
+     *
+     */
+    public function __construct() {
         $get_arguments       = func_get_args();
         $number_of_arguments = func_num_args();
 
@@ -35,7 +66,10 @@ class ConnectDatabase {
     }
 
 
-	function __construct1($mysqli){
+    /**
+     * @param $mysqli
+     */
+    function __construct1($mysqli){
 		$this->mysqli = $mysqli;
 		if ($this->mysqli->connect_errno) {
 		    echo "Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . $this->mysqli->connect_error;
@@ -43,15 +77,18 @@ class ConnectDatabase {
 	}
 
 
-	
-	
-
-	function close(){
+    /**
+     *
+     */
+    function close(){
 		$this->mysqli->close();
 	}
 
-	
-	function dumpConfig(){
+
+    /**
+     * @return array|null
+     */
+    function dumpConfig(){
 		$query="select * from `settings`";
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
@@ -83,6 +120,11 @@ class ConnectDatabase {
 		return $config;
 	}
 
+    /**
+     * @param $name
+     * @param $value
+     * @return bool
+     */
     function editConfig($name,$value){
         $query="UPDATE settings SET value='".$value."' WHERE name='".$name."' ";
         try{
@@ -102,7 +144,12 @@ class ConnectDatabase {
 	}
 
 
-	function setCurrentRound($round,$date_in){
+    /**
+     * @param $round
+     * @param $date_in
+     * @return bool
+     */
+    function setCurrentRound($round,$date_in){
 		$date=DateTime::createFromFormat('d-m-Y H:i', $date_in);
 		$query="UPDATE `rounds` SET closetime='".$date->format("Y-m-d H:i:00")."' WHERE round=".$round;
 
@@ -156,6 +203,11 @@ class ConnectDatabase {
 
 }
 
+/**
+ * @param $number
+ * @return bool
+ * @throws Exception
+ */
 function is_num($number) {
   if(!is_numeric($number)) {
     throw new Exception("Value is not number");
