@@ -60,8 +60,6 @@ if(isset($_SESSION['token'])){ $token=$_SESSION['token'] ?>
     $json = curl_exec($ch);
 
     $data=json_decode($json,true);
-    
-    var_dump($data);
 
 
 }else{

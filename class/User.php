@@ -1,23 +1,89 @@
 <?php
 
+/**
+ * Class User
+ */
 class User{
+    /**
+     * @var int $id
+     */
     private $id;
+    /**
+     * @var int $balance
+     */
     private $balance;
+    /**
+     * @var string $username
+     */
     private $username;
+    /**
+     * @var string $name
+     */
     private $name;
+    /**
+     * @var string $surname
+     */
     private $surname;
+    /**
+     * @var string $password
+     */
     private $password;
+    /**
+     * @var string $email
+     */
     private $email;
+    /**
+     * @var DateTime $reg_date
+     */
     private $reg_date;
+    /**
+     * @var int $auth
+     */
     private $auth;
+    /**
+     * @var RosterList $players
+     */
     private $players; // RosterList
+    /**
+     * @var Transfer[] $transfers
+     */
     private $transfers;
+    /**
+     * @var String $name_team
+     */
     private $name_team;
+    /**
+     * @var String $telephone
+     */
     private $telephone;
+    /**
+     * @var String $url_fb
+     */
     private $url_fb;
+    /**
+     * @var String $apiKey
+     */
     private $apiKey;
 
-    public function __construct($id=-1,$username,$name,$surname,$password,$email,$reg_date=NULL,$auth=0,$balance,$players=NULL,$transfers=NULL,$name_team,$telephone,$url_fb=NULL,$apiKey=NULL){
+
+    /**
+     * @param int $id
+     * @param String $username
+     * @param String $name
+     * @param String $surname
+     * @param String $password
+     * @param String $email
+     * @param DateTime $reg_date
+     * @param int $auth
+     * @param int $balance
+     * @param RosterList $players
+     * @param Transfer[] $transfers
+     * @param String $name_team
+     * @param String $telephone
+     * @param String $url_fb
+     * @param String $apiKey
+     */
+    public function __construct($id=-1,$username,$name,$surname,$password,$email,$reg_date=NULL,$auth=0,$balance,$players=NULL,$transfers=array(),$name_team,$telephone,$url_fb=NULL,$apiKey=NULL){
         $this->id=$id;
         $this->username=$username;
         $this->name=$name;
@@ -35,7 +101,10 @@ class User{
         
         $this->apiKey=$apiKey;
     }
-    
+
+    /**
+     * @return mixed|mixed
+     */
     public function map(){
         $arr=array();
         $arr['id']=$this->id;
@@ -47,7 +116,16 @@ class User{
         $arr['auth'] = $this->auth;
         $arr['balance'] = $this->balance;
         $arr['players'] = $this->players->map();
-        //$arr['transfers'] = $this->transfers->map();
+
+        $transferArray=array();
+
+        foreach($this->transfers as $transfer){
+            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+        }
+
+
+
+        $arr['transfers'] = $transferArray;
         $arr['name_team'] = $this->name_team;
         $arr['telephone'] = $this->telephone;
         $arr['url_fb'] = $this->url_fb;
@@ -60,12 +138,41 @@ class User{
         
     }
 
+    /**
+     * Map Only Basic Info
+     *
+     * @return String|mixed
+     */
+
+    public function mapBasic(){
+        $arr=array();
+        $arr['id']=$this->id;
+        $arr['username']=$this->username;
+        $arr['name']=$this->name;
+        $arr['surname']=$this->surname;
+        $arr['password']=  $this->password;
+        $arr['email']=  $this->email;
+        $arr['auth'] = $this->auth;
+        $arr['balance'] = $this->balance;
+
+        $arr['name_team'] = $this->name_team;
+        $arr['telephone'] = $this->telephone;
+        $arr['url_fb'] = $this->url_fb;
+
+        $arr['apiKey'] = $this->apiKey;
+
+
+
+        return $arr;
+
+    }
+
 	
 
     /**
      * Gets the value of id.
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -75,7 +182,7 @@ class User{
     /**
      * Sets the value of id.
      *
-     * @param mixed $id the id 
+     * @param int
      *
      * @return self
      */
@@ -89,7 +196,7 @@ class User{
     /**
      * Gets the value of balance.
      *
-     * @return mixed
+     * @return int
      */
     public function getBalance()
     {
@@ -99,7 +206,7 @@ class User{
     /**
      * Sets the value of balance.
      *
-     * @param mixed $balance the balance 
+     * @param int
      *
      * @return self
      */
@@ -113,7 +220,7 @@ class User{
     /**
      * Gets the value of username.
      *
-     * @return mixed
+     * @return String
      */
     public function getUsername()
     {
@@ -123,7 +230,7 @@ class User{
     /**
      * Sets the value of username.
      *
-     * @param mixed $username the username 
+     * @param String
      *
      * @return self
      */
@@ -137,7 +244,7 @@ class User{
     /**
      * Gets the value of name.
      *
-     * @return mixed
+     * @return String
      */
     public function getName()
     {
@@ -147,7 +254,7 @@ class User{
     /**
      * Sets the value of name.
      *
-     * @param mixed $name the name 
+     * @param String
      *
      * @return self
      */
@@ -161,7 +268,7 @@ class User{
     /**
      * Gets the value of surname.
      *
-     * @return mixed
+     * @return String
      */
     public function getSurname()
     {
@@ -171,7 +278,7 @@ class User{
     /**
      * Sets the value of surname.
      *
-     * @param mixed $surname the surname 
+     * @param String
      *
      * @return self
      */
@@ -185,7 +292,7 @@ class User{
     /**
      * Gets the value of password.
      *
-     * @return mixed
+     * @return String
      */
     public function getPassword()
     {
@@ -195,7 +302,7 @@ class User{
     /**
      * Sets the value of password.
      *
-     * @param mixed $password the password 
+     * @param String
      *
      * @return self
      */
@@ -209,7 +316,7 @@ class User{
     /**
      * Gets the value of email.
      *
-     * @return mixed
+     * @return String
      */
     public function getEmail()
     {
@@ -219,7 +326,7 @@ class User{
     /**
      * Sets the value of email.
      *
-     * @param mixed $email the email 
+     * @param String
      *
      * @return self
      */
@@ -233,9 +340,9 @@ class User{
     /**
      * Gets the value of reg_date.
      *
-     * @return mixed
+     * @return DateTime
      */
-    public function getRegDate()
+    public function getRegDateTime()
     {
         return $this->reg_date;
     }
@@ -243,11 +350,11 @@ class User{
     /**
      * Sets the value of reg_date.
      *
-     * @param mixed $reg_date the reg  date 
+     * @param DateTime
      *
      * @return self
      */
-    public function setRegDate($reg_date)
+    public function setRegDateTime($reg_date)
     {
         $this->reg_date = $reg_date;
 
@@ -257,7 +364,7 @@ class User{
     /**
      * Gets the value of auth.
      *
-     * @return mixed
+     * @return int
      */
     public function getAuth()
     {
@@ -267,7 +374,7 @@ class User{
     /**
      * Sets the value of auth.
      *
-     * @param mixed $auth the auth 
+     * @param int
      *
      * @return self
      */
@@ -281,7 +388,7 @@ class User{
     /**
      * Gets the value of players.
      *
-     * @return mixed
+     * @return RosterList
      */
     public function getPlayers()
     {
@@ -291,7 +398,7 @@ class User{
     /**
      * Sets the value of players.
      *
-     * @param mixed $players the players 
+     * @param RosterList
      *
      * @return self
      */
@@ -305,7 +412,7 @@ class User{
     /**
      * Gets the value of transfers.
      *
-     * @return mixed
+     * @return Transfer[]
      */
     public function getTransfers()
     {
@@ -315,7 +422,7 @@ class User{
     /**
      * Sets the value of transfers.
      *
-     * @param mixed $transfers the transfers 
+     * @param Transfer[]
      *
      * @return self
      */
@@ -326,37 +433,65 @@ class User{
         return $this;
     }
 
+    /**
+     * @return String
+     */
     public function getNameTeam(){
         return $this->name_team;
     }
 
+    /**
+     * @param String
+     * @return $this
+     */
     public function setNameTeam($name_team){
         $this->name_team=$name_team;
         return $this;
     }
-    
+
+    /**
+     * @return String
+     */
     public function getTelephone(){
         return $this->telephone;
     }
 
+    /**
+     * @param String
+     * @return $this
+     */
     public function setTelephone($telephone){
         $this->telephone=$telephone;
         return $this;
     }
-    
+
+    /**
+     * @return String
+     */
     public function getUrlFb(){
         return $this->url_fb;
     }
 
+    /**
+     * @param String
+     * @return $this
+     */
     public function setUrlFb($url_fb){
         $this->url_fb=$url_fb;
         return $this;
     }
-    
+
+    /**
+     * @return String
+     */
     public function getApiKey(){
         return $this->apiKey;
     }
-    
+
+    /**
+     * @param String
+     * @return $this
+     */
     public function setApiKey($apiKey){
         $this->apiKey=$apiKey;
         return $this;

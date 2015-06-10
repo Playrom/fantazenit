@@ -52,6 +52,11 @@ class Player{
 		return false;
 	}
 
+    /**
+     * Map the object to Associative Array
+     * @return mixed|mixed
+     */
+
     public function map(){
         $arr=array();
         $arr['id']=$this->id;

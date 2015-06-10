@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         $data['username']=$user;
         $data['password']=$encoded_pass;
 
-        $data= json_encode($data);
+        /*$data= json_encode($data);
 
         $ch = curl_init('http://associazionezenit.it/fantazenit/api/v1/login');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -29,11 +29,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 'Content-Length: ' . strlen($data))
         );
 
-        $json = curl_exec($ch);
+        $json = curl_exec($ch);*/
 
-        $result = json_decode($json,true);
-
-        var_dump($result);
+        $result=$apiAccess->requestToken($user,$encoded_pass);
 
         if($result['error']==true){
             error_log("Password Non Corretta");
@@ -41,7 +39,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
             if (isset($result['apiKey'])) {
                 $token = $result['apiKey'];
-                $_SESSION['token'] = $token;
+                $_SESSION['userToken'] = $token;
             }
 
 

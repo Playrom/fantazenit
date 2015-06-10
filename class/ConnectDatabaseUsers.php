@@ -198,7 +198,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
                 $data_markets->getTransfers($us,$data_players->dumpSingoliToList(null,null));
                 $users[]=$us;
             }
@@ -263,7 +263,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 
@@ -324,7 +324,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 
@@ -384,7 +384,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 

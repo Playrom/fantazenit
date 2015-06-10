@@ -19,9 +19,10 @@ $database_markets = new ConnectDatabaseMarkets($database->mysqli);
 
 $competitions=$database_competitions->getCompetitions();
 
-$config=$database->dumpConfig();
-
 require_once 'functions.php';
+require_once 'functions.api.php';
+
+$apiAccess=new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
 
 if(isset($_POST['competition_change'])){
 	$new_comp=$_POST['competition_change'];
@@ -43,9 +44,11 @@ if(isset($_SESSION['username'])){
         //$user=$database_users->getUserByUsername($username);
         $userId=$_SESSION['userId'];
         $userAuth=$_SESSION['userAuth'];
+        $userToken=$_SESSION['userToken'];
+        $apiAccess->setToken($userToken);
 }
 
-var_dump($userId);
+$config=$apiAccess->accessApi("/config","GET");
 
 $round=1;
 
@@ -154,7 +157,7 @@ if(isset($config['current_round'])){
 	                	<li><a href="formations.php">Formazioni</a></li>
 	                	<li><a href="teams.php">Squadre</a></li>
 	                	<li><a href="standings.php">Classifiche</a></li>
-		                <?php if(userId!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
+		                <?php if($userId!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
 	                </ul>
                 </div>
             </div>

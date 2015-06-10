@@ -12,6 +12,7 @@ require '../../class/User.php';
 
 $app = new \Slim\Slim();
 
+
 $app->get('/hello/:name', function ($name) {
     $response["message"]="Hello, $name";
     echoRespnse(200, $response);
@@ -25,7 +26,10 @@ $app->get('/me', function () use ($app) {
     
     if($db->checkApi($apiKey)){
         $response["error"] = false;
-        $response["message"]=$db->getUserByApiKey($apiKey)->map();
+
+        $user=$db->getUserById($db->getUserByApiKey($apiKey))->map();
+
+        $response["message"]=$user->map();
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -37,6 +41,48 @@ $app->get('/me', function () use ($app) {
     
 });
 
+$app->get('/me/basic', function () use ($app) {
+
+    $apiKey = $app->request->headers->get('Token');
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+
+    if($db->checkApi($apiKey)){
+        $response["error"] = false;
+        $response["message"]=$db->getUserByApiKey($apiKey)->mapBasic();
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/config', function () use ($app) {
+
+
+    $db = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+
+    $config = $db->dumpConfig();
+
+    $json=json_encode($config,true);
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["message"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Config Dump Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
 
 
 /**

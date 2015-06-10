@@ -59,6 +59,16 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * New: Modificate alcune classi per poter supportare il login tramite API che arriverà in una nuova brench
 
+# REST API Compatible Brench - 
+
+* New: Login API
+* New: Header modificato per login API
+
+* Edit: Comment User Class
+* New: Classe di accesso a API
+
+
+
 
 # Da Fare
  
