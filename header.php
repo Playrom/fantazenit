@@ -48,7 +48,7 @@ if(isset($_SESSION['username'])){
         $apiAccess->setToken($userToken);
 }
 
-$config=$apiAccess->accessApi("/config","GET");
+$config=$apiAccess->accessApi("/config","GET")["data"];
 
 $round=1;
 

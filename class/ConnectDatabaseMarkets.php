@@ -214,8 +214,19 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	}
 
 
-	function getTransfers($user,$players){
+    /**
+     * Get Transfers of User
+     * @param $user User
+     * @return Transfers[]
+     */
+
+	function getTransfers($user){
 		$transfers=array();
+
+
+        $db_players=new ConnectDatabasePlayers($this->mysqli);
+
+        $players=$db_players->dumpSingoliToList(null,null);
 
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=?";
@@ -245,10 +256,9 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$id_market=$row['id_market'];
                 
 				$transfers[$id]=new Transfer($id,$user,$id_market,$old_player,$new_player,$date);
-
 			}
-            
-            $user->setTransfers($transfers);
+
+
 
 			return $transfers;
 

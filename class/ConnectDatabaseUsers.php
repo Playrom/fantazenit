@@ -156,6 +156,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
 		$data_markets=new ConnectDatabaseMarkets($this->mysqli);
 
+
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -172,6 +173,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			while ($row = $res->fetch_assoc()) {
 
 				$id=$row['id'];
+
 				$name=$row['name'];
 				$surname=$row['surname'];
 				$username=$row['username'];
@@ -180,10 +182,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$password=$row['password'];
 				$name_team=$row['name_team'];
 				$email=$row['email'];
-                                $telephone=$row['telephone'];
-                                $url_fb=$row['url_fb'];
-                                
-                                $apiKey=$row['apiKey'];
+                $telephone=$row['telephone'];
+                $url_fb=$row['url_fb'];
+
+                $apiKey=$row['apiKey'];
                 
                 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
@@ -199,7 +201,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 
 
 				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
-                $data_markets->getTransfers($us,$data_players->dumpSingoliToList(null,null));
+                //$data_markets->getTransfers($us);
                 $users[]=$us;
             }
             return $users;

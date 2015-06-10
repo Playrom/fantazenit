@@ -58,9 +58,13 @@ class Transfer{
         $arr['id_user']=$this->user->getId();
         $arr['old_player']=$this->old_player->map();
         $arr['new_player']=$this->new_player->map();
+
+
         $strDate=strftime("%A %e %B %Y , %H:%M",$this->date->getTimestamp());
         $arr['date']=$strDate;
         $arr['id_market']=$this->id_market;
+
+        return $arr;
     }
 
 

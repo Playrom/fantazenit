@@ -59,21 +59,30 @@ class Player{
 
     public function map(){
         $arr=array();
+
         $arr['id']=$this->id;
         $arr['name']=$this->name;
         $arr['team']=$this->team;
         $arr['role']=$this->role;
+
         $arr['value']=$this->value;
         $arr['first_value']=  $this->first_value;
         $arr['diff']=  $this->diff;
 
-        $second_arr=array();
 
-        foreach($this->stat as  $item){
-            $second_arr[$item->getRound()]=$item->map();
+
+
+        $second_arr=array();
+        $c=count($this->stat);
+
+        if($this->stat!=null){
+            foreach($this->stat as  $item){
+                $second_arr[$item->getRound()]=$item->map();
+            }
         }
 
         $arr['stat']=$second_arr;
+
 
         return $arr;
 

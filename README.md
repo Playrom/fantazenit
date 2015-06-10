@@ -62,14 +62,17 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 # REST API Compatible Brench - 
 
 * New: Login API
-* New: Header modificato per login API
+* Edit: Header modificato per login API
 
 * Edit: Comment User Class
 * New: Classe di accesso a API
 
-
+* Edit: Settings Base con API
+* Edit: Pagina Squadre
 
 
 # Da Fare
+
+## DATA MERCATO E MERCATO TO JSON IN PAGINA SQUADRE
  
 * pagina aggiunta crediti

@@ -3,6 +3,7 @@ require '../../vendor/autoload.php';
 require '../../class/ConnectDatabase.php';
 require '../../class/ConnectDatabaseUsers.php';
 require '../../class/ConnectDatabasePlayers.php';
+require '../../class/ConnectDatabaseMarkets.php';
 require '../../class/RosterList.php';
 require '../../class/RosterPlayer.php';
 require '../../class/Player.php';
@@ -10,7 +11,13 @@ require '../../class/StatisticsCollection.php';
 require '../../class/Statistic.php';
 require '../../class/User.php';
 
-$app = new \Slim\Slim();
+require '../../class/PlayersList.php';
+require '../../class/Market.php';
+require '../../class/Transfer.php';
+
+$app = new \Slim\Slim(array(
+    'debug' => true
+));
 
 
 $app->get('/hello/:name', function ($name) {
@@ -29,7 +36,7 @@ $app->get('/me', function () use ($app) {
 
         $user=$db->getUserById($db->getUserByApiKey($apiKey))->map();
 
-        $response["message"]=$user->map();
+        $response["data"]=$user->map();
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -49,11 +56,80 @@ $app->get('/me/basic', function () use ($app) {
 
     if($db->checkApi($apiKey)){
         $response["error"] = false;
-        $response["message"]=$db->getUserByApiKey($apiKey)->mapBasic();
+        $response["data"]=$db->getUserByApiKey($apiKey)->mapBasic();
     }else {
         // unknown error occurred
         $response['error'] = true;
         $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/teams', function () use ($app) {
+
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+
+    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
+
+    $users = $db->getUsers();
+
+    $result=array();
+
+    foreach($users as $user){
+        $transfers=$db_markets->getTransfers($user);
+        $user->setTransfers($transfers);
+        $temp=$user->mapTeam();
+        $result[]=$temp;
+
+    }
+
+
+    $json=json_encode($result,true);
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Teams Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/teams/:id', function ($id) use ($app) {
+
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
+
+    $user = $db->getUserById($id);
+
+    $result=null;
+
+    if($user!=null){
+        $transfers=$db_markets->getTransfers($user);
+        $user->setTransfers($transfers);
+        $temp=$user->mapTeam();
+        $result=$temp;
+    }
+
+    $json=json_encode($result,true);
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Team ID:".$id." Error";
     }
 
     echoRespnse(200, $response);
@@ -72,11 +148,42 @@ $app->get('/config', function () use ($app) {
 
     if($json!=null){
         $response["error"] = false;
-        $response["message"]=$json;
+        $response["data"]=$json;
     }else {
         // unknown error occurred
         $response['error'] = true;
         $response['message'] = "Config Dump Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->post('/config', function () use ($app) {
+
+    $apiKey = $app->request->headers->get('Token');
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+
+    $json = $app->request->getBody();
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    if($db->checkApi($apiKey) && $db->getUserByApiKey($apiKey)->getAuth()==1){
+        $response["error"] = false;
+
+        if($data!=null){
+            foreach($data as $config){
+                $db->editConfig($config['name'],$config['value']);
+            }
+        }else{
+            $response['error'] = true;
+            $response['message'] = "Config JSON is Null";
+        }
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
     }
 
     echoRespnse(200, $response);
@@ -120,7 +227,7 @@ $app->post('/login', function() use ($app) {
             
             $mapped=$user->map();
 
-            $response['response']=$mapped;
+            $response['data']=$mapped;
             
             
             

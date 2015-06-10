@@ -3,56 +3,83 @@ $title="Impostazioni";
 include('header.php');
 
 
-    if(isset($_SESSION['username'])){
-        $username=$_SESSION['username'];
+    if(isset($username)){
+
+        $editConfig=array();
 
         if(isset($_POST['tactics'])){
             $value=$_POST['tactics'];
             $name="available-tactics";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max-role-reserve'])){
             $value=$_POST['max-role-reserve'];
             $name="max-role-reserve";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
 
         if(isset($_POST['max_por'])){
             $value=$_POST['max_por'];
             $name="max_por";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
 
         if(isset($_POST['max_def'])){
             $value=$_POST['max_def'];
             $name="max_def";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max_cen'])){
             $value=$_POST['max_cen'];
             $name="max_cen";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max_att'])){
             $value=$_POST['max_att'];
             $name="max_att";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max_sub'])){
             $value=$_POST['max_sub'];
             $name="max_sub";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['default_competition'])){
             $value=$_POST['default_competition'];
             $name="default_competition";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
+
+        $result=$apiAccess->accessApi("/config","POST",array("postParams" => $editConfig));
 
 
         $user=$database_users->getUserByUsername($username);

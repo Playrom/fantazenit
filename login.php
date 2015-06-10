@@ -44,9 +44,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 
             session_regenerate_id();
-            $_SESSION['username'] = $result['response']['username'];
-            $_SESSION['userAuth'] = $result['response']['auth'];
-            $_SESSION['userId'] = $result['response']['id'];
+            $_SESSION['username'] = $result['data']['username'];
+            $_SESSION['userAuth'] = $result['data']['auth'];
+            $_SESSION['userId'] = $result['data']['id'];
             session_write_close();
 
             if (isset($_SESSION['old_url'])) {

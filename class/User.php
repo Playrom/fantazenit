@@ -167,6 +167,34 @@ class User{
 
     }
 
+    /**
+     * @return mixed|mixed
+     */
+    public function mapTeam(){
+        $arr=array();
+
+        $arr['balance'] = $this->balance;
+        $arr['players'] = $this->players->map();
+
+        $transferArray=array();
+
+        foreach($this->transfers as $transfer){
+            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+        }
+
+
+        $arr['id']=$this->id;
+        $arr['transfers'] = $transferArray;
+        $arr['name_team'] = $this->name_team;
+        $arr['name']=$this->name;
+        $arr['surname']=$this->surname;
+
+        $arr['url_fb'] = $this->url_fb;
+
+        return $arr;
+
+    }
+
 	
 
     /**
