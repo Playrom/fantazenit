@@ -17,12 +17,17 @@ $database_players = new ConnectDatabasePlayers($database->mysqli);
 $database_markets = new ConnectDatabaseMarkets($database->mysqli);
 
 
+
 $competitions=$database_competitions->getCompetitions();
 
 require_once 'functions.php';
 require_once 'functions.api.php';
 
 $apiAccess=new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+
+$json=$apiAccess->accessApi("/config","GET")["data"];
+
+$config=json_decode($json,true);
 
 if(isset($_POST['competition_change'])){
 	$new_comp=$_POST['competition_change'];
@@ -48,7 +53,7 @@ if(isset($_SESSION['username'])){
         $apiAccess->setToken($userToken);
 }
 
-$config=$apiAccess->accessApi("/config","GET")["data"];
+
 
 $round=1;
 

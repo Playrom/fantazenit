@@ -137,6 +137,36 @@ $app->get('/teams/:id', function ($id) use ($app) {
 
 });
 
+$app->get('/market/:id', function ($id) use ($app) {
+
+
+    $db = new ConnectDatabaseMarkets("localhost","root","aicon07","fantacalcio",3306);
+
+    $market = $db->getMarketById($id);
+
+    $result=null;
+
+    if($market!=null){
+        $temp=$market->map();
+        $result=$temp;
+    }
+
+    $json=json_encode($result,true);
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Market ID:".$id." Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->get('/config', function () use ($app) {
 
 

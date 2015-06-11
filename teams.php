@@ -135,7 +135,9 @@ include('header.php');
                 <div class="transfers">
                     <?php foreach($transfers as $transfer){
 
-                    $market=$database_markets->getMarketById($transfer["id_market"]);
+                    $result=$apiAccess->accessApi("/market/".$transfer["id_market"],"GET");
+
+                    $market=json_decode($result["data"],true);
 
                     $date=$transfer["date"];
                     //$old=$database_players->dumpPlayerById(intval($transfer->getOldPlayer()->getPlayer()->getId()));
@@ -144,7 +146,7 @@ include('header.php');
                     $old=$transfer["old_player"];
                     $new=$transfer["new_player"];
                     ?>
-                    <div class="name_market"><?php echo $market->getName(); ?> - <?php echo $date ?></div>
+                    <div class="name_market"><?php echo $market["name"]; ?> - <?php echo $date ?></div>
                     <div class="operation">
                         <div class="old transfers_player">
                             <span class="role-icon"><span <?php echo "class=\"".strtolower($old["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($old["player"]["role"]); ?></span></span>
