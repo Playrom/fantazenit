@@ -16,7 +16,27 @@ class Team{
 		$this->players=$players;
 	}
 
-	
+	/*
+	 * Map Object to Array
+	 *
+	 * @return String|mixed
+	 */
+    function map(){
+        $arr=array();
+
+        $arr["id_user"] = $this->id_user;
+        $arr["round"] = $this->round;
+        $arr["def"] = $this->def;
+        $arr["cen"] = $this->cen;
+        $arr["att"] = $this->att;
+        if($this->players!=null) {
+            $arr["players"] = $this->players->map();
+        }else{
+            $arr["players"] = null;
+        }
+
+        return $arr;
+    }
 
 	
 

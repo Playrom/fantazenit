@@ -74,7 +74,6 @@ class Player{
 
         $second_arr=array();
         $c=count($this->stat);
-
         if($this->stat!=null){
             foreach($this->stat as  $item){
                 $second_arr[$item->getRound()]=$item->map();

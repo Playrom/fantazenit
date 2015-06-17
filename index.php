@@ -4,8 +4,6 @@ include('header.php');
 $round;
 $competition;
 
-$config=$database->dumpConfig();
-$id_competition=$config['default_competition'];   
 
 $seconds=$database_rounds->secondsToClosingTime();
 

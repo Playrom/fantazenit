@@ -216,10 +216,10 @@
 			}
 		},
 		{
-			"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
+			"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
 			"settings":
 			{
-				"buffer_size": 10891,
+				"buffer_size": 97,
 				"line_ending": "Windows"
 			}
 		}
@@ -295,12 +295,12 @@
 	],
 	"file_history":
 	[
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
 		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/12.html",
 		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/11.html",
 		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/10.html",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.html",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/foto-048.html",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
 		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/9.html",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/8.html",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 2.html",
@@ -637,32 +637,29 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
+					"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10891,
+						"buffer_size": 97,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1285,
-								1285
+								91,
+								91
 							]
 						],
 						"settings":
 						{
 							"auto_complete": false,
 							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 60.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,

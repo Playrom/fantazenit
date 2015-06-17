@@ -252,8 +252,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     function getTeam($id_user,$round){
 
     	$data_players=new ConnectDatabasePlayers($this->mysqli);
-        
-		$players=$data_players->dumpSingoliToList(null,null);
+
 		try{
 
 			$tempQuery="SELECT * from `teams` where id_user=? and round=?;";
@@ -283,7 +282,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 				$id=$row['id_player'];
 				$pos=$row['position'];
-				$players_team[]=new TeamPlayerRound($players[$id],$pos);
+                $pla=$data_players->dumpPlayerById($id);
+
+				$players_team[]=new TeamPlayerRound($pla,$pos);
 			}
 
 
@@ -315,15 +316,15 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				$dif=$tactic[0];
 				$cen=$tactic[1];
 				$att=$tactic[2];
-                
+
                 if($this->isValidFormation($id_user,$round)){
-                    
+
                 }else{
                     $players_team=null;
                 }
 
 			}
-            
+
 
 			$team=new Team($id_user,$round,$dif,$cen,$att,$players_team);
 
@@ -1331,8 +1332,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		}
 	}
   
-    function getTeamsByRoundAndCompetition($round,$id_competition,$players){
+    function getTeamsByRoundAndCompetition($round,$id_competition){
 		$arr=array();
+        $players=new ConnectDatabasePlayers($this->mysqli);
 		try{
 			$tempUser="SELECT users.* FROM users LEFT OUTER JOIN users_in_competitions ON users_in_competitions.id_user=users.id WHERE users_in_competitions.id_competition=?";
 			$tempQuery="SELECT teams.* , users.username FROM teams LEFT OUTER JOIN users ON users.id=teams.id_user WHERE teams.id_user=? ";
@@ -1431,6 +1433,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
             $auto=2*$stat['autogol']->getValue();
             $yellow=0.5*$stat['yellow_card']->getValue();
             $red=1*$stat['red_card']->getValue();
+
+            $autogol=2*$stat['autogol']->getValue();
 
             $assist=1*$stat['assist']->getValue();
             $stop_assist=1*$stat['stop_assist']->getValue();

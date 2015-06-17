@@ -38,6 +38,8 @@ if(!isset($_SESSION['last_competition'])){
     $_SESSION['last_competition']=$config['default_competition'];
 }
 
+$id_competition=$config['default_competition'];
+
 $id_comp=$_SESSION['last_competition'];
 
 $user=null;

@@ -4,6 +4,7 @@ require '../../class/ConnectDatabase.php';
 require '../../class/ConnectDatabaseUsers.php';
 require '../../class/ConnectDatabasePlayers.php';
 require '../../class/ConnectDatabaseMarkets.php';
+require '../../class/ConnectDatabaseRounds.php';
 require '../../class/RosterList.php';
 require '../../class/RosterPlayer.php';
 require '../../class/Player.php';
@@ -11,6 +12,10 @@ require '../../class/StatisticsCollection.php';
 require '../../class/Statistic.php';
 require '../../class/User.php';
 
+require '../../class/Team.php';
+
+require '../../class/TeamPlayerList.php';
+require '../../class/TeamPlayerRound.php';
 require '../../class/PlayersList.php';
 require '../../class/Market.php';
 require '../../class/Transfer.php';
@@ -68,7 +73,7 @@ $app->get('/me/basic', function () use ($app) {
 
 });
 
-$app->get('/teams', function () use ($app) {
+$app->get('/user', function () use ($app) {
 
 
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
@@ -104,7 +109,7 @@ $app->get('/teams', function () use ($app) {
 
 });
 
-$app->get('/teams/:id', function ($id) use ($app) {
+$app->get('/users/:id', function ($id) use ($app) {
 
 
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
@@ -130,6 +135,113 @@ $app->get('/teams/:id', function ($id) use ($app) {
         // unknown error occurred
         $response['error'] = true;
         $response['message'] = "Dump Team ID:".$id." Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/team', function () use ($app) {
+
+    verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+
+    $round=$app->request()->params('round');
+    $id_competition=$app->request()->params('competition');
+
+
+    $result=null;
+
+    $teams=$db_rounds->getTeamsByRoundAndCompetition($round,$id_competition);
+
+    $orderByRole=false;
+
+    if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }
+
+    if($teams!=null){
+        for($i=0;$i<count($teams);$i++){
+            if($orderByRole) {
+                if($teams[$i]["team"]->getPlayers()!=null) {
+                    $teams[$i]["team"] = $teams[$i]["team"]->getPlayers()->orderByRole();
+                    $teams[$i]["team"]["titolari"] = $teams[$i]["team"][0]->map();
+                    $teams[$i]["team"]["panchina"] = $teams[$i]["team"][1]->map();
+                    unset($teams[$i]["team"][0]);
+                    unset($teams[$i]["team"][1]);
+                }
+            }else {
+                $teams[$i]["team"] = $teams[$i]["team"]->map();
+            }
+        }
+    }
+
+
+
+    $json=json_encode($teams,true);
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Teams ID COMP:".$id_competition." and ROUND:".$round." Error";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
+
+
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+
+    $orderByRole=false;
+
+    if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }
+
+    $result=null;
+
+    $team=$db_rounds->getTeam($id,$round);
+
+    $valid=$db_rounds->isValidFormation($id,$round);
+
+    $response["valid_formation"]=$valid;
+
+    if($team!=null){
+        if($orderByRole) {
+            $team = $team->getPlayers()->orderByRole();
+            $team["titolari"] = $team[0]->map();
+            $team["panchina"] = $team[1]->map();
+            unset($team[0]);
+            unset($team[1]);
+        }else{
+            $temp=$team->map();
+            $result=$temp;
+        }
+
+    }
+
+    $json=json_encode($result,true);
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Team ID USER:".$id." and ROUND:".$round." Error";
     }
 
     echoRespnse(200, $response);
