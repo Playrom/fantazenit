@@ -182,35 +182,35 @@ function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){
 
 
 function calc($stat,$role){
-    $vote=$stat['vote']->getValue();
-    $scored=3*$stat['scored']->getValue();
-    $taken=1*$stat['taken']->getValue();
-    $free_keep=3*$stat['free_kick_keeped']->getValue();
-    $free_miss=1*$stat['free_kick_missed']->getValue();
-    $free_score=3*$stat['free_kick_scored']->getValue();
-    $auto=2*$stat['autogol']->getValue();
-    $yellow=0.5*$stat['yellow_card']->getValue();
-    $red=1*$stat['red_card']->getValue();
-    $assist=1*$stat['assist']->getValue();
-    $stop_assist=1*$stat['stop_assist']->getValue();
-    $gdp=0*$stat['gdp']->getValue();
-    $gdv=0*$stat['gdv']->getValue();
+    $vote=$stat['vote']["value"];
+    $scored=3*$stat['scored']["value"];
+    $taken=1*$stat['taken']["value"];
+    $free_keep=3*$stat['free_kick_keeped']["value"];
+    $free_miss=1*$stat['free_kick_missed']["value"];
+    $free_score=3*$stat['free_kick_scored']["value"];
+    $auto=2*$stat['autogol']["value"];
+    $yellow=0.5*$stat['yellow_card']["value"];
+    $red=1*$stat['red_card']["value"];
+    $assist=1*$stat['assist']["value"];
+    $stop_assist=1*$stat['stop_assist']["value"];
+    $gdp=0*$stat['gdp']["value"];
+    $gdv=0*$stat['gdv']["value"];
     if($vote!=-1){
         $vote=$vote+$scored-$taken+$free_keep-$free_miss+$free_score-$auto-$yellow-$red+$assist+$stop_assist+$gdp+$gdv;
     }else if($vote==-1 && strtolower($role)=="p"){
-        if($stat['red_card']->getValue()==1){
+        if($stat['red_card']["value"]==1){
             $vote=4;
         } // DA CONTROLLARE IL MINUTAGGIO
         //$vote=$vote+$scored-$taken+$free_keep-$free_miss+$free_score-$auto-$yellow-$red+$assist+$stop_assist+$gdp+$gdv;
     }else if($vote==-1 && strtolower($role)!="p"){
-        if($stat['red_card']->getValue()==1){
+        if($stat['red_card']["value"]==1){
             $vote=4;
-        }else if($stat['scored']->getValue()>0 || $stat['free_kick_keeped']->getValue()>0 || $stat['free_kick_scored']->getValue()>0 || $stat['assist']->getValue()>0 || $stat['stop_assist']->getValue()>0){
+        }else if($stat['scored']["value"]>0 || $stat['free_kick_keeped']["value"]>0 || $stat['free_kick_scored']["value"]>0 || $stat['assist']["value"]>0 || $stat['stop_assist']["value"]>0){
             $vote=6;
             $vote=$vote+$scored+$free_keep+$free_score+$assist+$stop_assist;
-        }else if($stat['free_kick_missed']->getValue()>0 || $stat['autogol']->getValue()>0){
+        }else if($stat['free_kick_missed']["value"]>0 || $stat['autogol']["value"]>0){
             $vote=6;
-            $vote=$vote-$free_miss-$autogol;
+            $vote=$vote-$free_miss-$auto;
         }else{
             $vote=-1;
         }
@@ -232,8 +232,8 @@ function media($statistics){
     $number=0;
     foreach($statistics as $stat){
         if(isset($stat['final'])){
-            if($stat['final']->getValue()!=-1){
-                $vote=$vote+$stat['final']->getValue();
+            if($stat['final']["value"]!=-1){
+                $vote=$vote+$stat['final']["value"];
                 $number++;
             }
         }
@@ -246,7 +246,7 @@ function media($statistics){
 function presenze($statistics){
     $number=0;
     foreach($statistics as $stat){
-        if(isset($stat['final']) && $stat['final']->getValue()!=-1){
+        if(isset($stat['final']) && $stat['final']["value"]!=-1){
             $number++;
         }
     }

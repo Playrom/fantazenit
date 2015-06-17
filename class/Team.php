@@ -38,6 +38,28 @@ class Team{
         return $arr;
     }
 
+    function mapOrderedByRole(){
+        $arr=array();
+
+        $arr["id_user"] = $this->id_user;
+        $arr["round"] = $this->round;
+        $arr["def"] = $this->def;
+        $arr["cen"] = $this->cen;
+        $arr["att"] = $this->att;
+
+        if($this->players!=null) {
+            $arr["players"] = $this->getPlayers()->orderByRole();
+            $arr["players"]["titolari"] = $arr["players"][0]->map();
+            $arr["players"]["panchina"] = $arr["players"][1]->map();
+            unset($arr["players"][0]);
+            unset($arr["players"][1]);
+        }else{
+            $arr["players"] = null;
+        }
+
+        return $arr;
+    }
+
 	
 
     /**

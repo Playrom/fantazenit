@@ -142,7 +142,7 @@ $app->get('/users/:id', function ($id) use ($app) {
 
 });
 
-$app->get('/team', function () use ($app) {
+$app->get('/teams', function () use ($app) {
 
     verifyRequiredParams(array('round', 'competition'),$app);
 
@@ -167,11 +167,7 @@ $app->get('/team', function () use ($app) {
         for($i=0;$i<count($teams);$i++){
             if($orderByRole) {
                 if($teams[$i]["team"]->getPlayers()!=null) {
-                    $teams[$i]["team"] = $teams[$i]["team"]->getPlayers()->orderByRole();
-                    $teams[$i]["team"]["titolari"] = $teams[$i]["team"][0]->map();
-                    $teams[$i]["team"]["panchina"] = $teams[$i]["team"][1]->map();
-                    unset($teams[$i]["team"][0]);
-                    unset($teams[$i]["team"][1]);
+                   $teams[$i]["team"] = $teams[$i]["team"]->mapOrderedByRole();
                 }
             }else {
                 $teams[$i]["team"] = $teams[$i]["team"]->map();
@@ -219,19 +215,19 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
     $response["valid_formation"]=$valid;
 
-    if($team!=null){
+    if($team!=null && $team->getPlayers()!=null){
         if($orderByRole) {
-            $team = $team->getPlayers()->orderByRole();
-            $team["titolari"] = $team[0]->map();
-            $team["panchina"] = $team[1]->map();
-            unset($team[0]);
-            unset($team[1]);
+            $temp = $team->mapOrderedByRole();
         }else{
             $temp=$team->map();
-            $result=$temp;
         }
 
+        $result=$temp;
+    }else{
+        $result=null;
     }
+
+
 
     $json=json_encode($result,true);
 

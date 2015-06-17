@@ -44,11 +44,9 @@ if(isset($_GET['round']) && isset($_GET['competition'])){
 
 $real_round=$database_rounds->getRealRoundByRoundCompetition($round,$competition);
 
-$apiPath = "/team?round=$round&competition=$competition&orderByRole=true";
+$apiPath = "/teams?round=$round&competition=$competition&orderByRole=true";
 
 $json=$apiAccess->accessApi($apiPath,"GET");
-
-var_dump($apiPath);
 
 $isCalc=!$database_rounds->isOpenRound($real_round);
 
@@ -56,8 +54,6 @@ $rounds_list=$database_rounds->getRoundsOfCompetition($competition);
 $possibleToEdit=$database_rounds->isPossibleToEditFormation($real_round);
 
 $teams=json_decode($json["data"],true);
-
-var_dump($json);
 
 ?>
          
@@ -92,7 +88,15 @@ var_dump($json);
         $team=$temp['team'];
         $findBySistem=false;
 
-        $roster=$team["players"];
+        $roster=null;
+
+
+        if(isset($team["players"])){
+            $roster=$team["players"];
+        }
+
+
+
 
         $tempArr=null;
         $start=null;
@@ -101,14 +105,31 @@ var_dump($json);
 
         if($roster==null && !$possibleToEdit && $real_round>1){
 
-            $json_team=$apiAccess->accessApi("/team/$id_user/$real_round","GET");
+            $json_team=$apiAccess->accessApi("/team/$id_user/$real_round?orderByRole=true","GET");
 
-            if($json_team!=null){
-                $team=json_decode($$json_team,true);
+
+            if($json_team["data"]!=null){
+                $team=json_decode($json_team["data"],true);
+            }
+
+            if($team==null){
+
+                $r=$real_round-1;
+
+                $json_team=$apiAccess->accessApi("/team/$id_user/".$r."?orderByRole=true","GET");
+
+
+                if($json_team["data"]!=null) {
+                    $team = json_decode($json_team["data"], true);
+
+                }
             }
 
             $roster=$team["players"];
+
             $findBySistem=true;
+
+
 
         }
 
@@ -138,7 +159,7 @@ var_dump($json);
 
                     <div class="title_formation"><span class="username_title"><?php echo $name_team; ?></span>
                         <?php if($team["def"]!=0){ ?>
-                            <span class="tactic_title"><?php echo $team["def"]."-".$team-["cen"]."-".$team["att"]; ?></span>
+                            <span class="tactic_title"><?php echo $team["def"]."-".$team["cen"]."-".$team["att"]; ?></span>
                         <?php } ?>
                     </div>
 
@@ -148,13 +169,13 @@ var_dump($json);
 
                                 foreach($start as $player){
 
-                                $arr_stat=$player["stat"];
+                                $arr_stat=$player["player"]["stat"];
 
                                 if(isset($arr_stat[$real_round])){
                                     $stat=$arr_stat[$real_round];
                                 }
+                                ?>
 
-                                if(!$isCalc){ ?>
                                     <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
                                         <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                                         <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
@@ -167,83 +188,74 @@ var_dump($json);
                                             <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']["value"]>0) {  for($i=0;$i<$stat['yellow_card']["value"];$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
                                             <?php if(isset($arr_stat[$real_round]) && $stat['red_card']["value"]>0) {  for($i=0;$i<$stat['red_card']["value"];$i++){ ?><img src="img/red_card.png"><?php } } ?>
                                         </div>
-                                        <div class="info-player-item">
-                        	                <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $stat['vote']["value"]; }  } else { echo " - "; } ?></div>
-                        	                <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round])) { $temp=calc($stat,$player["player"]["role"]); if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $temp; } $sum=$sum+$temp; } else { echo " - "; } ?></div>
-                                        </div>
+
+                                <?php if(!$isCalc){ ?>
+
+                                    <div class="info-player-item">
+                                        <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $stat['vote']["value"]; }  } else { echo " - "; } ?></div>
+                                        <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round])) { $temp=calc($stat,$player["player"]["role"]); if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $temp; } $sum=$sum+$temp; } else { echo " - "; } ?></div>
                                     </div>
 
-                            <?php }else{ ?>
-                                    <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                                        <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  >
-                                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                                        <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['scored']->getValue()>0) {  for($i=0;$i<$stat['scored']->getValue();$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['taken']->getValue()>0) {  for($i=0;$i<$stat['taken']->getValue();$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['autogol']->getValue()>0) {  for($i=0;$i<$stat['autogol']->getValue();$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']->getValue()>0) {  for($i=0;$i<$stat['yellow_card']->getValue();$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['red_card']->getValue()>0) {  for($i=0;$i<$stat['red_card']->getValue();$i++){ ?><img src="img/red_card.png"><?php } } ?>
-                                        </div>
-                                        <div class="info-player-item">
-                        	                <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']->getValue()==-1) { echo "S.V."; } else { echo $stat['vote']->getValue(); }  } else { echo " - "; } ?></div>
-                        	                <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round]) && isset($stat['final'])) {  if($stat['final']->getValue()==-1) { echo "S.V."; } else { echo $stat['final']->getValue(); } } else { echo " - "; } ?></div>
-                                        </div>
+                                <?php }else{ ?>
+
+                                    <div class="info-player-item">
+                                        <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $stat['vote']["value"]; }  } else { echo " - "; } ?></div>
+                                        <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round]) && isset($stat['final'])) {  if($stat['final']["value"]==-1) { echo "S.V."; } else { echo $stat['final']["value"]; } } else { echo " - "; } ?></div>
                                     </div>
+
+                                <?php } ?>
+
+                                </div>
+
                             <?php } ?>
 
-                        <?php } //fine count start ?> 
+                        <?php //} //fine count start ?>
 
                         <div class="old-player panchina_info">Panchina</div>
                             
                             <?php foreach($back as $player){
 
-                                $arr_stat=$database_players->dumpStats($player->getPlayer()->getId());
+                                $arr_stat=$player["player"]["stat"];
 
                                 if(isset($arr_stat[$real_round])){
                                     $stat=$arr_stat[$real_round];
                                 }
 
-                                if(!$isCalc){ ?>
-                                    
-                                    <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                                        <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  >
-                                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                                        <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['scored']->getValue()>0) {  for($i=0;$i<$stat['scored']->getValue();$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['taken']->getValue()>0) {  for($i=0;$i<$stat['taken']->getValue();$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['autogol']->getValue()>0) {  for($i=0;$i<$stat['autogol']->getValue();$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']->getValue()>0) {  for($i=0;$i<$stat['yellow_card']->getValue();$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['red_card']->getValue()>0) {  for($i=0;$i<$stat['red_card']->getValue();$i++){ ?><img src="img/red_card.png"><?php } } ?>
-                                        </div>
-                                        <div class="info-player-item">
-                        	                <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']->getValue()==-1) { echo "S.V."; } else { echo $stat['vote']->getValue(); }  } else { echo " - "; } ?></div>
-                        	                <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round])) { $temp=calc($stat,$player->getPlayer()->getRole()); if($stat['vote']->getValue()==-1) { echo "S.V."; } else { echo $temp; } } else { echo " - "; } ?></div>
-                                        </div>
+                            ?>
+
+
+
+                            <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                                <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                                <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
+                                <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
+                                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                                <div class="name-player-item"><?php echo $player["player"]["name"]; ?>
+                                    <?php if(isset($arr_stat[$real_round]) && $stat['scored']["value"]>0) {  for($i=0;$i<$stat['scored']["value"];$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
+                                    <?php if(isset($arr_stat[$real_round]) && $stat['taken']["value"]>0) {  for($i=0;$i<$stat['taken']["value"];$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
+                                    <?php if(isset($arr_stat[$real_round]) && $stat['autogol']["value"]>0) {  for($i=0;$i<$stat['autogol']["value"];$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
+                                    <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']["value"]>0) {  for($i=0;$i<$stat['yellow_card']["value"];$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
+                                    <?php if(isset($arr_stat[$real_round]) && $stat['red_card']["value"]>0) {  for($i=0;$i<$stat['red_card']["value"];$i++){ ?><img src="img/red_card.png"><?php } } ?>
+                                </div>
+
+
+                                <?php if(!$isCalc){ ?>
+
+                                    <div class="info-player-item">
+                                        <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $stat['vote']["value"]; }  } else { echo " - "; } ?></div>
+                                        <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round])) { $temp=calc($stat,$player["player"]["role"]); if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $temp; } } else { echo " - "; } ?></div>
                                     </div>
 
-                            <?php }else{ ?>
-                                    <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                                        <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  >
-                                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                                        <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['scored']->getValue()>0) {  for($i=0;$i<$stat['scored']->getValue();$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['taken']->getValue()>0) {  for($i=0;$i<$stat['taken']->getValue();$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['autogol']->getValue()>0) {  for($i=0;$i<$stat['autogol']->getValue();$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']->getValue()>0) {  for($i=0;$i<$stat['yellow_card']->getValue();$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
-                                            <?php if(isset($arr_stat[$real_round]) && $stat['red_card']->getValue()>0) {  for($i=0;$i<$stat['red_card']->getValue();$i++){ ?><img src="img/red_card.png"><?php } } ?>
-                                        </div>
-                                        <div class="info-player-item">
-                        	                <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']->getValue()==-1) { echo "S.V."; } else { echo $stat['vote']->getValue(); }  } else { echo " - "; } ?></div>
-                        	                <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round]) && isset($stat['final'])) {  if($stat['final']->getValue()==-1) { echo "S.V."; } else { echo $stat['final']->getValue(); } } else { echo " - "; } ?></div>
-                                        </div>
+                                <?php }else{ ?>
+
+                                    <div class="info-player-item">
+                                        <div class="vote value-player-item"><?php if(isset($arr_stat[$real_round])) { if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $stat['vote']["value"]; }  } else { echo " - "; } ?></div>
+                                        <div class="finalvote vote value-player-item"><?php if(isset($arr_stat[$real_round]) && isset($stat['final'])) {  if($stat['final']["value"]==-1) { echo "S.V."; } else { echo $stat['final']["value"]; } } else { echo " - "; } ?></div>
                                     </div>
-                            <?php } ?>
+
+                                <?php } ?>
+
+                            </div>
 
                         <?php } //FOREACH PANCHINA ?>
 
@@ -281,7 +293,7 @@ var_dump($json);
 
                         <?php } ?>
 
-                    <?php }else { // IF COUNT START >0 ?>
+                    <?php } else { // IF COUNT START >0 ?>
 
                         <div class="old-player" >
                            	Nessuna Informazione Inserita

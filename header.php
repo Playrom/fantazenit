@@ -15,8 +15,7 @@ $database_users = new ConnectDatabaseUsers($database->mysqli);
 $database_rounds = new ConnectDatabaseRounds($database->mysqli);
 $database_players = new ConnectDatabasePlayers($database->mysqli);
 $database_markets = new ConnectDatabaseMarkets($database->mysqli);
-
-
+$database_handicaps = new ConnectDatabaseHandicaps($database->mysqli);
 
 $competitions=$database_competitions->getCompetitions();
 
@@ -157,7 +156,7 @@ if(isset($config['current_round'])){
         <div id="wrapper">
             <div id="header">
 
-                <a href="/index.php"><div id="logo"></div></a>
+                <a href="index.php"><div id="logo"></div></a>
                 <div id="menu-top">
 	                <ul>
 		                <li><a href="index.php">Home</a></li>
