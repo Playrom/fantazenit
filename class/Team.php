@@ -21,7 +21,7 @@ class Team{
 	 *
 	 * @return String|mixed
 	 */
-    function map(){
+    function map($round){
         $arr=array();
 
         $arr["id_user"] = $this->id_user;
@@ -30,7 +30,7 @@ class Team{
         $arr["cen"] = $this->cen;
         $arr["att"] = $this->att;
         if($this->players!=null) {
-            $arr["players"] = $this->players->map();
+            $arr["players"] = $this->players->mapByRound($round);
         }else{
             $arr["players"] = null;
         }
@@ -38,7 +38,7 @@ class Team{
         return $arr;
     }
 
-    function mapOrderedByRole(){
+    function mapOrderedByRole($round){
         $arr=array();
 
         $arr["id_user"] = $this->id_user;
@@ -49,8 +49,8 @@ class Team{
 
         if($this->players!=null) {
             $arr["players"] = $this->getPlayers()->orderByRole();
-            $arr["players"]["titolari"] = $arr["players"][0]->map();
-            $arr["players"]["panchina"] = $arr["players"][1]->map();
+            $arr["players"]["titolari"] = $arr["players"][0]->mapByRound($round);
+            $arr["players"]["panchina"] = $arr["players"][1]->mapByRound($round);
             unset($arr["players"][0]);
             unset($arr["players"][1]);
         }else{

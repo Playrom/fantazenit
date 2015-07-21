@@ -21,6 +21,20 @@ class TeamPlayerList extends ArrayObject{ // Utilize TeamPlayerRound
 
         return $arr;
     }
+
+    /**
+     * map the Object by round
+     *
+     * @return array
+     */
+    function mapByRound($round){
+        $arr=array();
+        foreach($this as $player){
+            $arr[]=$player->mapByRound($round);
+        }
+
+        return $arr;
+    }
     /**
      * Find if a player is in this list
      *

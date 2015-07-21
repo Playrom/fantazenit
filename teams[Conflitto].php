@@ -135,7 +135,7 @@ include('header.php');
                 <div class="transfers">
                     <?php foreach($transfers as $transfer){
 
-                    $result=$apiAccess->accessApi("/markets/".$transfer["id_market"],"GET");
+                    $result=$apiAccess->accessApi("/market/".$transfer["id_market"],"GET");
 
                     $market=$result["data"];
 
@@ -199,13 +199,9 @@ include('header.php');
 
             $users=$json["data"];
 
-            $count=0;
-            foreach($users as $temp){ $count++;
-                $id = $temp['id'];
-                $json=$apiAccess->accessApi("/users/".$id,"GET");
 
-                $team = $json["data"];
-                ?>
+            $count=0;
+            foreach($users as $team){ $count++;  ?>
                 <div class="row_formation col-md-6">
                     <div <?php if($count&1){echo " class=\"team_item_list\"";}else{echo " class=\"team_item_list\"";} ?> >
                         <div class="name_team"><a <?php echo "href=\"?id=".$team["id"]."\""; ?>><?php echo $team["name_team"]; ?></a></div>

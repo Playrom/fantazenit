@@ -6,11 +6,16 @@
  * @return string
  */
 function getStandings($id_competition){
-    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-    $database_users = new ConnectDatabaseUsers($database->mysqli);
-    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
 
-    $results=$database_competitions->getStandings($id_competition);
+    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+
+    $standings=$api->accessApi("/competitions/".$id_competition."/standings" , "GET");
+
+    $results = null;
+
+    if($standings["error"]==false){
+        $results = $standings["data"]["standings"];
+    }
     
     
     $pos=1;
@@ -20,13 +25,12 @@ function getStandings($id_competition){
 
     
         foreach($results as $team){
-            $teamData=$database_users->getUserById($team['id_user']);
 
-            $ret.="<div class=\"old-player\" id=\"".$teamData->getId()."\" >";
+            $ret.="<div class=\"old-player\" id=\"".$team["team_info"]["id"]."\" >";
             $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
-            $ret.="<div class=\"name-player-item\">".$teamData->getNameTeam()."</div>";
-            $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team['points']."</div>";
-            $ret.="<div class=\"finalvote vote value-player-item\">".$team['gol']."</div></div>";
+            $ret.="<div class=\"name-player-item\">".$team["team_info"]["name_team"]."</div>";
+            $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team["points"]."</div>";
+            $ret.="<div class=\"finalvote vote value-player-item\">".$team["gol"]."</div></div>";
             $ret.="</div>";
 
             $pos++; 
@@ -46,11 +50,16 @@ function getStandings($id_competition){
  * @return [type]
  */
 function getStandingsByIdUser($id_competition,$id_user){
-    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-    $database_users = new ConnectDatabaseUsers($database->mysqli);
-    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
 
-    $results=$database_competitions->getStandings($id_competition);
+    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+
+    $standings=$api->accessApi("/competitions/".$id_competition."/standings" , "GET");
+
+    $results = null;
+
+    if($standings["error"]==false){
+        $results = $standings["data"]["standings"];
+    }
         
     $pos=1;
     $dots=false;
@@ -60,18 +69,17 @@ function getStandingsByIdUser($id_competition,$id_user){
 
     
         foreach($results as $team){
-            $teamData=$database_users->getUserById($team['id_user']);
-            
+
             if($pos>3 && $team['id_user']!=$id_user){
                 if(!$dots){
                     $ret.="<div class=\"old-player dots\">...</div>";
                     $dots=true;
                 }
             }else{
-                if($team['id_user']==$id_user) $ret.="<div class=\"old-player user_position\" id=\"".$teamData->getId()."\" >";
-                else $ret.="<div class=\"old-player\" id=\"".$teamData->getId()."\" >";
+                if($team['id_user']==$id_user) $ret.="<div class=\"old-player user_position\" id=\"".$team["team_info"]['id']."\" >";
+                else $ret.="<div class=\"old-player\" id=\"".$team["team_info"]["id"]."\" >";
                 $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
-                $ret.="<div class=\"name-player-item\">".$teamData->getNameTeam()."</div>";
+                $ret.="<div class=\"name-player-item\">".$team["team_info"]["name_team"]."</div>";
                 $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team['points']."</div>";
 	            $ret.="<div class=\"finalvote vote value-player-item\">".$team['gol']."</div></div>";
 	            $ret.="</div>";
@@ -89,17 +97,35 @@ function getStandingsByIdUser($id_competition,$id_user){
 
 
 function getStandingsRound($id_competition,$id_round){
-    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-    $database_users = new ConnectDatabaseUsers($database->mysqli);
-    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
-    $database_rounds = new ConnectDatabaseRounds($database->mysqli);
     
-    $config=$database->dumpConfig();
-    
-    if($id_round==-1) $id_round=$config['last-round'];
-    else $id_round=$database_rounds->getRealRoundByRoundCompetition($id_round,$id_competition);
-    $results=$database_rounds->getRoundStandings($id_competition,$id_round);
-    
+
+    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+
+    $config = $api->accessApi("/config" , "GET");
+
+
+    if($id_round==-1) {
+        $id_round = $config['last-round'];
+    } else {
+
+        $competitions = $api->accessApi("/competitions" , "GET");
+        if($competitions["error"] == false){
+            if(isset($competitions["data"]["$id_competition"])){
+                $compe=$competitions["data"]["$id_competition"];
+
+                $id_round = $compe["real_rounds"]["$id_round"];
+            }
+        }
+    }
+
+    $standings=$api->accessApi("/competitions/".$id_competition."/standings/".$id_round , "GET");
+
+    $results = null;
+
+    if($standings["error"]==false){
+        $results = $standings["data"]["standings"];
+    }
+
     
     $pos=1;
     $dots=false;
@@ -107,18 +133,18 @@ function getStandingsRound($id_competition,$id_round){
     $ret="<div class=\"roster-item\"><div class=\"old-player info_player\"><div class=\"role-icon\">*</div><div class=\"name-player-item\">Nome Squadra</div>";
     $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">Punti</div><div class=\"finalvote vote value-player-item\">Gol</div></div></div>";
 
-        foreach($results as $team){
-            $teamData=$database_users->getUserById($team['id_user']);
 
-            $ret.="<div class=\"old-player\" id=\"".$teamData->getId()."\" >";
-            $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
-            $ret.="<div class=\"name-player-item\">".$teamData->getNameTeam()."</div>";
-            $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team['points']."</div>";
-            $ret.="<div class=\"finalvote vote value-player-item\">".$team['gol']."</div></div>";
-            $ret.="</div>";
+    foreach($results as $team){
 
-            $pos++; 
-        }
+        $ret.="<div class=\"old-player\" id=\"".$team["team_info"]["id"]."\" >";
+        $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
+        $ret.="<div class=\"name-player-item\">".$team["team_info"]["name_team"]."</div>";
+        $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team["points"]."</div>";
+        $ret.="<div class=\"finalvote vote value-player-item\">".$team["gol"]."</div></div>";
+        $ret.="</div>";
+
+        $pos++;
+    }
 
     $ret.="</div>";
 
@@ -128,22 +154,32 @@ function getStandingsRound($id_competition,$id_round){
 }
 
 function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){
-    $database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
-    $database_users = new ConnectDatabaseUsers($database->mysqli);
-    $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
-    $database_rounds = new ConnectDatabaseRounds($database->mysqli);
+    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
 
-    $config=$database->dumpConfig();
+    $config = $api->accessApi("/config" , "GET")["data"];
 
-    $base_round=$id_round;
-    if($id_round==-1) { 
-        $id_round=$config['last-round'];
-        $base_round=$database_rounds->getRoundCompetitionByRealRound($id_round,$id_competition);
-    }else{
-        $id_round=$database_rounds->getRealRoundByRoundCompetition($id_round,$id_competition);
+
+    if($id_round==-1) {
+        $id_round = $config['last-round'];
+    } else {
+
+        $competitions = $api->accessApi("/competitions" , "GET");
+        if($competitions["error"] == false){
+            if(isset($competitions["data"]["$id_competition"])){
+                $compe=$competitions["data"]["$id_competition"];
+
+                $id_round = $compe["real_rounds"]["$id_round"];
+            }
+        }
     }
-    $results=$database_rounds->getRoundStandings($id_competition,$id_round);
-    
+
+    $standings=$api->accessApi("/competitions/".$id_competition."/standings/".$id_round , "GET");
+
+    $results = null;
+
+    if($standings["error"]==false){
+        $results = $standings["data"]["standings"];
+    }
     
     $pos=1;
     $dots=false;
@@ -151,29 +187,28 @@ function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){
     $ret="<div class=\"roster-item\"><div class=\"old-player info_player\"><div class=\"role-icon\">*</div><div class=\"name-player-item\">Nome Squadra</div>";
     $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">Punti</div><div class=\"finalvote vote value-player-item\">Gol</div></div></div>";
 
-    
-        foreach($results as $team){
-            $teamData=$database_users->getUserById($team['id_user']);
-            
-            if($pos>3 && $team['id_user']!=$id_user){
-                if(!$dots){
-                    $ret.="<div class=\"old-player dots\">...</div>";
-                    $dots=true;
-                }
-            }else{
-                if($team['id_user']==$id_user) $ret.="<div class=\"old-player user_position\" id=\"".$teamData->getId()."\" >";
-                else $ret.="<div class=\"old-player\" id=\"".$teamData->getId()."\" >";
-                $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
-                $ret.="<div class=\"name-player-item\">".$teamData->getNameTeam()."</div>";
-                $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team['points']."</div>";
-	            $ret.="<div class=\"finalvote vote value-player-item\">".$team['gol']."</div></div>";
-	            $ret.="</div>";
-            }
 
-            $pos++; 
+    foreach($results as $team){
+
+        if($pos>3 && $team['id_user']!=$id_user){
+            if(!$dots){
+                $ret.="<div class=\"old-player dots\">...</div>";
+                $dots=true;
+            }
+        }else{
+            if($team['id_user']==$id_user) $ret.="<div class=\"old-player user_position\" id=\"".$team["team_info"]['id']."\" >";
+            else $ret.="<div class=\"old-player\" id=\"".$team["team_info"]["id"]."\" >";
+            $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
+            $ret.="<div class=\"name-player-item\">".$team["team_info"]["name_team"]."</div>";
+            $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team['points']."</div>";
+            $ret.="<div class=\"finalvote vote value-player-item\">".$team['gol']."</div></div>";
+            $ret.="</div>";
         }
 
-    $ret.="<div class=\"old-player finalvote complete-standing\" onclick=\"javascript:location.href='standings.php?competition=".$id_competition."&round=".$base_round."'\">Classifica Completa -> </div></div>";
+        $pos++;
+    }
+
+    $ret.="<div class=\"old-player finalvote complete-standing\" onclick=\"javascript:location.href='standings.php?competition=$id_competition&round=$id_round'\">Classifica Completa -> </div></div>";
 
     return $ret;
 

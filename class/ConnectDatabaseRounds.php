@@ -193,58 +193,72 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     }
     
     function isValidFormation($id_user,$round){
+	    
+	    $conf=$this->dumpConfig();
+		$current_round=$conf['current_round'];
         
         try{
-            $tempQuery="SELECT * from `tactics` where id_user=? and round=?;";
+	        
+	        if($round==$current_round){
+		        
+		        $tempQuery="SELECT * from `tactics` where id_user=? order by round DESC;";
 
-			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-			}
-
-			if (!$stmt->bind_param("ii", $id_user,$round)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-			}
-
-			$res=$stmt->get_result();
-			$res->data_seek(0);
-
-			while ($row = $res->fetch_assoc()) {
-                
-                $datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['date'])));
-				$date_tactic=new DateTime($datetemp);
-
-				$date_last_change=$this->getDateLastChange($id_user);
-                
-                if($date_last_change!=null){
-                    $stamp_tactic=$date_tactic->getTimestamp();
-                    $stamp_change=$date_last_change->getTimestamp();
-
-                    $diff=$stamp_tactic-$stamp_change;
-                                        
-                    
-                    if($diff<=0){
-                        return false;
-                    }else{
-                        return true;
-                    }
-                }else{
-	                return true;
-                }
-			}
-			
-			if($round>0){
-				return $this->isValidFormation($id_user,$round-1);
-			}
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+	
+				if (!$stmt->bind_param("i", $id_user)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+	
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+				
+				
+				while ($row = $res->fetch_assoc()) {
+					
+					
+	                
+	                $datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['date'])));
+					$date_tactic=new DateTime($datetemp);
+						
+					$date_last_change=$this->getDateLastChange($id_user);
+	                
+	                if($date_last_change!=null){
+	                    $stamp_tactic=$date_tactic->getTimestamp();
+	                    $stamp_change=$date_last_change->getTimestamp();
+	
+	                    $diff=$stamp_tactic-$stamp_change;
+	                                        
+	                    
+	                    if($diff<=0){
+	                        return false;
+	                    }else{
+	                        return true;
+	                    }
+	                }else{
+		                return true;
+	                }
+				}
+				
+				return true;
+				
+				
+	        }else{
+		        return true;
+	        }
+	        
             
-            return false;
+			
+			
 
 
 		}catch(exception $e) {
-			echo "\nERRORE DUMP FORMAZIONE: ".$e;
+			echo "\nERRORE CHECK VALIDITA FORMAZIONE: ".$e;
 			return false;
 		}
     }
@@ -864,7 +878,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 					$id_user=$row['id'];
 					$team=$this->getTeam($id_user,$round);
 
-					if($team->getPlayers()==null && $round>1 && $this->getTeam($id_user,$round-1)->getPlayers()!=null){ // SE NON CE SQUADRA QUESTA GIORNATA MA PRECEDENTE SI
+					if($team->getPlayers()==null && $round>1 && $this->getTeam($id_user,$round-1)->getPlayers()!=null && $this->isValidFormation($id_user,$round)){ // SE NON CE SQUADRA QUESTA GIORNATA MA PRECEDENTE SI
 						$team=$this->getTeam($id_user,$round-1);
 						$roster=$team->getPlayers();
 						$tempArr=$roster->orderByRole();
@@ -1070,7 +1084,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 	}
 
 	function getRoundsOfCompetition($id_competition){
-		$tempQuery="SELECT * FROM competitions_in_rounds  WHERE id_competition=? ";
+		$tempQuery="SELECT * FROM competitions_in_rounds  WHERE id_competition=?  ORDER BY round";
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -1090,7 +1104,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			$arr=array();
 
 			while ($row = $res->fetch_assoc()) {
-				$arr[]=$row['round_competition'];
+				$arr[$row["round"]]=$row['round_competition'];
 			}
 
 			return $arr;
@@ -1124,7 +1138,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			$arr=array();
 
 			while ($row = $res->fetch_assoc()) {
-				$arr[]=$row['round'];
+				$arr[$row['round_competition']]=$row['round'];
 			}
 
 			return $arr;
@@ -1472,6 +1486,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 		$data_competitions=new ConnectDatabaseCompetitions($this->mysqli);
 		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
+		
+		$id_round=$this->getRealRoundByRoundCompetition($id_round,$id_competition);
 
 
         $tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
@@ -1517,8 +1533,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
                 $round_result[$id_user]['gol']=$gol;
                 $round_result[$id_user]['user']=$id_user;
             }
+         
 
-            $results[]=$round_result;
+            $results=$round_result;
 
 
         }catch(exception $e) {
@@ -1527,20 +1544,26 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
         }
         
+        if(count($results)==0){
+	        return null;
+        }
+        
+        
 		$classifica=array();
 		$users=$data_competitions->getUsersInCompetition($id_competition);
 
 		foreach($users as $user){
 			$gols=0;
 			$points=0;
-			foreach($results as $round){
-				if(isset($round[intval($user)])){
-                    $res=$round[intval($user)];
-                    $gols+=$res['gol'];
-                    $points+=$res['points'];
-                }
-			}
-			$temp['id_user']=$user;
+			$round=$results;
+			
+			if(isset($round[intval($user["id"])])){
+                $res=$round[intval($user["id"])];
+                $gols+=$res['gol'];
+                $points+=$res['points'];
+            }
+			
+			$temp['id_user']=$user["id"];
 			$temp['gol']=$gols;
 			$temp['points']=$points;
 			$classifica[]=$temp;

@@ -4,6 +4,7 @@ $title="Inserisci Formazione";
 include('header.php');
 
 if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids']) && isset($_POST['reserves'])){
+	
 
     $user=$database_users->getUserByUsername($_SESSION['username']);
     $players=$database_players->dumpSingoliToList(null,null);

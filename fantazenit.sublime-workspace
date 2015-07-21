@@ -216,10 +216,10 @@
 			}
 		},
 		{
-			"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
+			"file": "/D/Archivi Console/ISO & Sistemi Operativi/productkeyWin8.txt",
 			"settings":
 			{
-				"buffer_size": 97,
+				"buffer_size": 29,
 				"line_ending": "Windows"
 			}
 		}
@@ -295,6 +295,12 @@
 	],
 	"file_history":
 	[
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/skel.min.js",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/init.js",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/form.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/emtshipping.php",
+		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/defines.inc.php",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index 3.html",
 		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/12.html",
 		"/D/Sync Online/Archivi Siti Web/Da Lorenzo Noleggio/foto verde/11.html",
@@ -308,8 +314,6 @@
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/appartamenti.html",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/history.tpl",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/footer.tpl",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
-		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/defines.inc.php",
 		"/D/Sync Online/Archivi Siti Web/Club Nautico Baia Azzurra/Backup Deface/index.php",
 		"/G/W7ULTMT_x86_UPDT_it_06_2010_PSSTR/INFO.txt",
 		"/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/global.css",
@@ -418,11 +422,7 @@
 		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/SublimeCodeIntel/SublimeCodeIntel.sublime-settings",
 		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/SublimeCodeIntel.sublime-settings",
 		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/C/Users/Giorgio/AppData/Local/Temp/Temp1_php-5.5.21-nts-Win32-VC11-x86.zip/install.txt",
-		"/D/dev/PHP/fantazenit/todo.txt",
-		"/D/dev/JAVA/sorteggi/lista.csv",
-		"/D/dev/PHP/fantazenit/js/countdown/READ ME.txt"
+		"/C/Users/Giorgio/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings"
 	],
 	"find":
 	{
@@ -443,6 +443,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"dateArra",
 			"analy",
 			"dev",
 			"header",
@@ -637,26 +638,25 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/C/Users/Giorgio/AppData/Local/Temp/fz3temp-2/index.php",
+					"file": "/D/Archivi Console/ISO & Sistemi Operativi/productkeyWin8.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 97,
+						"buffer_size": 29,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								91,
-								91
+								29,
+								0
 							]
 						],
 						"settings":
 						{
-							"auto_complete": false,
 							"incomplete_sync": null,
-							"syntax": "Packages/PHP/PHP.tmLanguage"
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,

@@ -45,9 +45,67 @@ class Statistic{
         $second_arr['value']=$this->getValue();
         $second_arr['date_modified']=$this->getDateModified();
 
+        $temp = $this->getRealName($this->getName());
+
+        if(isset($temp)){
+            $second_arr["real_name"] = $temp;
+        }
+
+
+
         return $second_arr;
     }
+
+    private function getRealName($name){
+        switch($name){
+            case "taken" :
+                return "Gol Subiti";
+            case "free_kick_scored" :
+                return "Rigori Segnati";
+            case "round" :
+                return  "Round";
+            case "scored" :
+                return "Gol Segnati";
+            case "autogol" :
+                return "Autogol";
+            case "vote" :
+                return "Voto Base";
+            case "id_player":
+                return "Id Giocatore";
+            case "yellow_card":
+                return "Cartellini Gialli";
+            case "free_kick_keeped":
+                return "Rigori Parati";
+            case "gdv" :
+                return "GDV";
+            case "assist":
+                return "Assist";
+            case "red_card":
+                return "Cartellini Rossi";
+            case "gdp" :
+                return "GDP";
+            case "final":
+                return "Voto Finale";
+            case "free_kick_missed":
+                return "Rigori Sbagliati";
+            case "stop_assist":
+                return "Assist da Fermo";
+            default:
+                return null;
+    }
+
+        return null;
+    }
+
 }
+
+/** FUNZIONE RITORNA NOME DISPLAY DELLA TIPOLOGIA
+ *
+ * @param String $name
+ * @return String
+ */
+
+
 
 //Test
 

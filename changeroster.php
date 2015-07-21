@@ -3,26 +3,34 @@ $title="Mercato di Riparazione";
 include('header.php');
 
 $error_code=0;
+$error_message = null;
 
 if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['old']) && isset($_POST['new'])){
+	
+	
+	
+
+    $data["id_old"]=$_POST['old'];
+    $data["id_new"]=$_POST['new'];
+    $data["id_market"]=$_POST['id_market'];
     
-    $user=$database_users->getUserByUsername($_SESSION['username']);
-
-    $players=$database_players->dumpSingoliToList(null,null);
-    $roster=$user->getPlayers();
-
-    $id_old=$_POST['old'];
-    $id_new=$_POST['new'];
-    $id_market=$_POST['id_market'];
-
-    $old_player=$roster->searchPlayer($id_old);
-    $new_player=$players[$id_new];
-
-    if($old_player!=null && ($user->getBalance() + $old_player->getValue() - $new_player->getValue())>=0){
-        $error_code=$database_markets->changePlayer($old_player,$new_player,$user,$players,$id_market);
+    $data["id_user"] = $userId;
+    
+    $params = array('postParams' => $data);
+    
+    
+    $json=$apiAccess->accessApi("/markets/transfers","POST",$params);
+    
+    if($json["error"]){
+	    if(isset($json["error_code"])){
+		    $error_code=$json["error_code"];
+	    }else{
+		    $error_message = $json["message"];
+	    }
+        
     }
 
-    $market_pre=$id_market;
+    $market_pre=$data["id_market"];
 
 }
 
@@ -32,21 +40,40 @@ if(!isset($_SESSION['username'])) {
     header("Location:login.php");
 }else if(isset($_SESSION['username'])){
 
-    $username=$_SESSION['username'];
-    $user=$database_users->getUserByUsername($username);
+    $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
+    $user = $team["data"] ; 
+    $roster=null;
+    
+    $players = null;
+    
+    $json = $apiAccess->accessApi("/players","GET");
+    
+    if($json["error"]==false){
+	    $players = $json["data"];
+    }
+    
 
-    $players=$database_players->dumpSingoliToList(null, null);
-    $roster=$user->getPlayers();
+    if(isset($team["data"])){
+        $arr=$team["data"];
+		
+        $roster=$arr["players"];
+    }
+    
+    $markets=null;
 
-    $markets=$database_markets->getOpenMarkets();
 
-    $roster=$roster->orderByRole();
+    $json=$apiAccess->accessApi("/markets/open","GET");
+
+    if($json["error"]==false){
+	    $markets = $json["data"];
+    }
+    
 
     $market=null;
     $now_max=null;
     $selected=false;
     $finish=false;
-
+    
 
     if(isset($_GET['market']) || count($markets)==1 || isset($market_pre)){
 
@@ -56,35 +83,63 @@ if(!isset($_SESSION['username'])) {
         if(isset($_GET['market'])){
 
             $id_market=$_GET['market'];
-            $market=$databas_markets->getMarketById($id_market);
+            
+            $json=$apiAccess->accessApi("/markets/$id_market","GET");
+    
+		    if($json["error"]==false){
+			    $market = $json["data"];
+		    }
 
         }else if(count($markets)==1){
 
             $market=$markets[0];
-            $id_market=$market->getId();
+            $id_market=$market["id"];
+
 
         }else{
 
             $id_market=$market_pre;
-            $market=$database_markets->getMarketById($id_market);
+            $json=$apiAccess->accessApi("/markets/$id_market","GET");
+    
+		    if($json["error"]==false){
+			    $market = $json["data"];
+		    }
 
         }
-
-        $trans=$database_markets->getTransfersByIdMarket($user,$players,$id_market);
-        $already_transfer=count($trans);
         
-        $selected=true;
-        $now_max=$markets[0]->getMaxChange()-$already_transfer;
+        $json=$apiAccess->accessApi("/markets/$id_market/transfers/$userId","GET");
+            
+		$trans = null;
+		
+	    if($json["error"]==false){
+		    $trans = $json["data"];
+	    }
 
-        if($now_max==0){
-            $finish=true;
+        if($trans!=null){
+	        $already_transfer=count($trans);
+        
+	        $selected=true;
+	        $now_max=intval($markets[0]["max_change"])-$already_transfer;
+	
+	        if($now_max==0){
+	            $finish=true;
+	        }
         }
+        
 
     }else{
         $selected=false;
     }
+    
+if($error_message!=null){ ?>
+	<div class="alert alert-danger error_display" role="alert">
+		<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+		<span class="sr-only"></span><?php echo $error_message; ?>
+	</div>
+<?php 
+}
 
-if($error_code==-1){  ?>
+	if($error_code==-1){  ?>
 
     	<div class="alert alert-danger error_display" role="alert">
 			<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
@@ -123,8 +178,8 @@ if($error_code==-1){  ?>
         <div class="row">
             <div class="col-md-12">
 	            <div id="team-info">
-	                <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
-	                <div class="balance">Sessione di Mercato: <?php echo $market->getName(); ?></div>
+	                <div class="name-team"><?php echo $user["name_team"]; ?></div>
+	                <div class="balance">Sessione di Mercato: <?php echo $market["name"]; ?></div>
 	            </div>
             </div>
 	    </div>
@@ -141,7 +196,7 @@ if($error_code==-1){  ?>
                         <div class="form-group" style="float:right;">
                             <select name="market" class="form-control">
                             <?php foreach($markets as $mar){
-                                echo "<option value=\"".$mar->getId()."\" >".$mar->getName()."</option>";
+                                echo "<option value=\"".$mar["id"]."\" >".$mar["name"]."</option>";
                             } ?>
                             </select>
                             <input  type="submit" value="Seleziona Mercato">
@@ -162,18 +217,18 @@ if($error_code==-1){  ?>
     	
     	            <?php 
     		        foreach($roster as $player){
-                    	unset($players[$player->getPlayer()->getId()]);
+                    	unset($players[$player["player"]["id"]]);
 
     	
     	            ?>
-    		            <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-    		                <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-    		                <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  
+    		            <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+    		                <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+    		                <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
     			        >
-    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-    		                <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+    		                <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
     		                <div class="info-player-item">
-    		                	<div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+    		                	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
     		                </div>
     		            </div>
     	           <?php } ?>
@@ -195,10 +250,10 @@ if($error_code==-1){  ?>
                         <div class="market-player" id="market-old"></div>
                         <div class="market-player" id="market-new"></div>
                         <form id="mod-form" action="changeroster.php" method="post">
-                            <div id="market-cost">Milioni dopo lo scambio:<span id="market-cost-value" <?php echo "data-value=\"".$user->getBalance()."\" "; ?>><?php echo $user->getBalance(); ?></span></div>
+                            <div id="market-cost">Milioni dopo lo scambio:<span id="market-cost-value" <?php echo "data-value=\"".$user["balance"]."\" "; ?>><?php echo $user["balance"]; ?></span></div>
                             <input type="hidden" id="old-form" name="old" value="">
                             <input type="hidden" id="new-form" name="new" value="">
-                            <input type="hidden" id="market-id-form" name="id_market" <?php echo "value=\"".$market->getId()."\" "; ?> >
+                            <input type="hidden" id="market-id-form" name="id_market" <?php echo "value=\"".$market["id"]."\" "; ?> >
                             <input id="mod-button" type="submit" name="Modifica" value="Salva">
                         </form>
                     </div>
@@ -210,19 +265,19 @@ if($error_code==-1){  ?>
          
                     <ul class="list" id="free-table" style="display: none;">
     		          <?php  foreach($players as $player){   ?>
-    		            <li class="new-player" <?php echo "id=\"".$player->getId()."_free\" "; 
-    		            	echo " id_player=\"".$player->getId()."\" "; ?>
+    		            <li class="new-player" <?php echo "id=\"".$player["id"]."_free\" "; 
+    		            	echo " id_player=\"".$player["id"]."\" "; ?>
     		                class="free-player"
-    		                <?php echo "data-value=\"".$player->getValue()."\" "; ?>
-    		                <?php echo "role=\"".$player->getRole()."\" "; ?>
-    		                <?php echo "name=\"".$player->getName()."\" "; ?>
-    		                <?php if($roster->searchPlayer($player->getId())!=null){ ?> style="display:none;" in-roster="yes" <?php } ?>
+    		                <?php echo "data-value=\"".$player["value"]."\" "; ?>
+    		                <?php echo "role=\"".$player["role"]."\" "; ?>
+    		                <?php echo "name=\"".$player["name"]."\" "; ?>
+    		                <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
     		            >
-    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getRole()); ?></span></div>
-    		                <div class="name-player-item nam"><?php echo $player->getName(); ?></div>
+    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
+    		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
     						<div class="info-player-item">
-    			                <div class="value-player-item val"><?php echo $player->getValue(); ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player->getId();?>">i</a></div>
+    			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
     						</div>
     		            </li>
     					<?php } ?>

@@ -29,6 +29,20 @@ class TeamPlayerRound{
         return $arr;
     }
 
+    /**
+     * Map the object by ROUND
+     */
+
+    function mapByRound($round){
+        $arr=array();
+
+        $arr["player"]=$this->player->mapByRound($round);
+        $arr["position"]=$this->position;
+
+        return $arr;
+    }
+
+
 
 
     /**

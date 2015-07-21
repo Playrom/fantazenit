@@ -17,16 +17,18 @@ $database_players = new ConnectDatabasePlayers($database->mysqli);
 $database_markets = new ConnectDatabaseMarkets($database->mysqli);
 $database_handicaps = new ConnectDatabaseHandicaps($database->mysqli);
 
-$competitions=$database_competitions->getCompetitions();
-
 require_once 'functions.php';
 require_once 'functions.api.php';
 
 $apiAccess=new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
 
-$json=$apiAccess->accessApi("/config","GET")["data"];
+$json=$apiAccess->accessApi("/config","GET");
 
-$config=json_decode($json,true);
+$config = null;
+
+if($json["error"]==false){
+    $config = $json["data"];
+}
 
 if(isset($_POST['competition_change'])){
 	$new_comp=$_POST['competition_change'];
@@ -57,9 +59,11 @@ if(isset($_SESSION['username'])){
 
 
 $round=1;
+$json_team = null;
 
 if(isset($config['current_round'])){
     $round=intval($config['current_round']);
+    $json_team = $apiAccess->accessApi("/team/$userId/$round","GET");
 }
 
 ?>
@@ -190,7 +194,7 @@ if(isset($config['current_round'])){
 					<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
 				</div>
 				                
-                <?php if($userId!=null && !$database_rounds->isValidFormation(intval($userId),intval($round))) { ?>
+                <?php if($userId!=null && !$json_team["valid_formation"]) { ?>
                     <div class="alert alert-danger error_display" role="alert">
 						<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
 						<span class="sr-only"></span>Attenzione , Hai modificato la tua rosa dall'ultima formazione inserita

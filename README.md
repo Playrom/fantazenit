@@ -59,6 +59,10 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * New: Modificate alcune classi per poter supportare il login tramite API che arriverà in una nuova brench
 
+# Alpha 0.5 - 
+
+* Edit: Ottimizzazione per API JSON in corso
+
 # REST API Compatible Brench - 
 
 * New: Login API
@@ -69,6 +73,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * Edit: Settings Base con API
 * Edit: Pagina Squadre
+
 
 
 # Da Fare

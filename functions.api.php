@@ -51,7 +51,7 @@ class ApiAccess{
                 $dataPost=$data['postParams'];
 
                 $json=json_encode($dataPost);
-
+                
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 
                 $headerParams[]='Content-Type: application/json';

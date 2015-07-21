@@ -150,13 +150,13 @@ class User{
         $arr['username']=$this->username;
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
-        $arr['password']=  $this->password;
-        $arr['email']=  $this->email;
+        //$arr['password']=  $this->password;
+        //$arr['email']=  $this->email;
         $arr['auth'] = $this->auth;
         $arr['balance'] = $this->balance;
 
         $arr['name_team'] = $this->name_team;
-        $arr['telephone'] = $this->telephone;
+        //$arr['telephone'] = $this->telephone;
         $arr['url_fb'] = $this->url_fb;
 
         $arr['apiKey'] = $this->apiKey;
@@ -194,6 +194,35 @@ class User{
         return $arr;
 
     }
+    
+    /**
+     * @return mixed|mixed
+     */
+    public function mapTeamOrderedByRole(){
+        $arr=array();
+
+        $arr['balance'] = $this->balance;
+        $arr['players'] = $this->players->mapOrderedByRole();
+
+        $transferArray=array();
+
+        foreach($this->transfers as $transfer){
+            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+        }
+
+
+        $arr['id']=$this->id;
+        $arr['transfers'] = $transferArray;
+        $arr['name_team'] = $this->name_team;
+        $arr['name']=$this->name;
+        $arr['surname']=$this->surname;
+
+        $arr['url_fb'] = $this->url_fb;
+
+        return $arr;
+
+    }
+
 
 	
 

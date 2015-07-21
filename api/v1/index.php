@@ -5,12 +5,20 @@ require '../../class/ConnectDatabaseUsers.php';
 require '../../class/ConnectDatabasePlayers.php';
 require '../../class/ConnectDatabaseMarkets.php';
 require '../../class/ConnectDatabaseRounds.php';
+require '../../class/ConnectDatabaseCompetitions.php';
+require '../../class/ConnectDatabaseHandicaps.php';
+
 require '../../class/RosterList.php';
 require '../../class/RosterPlayer.php';
 require '../../class/Player.php';
 require '../../class/StatisticsCollection.php';
 require '../../class/Statistic.php';
 require '../../class/User.php';
+require '../../class/Handicap.php';
+require '../../class/HandicapRound.php';
+require '../../class/HandicapStanding.php';
+
+
 
 require '../../class/Team.php';
 
@@ -19,6 +27,14 @@ require '../../class/TeamPlayerRound.php';
 require '../../class/PlayersList.php';
 require '../../class/Market.php';
 require '../../class/Transfer.php';
+require '../../class/Competition.php';
+
+require '../../functions.php';
+
+require 'functions.handicaps.php';
+require 'functions.competitions.php';
+
+
 
 $app = new \Slim\Slim(array(
     'debug' => true
@@ -73,7 +89,7 @@ $app->get('/me/basic', function () use ($app) {
 
 });
 
-$app->get('/user', function () use ($app) {
+$app->get('/users', function () use ($app) {
 
 
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
@@ -85,19 +101,16 @@ $app->get('/user', function () use ($app) {
     $result=array();
 
     foreach($users as $user){
-        $transfers=$db_markets->getTransfers($user);
-        $user->setTransfers($transfers);
-        $temp=$user->mapTeam();
+        //$transfers=$db_markets->getTransfers($user);
+        //$user->setTransfers($transfers);
+        $temp=$user->mapBasic();
         $result[]=$temp;
 
     }
 
-
-    $json=json_encode($result,true);
-
-    if($json!=null){
+    if($result!=null){
         $response["error"] = false;
-        $response["data"]=$json;
+        $response["data"]=$result;
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -114,19 +127,40 @@ $app->get('/users/:id', function ($id) use ($app) {
 
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
     $db_markets = new ConnectDatabaseMarkets($db->mysqli);
+    
+    $user = null;
+    
+    $orderByRole=false;
 
-    $user = $db->getUserById($id);
+    if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }
+    
+    if(intval($id)!=0){
+
+    	$user = $db->getUserById($id);
+    	
+	}else{
+		$user = $db->getUserByUsername($id);
+	}
 
     $result=null;
 
     if($user!=null){
         $transfers=$db_markets->getTransfers($user);
         $user->setTransfers($transfers);
-        $temp=$user->mapTeam();
+        $temp = null;
+        
+        if($orderByRole){
+	        $temp=$user->mapTeamOrderedByRole();
+        }else{
+        	$temp=$user->mapTeam();
+        }
+        
         $result=$temp;
     }
 
-    $json=json_encode($result,true);
+    $json=$result;
 
     if($json!=null){
         $response["error"] = false;
@@ -142,62 +176,9 @@ $app->get('/users/:id', function ($id) use ($app) {
 
 });
 
-$app->get('/teams', function () use ($app) {
-
-    verifyRequiredParams(array('round', 'competition'),$app);
-
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
-    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
-
-    $round=$app->request()->params('round');
-    $id_competition=$app->request()->params('competition');
-
-
-    $result=null;
-
-    $teams=$db_rounds->getTeamsByRoundAndCompetition($round,$id_competition);
-
-    $orderByRole=false;
-
-    if($app->request()->params('orderByRole')){
-        $orderByRole=true;
-    }
-
-    if($teams!=null){
-        for($i=0;$i<count($teams);$i++){
-            if($orderByRole) {
-                if($teams[$i]["team"]->getPlayers()!=null) {
-                   $teams[$i]["team"] = $teams[$i]["team"]->mapOrderedByRole();
-                }
-            }else {
-                $teams[$i]["team"] = $teams[$i]["team"]->map();
-            }
-        }
-    }
-
-
-
-    $json=json_encode($teams,true);
-
-    if($json!=null){
-        $response["error"] = false;
-        $response["data"]=$json;
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Dump Teams ID COMP:".$id_competition." and ROUND:".$round." Error";
-    }
-
-
-    echoRespnse(200, $response);
-
-
-});
 
 $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
-
-
     $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
 
@@ -205,6 +186,12 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
     if($app->request()->params('orderByRole')){
         $orderByRole=true;
+    }
+    
+    $stat = $round;
+    
+    if($app->request()->params('stat')!=null){
+        $stat=$app->request()->params('stat');
     }
 
     $result=null;
@@ -217,9 +204,9 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
     if($team!=null && $team->getPlayers()!=null){
         if($orderByRole) {
-            $temp = $team->mapOrderedByRole();
+            $temp = $team->mapOrderedByRole($stat);
         }else{
-            $temp=$team->map();
+            $temp=$team->map($stat);
         }
 
         $result=$temp;
@@ -228,12 +215,9 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
     }
 
 
-
-    $json=json_encode($result,true);
-
-    if($json!=null){
+    if($result!=null && $db_rounds->isValidFormation($id,$round)){
         $response["error"] = false;
-        $response["data"]=$json;
+        $response["data"]=$result;
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -245,7 +229,456 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
 });
 
-$app->get('/market/:id', function ($id) use ($app) {
+$app->get('/competitions', function () use ($app) {
+
+
+    $db_competitions = new ConnectDatabaseCompetitions("localhost","root","aicon07","fantacalcio",3306);
+
+    $db_rounds = new ConnectDatabaseRounds($db_competitions->mysqli);
+
+    $competitions = $db_competitions->getCompetitions();
+
+    $array = false;
+
+    if($app->request()->params('array')){
+        $array=true;
+    }
+
+    $result = null;
+
+    if($competitions!=null){
+        for($i=0;$i<count($competitions);$i++){
+            $id = $competitions[$i]->getId();
+            $compe = $competitions[$i]->map();
+            $compe["real_rounds"] = $db_rounds->getRoundsByCompetition($id);
+            $compe["competition_rounds"] = $db_rounds->getRoundsOfCompetition($id);
+
+            if($array){
+                $result[] = $compe;
+            }else{
+                $result[$id] = $compe;
+            }
+
+        }
+
+    }
+
+
+    if($competitions!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Competitions Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/competitions/:id', function ($id_competition) use ($app) {
+
+    //verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+
+
+    $result=null;
+    
+    $competition = getCompetition($id_competition);
+    
+
+    $teams=$db_competitions->getUsersInCompetition($id_competition);
+    
+    
+    $standings=$db_competitions->getStandings($id_competition);
+    
+
+    for($i=0 ; $i<count($standings) ; $i++){
+        $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
+    }
+    
+
+    if($standings!=null && $teams!=null && $competition!=null){
+        $response["error"] = false;
+        $response["data"]["standings"]=$standings;
+        $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
+        $response["data"]["competition"] =$competition;
+        $response["data"]["teams"]=$teams;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump ID COMP:".$id_competition." Error";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/competitions/:id/teams', function ($id_competition) use ($app) {
+
+    //verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    $round=$app->request()->params('round');
+    //$id_competition=$app->request()->params('competition');
+
+
+    $result=null;
+
+    $teams=$db_competitions->getUsersInCompetition($id_competition);
+
+    $orderByRole=false;
+
+    /*if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }*/
+
+    /*if($teams!=null){
+        for($i=0;$i<count($teams);$i++){
+            if($orderByRole) {
+                if($teams[$i]["team"]->getPlayers()!=null) {
+                   $teams[$i]["team"] = $teams[$i]["team"]->mapOrderedByRole();
+                }
+            }else {
+                $teams[$i]["team"] = $teams[$i]["team"]->map();
+            }
+        }
+    }*/
+
+    if($teams!=null){
+        $response["error"] = false;
+        $response["data"]=$teams;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Teams ID COMP:".$id_competition." and ROUND:".$round." Error";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/competitions/:id/standings', function ($id_competition) use ($app) {
+
+    //verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+
+
+    $result=null;
+
+    $standings=$db_competitions->getStandings($id_competition);
+
+    $orderByRole=false;
+
+    /*if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }*/
+
+    /*if($teams!=null){
+        for($i=0;$i<count($teams);$i++){
+            if($orderByRole) {
+                if($teams[$i]["team"]->getPlayers()!=null) {
+                   $teams[$i]["team"] = $teams[$i]["team"]->mapOrderedByRole();
+                }
+            }else {
+                $teams[$i]["team"] = $teams[$i]["team"]->map();
+            }
+        }
+    }*/
+
+    for($i=0 ; $i<count($standings) ; $i++){
+        $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
+    }
+
+    if($standings!=null){
+        $response["error"] = false;
+        $response["data"]["standings"]=$standings;
+        $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
+        $response["data"]["competition"] = getCompetition($id_competition);
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Classifica ID COMP:".$id_competition." Error";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+//COMPETITION ROUND
+
+$app->get('/competitions/:id/standings/:round', function ($id_competition,$round) use ($app) {
+
+    //verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+
+
+    $result=null;
+    
+    $competition=getCompetition($id_competition);
+
+    $standings=$db_rounds->getRoundStandings($id_competition,$round);
+
+    $orderByRole=false;
+
+    /*if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }*/
+
+    /*if($teams!=null){
+        for($i=0;$i<count($teams);$i++){
+            if($orderByRole) {
+                if($teams[$i]["team"]->getPlayers()!=null) {
+                   $teams[$i]["team"] = $teams[$i]["team"]->mapOrderedByRole();
+                }
+            }else {
+                $teams[$i]["team"] = $teams[$i]["team"]->map();
+            }
+        }
+    }*/
+
+    
+
+    if($standings!=null){
+	    
+	    for($i=0 ; $i<count($standings) ; $i++){
+	        $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
+	    }
+	    
+        $response["error"] = false;
+        $response["data"]["standings"]=$standings;
+        $response["data"]["handicaps"]=getHandicapsRoundByRoundId($round);
+        $response["data"]["competition"] =$competition;
+        $response["data"]["teams"] = $teams=$db_competitions->getUsersInCompetition($id_competition);
+    }else if($competition!=null){
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Giornata Non Calcolata";
+        $response["error_data"] = $competition;
+    }else{
+	    $response["error"] = true;
+	    $response["message"] = "Competition Not Found";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+/// ROUNDS
+
+$app->get('/rounds/:id', function ($id) use ($app) {
+	
+	// Round is Real Round
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+
+
+    $result=null;
+    
+    if($db_rounds->roundExist($id)){
+        $response["error"] = false;
+        $open=$db_rounds->isOpenRound($id);
+        $response["data"]["open"] = $open;
+        $response["data"]["formations_editing"]=$db_rounds->isPossibleToEditFormation($id);
+        if(!$open){
+	        $response["data"]["results"] = $db_rounds->getInfoRound($id);
+	    }
+    }else{
+	    $response["error"] = true;
+	    $response["message"] = "Round Not Found";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+
+/// HANDICAPS
+
+$app->get('/handicaps/competitions', function () use ($app) {
+
+    $result = getHandicapsCompetitions();
+
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Handicaps Competitions Null";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/handicaps/competitions/:id', function ($id_competition) use ($app) {
+
+    $result = getHandicapsCompetitionById($id_competition);
+
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Handicaps Competitions ID:$id_competition Null";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/handicaps/rounds', function () use ($app) {
+
+
+    $result = getHandicapsRounds();
+    $response=null;
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Handicaps Rounds Null";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+
+$app->get('/handicaps/rounds/:round', function ($round) use ($app) {
+
+    $result = getHandicapsRoundByRoundId($round);
+
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Handicaps Round : $round Null";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/markets', function ($id) use ($app) {
+
+
+    $db = new ConnectDatabaseMarkets("localhost","root","aicon07","fantacalcio",3306);
+
+    $markets = $db->getMarkets();
+
+    $result=null;
+
+    if($markets!=null){
+	    $arr = array();
+        foreach($markets as $market){
+	        $arr[] = $market->map();
+        }
+        $result = $arr;
+    }
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Markets Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/markets/open', function () use ($app) {
+
+
+    $db = new ConnectDatabaseMarkets("localhost","root","aicon07","fantacalcio",3306);
+
+    $markets = $db->getOpenMarkets();
+
+    $result=null;
+
+    if($markets!=null){
+	    $arr = array();
+        foreach($markets as $market){
+	        $arr[] = $market->map();
+        }
+        $result = $arr;
+    }
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Markets Open Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+
+
+$app->get('/markets/:id', function ($id) use ($app) {
 
 
     $db = new ConnectDatabaseMarkets("localhost","root","aicon07","fantacalcio",3306);
@@ -259,11 +692,10 @@ $app->get('/market/:id', function ($id) use ($app) {
         $result=$temp;
     }
 
-    $json=json_encode($result,true);
 
-    if($json!=null){
+    if($result!=null){
         $response["error"] = false;
-        $response["data"]=$json;
+        $response["data"]=$result;
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -275,6 +707,112 @@ $app->get('/market/:id', function ($id) use ($app) {
 
 });
 
+$app->get('/markets/:id/transfers/:user', function ($id_market,$id_user) use ($app) {
+
+
+    $db = new ConnectDatabaseMarkets("localhost","root","aicon07","fantacalcio",3306);
+
+    $transfers = $db->getTransfersByIdMarket($id_market,$id_user);
+
+    $result=null;
+
+    if($transfers!=null){
+	    $arr = array();
+	    foreach($transfers as $transfer){
+		    $arr[] = $transfer->map();
+	    }
+        $result=$arr;
+    }
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Market ID:".$id_market."  Transfers $id_user Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+/* Transfers
+	
+	id_user
+	id_new
+	id_old
+	id_market
+	
+*/
+
+
+$app->post('/markets/transfers', function () use ($app) {
+
+    $apiKey = $app->request->headers->get('Token');
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_players = new ConnectDatabasePlayers($db->mysqli);
+    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
+        
+
+	$json = $app->request->getBody();
+	
+	$data = json_decode($json);	
+	
+	verifyRequiredParams(array("id_user","id_new","id_old","id_market"),$app);
+
+	
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    
+    $id_user = $data["id_user"];
+    $id_new  = $data["id_new"];
+    $id_old  = $data["id_old"];
+    $id_market = $data["id_market"];
+    
+    $user = $db->getUserByApiKey($apiKey);
+    
+    $error_code=null;
+
+    if($db->checkApi($apiKey) && $user!=null && $id_user==$user->getId()){
+        $response["error"] = false;
+        
+        $roster = $user->getPlayers();
+        
+        
+        $old_player = $roster->searchPlayer($id_old);
+        $new_player = $db_players->dumpPlayerById($id_new);
+        
+        
+        if($old_player!=null && ($user->getBalance() + $old_player->getValue() - $new_player->getValue())>=0){
+	        $error_code=$db_markets->changePlayer($old_player,$new_player,$user,$id_market);
+	    }else{
+		    $response["error"] = true;
+		    $response["message"] = "Errore Old Player or Balance";
+	    }
+	    
+	    if($error_code!=null){
+		    $response["error"] = true;
+		    $response["message"] = "Error Code";
+		    $response["error_code"] = $error_code;
+	    }else{
+		    $response["error"] = false;
+	    }
+        
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+
 $app->get('/config', function () use ($app) {
 
 
@@ -282,7 +820,7 @@ $app->get('/config', function () use ($app) {
 
     $config = $db->dumpConfig();
 
-    $json=json_encode($config,true);
+    $json=$config;
 
     if($json!=null){
         $response["error"] = false;
@@ -328,6 +866,100 @@ $app->post('/config', function () use ($app) {
 
 
 });
+
+$app->get('/players', function () use ($app) {
+
+
+    $db = new ConnectDatabasePlayers("localhost","root","aicon07","fantacalcio",3306);
+
+    $players = $db->dumpSingoliToList(null,null);
+
+    $result=null;
+
+    if($players!=null){
+	    $arr = array();
+	    foreach($players as $player){
+		    $arr[] = $player->mapWithoutVotes();
+	    }
+	    
+        $result=$arr;
+    }
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Singoli Players Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/players/:id', function ($id) use ($app) {
+
+
+    $db = new ConnectDatabasePlayers("localhost","root","aicon07","fantacalcio",3306);
+
+    $player = $db->dumpPlayerById($id);
+
+    $result=null;
+
+    if($player!=null){
+        $temp=$player->map();
+        $result=$temp;
+    }
+
+    $json = $result;
+
+
+
+    if($json!=null){
+        $json["url_logo_team"]="http://www.associazionezenit.it/fantazenit/teamlogo/".$json["team"].".png";
+        $json["role_name"]=role($json["role"]);
+        $json["media"] = media($json["stat"],2);
+        $json["presenze"] = presenze($json["stat"]);
+
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Player ID:".$id." Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/players/:id/values', function ($id) use ($app) {
+
+
+    $db = new ConnectDatabasePlayers("localhost","root","aicon07","fantacalcio",3306);
+
+    $json = $db->getValuesOfPlayer($id);
+
+    $result=null;
+
+    if($json!=null){
+        $response["error"] = false;
+        $response["data"]=$json;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Values Player ID:".$id." Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+
 
 
 /**
@@ -449,6 +1081,7 @@ function verifyRequiredParams($required_fields,$app) {
         $app->stop();
     }
 }
+
 
 function checkLogin($username,$password){
     

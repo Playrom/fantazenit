@@ -102,7 +102,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	
 
 
-	function changePlayer($old_player,$new_player,$user,$players,$id_market){
+	function changePlayer($old_player,$new_player,$user,$id_market){
 		try{
 			
 			$num_pla=count($user->getPlayers()->getByRole($new_player->getRole()));
@@ -270,8 +270,11 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	}
 
 
-	function getTransfersByIdMarket($user,$players,$id_market){
+	function getTransfersByIdMarket($id_user,$id_market){
 		$transfers=array();
+		$db_users = new ConnectDatabaseUsers($this->mysqli);
+		$db_players = new ConnectDatabasePlayers($this->mysqli);
+
 
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=? and id_market=?";
@@ -280,7 +283,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("ii", $user->getId(),$id_market)) {
+			if (!$stmt->bind_param("ii", $id_user,$id_market)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -295,13 +298,13 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$id=$row['id_transfer'];
 				$old_cost=$row['old_player_cost'];
 				$new_cost=$row['new_player_cost'];
-				$old_player=new RosterPlayer($players[intval($row['id_old_player'])],$old_cost);
-				$new_player=new RosterPlayer($players[intval($row['id_new_player'])],$new_cost);
+				$old_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_old_player'])),$old_cost);
+				$new_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_new_player'])),$new_cost);
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);;
 				$id_market=$row['id_market'];
 
-				$transfers[$id]=new Transfer($id,$user,$id_market,$old_player,$new_player,$date);
+				$transfers[$id]=new Transfer($id,$db_users->getUserById($id_user),$id_market,$old_player,$new_player,$date);
 
 			}
 

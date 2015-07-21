@@ -5,19 +5,19 @@
  */
 class Competition{
     /**
-     * @var int
+     * @var int $Id
      */
     private $id;
     /**
-     * @var string
+     * @var string $name
      */
     private $name;
     /**
-     * @var int
+     * @var int $first_round
      */
     private $first_round;
     /**
-     * @var int
+     * @var int $num_rounds
      */
     private $num_rounds;
 
@@ -28,15 +28,34 @@ class Competition{
      * @param int
      */
     function __construct($id,$name,$first_round,$num_rounds){
-		$this->id=$id;
+		$this->id=intval($id);
 		$this->name=$name;
 		$this->first_round=$first_round;
 		$this->num_rounds=$num_rounds;
                 
 	}
 
+    /** Map competitions to dictionary
+     * 
+     * @return String|mixed
+     * 
+     * */
+     
+     public function map(){
+        $arr = array();
+
+        $arr["id"] = $this->id;
+        $arr["name"] = $this->name;
+        $arr["first_round"] = $this->first_round;
+        $arr["num_rounds"] = $this->num_rounds;
+
+        return $arr;
+
+     }
+
 
     /**
+     * 
      * @return int
      */
     public function getId(){

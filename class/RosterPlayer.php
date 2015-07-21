@@ -73,7 +73,7 @@ class RosterPlayer{
     public function map(){
         $arr=array();
 
-        $arr['player']=$this->player->map();
+        $arr['player']=$this->player->mapWithoutVotes();
         $arr['cost']=$this->cost;
 
         return $arr;

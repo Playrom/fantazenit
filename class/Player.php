@@ -73,7 +73,6 @@ class Player{
 
 
         $second_arr=array();
-        $c=count($this->stat);
         if($this->stat!=null){
             foreach($this->stat as  $item){
                 $second_arr[$item->getRound()]=$item->map();
@@ -82,6 +81,63 @@ class Player{
 
         $arr['stat']=$second_arr;
 
+
+        return $arr;
+
+    }
+
+    /** Map by round
+     * @return mixed|mixed
+     */
+
+    public function mapByRound($round){
+        $arr=array();
+
+        $arr['id']=$this->id;
+        $arr['name']=$this->name;
+        $arr['team']=$this->team;
+        $arr['role']=$this->role;
+
+        $arr['value']=$this->value;
+        $arr['first_value']=  $this->first_value;
+        $arr['diff']=  $this->diff;
+
+
+
+
+        $second_arr=null;
+        if($this->stat!=null){
+            if(isset($this->stat[$round])) {
+
+                $second_arr = $this->stat[$round]->map();
+
+            }
+
+        }
+
+        $arr['stat']=$second_arr;
+
+
+        return $arr;
+
+    }
+
+    /**
+     * Map the object to Associative Array
+     * @return mixed|mixed
+     */
+
+    public function mapWithoutVotes(){
+        $arr=array();
+
+        $arr['id']=$this->id;
+        $arr['name']=$this->name;
+        $arr['team']=$this->team;
+        $arr['role']=$this->role;
+
+        $arr['value']=$this->value;
+        $arr['first_value']=  $this->first_value;
+        $arr['diff']=  $this->diff;
 
         return $arr;
 

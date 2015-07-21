@@ -69,5 +69,22 @@ class RosterList extends ArrayObject{
 
         return $arr;
     }
+    
+    /**
+     * Map object to Array
+     *
+     * @return int|RosterPlayer
+     */
+
+    public function mapOrderedByRole(){
+        $arr=array();
+        foreach($this->orderByRole() as $item){
+            $arr[$item->getPlayer()->getId()]=$item->map();
+        }
+
+
+
+        return $arr;
+    }
 
 }
