@@ -50,7 +50,7 @@ class ApiAccess{
             if(isset($data['postParams'])){
                 $dataPost=$data['postParams'];
 
-                $json=json_encode($dataPost);
+                $json=json_encode($dataPost,true);
                 
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 

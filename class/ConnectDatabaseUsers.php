@@ -341,16 +341,16 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 	}
 
 	function getUserById($id){
-
+		
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
-
-		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where id=?";
+		
+		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where id=? ; ";
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $id)) {
+			if (!$stmt->bind_param("i", intval($id))) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -373,7 +373,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
                 $telephone=$row['telephone'];
                 $url_fb=$row['url_fb'];
                 
-                                $apiKey=$row['apiKey'];
+                $apiKey=$row['apiKey'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);

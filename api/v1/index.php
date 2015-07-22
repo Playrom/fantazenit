@@ -35,7 +35,6 @@ require 'functions.handicaps.php';
 require 'functions.competitions.php';
 
 
-
 $app = new \Slim\Slim(array(
     'debug' => true
 ));
@@ -88,6 +87,8 @@ $app->get('/me/basic', function () use ($app) {
 
 
 });
+
+
 
 $app->get('/users', function () use ($app) {
 
@@ -175,6 +176,54 @@ $app->get('/users/:id', function ($id) use ($app) {
 
 
 });
+
+
+$app->post('/users/roster', function () use ($app) {
+	
+
+    $apiKey = $app->request->headers->get('Token');
+
+    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db_players = new ConnectDatabasePlayers($db->mysqli);
+    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
+        
+    
+
+	$json = $app->request->getBody();
+	
+	$data = json_decode($json,true);	
+	
+	//var_dump($data);
+	
+	//verifyRequiredParams(array("ids","id_user"),$app);
+	        
+    $id_user = $data["id_user"];
+    $ids = $data["ids"];
+    
+    $user = $db->getUserByApiKey($apiKey);
+    
+    $error_code=null;
+
+    if($db->checkApi($apiKey) && $user!=null && $id_user==$user->getId()){
+        $response["error"] = false;
+                
+        $result = $db_markets->createRoster($id_user,$ids);
+        
+		//$response["error"] = !$result;
+	    
+        
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+
 
 
 $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
@@ -1035,6 +1084,17 @@ function echoRespnse($status_code, $response) {
     $app->contentType('application/json');
  
     echo json_encode($response);
+}
+
+function direct($status_code, $response) {
+    $app = \Slim\Slim::getInstance();
+    // Http response code
+    $app->status($status_code);
+ 
+    // setting response content type to json
+    $app->contentType('application/json');
+ 
+	var_dump($response);
 }
 
 function generateApiKey() {

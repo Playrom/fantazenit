@@ -1,8 +1,15 @@
 <?php
 
+
+require_once 'ConnectDatabaseUsers.php';
+
 class ConnectDatabaseMarkets extends ConnectDatabase{
-    function createRoster($user,$players,$ids){
+    function createRoster($id_user,$ids){
+        
 		try{
+			
+			$db_users = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+			$db_players = new ConnectDatabasePlayers($db_users->mysqli);
 
 			$tempQuery="SELECT * from `rosters` where id_user=?;";
 
@@ -10,13 +17,16 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $user->getId())) {
+			if (!$stmt->bind_param("i", $id_user)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
+						
+			$user = $db_users->getUserById(intval($id_user));
+			$players = $db_players->dumpSingoliToList(null,null);
 
 
 			$roster=new RosterList();
@@ -80,8 +90,6 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
-			$user->setBalance($new_balance);
-			$user->setPlayers($roster);
 
 			return true;
 

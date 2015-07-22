@@ -140,8 +140,6 @@ include('header.php');
                     $market=$result["data"];
 
                     $date=$transfer["date"];
-                    //$old=$database_players->dumpPlayerById(intval($transfer->getOldPlayer()->getPlayer()->getId()));
-                    //$new=$database_players->dumpPlayerById(intval($transfer->getNewPlayer()->getPlayer()->getId()));
 
                     $old=$transfer["old_player"];
                     $new=$transfer["new_player"];
