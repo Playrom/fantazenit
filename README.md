@@ -82,12 +82,13 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * Edit: Add to /config info generali sul sito
 
+* Edit: settings.php
+
 ## REST API da editare
 
 * cron
 * creation-competition
 * gestionegiornate
-* settings
 * signup
 
 

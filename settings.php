@@ -3,7 +3,7 @@ $title="Impostazioni";
 include('header.php');
 
 
-    if(isset($username)){
+    if($username!=null && $userAuth==1){
 
         $editConfig=array();
 
@@ -78,16 +78,21 @@ include('header.php');
                 "value"=>$value
             );
         }
-
-        $result=$apiAccess->accessApi("/config","POST",array("postParams" => $editConfig));
-
-
-        $user=$database_users->getUserByUsername($username);
-
-        $config=$database->dumpConfig();
+        
+        $config=null;
+        
+        if(count($editConfig)){
+	    	$result=$apiAccess->accessApi("/config","POST",array("postParams" => $editConfig));
+	    }else{
+		    $result=$apiAccess->accessApi("/config","GET");
+		}
+		
+		if($result["error"]==false){
+			$config=$result["data"];
+		}
         
 
-        if($user->getAuth()==1){ ?>
+         ?>
         <div class="main">
             <a href="settings-competitions.php">Impostazioni Competizioni</a>
             <a href="settings-market.php">Impostazioni Mercati</a>
@@ -165,7 +170,7 @@ include('header.php');
                 </div>
             </form>
         </div>
-        <?php }
+        <?php 
 
 
     }else{

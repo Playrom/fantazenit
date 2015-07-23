@@ -48,6 +48,7 @@ $id_comp=$_SESSION['last_competition'];
 $user=null;
 $userId=null;
 $userAuth=null;
+$username = null;
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];

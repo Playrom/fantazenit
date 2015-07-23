@@ -3,16 +3,9 @@ $title="Gestione Competizioni";
 include('header.php');
 
 
-    if(isset($_SESSION['username'])){
+    if($username!=null){
 
-        $username=$_SESSION['username'];
-
-        $user=$database_users->getUserByUsername($username);
-
-        $config=$database->dumpConfig();
-
-
-        if($user->getAuth()==1){
+        if($userAuth==1){
 
 	        $name="";
 	        $first_round=0;
@@ -22,8 +15,8 @@ include('header.php');
         if(isset($_GET['delete'])){
 
             $id=$_GET['delete'];
-            $database_competitions->deleteCompetition($id);
-
+            $json=$apiAccess->accessApi("/competitions/$id","DELETE");
+            
         }else if(isset($_POST['modified']) && isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds'])){
 
             $name=$_POST['name'];
@@ -34,8 +27,17 @@ include('header.php');
 
                 $id=$_POST['id'];
                 $users_in_competition=$_POST['users'];
-                $database_competitions->editCompetition($id,$name,$first_round,$num_rounds);
-                $database_competitions->setUsersInCompetition($id,$users_in_competition);
+                
+                $arr_data = array("id" => $id , "name" => $name , "first_round" => $first_round , "num_rounds" => $num_rounds , "users" => $users_in_competition);
+                     
+				$params = array('postParams' => $arr_data);
+                
+                $json=$apiAccess->accessApi("/competitions/$id","PUT",$params);
+                
+                if($json["error"]==true{
+	                var_dump($json);
+	            }
+                
             }
 
         }else if(isset($_POST['create']) && isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds'])){
@@ -116,9 +118,9 @@ include('header.php');
                         </ul>
 
                         <div class="form-group">
-                            <div class="col-md-12">
-                                <input type="button" name="modified" type="submit" value="Modifica" class="btn btn-default col-md-12" />
-                            </div>
+                        	<div class="form-group col-md-12  input-lg">
+			                    <button type="submit" name="modified" class="btn btn-default col-md-12">Modifica</button>
+			                </div>
                         </div>
                     </div>    
                 </div>
