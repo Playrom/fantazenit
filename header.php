@@ -7,9 +7,10 @@ function __autoload($class_name) {
 ob_start();
 session_start();
 setlocale(LC_ALL, 'it_IT.UTF-8'); 
+require_once('config.php');
 
 
-$database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+$database = new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
 $database_users = new ConnectDatabaseUsers($database->mysqli);
 $database_rounds = new ConnectDatabaseRounds($database->mysqli);
@@ -20,7 +21,8 @@ $database_handicaps = new ConnectDatabaseHandicaps($database->mysqli);
 require_once 'functions.php';
 require_once 'functions.api.php';
 
-$apiAccess=new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+
+$apiAccess=new ApiAccess(API_PATH);
 
 $json=$apiAccess->accessApi("/config","GET");
 

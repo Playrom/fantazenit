@@ -60,6 +60,23 @@ class Team{
         return $arr;
     }
 
+
+	function mapOrderById($round){
+        $arr=array();
+
+        $arr["id_user"] = $this->id_user;
+        $arr["round"] = $this->round;
+        $arr["def"] = $this->def;
+        $arr["cen"] = $this->cen;
+        $arr["att"] = $this->att;
+        if($this->players!=null) {
+            $arr["players"] = $this->players->mapByRoundWithId($round);
+        }else{
+            $arr["players"] = null;
+        }
+
+        return $arr;
+    }
 	
 
     /**

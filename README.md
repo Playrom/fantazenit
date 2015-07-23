@@ -77,12 +77,14 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Create Roster 
 * Known Strange : In ConnectDatabaseMarkets->createRoster mi da problemi il $this->mysqli nella creazione di un oggetto database
 
+* Edit: Make Team
+* New : Config file with Define Values
+
 ## REST API da editare
 
 * cron
 * creation-competition
 * gestionegiornate
-* maketeam
 * playersinfo GET INFO LAST ROUND
 * settings
 * signup

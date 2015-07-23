@@ -211,7 +211,7 @@
 			"file": "index.php",
 			"settings":
 			{
-				"buffer_size": 3306,
+				"buffer_size": DATABASE_PORT,
 				"line_ending": "Windows"
 			}
 		},
@@ -677,7 +677,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3306,
+						"buffer_size": DATABASE_PORT,
 						"regions":
 						{
 						},

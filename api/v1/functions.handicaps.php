@@ -1,9 +1,10 @@
 <?php
+	
 
 function getHandicapsRounds(){
     //verifyRequiredParams(array('round', 'competition'),$app);
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_handicaps = new ConnectDatabaseHandicaps($db->mysqli);
 
     //$id_competition=$app->request()->params('competition');
@@ -34,7 +35,7 @@ function getHandicapsRounds(){
 function getHandicapsRoundByRoundId($round){
     //verifyRequiredParams(array('round', 'competition'),$app);
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
     $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
     $db_handicaps = new ConnectDatabaseHandicaps($db->mysqli);
@@ -65,7 +66,7 @@ function getHandicapsRoundByRoundId($round){
 function getHandicapsCompetitions(){
     //verifyRequiredParams(array('round', 'competition'),$app);
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
     $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
     $db_handicaps = new ConnectDatabaseHandicaps($db->mysqli);
@@ -96,7 +97,7 @@ function getHandicapsCompetitions(){
 function getHandicapsCompetitionById($id_competition){
     //verifyRequiredParams(array('round', 'competition'),$app);
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
     $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
     $db_handicaps = new ConnectDatabaseHandicaps($db->mysqli);

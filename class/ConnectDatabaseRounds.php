@@ -75,12 +75,15 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 	}
 
     function insertTeam($id_user,$ids,$reserves,$round,$tactic){
-
+	   
     	$data_players=new ConnectDatabasePlayers($this->mysqli);
 
 		try{
+			
+
 
 			$players=$data_players->dumpSingoliToList(null,null);
+			
 
 			$query="DELETE from `teams` where id_user=? and round=?;";
 
@@ -105,8 +108,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 				$pla=$players[$id];
 				$zero=0;
+				
+				$id_pla = $pla->getId();
 
-				if (!$stmt->bind_param("iiii", $id_user,$pla->getId(),$round,$zero)) {
+				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$zero)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 
@@ -125,8 +130,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				$pla=$players[$id];
 
 				$uno=1;
+				
+				$id_pla = $pla->getId();
 
-				if (!$stmt->bind_param("iiii", $id_user,$pla->getId(),$round,$uno)) {
+				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$uno)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 
@@ -134,6 +141,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 			}
+			
 
 			$tacticQuery="REPLACE INTO tactics (`id_user`,`tactic`,`round`) VALUES (?,?,?);";
 
@@ -1320,7 +1328,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", intval($round))) {
+			if (!$stmt->bind_param("i", $round)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 

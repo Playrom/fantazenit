@@ -3,7 +3,7 @@
 
 function getCompetition($id_competition){
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
 

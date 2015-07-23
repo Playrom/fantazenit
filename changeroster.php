@@ -21,6 +21,8 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
     
     $json=$apiAccess->accessApi("/markets/transfers","POST",$params);
     
+    var_dump($json);
+    
     if($json["error"]){
 	    if(isset($json["error_code"])){
 		    $error_code=$json["error_code"];

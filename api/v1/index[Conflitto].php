@@ -36,7 +36,7 @@ $app->get('/me', function () use ($app) {
     
     $apiKey = $app->request->headers->get('Token');
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     
     if($db->checkApi($apiKey)){
         $response["error"] = false;
@@ -59,7 +59,7 @@ $app->get('/me/basic', function () use ($app) {
 
     $apiKey = $app->request->headers->get('Token');
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     if($db->checkApi($apiKey)){
         $response["error"] = false;
@@ -78,7 +78,7 @@ $app->get('/me/basic', function () use ($app) {
 $app->get('/users', function () use ($app) {
 
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     $db_markets = new ConnectDatabaseMarkets($db->mysqli);
 
@@ -111,7 +111,7 @@ $app->get('/users', function () use ($app) {
 $app->get('/users/:id', function ($id) use ($app) {
 
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_markets = new ConnectDatabaseMarkets($db->mysqli);
 
     $user = $db->getUserById($id);
@@ -145,7 +145,7 @@ $app->get('/teams', function () use ($app) {
 
     verifyRequiredParams(array('round', 'competition'),$app);
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
 
     $round=$app->request()->params('round');
@@ -193,7 +193,7 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
 
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
 
     $orderByRole=false;
@@ -240,7 +240,7 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 $app->get('/competitions', function () use ($app) {
 
 
-    $db_competitions = new ConnectDatabaseCompetitions("localhost","root","aicon07","fantacalcio",3306);
+    $db_competitions = new ConnectDatabaseCompetitions(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     $db_rounds = new ConnectDatabaseRounds($db_competitions->mysqli);
 
@@ -290,7 +290,7 @@ $app->get('/competitions', function () use ($app) {
 $app->get('/market/:id', function ($id) use ($app) {
 
 
-    $db = new ConnectDatabaseMarkets("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     $market = $db->getMarketById($id);
 
@@ -320,7 +320,7 @@ $app->get('/market/:id', function ($id) use ($app) {
 $app->get('/config', function () use ($app) {
 
 
-    $db = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     $config = $db->dumpConfig();
 
@@ -344,7 +344,7 @@ $app->post('/config', function () use ($app) {
 
     $apiKey = $app->request->headers->get('Token');
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     $json = $app->request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
@@ -395,7 +395,7 @@ $app->post('/login', function() use ($app) {
     $response['apiKey'] = null;
 
 
-    $db = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     // check for correct email and password
     if (checkLogin($username, $password)) {
         // get the user by email
@@ -494,7 +494,7 @@ function verifyRequiredParams($required_fields,$app) {
 
 function checkLogin($username,$password){
     
-    $database_users = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $database_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
        
     $user_data=$database_users->getUserByUsername($username);
 
@@ -509,7 +509,7 @@ function checkLogin($username,$password){
 
 function checkApi($username,$apiKey){
     
-    $database_users = new ConnectDatabaseUsers("localhost","root","aicon07","fantacalcio",3306);
+    $database_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
        
     return $database_users->checkApi($username,$apiKey);
 

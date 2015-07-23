@@ -350,7 +350,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", intval($id))) {
+			if (!$stmt->bind_param("i", $id)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 

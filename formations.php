@@ -314,12 +314,15 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				
 				                        <?php if($isCalc) {  
 					                        
+											$tot_points=$info_round[$id_user]['points'];					                        
+					                        
+					                        
 					                        
 					                        if($json_handicaps["error"]==false){
 						                        
 					                            $handicaps=$json_handicaps["data"];
 					                            
-					                            $tot_points=$info_round[$id_user]['points'];
+					                            
 					                            
 					                            foreach($handicaps as $handicap){
 					                                if(intval($handicap["user"]["id"])==intval($id_user)){

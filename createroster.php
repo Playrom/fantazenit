@@ -54,7 +54,7 @@ if($config['creation_market']==0){ ?>
 	    $user = $team["data"];
 	    $roster=$user["players"];
     }
-
+    
 
 	$json = $apiAccess->accessApi("/players","GET");
     
