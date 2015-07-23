@@ -31,6 +31,7 @@ include('header.php');
 	    $json=$apiAccess->accessApi("/players/$id_player/values","GET");
 
         $values = null;
+        $last_round = $config["last_stat_round"];
 
         if($json["data"]!=null){
             $values = $json["data"];
@@ -41,8 +42,6 @@ include('header.php');
 		$rounds_arr=array();
 		$item=false;
 		$it=1;
-
-		$last_round=$database_rounds->getLastStatRound();
 
 		foreach($player["stat"] as $stat){
 			if(isset($stat['final'])){

@@ -921,16 +921,21 @@ $app->post('/markets/transfers', function () use ($app) {
 });
 
 
+
 $app->get('/config', function () use ($app) {
 
 
     $db = new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
 
     $config = $db->dumpConfig();
 
     $json=$config;
+    
+    
 
     if($json!=null){
+	    $json["last_stat_round"] = $db_rounds->getLastStatRound();
         $response["error"] = false;
         $response["data"]=$json;
     }else {

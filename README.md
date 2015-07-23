@@ -80,12 +80,13 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Make Team
 * New : Config file with Define Values
 
+* Edit: Add to /config info generali sul sito
+
 ## REST API da editare
 
 * cron
 * creation-competition
 * gestionegiornate
-* playersinfo GET INFO LAST ROUND
 * settings
 * signup
 
