@@ -90,7 +90,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				
 				$json=$apiAccess->accessApi($apiPath,"GET");
 				
-				$teams=$json["data"];
+				$teams=$json["data"]["teams"];
 				
 				?>
 				         

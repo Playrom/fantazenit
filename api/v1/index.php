@@ -460,20 +460,22 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
 
 
     $result=null;
+    
 
     $competition = getCompetition($id_competition);
+    
 
 
     $teams=$db_competitions->getUsersInCompetition($id_competition);
-
+    
 
     $standings=$db_competitions->getStandings($id_competition);
-
+    
 
     for($i=0 ; $i<count($standings) ; $i++){
         $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
     }
-
+    
 
     if($standings!=null && $teams!=null && $competition!=null){
         $response["error"] = false;
@@ -481,6 +483,14 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
         $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
         $response["data"]["competition"] =$competition;
         $response["data"]["teams"]=$teams;
+        
+        $ids = array();
+        foreach($teams as $team){
+		    $ids[]  = $team["id"];
+	    }
+	    
+	    $response["data"]["ids"] = $ids;
+        
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -510,6 +520,12 @@ $app->get('/competitions/:id/teams', function ($id_competition) use ($app) {
     $teams=$db_competitions->getUsersInCompetition($id_competition);
 
     $orderByRole=false;
+    
+    $ids = array();
+            
+    foreach($teams as $team){
+	    $ids[]  = $team["id"];
+    }
 
     /*if($app->request()->params('orderByRole')){
         $orderByRole=true;
@@ -529,7 +545,8 @@ $app->get('/competitions/:id/teams', function ($id_competition) use ($app) {
 
     if($teams!=null){
         $response["error"] = false;
-        $response["data"]=$teams;
+        $response["data"]["teams"]=$teams;
+        $response["data"]["ids"]=$ids;
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -640,12 +657,23 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
 	    for($i=0 ; $i<count($standings) ; $i++){
 	        $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
 	    }
+	    
+	    $teams=$db_competitions->getUsersInCompetition($id_competition);
 
         $response["error"] = false;
         $response["data"]["standings"]=$standings;
         $response["data"]["handicaps"]=getHandicapsRoundByRoundId($round);
         $response["data"]["competition"] =$competition;
-        $response["data"]["teams"] = $teams=$db_competitions->getUsersInCompetition($id_competition);
+        $response["data"]["teams"] = $teams;
+        
+        $ids = array();
+        foreach($teams as $team){
+		    $ids[]  = $team->getId();
+	    }
+	    
+	    $response["data"]["ids"] = $ids;
+
+        
     }else if($competition!=null){
         // unknown error occurred
         $response['error'] = true;

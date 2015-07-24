@@ -83,6 +83,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Add to /config info generali sul sito
 
 * Edit: settings.php
+* Edit: settings-competitions.php
 
 ## REST API da editare
 

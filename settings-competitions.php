@@ -34,7 +34,7 @@ include('header.php');
                 
                 $json=$apiAccess->accessApi("/competitions/$id","PUT",$params);
                 
-                if($json["error"]==true{
+                if($json["error"]==true){
 	                var_dump($json);
 	            }
                 
@@ -52,15 +52,37 @@ include('header.php');
 
         if(isset($_GET['edit'])){
             $edit=$_GET['edit'];
-            $competition=$database_competitions->getCompetition($edit);
-            $first_round=$competition->getFirstRound();
+            
+            $competition = null;
+            $first_round = null ;
+			$users = null;
+			$ids = null;
+			
+			$json=$apiAccess->accessApi("/competitions/$edit","GET");
+                
+            if($json["error"]==true){
+                var_dump($json);
+            }else{
+	            $competition = $json["data"]["competition"];
+	            $ids = $json["data"]["ids"];
+	            $first_round = $competition["first_round"];
+            }
+                                    
+            $json=$apiAccess->accessApi("/users","GET");
+                
+            if($json["error"]==true){
+                var_dump($json);
+            }else{
+	            $users = $json["data"];
+            }
+            
             $gen_rounds=range($first_round,38);
-            $users=$database_users->getUsers();
+            
             
 ?>
             <form action="settings-competitions.php" method="post" class="form-horizontal">
                 <div class="main">
-                    <input type="hidden" name="id" <?php echo "value=\"".$competition->getId()."\" "; ?> >
+                    <input type="hidden" name="id" <?php echo "value=\"".$competition["id"]."\" "; ?> >
 
                     <div class="form-group">
                         <label class="col-md-12">Modifica Competizione</label>
@@ -69,12 +91,12 @@ include('header.php');
                     <div class="form-group">
                         <label class="col-md-4">Nome Competizione</label>
                         <div class=" col-md-8">
-                            <input class="form-control" type="text" name="name"  <?php echo "value=\"".$competition->getName()."\" "; ?> >
+                            <input class="form-control" type="text" name="name"  <?php echo "value=\"".$competition["name"]."\" "; ?> >
                         </div>
                     </div>
 
-                    <input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$competition->getFirstRound()."\" "; ?> >
-                    <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$competition->getNumRounds()."\" "; ?>>
+                    <input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$competition["first_round"]."\" "; ?> >
+                    <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$competition["num_rounds"]."\" "; ?>>
                     
                 </div>
 
@@ -109,9 +131,9 @@ include('header.php');
                                 <?php foreach($users as $team){ ?>
                                     <div class="checkbox-inline cold-md-6">
                                       <label>
-                                        <input clas=s"select_teams" type="checkbox" <?php echo "value=\"".$team->getId()."\""; ?> name="users[]" 
-                                        <?php if($database_competitions->isUserInCompetition($team->getId(),$competition->getId())) echo "checked=\"checked\""; ?> >
-                                        <?php echo $team->getNameTeam(); ?>
+                                        <input clas=s"select_teams" type="checkbox" <?php echo "value=\"".$team["id"]."\""; ?> name="users[]" 
+                                        <?php if($ids!=null && in_array($team["id"], $ids)) echo "checked=\"checked\""; ?> >
+                                        <?php echo $team["name_team"]; ?>
                                       </label>
                                     </div>
                                 <?php } ?>
@@ -184,18 +206,29 @@ include('header.php');
         <?php }else{ ?>
         <div class="main">
             <?php
-            $competitions=$database_competitions->getCompetitions();
+	            
+	        $json=$apiAccess->accessApi("/competitions","GET");
+	        
+	        $competitions = null;
+                
+            if($json["error"]==true){
+                var_dump($json);
+            }else{
+	            $competitions = $json["data"];
+            }
+	            
+	            
             foreach($competitions as $competition){ ?>
                    <!--  <div class="setting_item_descript"></div> -->
                     <div class="form-group">
-                        <h3 class="col-md-8 control-label left-label"><?php echo $competition->getName(); ?></h3>
+                        <h3 class="col-md-8 control-label left-label"><?php echo $competition["name"]; ?></h3>
 
                         <form class="form-horizontal" action="settings-competitions.php" method="get">
 
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-default col-md-12">Modifica</button>
                             </div>
-                            <input type="hidden" name="edit" <?php echo "value=\"".$competition->getId()."\""; ?> >
+                            <input type="hidden" name="edit" <?php echo "value=\"".$competition["id"]."\""; ?> >
 
                         </form>
 
@@ -205,7 +238,7 @@ include('header.php');
                                 <button type="submit" class="btn btn-default col-md-12">Cancella</button>
                             </div>
 
-                            <input type="hidden" name="delete" <?php echo "value=\"".$competition->getId()."\""; ?> >
+                            <input type="hidden" name="delete" <?php echo "value=\"".$competition["id"]."\""; ?> >
                         </form>
                     </div>
             <?php } ?>
