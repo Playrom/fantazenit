@@ -392,6 +392,7 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
+		
 
 		try{
 			$tempQuery="INSERT INTO `handicaps_rounds`( `id_user`, `id_round`, `description`, `points`) VALUES (?,?,?,?)";
@@ -417,10 +418,10 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 	}
 
 	function setHandicapCompetition($id_user,$id_competition,$description,$points){
-
+		
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
-
+		
 		try{
 			$tempQuery="INSERT INTO `handicaps_competitions`( `id_user`, `id_competition`, `description`, `points`) VALUES (?,?,?,?)";
 

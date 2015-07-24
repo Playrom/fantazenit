@@ -740,6 +740,33 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
 
 /// ROUNDS
 
+$app->get('/rounds', function () use ($app) {
+
+	// Round is Real Round
+
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+    
+    $result=$db_rounds->getRounds();
+    
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"] = $result;
+    }else{
+	    $response["error"] = true;
+	    $response["message"] = "No Rounds Created";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->get('/rounds/:id', function ($id) use ($app) {
 
 	// Round is Real Round
@@ -774,6 +801,62 @@ $app->get('/rounds/:id', function ($id) use ($app) {
 
 
 /// HANDICAPS
+
+
+$app->post('/handicaps', function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_handicaps = new ConnectDatabaseHandicaps($db_users->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+
+    $id_team = $data["id_team"];
+    $description = $data["description"];
+    $points = $data["points"];
+    $type = $data["type"];
+        
+    
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = false;
+        
+        if($type == "COMPETITION"){
+	        
+	        
+	        $id_competition = $data["id_type"];
+            $response["error"] = !$db_handicaps->setHandicapCompetition($id_team,$id_competition,$description,$points);
+                        
+        }else if($type == "ROUND"){
+	        
+	        $id_round = $data["id_type"];
+	        $response["error"] = !$db_handicaps->setHandicapRound($id_team,$id_round,$description,$points);
+	        	        
+        }else{
+	        
+	        $response["error"] = true;
+	        $response["message"] = "Handicap Type Not Found";
+	        
+        }
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+
 
 $app->get('/handicaps/competitions', function () use ($app) {
 
@@ -817,6 +900,31 @@ $app->get('/handicaps/competitions/:id', function ($id_competition) use ($app) {
 
 });
 
+$app->delete('/handicaps/competitions/:id', function ($id) use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+    $db_handicaps = new ConnectDatabaseHandicaps(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_handicaps->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = false;
+
+        $db_handicaps->deleteHandicapCompetition($id);
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->get('/handicaps/rounds', function () use ($app) {
 
 
@@ -853,6 +961,31 @@ $app->get('/handicaps/rounds/:round', function ($round) use ($app) {
         $response['message'] = "Dump Handicaps Round : $round Null";
     }
 
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->delete('/handicaps/rounds/:id', function ($id) use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+    $db_handicaps = new ConnectDatabaseHandicaps(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_handicaps->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = false;
+
+        $db_handicaps->deleteHandicapRound($id);
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
 
     echoRespnse(200, $response);
 
