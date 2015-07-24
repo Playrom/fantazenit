@@ -336,6 +336,48 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
 });
 
+$app->post('/competitions/:id', function ($id) use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+    $db_competitions = new ConnectDatabaseCompetitions(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_competitions->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+
+    $name = $data["name"];
+    $first_round  = $data["first_round"];
+    $num_rounds = $data["num_rounds"];
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = false;
+
+        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds);
+        
+        if($ret != null){
+	        $response["data"] = $ret;
+        }else{
+	        $response["error"] = true;
+	        $response["message"] = "Errore Creazione";
+        }
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->put('/competitions/:id', function ($id) use ($app) {
 
 	$apiKey = $app->request->headers->get('Token');
@@ -362,6 +404,12 @@ $app->put('/competitions/:id', function ($id) use ($app) {
 
         $db_competitions->editCompetition($id,$name,$first_round,$num_rounds);
         $db_competitions->setUsersInCompetition($id,$users);
+        
+        if(isset($data["rounds"])){
+	        $rounds = $data["rounds"];
+	        $db_competitions->setRoundsCompetition($id,$rounds);
+        }
+        
 
     }else {
         // unknown error occurred

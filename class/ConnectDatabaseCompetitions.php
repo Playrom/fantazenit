@@ -465,7 +465,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 		
 
 		foreach($users as $user){
-			
+						
 			
 			
 			
@@ -479,7 +479,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
                 }
 			}
 			
-			$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserIdAndCompetition($id_user,$id_competition);
+			$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserIdAndCompetition($user["id"],$id_competition);
 					
 
 			foreach($handicaps_competitions as $handicap){
