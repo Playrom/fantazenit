@@ -413,6 +413,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 					}
 				}
 			}
+			
+			error_log("precalc");
 
 			$this->calcRound($round);
 
@@ -557,7 +559,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				if (!$stmt->execute()) {
 				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
-
+				
 				if(!$this->isOpenRound($round)){
 				$settings=$this->dumpConfig();
 				$available=$settings['available-round'];

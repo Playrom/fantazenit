@@ -246,7 +246,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				
 				                                    <div class="info-player-item">
 				                                        <div class="vote value-player-item"><?php if(isset($arr_stat)) { if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $stat['vote']["value"]; }  } else { echo " - "; } ?></div>
-				                                        <div class="finalvote vote value-player-item"><?php if(isset($arr_stat)) { $temp=calc($stat,$player["player"]["role"]); if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $temp; } $sum=$sum+$temp; } else { echo " - "; } ?></div>
+				                                        <div class="finalvote vote value-player-item"><?php if(isset($arr_stat)) { $temp=calc($stat,$player["player"]["role"]); if($stat['vote']["value"]==-1) { echo "S.V."; } else { echo $temp;  $sum=$sum+$temp;  } } else { echo " - "; } ?></div>
 				                                    </div>
 				
 				                                <?php }else{ ?>

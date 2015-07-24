@@ -87,6 +87,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: creation-competition.php
 * Edit: settings-handicaps.php
 * Edit: settings-market.php
+* Edit: gestionegiornate.php
 
 ## REST API da editare
 

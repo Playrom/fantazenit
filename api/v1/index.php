@@ -716,7 +716,7 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
         
         $ids = array();
         foreach($teams as $team){
-		    $ids[]  = $team->getId();
+		    $ids[]  = $team["id"];
 	    }
 	    
 	    $response["data"]["ids"] = $ids;
@@ -739,6 +739,69 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
 });
 
 /// ROUNDS
+
+$app->post('/rounds', function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_rounds = new ConnectDatabaseRounds($db_users->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+
+    $round= $data["round"];
+    $type = $data["type"];
+    
+    
+        
+    
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = false;
+        
+        
+        if($type == "ADD"){
+	        	        
+            $response["error"] = !$db_rounds->addRound($round);
+                        
+        }else if($type == "SET_CURRENT"){
+	        
+	        if(isset($data["additional"])){
+	        	
+	        	$date_finish = $data["additional"];
+	        	$response["error"] = !$db_rounds->setCurrentRound($round,$date_finish);
+	        }    
+	            
+        }else if($type == "OPEN"){
+	        
+            $response["error"] = !$db_rounds->openRound($round);
+	        	        
+        }else if($type == "CLOSE"){
+	        	        
+            $response["error"] = !$db_rounds->closeRound($round);
+	        	        
+        }else{
+	        
+	        $response["error"] = true;
+	        $response["message"] = "Config Rounds Type Not Found";
+	        
+        }
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
 
 $app->get('/rounds', function () use ($app) {
 
