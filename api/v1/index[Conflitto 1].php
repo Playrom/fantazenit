@@ -211,7 +211,7 @@ $app->get('/users/:id', function ($id) use ($app) {
     $result=null;
 
     if($user!=null){
-        $transfers=$db_markets->getTransfers($user->getId());
+        $transfers=$db_markets->getTransfers($user);
         $user->setTransfers($transfers);
         $temp = null;
 
@@ -1307,16 +1307,14 @@ $app->get('/markets/:id/transfers/:user', function ($id_market,$id_user) use ($a
 
     $db = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
-    $transfers = $db->getTransfers($id_user);
-		
+    $transfers = $db->getTransfersByIdMarket($id_market,$id_user);
+
     $result=null;
-    
+
     if($transfers!=null){
 	    $arr = array();
 	    foreach($transfers as $transfer){
-		    if($transfer->getIdMarket() == $id_market){
-		    	$arr[] = $transfer->map();
-		    }
+		    $arr[] = $transfer->map();
 	    }
         $result=$arr;
     }
@@ -1426,7 +1424,6 @@ $app->get('/config', function () use ($app) {
 
     if($json!=null){
 	    $json["last_stat_round"] = $db_rounds->getLastStatRound();
-	    $json["seconds_to_closing_time"] = $db_rounds->secondsToClosingTime();
         $response["error"] = false;
         $response["data"]=$json;
     }else {

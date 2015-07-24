@@ -249,7 +249,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 
         $players=$db_players->dumpSingoliToList(null,null);
         
-        $id_user = $user->getId();
+        $id_user = $user;
 
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=?";
@@ -295,10 +295,10 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 
 	function getTransfersByIdMarket($id_user,$id_market){
 		$transfers=array();
-		$db_users = new ConnectDatabaseUsers($this->mysqli);
-		$db_players = new ConnectDatabasePlayers($this->mysqli);
-
-
+		$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+		$db_players = new ConnectDatabasePlayers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+		
+		
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=? and id_market=?";
 
@@ -306,23 +306,28 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("ii", $id_user,$id_market)) {
+			if (!$stmt->bind_param("ss", $id_user,$id_market)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
-
+			
+			
 			$res=$stmt->get_result();
 			$res->data_seek(0);
+			
 
 			while ($row = $res->fetch_assoc()) {
+
 				$id=$row['id_transfer'];
 				$old_cost=$row['old_player_cost'];
 				$new_cost=$row['new_player_cost'];
+				
 				$old_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_old_player'])),$old_cost);
 				$new_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_new_player'])),$new_cost);
+				
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);;
 				$id_market=$row['id_market'];
@@ -370,7 +375,12 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$start_date=$row['start_date'];
 				$finish_date=$row['finish_date'];
 				$max_change=$row['max_change'];
-				$arr[]=new Market($id,$name,$start_date,$finish_date,$max_change);
+				
+				$date_1=DateTime::createFromFormat('Y-m-d H:i:s', $start_date);
+              
+                $date_2=DateTime::createFromFormat('Y-m-d H:i:s', $finish_date);
+				
+				$arr[]=new Market($id,$name,$date_1, $date_2,$max_change);
 
 			}
 
@@ -411,6 +421,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$max_change=$row['max_change'];
 
                 $date_1=DateTime::createFromFormat('Y-m-d H:i:s', $start_date);
+              
                 $date_2=DateTime::createFromFormat('Y-m-d H:i:s', $finish_date);
 
 

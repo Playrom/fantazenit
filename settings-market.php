@@ -34,7 +34,6 @@ if($username!=null){
 	                var_dump($json);
 	            }
 	            
-	            $database_markets->editMarket($id,$name,$max_change,$start_date,$finish_date);
 	
 	        }else{
                 
@@ -44,7 +43,6 @@ if($username!=null){
 	                var_dump($json);
 	            }
 		        
-	            $database_markets->createMarket($name,$max_change,$start_date,$finish_date);
 	        }
 	    }
     

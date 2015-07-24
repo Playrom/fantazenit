@@ -88,12 +88,11 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: settings-handicaps.php
 * Edit: settings-market.php
 * Edit: gestionegiornate.php
+* Edit: signup.php
 
 ## REST API da editare
 
 * cron
-* gestionegiornate
-* signup
 
 
 # Da Fare

@@ -2,21 +2,26 @@
 
 class ConnectDatabaseUsers extends ConnectDatabase{
     function signupUser(User $user){
-
+	    
+		
 		$query="select * from `users` where email LIKE ?";
 		$queryInsert="insert into `users`( `name`, `surname`, `username`, `password`, `email`,`balance`,`name_team`,`telephone`,`url_fb`) VALUES (?,?,?,?,?,?,?,?,?)";
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
+			
+			
+			$email = strtolower($user->getEmail());
 
-			if (!$stmt->bind_param("s", strtolower($user->getEmail()))) {
+			if (!$stmt->bind_param("s", $email)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
+			
 
 			$res=$stmt->get_result();
 			$res->data_seek(0);
@@ -27,17 +32,32 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			if (!($stmt = $this->mysqli->prepare($queryInsert))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
-
-			if (!$stmt->bind_param("sssssisss", $user->getName(),$user->getSurname(),$user->getUsername(),$user->getPassword(),strtolower($user->getEmail()),$user->getBalance(),$user->getNameTeam(),$user->getTelephone(),$user->getUrlFb())) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			
+			
+			$name = $user->getName();
+			$surname = $user->getSurname();
+			$username = $user->getUsername();
+			$password = $user->getPassword();
+			$email = strtolower($user->getEmail());
+			$balance =  intval($user->getBalance());
+			$name_team = $user->getNameTeam();
+			$telephone = $user->getTelephone();
+			$url_fb = $user->getUrlFb();
+			
+		
+			if (!$stmt->bind_param("sssssisss", $name,$surname, $username, $password ,$email , $balance , $name_team , $telephone , $url_fb)) {
+			    //echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("error");
+			    return false;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			    return false;
 			}
-
-				return true;
+			
+			
+			return true;
 
 		}catch(exception $e) {
 			echo "\nERRORE REGISTRAZIONE UTENTE: ".$e;
@@ -227,8 +247,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
+			
+			$email = strtolower($email);
 
-			if (!$stmt->bind_param("s", strtolower($email))) {
+			if (!$stmt->bind_param("s", $email)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 

@@ -55,7 +55,7 @@ class Transfer{
         $arr=array();
 
         $arr['id_transfer']=$this->id_transfer;
-        $arr['id_user']=$this->user->getId();
+        $arr['id_user']=$this->user;
         $arr['old_player']=$this->old_player->map();
         $arr['new_player']=$this->new_player->map();
 

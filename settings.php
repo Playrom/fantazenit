@@ -90,7 +90,13 @@ include('header.php');
 		if($result["error"]==false){
 			$config=$result["data"];
 		}
+		
+		$competitions = null;
         
+        $json = $apiAccess->accessApi("/competitions","GET");
+        if($json["error"] == false){
+	        $competitions = $json["data"];
+        }
 
          ?>
         <div class="main">
@@ -153,11 +159,11 @@ include('header.php');
                 <div class="form-group">
                     <h3 class="col-md-8 control-label left-label">Competizione di Default&nbsp;&nbsp;<small>La Competizione principale della Lega</small></h3>
                     <div class="col-md-4">
-                        <?php $competitions=$database_competitions->getCompetitions(); $comp=$database_competitions->getCompetition($config['default_competition']); ?>
+                        <?php if($competitions!=null) { $comp=$competitions[$config['default_competition']]; ?>
                         <select class="form-control"  name="default_competition" >
                             <?php foreach($competitions as $competition){ ?>
-                                <option <?php echo "value=\"".$competition->getId()."\""; if($comp!=null && $competition->getId()==$comp->getId()) echo " selected"; ?> ><?php echo $competition->getName(); ?></option> 
-                            <?php } ?>
+                                <option <?php echo "value=\"".$competition["id"]."\""; if($comp!=null && $competition["id"]==$comp["id"]) echo " selected"; ?> ><?php echo $competition["name"]; ?></option> 
+                            <?php } } ?>
                         </select>
                     </div>
                 </div>

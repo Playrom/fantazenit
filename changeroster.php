@@ -5,7 +5,7 @@ include('header.php');
 $error_code=0;
 $error_message = null;
 
-if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['old']) && isset($_POST['new'])){
+if($username != null && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['old']) && isset($_POST['new'])){
 	
 	
 	
@@ -21,7 +21,7 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
     
     $json=$apiAccess->accessApi("/markets/transfers","POST",$params);
     
-    var_dump($json);
+
     
     if($json["error"]){
 	    if(isset($json["error_code"])){
@@ -37,10 +37,10 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
 }
 
 
-if(!isset($_SESSION['username'])) {
+if($username == null) {
     $_SESSION['old_url']=$_SERVER['REQUEST_URI'];
     header("Location:login.php");
-}else if(isset($_SESSION['username'])){
+}else if($username != null){
 
     $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
     $user = $team["data"] ; 
@@ -53,7 +53,7 @@ if(!isset($_SESSION['username'])) {
     if($json["error"]==false){
 	    $players = $json["data"];
     }
-    
+        
 
     if(isset($team["data"])){
         $arr=$team["data"];
@@ -109,6 +109,8 @@ if(!isset($_SESSION['username'])) {
 
         }
         
+        $selected=true;
+        
         $json=$apiAccess->accessApi("/markets/$id_market/transfers/$userId","GET");
             
 		$trans = null;
@@ -116,11 +118,13 @@ if(!isset($_SESSION['username'])) {
 	    if($json["error"]==false){
 		    $trans = $json["data"];
 	    }
-
+	    
+	    $already_transfer = 0;
+	    $now_max = $markets[0]["max_change"];
+	    
         if($trans!=null){
 	        $already_transfer=count($trans);
         
-	        $selected=true;
 	        $now_max=intval($markets[0]["max_change"])-$already_transfer;
 	
 	        if($now_max==0){
@@ -133,13 +137,13 @@ if(!isset($_SESSION['username'])) {
         $selected=false;
     }
     
-if($error_message!=null){ ?>
-	<div class="alert alert-danger error_display" role="alert">
-		<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-		<span class="sr-only"></span><?php echo $error_message; ?>
-	</div>
-<?php 
-}
+	if($error_message!=null){ ?>
+		<div class="alert alert-danger error_display" role="alert">
+			<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+			<span class="sr-only"></span><?php echo $error_message; ?>
+		</div>
+	<?php 
+	}
 
 	if($error_code==-1){  ?>
 
@@ -295,7 +299,9 @@ if($error_message!=null){ ?>
 
     </div><!-- end container-->
 
-<?php } ?>
+<?php
+}
+?>
 
 
 
