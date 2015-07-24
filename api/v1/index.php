@@ -992,7 +992,99 @@ $app->delete('/handicaps/rounds/:id', function ($id) use ($app) {
 
 });
 
-$app->get('/markets', function ($id) use ($app) {
+$app->delete('/markets/:id', function ($id) use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+    $db_markets = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_markets->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = !$db_markets->deleteMarket($id);
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->put('/markets/:id', function ($id) use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+    $db_markets = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_markets->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+
+    $name = $data["name"];
+    $start_date  = $data["start_date"];
+    $finish_date = $data["finish_date"];
+    $max_change = $data["max_change"];
+    
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = !$db_markets->editMarket($id,$name,$max_change,$start_date,$finish_date);
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->post('/markets', function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+    $db_markets = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_markets->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+
+    $name = $data["name"];
+    $start_date  = $data["start_date"];
+    $finish_date = $data["finish_date"];
+    $max_change = $data["max_change"];
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = !$db_markets->createMarket($name,$max_change,$start_date,$finish_date);
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/markets', function () use ($app) {
 
 
     $db = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);

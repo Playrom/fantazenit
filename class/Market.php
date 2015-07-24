@@ -27,8 +27,8 @@
 
             $arr["id"]=$this->id;
             $arr["name"]=$this->name;
-            $arr["start_date"]=$this->start_date;
-            $arr["finish_date"]=$this->finish_date;
+            $arr["start_date"]=$this->start_date->format("d-m-Y H:i");
+            $arr["finish_date"]=$this->finish_date->format("d-m-Y H:i");
             $arr["max_change"]=$this->max_change;
 
             return $arr;

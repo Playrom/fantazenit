@@ -508,8 +508,11 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
-
-			if (!$stmt->bind_param("sssi", $name,$date_1->format("Y-m-d H:i:00"),$date_2->format("Y-m-d H:i:00"),$max_change)) {
+			
+			$first_date = $date_1->format("Y-m-d H:i:00");
+			$end_date = $date_2->format("Y-m-d H:i:00");
+			
+			if (!$stmt->bind_param("sssi", $name,$first_date,$end_date,$max_change)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
