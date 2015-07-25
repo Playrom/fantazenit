@@ -59,11 +59,12 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * New: Modificate alcune classi per poter supportare il login tramite API che arriverà in una nuova brench
 
-# Alpha 0.5 - 
+# Alpha 0.5 - 25 Luglio 2015
 
-* Edit: Ottimizzazione per API JSON in corso
+* New: Api JSON Create ed Implementate in tutto il sito
+* Info: Riunificazione Brench con Brench API JSON
 
-# REST API Compatible Brench - 
+# REST API Compatible Brench - 25 Luglio 2015
 
 * New: Login API
 * Edit: Header modificato per login API

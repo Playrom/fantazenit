@@ -7,7 +7,7 @@
  */
 function getStandings($id_competition){
 
-    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+	$api=new ApiAccess(API_PATH);
 
     $standings=$api->accessApi("/competitions/".$id_competition."/standings" , "GET");
 
@@ -51,7 +51,7 @@ function getStandings($id_competition){
  */
 function getStandingsByIdUser($id_competition,$id_user){
 
-    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+	$api=new ApiAccess(API_PATH);
 
     $standings=$api->accessApi("/competitions/".$id_competition."/standings" , "GET");
 
@@ -99,24 +99,24 @@ function getStandingsByIdUser($id_competition,$id_user){
 function getStandingsRound($id_competition,$id_round){
     
 
-    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+	$api=new ApiAccess(API_PATH);
 
     $config = $api->accessApi("/config" , "GET");
 
 
     if($id_round==-1) {
         $id_round = $config['last-round'];
-    } else {
+    } 
 
-        $competitions = $api->accessApi("/competitions" , "GET");
-        if($competitions["error"] == false){
-            if(isset($competitions["data"]["$id_competition"])){
-                $compe=$competitions["data"]["$id_competition"];
+    $competitions = $api->accessApi("/competitions" , "GET");
+    if($competitions["error"] == false){
+        if(isset($competitions["data"]["$id_competition"])){
+            $compe=$competitions["data"]["$id_competition"];
 
-                $id_round = $compe["real_rounds"]["$id_round"];
-            }
+            $id_round = $compe["competition_rounds"]["$id_round"];
         }
     }
+    
 
     $standings=$api->accessApi("/competitions/".$id_competition."/standings/".$id_round , "GET");
 
@@ -153,34 +153,36 @@ function getStandingsRound($id_competition,$id_round){
 
 }
 
-function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){
-    $api = new ApiAccess('http://associazionezenit.it/fantazenit/api/v1');
+function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){ // ID_ROUND = COMPETITION ROUND
+	
+	$api=new ApiAccess(API_PATH);
 
     $config = $api->accessApi("/config" , "GET")["data"];
 
 
     if($id_round==-1) {
         $id_round = $config['last-round'];
-    } else {
-
-        $competitions = $api->accessApi("/competitions" , "GET");
-        if($competitions["error"] == false){
-            if(isset($competitions["data"]["$id_competition"])){
-                $compe=$competitions["data"]["$id_competition"];
-
-                $id_round = $compe["real_rounds"]["$id_round"];
-            }
-        }
     }
 
-    $standings=$api->accessApi("/competitions/".$id_competition."/standings/".$id_round , "GET");
+    $competitions = $api->accessApi("/competitions" , "GET");
+    if($competitions["error"] == false){
+        if(isset($competitions["data"]["$id_competition"])){
+            $compe=$competitions["data"]["$id_competition"];
+
+            $id_round = $compe["competition_rounds"]["$id_round"];
+        }
+    }
+    
+	$text = "/competitions/".$id_competition."/standings/".$id_round;
+
+    $standings=$api->accessApi($text , "GET");
 
     $results = null;
 
     if($standings["error"]==false){
         $results = $standings["data"]["standings"];
     }
-    
+            
     $pos=1;
     $dots=false;
 
