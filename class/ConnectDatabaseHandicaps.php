@@ -190,9 +190,9 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 				$id_competition=$row['id_competition'];
 
 				$user = $data_user->getUserById($id_user);
-				$competition=$data_competition->getCompetition($id_competition);
+				//$competition=$data_competition->getCompetition($id_competition);
 
-				$arr[] = new HandicapStanding($id,$user,$description,$points,$competition);
+				$arr[] = new HandicapStanding($id,$user,$description,$points,null);
 
 			}
 
@@ -295,11 +295,104 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 			return null;
 		}
 	}
+	
+	function getHandicapsRoundsByUserIdAndRound($id_user,$round){
+
+		$data_user = new ConnectDatabaseUsers($this->mysqli);
+		
+		try{
+			$tempQuery="SELECT * FROM handicaps_rounds where id_user=? and id_round=? ";
+
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("ii", $id_user,$round)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+			$arr=array();
+
+			while ($row = $res->fetch_assoc()) {
+				$id=$row['id'];
+				$id_round=$row['id_round'];
+				$description=$row['description'];
+				$points=$row['points'];
+
+				$user = $data_user->getUserById($id_user);
+				//$competition=$this->data_competition->getCompetition($id_competition);
+
+				$arr[] = new HandicapRound($id,$user,$description,$points,$id_round);
+
+			}
+
+			return $arr;
+
+		}catch(exception $e) {
+			echo "\nERRORE Get Handicaps Rounds By User ID: ".$e;
+			return null;
+		}
+	}
+	
+	function getHandicapsCompetitionsByUserIdAndCompetition($id_user,$id_competition){
+
+		$data_user = new ConnectDatabaseUsers($this->mysqli);
+		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
+		
+
+		try{
+			$tempQuery="SELECT * FROM handicaps_competitions where id_user=? and id_competition=? ";
+
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("ii", $id_user,$id_competition)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+			$arr=array();
+
+			while ($row = $res->fetch_assoc()) {
+				$id=$row['id'];
+				$description=$row['description'];
+				$points=$row['points'];
+				$id_competition=$row['id_competition'];
+
+				$user = $data_user->getUserById($id_user);
+				//$competition=$data_competition->getCompetition($id_competition);
+
+				$arr[] = new HandicapStanding($id,$user,$description,$points,null);
+
+			}
+			
+
+			return $arr;
+
+		}catch(exception $e) {
+			echo "\nERRORE Get Handicaps Standings By User ID: ".$e;
+			return null;
+		}
+	}
+
 
 	function setHandicapRound($id_user,$id_round,$description,$points){
 
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
+		
 
 		try{
 			$tempQuery="INSERT INTO `handicaps_rounds`( `id_user`, `id_round`, `description`, `points`) VALUES (?,?,?,?)";
@@ -325,10 +418,10 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 	}
 
 	function setHandicapCompetition($id_user,$id_competition,$description,$points){
-
+		
 		$data_user = new ConnectDatabaseUsers($this->mysqli);
 		$data_competition = new ConnectDatabaseCompetitions($this->mysqli);
-
+		
 		try{
 			$tempQuery="INSERT INTO `handicaps_competitions`( `id_user`, `id_competition`, `description`, `points`) VALUES (?,?,?,?)";
 

@@ -7,21 +7,30 @@ function __autoload($class_name) {
 ob_start();
 session_start();
 setlocale(LC_ALL, 'it_IT.UTF-8'); 
+require_once('config.php');
 
 
-$database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+/*$database = new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 $database_competitions = new ConnectDatabaseCompetitions($database->mysqli);
 $database_users = new ConnectDatabaseUsers($database->mysqli);
 $database_rounds = new ConnectDatabaseRounds($database->mysqli);
 $database_players = new ConnectDatabasePlayers($database->mysqli);
 $database_markets = new ConnectDatabaseMarkets($database->mysqli);
-
-
-$competitions=$database_competitions->getCompetitions();
-
-$config=$database->dumpConfig();
+$database_handicaps = new ConnectDatabaseHandicaps($database->mysqli);*/
 
 require_once 'functions.php';
+require_once 'functions.api.php';
+
+
+$apiAccess=new ApiAccess(API_PATH);
+
+$json=$apiAccess->accessApi("/config","GET");
+
+$config = null;
+
+if($json["error"]==false){
+    $config = $json["data"];
+}
 
 if(isset($_POST['competition_change'])){
 	$new_comp=$_POST['competition_change'];
@@ -32,21 +41,32 @@ if(!isset($_SESSION['last_competition'])){
     $_SESSION['last_competition']=$config['default_competition'];
 }
 
+$id_competition=$config['default_competition'];
+
 $id_comp=$_SESSION['last_competition'];
 
 $user=null;
-$id_user=-1;
+$userId=null;
+$userAuth=null;
+$username = null;
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
-        $user=$database_users->getUserByUsername($username);
-        $id_user=$user->getId();
+        //$user=$database_users->getUserByUsername($username);
+        $userId=$_SESSION['userId'];
+        $userAuth=$_SESSION['userAuth'];
+        $userToken=$_SESSION['userToken'];
+        $apiAccess->setToken($userToken);
 }
 
+
+
 $round=1;
+$json_team = null;
 
 if(isset($config['current_round'])){
     $round=intval($config['current_round']);
+    $json_team = $apiAccess->accessApi("/team/$userId/$round","GET");
 }
 
 ?>
@@ -143,19 +163,19 @@ if(isset($config['current_round'])){
         <div id="wrapper">
             <div id="header">
 
-                <a href="/index.php"><div id="logo"></div></a>
+                <a href="index.php"><div id="logo"></div></a>
                 <div id="menu-top">
 	                <ul>
 		                <li><a href="index.php">Home</a></li>
 	                	<li><a href="formations.php">Formazioni</a></li>
 	                	<li><a href="teams.php">Squadre</a></li>
 	                	<li><a href="standings.php">Classifiche</a></li>
-		                <?php if($user!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
+		                <?php if($userId!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
 	                </ul>
                 </div>
             </div>
             <!-- <div id="menu-settings"></div> -->
-            <?php if($user!=null) { ?>
+            <?php if($userId!=null) { ?>
 	            <div class="menu-info">
 	                <li><a href="maketeam.php">Inserisci Formazione</a></li>
 	                <li><a href="createroster.php">Crea Rosa</a></li>
@@ -163,7 +183,7 @@ if(isset($config['current_round'])){
 	            </div>
 	        <?php } ?>
 
-	        <?php if($user!=null && $user->getAuth()==1) { ?>
+	        <?php if($userId!=null && $userAuth==1) { ?>
 	            <div class="menu-info menu-settings">
 	                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
 	                <li><a href="loadfile.php">Carica Dati</a></li>
@@ -177,7 +197,7 @@ if(isset($config['current_round'])){
 					<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
 				</div>
 				                
-                <?php if($user!=null && !$database_rounds->isValidFormation(intval($user->getId()),intval($round))) { ?>
+                <?php if($userId!=null && !$json_team["valid_formation"]) { ?>
                     <div class="alert alert-danger error_display" role="alert">
 						<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
 						<span class="sr-only"></span>Attenzione , Hai modificato la tua rosa dall'ultima formazione inserita

@@ -15,18 +15,27 @@ include('header.php');
 
 
 
-
 </script>
 <?php
 
-    $config=$database->dumpConfig();
 
     if(isset($_GET['id'])){
         $id_player=$_GET['id'];
     }
 
-    if($player=$database_players->dumpPlayerById($id_player)){
-	    $values=$database_players->getValuesOfPlayer($id_player);
+    $json=$apiAccess->accessApi("/players/$id_player","GET");
+
+    if($json["data"]!=null){
+        $player = $json["data"];
+
+	    $json=$apiAccess->accessApi("/players/$id_player/values","GET");
+
+        $values = null;
+        $last_round = $config["last_stat_round"];
+
+        if($json["data"]!=null){
+            $values = $json["data"];
+        }
 	    
 
 		$votes=array();
@@ -34,13 +43,11 @@ include('header.php');
 		$item=false;
 		$it=1;
 
-		$last_round=$database_rounds->getLastStatRound();
-
-		foreach($player->getStat() as $stat){
+		foreach($player["stat"] as $stat){
 			if(isset($stat['final'])){
-				$vote=$stat['final']->getValue();
-				$basic=$stat['vote']->getValue();
-				$r=$stat['round']->getValue();
+				$vote=$stat['final']["value"];
+				$basic=$stat['vote']["value"];
+				$r=$stat['round']["value"];
 
 				if($it==$r){
 					if($vote==-1) $vote=0;
@@ -106,19 +113,19 @@ include('header.php');
 
         <div class="box value_box">
 	        <div class="name_box">
-				<span class="name_item"><?php echo $player->getName(); ?></span>
-		        <span class="role_item"><?php echo role($player->getRole()); ?></span>
+				<span class="name_item"><?php echo $player["name"]; ?></span>
+		        <span class="role_item"><?php echo role($player["role"]); ?></span>
 	        </div>
 
 	        <div class="team_box">
-				<img <?php echo "src=\"teamlogo/".$player->getTeam().".png\""; ?> />
-		        <span class="team_item"><?php echo $player->getTeam(); ?></span>
+				<img <?php echo "src=\"teamlogo/".$player["team"].".png\""; ?> />
+		        <span class="team_item"><?php echo $player["team"]; ?></span>
 	        </div>
 
-	        <div class="media_box"><span class="descript_item media_item">Media:</span><span class="value_item media_value_item"><?php echo round(media($player->getStat()),2); ?></span></div>
-	    	<div class="current_value_box"><span class="descript_item">Costo Attuale:</span><span class="value_item"><?php echo $player->getValue(); ?></span></div>
-	        <div class="media_box presenze_box"><span class="descript_item media_item">Presenze:</span><span class="value_item media_value_item"><?php echo presenze($player->getStat()); ?></span></div>
-	        <div class="current_value_box first_value_box"><span class="descript_item">Costo Iniziale:</span><span class="value_item"><?php echo $player->getFirstValue(); ?></span></div>
+	        <div class="media_box"><span class="descript_item media_item">Media:</span><span class="value_item media_value_item"><?php echo round(media($player["stat"]),2); ?></span></div>
+	    	<div class="current_value_box"><span class="descript_item">Costo Attuale:</span><span class="value_item"><?php echo $player["value"]; ?></span></div>
+	        <div class="media_box presenze_box"><span class="descript_item media_item">Presenze:</span><span class="value_item media_value_item"><?php echo presenze($player["stat"]); ?></span></div>
+	        <div class="current_value_box first_value_box"><span class="descript_item">Costo Iniziale:</span><span class="value_item"><?php echo $player["first_value"]; ?></span></div>
         </div>
 
 
@@ -133,20 +140,20 @@ include('header.php');
          <div class="value_stat_box box ">
 			<table>
 				<tr class="value_tr"><th>Giornata</th><th>Voto</th><th>Segnati</th><th>Subiti</th><th>Rigori Segnati</th><th>Rigori Parati</th><th>Rigori Sbagliati</th><th>Autogol</th><th>Giallo</th><th>Rosso</th><th>Assist</th><th>Fanta Voto</th></tr>
-				<?php foreach($player->getStat() as $stat) { ?>
+				<?php foreach($player["stat"] as $stat) { ?>
 					<tr class="value_tr">
-						<td><?php echo $stat['round']->getValue(); ?></td>
-						<td><?php echo $stat['vote']->getValue(); ?></td>
-						<td><?php echo $stat['scored']->getValue(); ?></td>
-						<td><?php echo $stat['taken']->getValue(); ?></td>
-						<td><?php echo $stat['free_kick_scored']->getValue(); ?></td>
-						<td><?php echo $stat['free_kick_keeped']->getValue(); ?></td>
-						<td><?php echo $stat['free_kick_missed']->getValue(); ?></td>
-						<td><?php echo $stat['autogol']->getValue(); ?></td>
-						<td><?php echo $stat['yellow_card']->getValue(); ?></td>
-						<td><?php echo $stat['red_card']->getValue(); ?></td>
-						<td><?php echo $stat['assist']->getValue(); ?></td>
-						<td><?php echo $stat['final']->getValue(); ?></td>
+						<td><?php echo $stat['round']["value"]; ?></td>
+						<td><?php echo $stat['vote']["value"]; ?></td>
+						<td><?php echo $stat['scored']["value"]; ?></td>
+						<td><?php echo $stat['taken']["value"]; ?></td>
+						<td><?php echo $stat['free_kick_scored']["value"]; ?></td>
+						<td><?php echo $stat['free_kick_keeped']["value"]; ?></td>
+						<td><?php echo $stat['free_kick_missed']["value"]; ?></td>
+						<td><?php echo $stat['autogol']["value"]; ?></td>
+						<td><?php echo $stat['yellow_card']["value"]; ?></td>
+						<td><?php echo $stat['red_card']["value"]; ?></td>
+						<td><?php echo $stat['assist']["value"]; ?></td>
+						<td><?php echo $stat['final']["value"]; ?></td>
 					</tr>
 				<?php } ?>
 			</table>

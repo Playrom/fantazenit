@@ -7,7 +7,7 @@
 		$user=$database->getUserByUsername($username);
 	}
 
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $config=$database->dumpConfig();
 
     if(!isset($_SESSION['last_competition'])){

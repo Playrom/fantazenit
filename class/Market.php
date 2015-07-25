@@ -2,21 +2,38 @@
 
 	class Market{
 
-		private $id;
-		private $name;
-		private $start_date;
-		private $finish_date;
-		private $max_change;
+    private $id;
+    private $name;
+    private $start_date;
+    private $finish_date;
+    private $max_change;
 
-		function __construct($id,$name,$start_date,$finish_date,$max_change){
-			$this->id=$id;
-			$this->name=$name;
-			$this->start_date=$start_date;
-			$this->finish_date=$finish_date;
-			$this->max_change=$max_change;
-		}
+    function __construct($id,$name,$start_date,$finish_date,$max_change){
+        $this->id=$id;
+        $this->name=$name;
+        $this->start_date=$start_date;
+        $this->finish_date=$finish_date;
+        $this->max_change=$max_change;
+    }
 
+    /**
+     * Map Object to Array
+     *
+     * @return string|mixed
+     *
+     */
+        public function map(){
+            $arr=array();
 
+            $arr["id"]=$this->id;
+            $arr["name"]=$this->name;
+           
+            $arr["start_date"]=$this->start_date->format("d-m-Y H:i");
+            $arr["finish_date"]=$this->finish_date->format("d-m-Y H:i");
+            $arr["max_change"]=$this->max_change;
+
+            return $arr;
+        }
 	
     /**
      * Gets the value of id.

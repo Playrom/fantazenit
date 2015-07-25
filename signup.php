@@ -10,7 +10,6 @@ if(isset($_SESSION['username'])) {
 
 }else if(isset($_POST['user']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['email']) && isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['name_team']) &&      isset($_POST['telephone'])){
     
-    $config=$database->dumpConfig();
     
     $pass1=$_POST['pass1'];
     $pass2=$_POST['pass2'];
@@ -41,16 +40,50 @@ if(isset($_SESSION['username'])) {
         $url_fb="NULL";
         if(isset($_POST['url_fb'])) $url_fb=$_POST['url_fb'];
         
-        if($database_users->getUserByEmail($email)==null && $database_users->getUserByUsername($username)==null){
-            $user=$database_users->signupUser(new User(-1,$username,$name,$surname,$pass,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb));
-            if($user) {
-                session_destroy();
-                header("Location:login.php?reg_complete");
-            }
-        }else{
-            $_SESSION['wrong_username']=true;
-            header("Location:signup.php");
+        $byEmail = null;
+        $byUsername = null;
+        
+        /*$json = $apiAccess->accessApi("/users/$username","GET");
+        
+        if($json["error"]==false){
+	        $byUsername = $json["data"];
         }
+        
+        $json = $apiAccess->accessApi("/users/$email","GET");
+        
+        if($json["error"]==false){
+	        $byEmail = $json["data"];
+        }*/
+        	        
+        $arr_data = array(
+	        "username" => $username , 
+	        "name" => $name , 
+	        "surname" => $surname , 
+	        "password" => $pass , 
+	        "email" => $email , 
+	        "balance" => $balance ,
+	        "name_team" => $name_team , 
+	        "telephone" => $telephone , 
+	        "url_fb" => $url_fb
+	    );
+                 
+		$params = array('postParams' => $arr_data);
+        
+        $json=$apiAccess->accessApi("/users","POST",$params);
+                
+        $error_code = null;
+                
+        if($json["error"]==true){
+            $error_code = $json["error_code"];
+            $_SESSION['wrong_username']=true;
+			header("Location:signup.php");
+        }else{
+            session_destroy();
+            header("Location:login.php?reg_complete");
+        }
+        
+        //$user=$database_users->signupUser(new User(-1,$username,$name,$surname,$pass,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb));
+           
         
     }else{
         $_SESSION['wrong_pass']=true;

@@ -53,6 +53,7 @@ class ConnectDatabasePlayers extends ConnectDatabase{
 
 		    $arr[$id]=$item;
 		}
+				
 		return $arr;
 	}
 

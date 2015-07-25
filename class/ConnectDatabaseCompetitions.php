@@ -217,6 +217,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 		}finally{
 		  isset($stmt) && $stmt->close();
 		  $this->mysqli->autocommit(true);
+            return true;
 		}
 	}
 
@@ -305,7 +306,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	}
 
 	function getUsersInCompetition($id_competition){
-		$tempQuery="SELECT * FROM users_in_competitions  WHERE id_competition=? ";
+		$tempQuery="SELECT users_in_competitions.* ,users.* FROM users_in_competitions LEFT OUTER JOIN users ON users.id = users_in_competitions.id_user WHERE id_competition=?";
 
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
@@ -325,8 +326,16 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 			$arr=array();
 
+
 			while ($row = $res->fetch_assoc()) {
-				$arr[]=$row['id_user'];
+				$ret["id"]=$row['id_user'];
+                $ret["name_team"] = $row["name_team"];
+                $ret["username"] = $row["username"];
+                $ret["name"] = $row["name"];
+                $ret["surname"] = $row["surname"];
+
+
+                $arr[] = $ret;
 			}
 
 			return $arr;
@@ -387,6 +396,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 		foreach($rounds as $round){
 			$tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
+			
 
 			try{
 				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
@@ -396,6 +406,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 				if (!$stmt->bind_param("i", $round)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
+				
 
 				if (!$stmt->execute()) {
 				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -405,16 +416,22 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 				$res->data_seek(0);
 
 				$round_result=array();
+				
 
 				while ($row = $res->fetch_assoc()) {
+					
+					
 					$id_user=$row['id_user'];
 
-					$handicaps=$data_handicaps->getHandicapsRoundsByUserId($id_user);
+					$handicaps=$data_handicaps->getHandicapsRoundsByUserIdAndRound($id_user,$round);
+					
 
 					$result=$row['points'];
 					$gol=$row['gol'];
 
 					foreach($handicaps as $handicap){
+						
+						
 						if(intval($handicap->getRound())==intval($round)){
 							$round_handicap=$handicap->getPoints();
 							$result=$result+$round_handicap;
@@ -424,17 +441,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 						}
 					}
 
-					$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserId($id_user);
-
-					foreach($handicaps_competitions as $handicap){
-						if(intval($handicap->getCompetition()->getId())==intval($id_competition)){
-							$points_handicap=$handicap->getPoints();
-							$result=$result+$points_handicap;
-							if($result>=66){
-								$gol=floor(($result-66)/6)+1;
-							}
-						}
-					}
+					
 
 					$round_result[$id_user]['points']=$result;
 					$round_result[$id_user]['gol']=$gol;
@@ -450,20 +457,43 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 			}
 		}
+		
+		
+		
 		$classifica=array();
 		$users=$this->getUsersInCompetition($id_competition);
+		
 
 		foreach($users as $user){
+						
+			
+			
+			
 			$gols=0;
 			$points=0;
 			foreach($results as $round){
-				if(isset($round[intval($user)])){
-                    $res=$round[intval($user)];
+				if(isset($round[intval($user["id"])])){
+                    $res=$round[intval($user["id"])];
                     $gols+=$res['gol'];
                     $points+=$res['points'];
                 }
 			}
-			$temp['id_user']=$user;
+			
+			$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserIdAndCompetition($user["id"],$id_competition);
+					
+
+			foreach($handicaps_competitions as $handicap){
+				
+				if($handicap->getCompetition()!=null){
+				
+					if(intval($handicap->getCompetition()->getId())==intval($id_competition)){
+						$points_handicap=$handicap->getPoints();
+						$points=$points+$points_handicap;
+					}
+				}
+			}
+			
+			$temp['id_user']=$user["id"];
 			$temp['gol']=$gols;
 			$temp['points']=$points;
 			$classifica[]=$temp;

@@ -39,7 +39,7 @@ session_start();
              header("Location:login.php");
         }else if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='GET'){
             $username=$_SESSION['username'];
-                $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+                $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
                 $user=$database->getUserByUsername($username);
 
                 $players=$database->dumpSingoliToList(null, null);
@@ -305,7 +305,7 @@ session_start();
         </div>
         </div>
     <?php }else if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids']) && isset($_POST['reserves'])){
-        $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+        $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
         $user=$database->getUserByUsername($_SESSION['username']);
 
         $players=$database->dumpSingoliToList(null,null);

@@ -59,7 +59,45 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * New: Modificate alcune classi per poter supportare il login tramite API che arriverà in una nuova brench
 
+# Alpha 0.5 - 25 Luglio 2015
+
+* New: Api JSON Create ed Implementate in tutto il sito
+* Info: Riunificazione Brench con Brench API JSON
+
+# REST API Compatible Brench - 25 Luglio 2015
+
+* New: Login API
+* Edit: Header modificato per login API
+
+* Edit: Comment User Class
+* New: Classe di accesso a API
+
+* Edit: Settings Base con API
+* Edit: Pagina Squadre
+
+* Edit: Create Roster 
+* Known Strange : In ConnectDatabaseMarkets->createRoster mi da problemi il $this->mysqli nella creazione di un oggetto database
+
+* Edit: Make Team
+* New : Config file with Define Values
+
+* Edit: Add to /config info generali sul sito
+
+* Edit: settings.php
+* Edit: settings-competitions.php
+* Edit: creation-competition.php
+* Edit: settings-handicaps.php
+* Edit: settings-market.php
+* Edit: gestionegiornate.php
+* Edit: signup.php
+
+## REST API da editare
+
+* cron
+
 
 # Da Fare
+
+## DATA MERCATO E MERCATO TO JSON IN PAGINA SQUADRE
  
 * pagina aggiunta crediti

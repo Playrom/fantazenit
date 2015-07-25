@@ -4,7 +4,9 @@ function __autoload($class_name) {
     require_once 'class/'.$class_name . '.php';
 }
 
-$database = new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+require_once('config.php');
+
+$database = new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 $database_files = new ConnectDatabaseFiles($database->mysqli);
 
 $config=$database->dumpConfig();

@@ -5,7 +5,7 @@ include('header.php');
 
 <?php if(isset($_SESSION['username'])){
     $username=$_SESSION['username'];
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $user=$database->getUserByUsername($username);
 
     if($user->getAuth()==1){
@@ -23,7 +23,7 @@ include('header.php');
             $uploadfile = $uploaddir . basename("quote-".$date.".html");
 
             if (move_uploaded_file($_FILES['players']['tmp_name'], $uploadfile)) {
-                $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+                $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
                 $database->loadPlayersToDatabase($uploadfile,$date);
             } else {
                 echo "Possibile attacco tramite file upload!\n";
@@ -37,7 +37,7 @@ include('header.php');
             $uploadfile = $uploaddir . basename("stat-".$round.".html");
 
             if (move_uploaded_file($_FILES['votes']['tmp_name'], $uploadfile)) {
-                $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+                $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
                 $database->loadStatsToDatabase($round,$uploadfile);
             } else {
                 echo "Possibile attacco tramite file upload!\n";

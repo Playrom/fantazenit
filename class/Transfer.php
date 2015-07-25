@@ -1,14 +1,43 @@
-<?php 
+<?php
 
+/**
+ * Class Transfer
+ */
 class Transfer{
-	private $id_transfer;
-	private $user; // User Instance
-	private $old_player; // Roster_Player
-	private $new_player;
-	private $date; // DateTime
+    /**
+     * @var $id_transfer Int
+     */
+    private $id_transfer;
+    /**
+     * @var $user User
+     */
+    private $user; // User Instance
+    /**
+     * @var $old_player RosterPlayer
+     */
+    private $old_player; // Roster_Player
+    /**
+     * @var $new_player RosterPlayer
+     */
+    private $new_player;
+    /**
+     * @var $date DateTime
+     */
+    private $date; // DateTime
+    /**
+     * @var $id_market Int
+     */
     private $id_market;
 
-	public function __construct($id_transfer,$user,$id_market,$old_player,$new_player,$date){
+    /**
+     * @param $id_transfer Int
+     * @param $user User
+     * @param $id_market Int
+     * @param $old_player RosterPlayer
+     * @param $new_player RosterPlayer
+     * @param $date DateTime
+     */
+    public function __construct($id_transfer,$user,$id_market,$old_player,$new_player,$date){
 		$this->id_transfer=$id_transfer;
 		$this->user=$user;
 		$this->old_player=$old_player;
@@ -17,12 +46,33 @@ class Transfer{
         $this->id_market=$id_market;
 	}
 
+    /**
+     * Map Object to Array
+     *
+     * @return string|mixed
+     */
+    public function map(){
+        $arr=array();
+
+        $arr['id_transfer']=$this->id_transfer;
+        $arr['id_user']=$this->user;
+        $arr['old_player']=$this->old_player->map();
+        $arr['new_player']=$this->new_player->map();
+
+
+        $strDate=strftime("%A %e %B %Y , %H:%M",$this->date->getTimestamp());
+        $arr['date']=$strDate;
+        $arr['id_market']=$this->id_market;
+
+        return $arr;
+    }
+
 
 
     /**
      * Gets the value of id_transfer.
      *
-     * @return mixed
+     * @return int
      */
     public function getIdTransfer()
     {
@@ -32,7 +82,7 @@ class Transfer{
     /**
      * Sets the value of id_transfer.
      *
-     * @param mixed $id_transfer the id  transfer 
+     * @param Int
      *
      * @return self
      */
@@ -46,7 +96,7 @@ class Transfer{
     /**
      * Gets the value of user.
      *
-     * @return mixed
+     * @return User
      */
     public function getUser()
     {
@@ -56,7 +106,7 @@ class Transfer{
     /**
      * Sets the value of user.
      *
-     * @param mixed $user the user 
+     * @param User
      *
      * @return self
      */
@@ -70,7 +120,7 @@ class Transfer{
     /**
      * Gets the value of old_player.
      *
-     * @return mixed
+     * @return RosterPlayer
      */
     public function getOldPlayer()
     {
@@ -80,7 +130,7 @@ class Transfer{
     /**
      * Sets the value of old_player.
      *
-     * @param mixed $old_player the old  player 
+     * @param RosterPlayer
      *
      * @return self
      */
@@ -94,7 +144,7 @@ class Transfer{
     /**
      * Gets the value of new_player.
      *
-     * @return mixed
+     * @return RosterPlayer
      */
     public function getNewPlayer()
     {
@@ -104,7 +154,7 @@ class Transfer{
     /**
      * Sets the value of new_player.
      *
-     * @param mixed $new_player the new  player 
+     * @param RosterPlayer
      *
      * @return self
      */
@@ -118,7 +168,7 @@ class Transfer{
     /**
      * Gets the value of date.
      *
-     * @return mixed
+     * @return DateTime
      */
     public function getDate()
     {
@@ -128,7 +178,7 @@ class Transfer{
     /**
      * Sets the value of date.
      *
-     * @param mixed $date the date 
+     * @param DateTime
      *
      * @return self
      */
@@ -139,10 +189,17 @@ class Transfer{
         return $this;
     }
 
+    /**
+     * @return Int
+     */
     public function getIdMarket(){
         return $this->id_market;
     }
 
+    /**
+     * @param Int
+     * @return self
+     */
     public function setIdMarket($id){
         $this->id_market=$id;
         return $this;

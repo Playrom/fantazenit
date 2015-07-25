@@ -4,17 +4,36 @@ $title="Inserisci Formazione";
 include('header.php');
 
 if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids']) && isset($_POST['reserves'])){
-
-    $user=$database_users->getUserByUsername($_SESSION['username']);
-    $players=$database_players->dumpSingoliToList(null,null);
-
-    $ids_string=$_POST['ids'];
-    $reserves_string=$_POST['reserves'];
-
-    $round=intval($_POST['round']);
-    $tactic=$_POST['tactic'];
-    
-    $ret=$database_rounds->insertTeam($user->getId(),$ids_string,$reserves_string,$round,$tactic);
+	
+	$team=$apiAccess->accessApi("/users/".$userId,"GET");
+	
+	$user = null;
+	if($team["error"] == false){
+		$user = $team["data"];
+	
+	
+		$data = array();
+	
+	    $data["ids"]=$_POST['ids'];
+	    $data["reserves"]=$_POST['reserves'];
+	
+	    $data["round"]=intval($_POST['round']);
+	    $data["tactic"]=$_POST['tactic'];
+	    $data["id_user"]=$user["id"];
+	    
+	    
+	    $params = array('postParams' => $data);
+	    	    
+	    
+	    $json=$apiAccess->accessApi("/teams","POST",$params);
+	    
+	    
+	    if($json["error"]){
+		    var_dump($json);
+	        
+	    }
+	        
+    }
 
 }
 
@@ -24,13 +43,27 @@ if(!isset($_SESSION['username'])) {
     header("Location:login.php");
 
 }else if(isset($_SESSION['username'])){
+	
+	$json=$apiAccess->accessApi("/users/".$userId,"GET");
 
-    $username=$_SESSION['username'];
-    $user=$database_users->getUserByUsername($username);
-    $players=$database_players->dumpSingoliToList(null, null);
+    $user = null;
+	if($json["error"] == false){
+		$user = $json["data"];
+	}
+		
+	$json=$apiAccess->accessApi("/players","GET");
+	
+	$players = null;
+	
+	if($json["error"] == false){
+		$players=$json["data"];
+	}
+	
+	
+	
 
-    $roster=$user->getPlayers();
-    $config=$database->dumpConfig();
+    $roster=$user["players"];
+
     $round=1;
     
     $num_giocatori=$config['max_por']+$config['max_def']+$config['max_cen']+$config['max_att'];
@@ -46,8 +79,100 @@ if(!isset($_SESSION['username'])) {
         $round=intval($config['current_round']);
     }
     
+    $json_round=$apiAccess->accessApi("/rounds/$round","GET");
+    
+    $possibleToEdit = false;
+    
+    if($json_round["error"]==false){
+	    $possibleToEdit = $json_round["data"]["formations_editing"];
+    }
+        
+    
+    
+    
+    
+    $apiPath = "/team/$userId/$round?orderById=true";
+				
+	$json_team=$apiAccess->accessApi($apiPath,"GET");
+	
+	
+	
+	//$username=$temp['username'];
+	
+	$temp = null;
+	$team = null;
+	$result = null ;
+	
+	if(!$json_team["error"]){
+	
+	    if($json_team["data"]!=null){
+	        $result=$json_team["data"];
+	    }
+	
+	}
+	
+	$findBySistem=false;
+	
+	if($result!=null) {
+	    if (isset($result["players"])) {
+	        $team = $result["players"];
+	    }
+	}
+	
+	
+	$tempArr=null;
+	$start=null;
+	$back=null;
+	$info_round=null;
+	
+	$rescued_team = false;
+	
+	if($team==null && $round>1){
+	
+	    $json_team=$apiAccess->accessApi("/team/$userId/$round?orderById=true","GET");
+	
+	    $team = null;
+	    $result = null;
+	
+	    if(!$json_team["error"]){
+	        
+	        if($json_team["data"]!=null){
+	            $result=$json_team["data"];
+	        }
+	
+	    }
+	
+	    if($result==null){
+	
+	        $r=$round-1;
+	        
+	        
+	        if($json_team["valid_formation"]){
+	
+	            $json_team=$apiAccess->accessApi("/team/$userId/$r?orderById=true","GET");
+	            
+	
+	            if(!$json_team["error"]){
+	
+	                if($json_team["data"]!=null) {
+	                    $result = $json_team["data"];
+	                    
+	                    if($result["players"]!=null){
+							$team = $result["players"];
+							$rescued_team = true;
+						}
+	
+	                }
+	            }
+	        }
+	    }
+	
+	   
+	}
+	
+      
 
-    $team=$database_rounds->getTeam($user->getId(),$round);
+    /*$team=$database_rounds->getTeam($user->getId(),$round);
     $tactic=$database_rounds->getTactic($user,$round );
 
     $rescued_team=false;
@@ -57,17 +182,20 @@ if(!isset($_SESSION['username'])) {
         $tactic=$database_rounds->getTactic($user,$round-1 );
         $rescued_team=true;
     }
-
+*/
     $max_por=1;
     $max_def=4;
     $max_cen=4;
     $max_att=2;
 
-    if($tactic!=null){
-        $max_def=$tactic[0];
-        $max_cen=$tactic[1];
-        $max_att=$tactic[2];
+    if($team!=null){
+        $max_def=$result["def"];
+        $max_cen=$result["cen"];
+        $max_att=$result["att"];
+        
     }
+    
+    $tactic=$max_def.$max_cen.$max_att;
 
     $num_giocatori=$max_por+$max_def+$max_cen+$max_att;
 
@@ -80,7 +208,7 @@ if(!isset($_SESSION['username'])) {
 
     $official_players=($max_role_reserve*3)+1+$num_giocatori;
 
-    if($database_rounds->isPossibleToEditFormation($round)){
+    if($json_round["data"]["formations_editing"]){
 
     ?>
     <div id="official_players" <?php echo "number=\"".$official_players."\""; ?> ></div>
@@ -89,7 +217,7 @@ if(!isset($_SESSION['username'])) {
             <div class="row">
                 <div class="col-md-12">
                     <div id="team-info">
-                        <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
+                        <div class="name-team"><?php echo $user["name_team"]; ?></div>
                         <div class="balance">Giornata <?php echo $round; ?></div>
                     </div>
                 </div>
@@ -100,21 +228,21 @@ if(!isset($_SESSION['username'])) {
                     <div class="roster-item" id="P_free" <?php echo "max=\"".$max_por."\""; ?> >
 
                         <?php foreach($roster as $player){
-                            if(strtolower($player->getPlayer()->getRole())=="p"){
+                            if(strtolower($player["player"]["role"])=="p"){
 
                         ?>
                         <div class="old-player in-roster-player" 
-                            <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                            <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                            <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                            <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  
-                            <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?>
+                            <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                            <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                            <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                              <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
                               <div class="info-player-item">
-                                <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
                             </div>
                           </div>
                        <?php }
@@ -126,23 +254,23 @@ if(!isset($_SESSION['username'])) {
 
                         <?php foreach($roster as $player){
 
-                            if(strtolower($player->getPlayer()->getRole())=="d"){
+                            if(strtolower($player["player"]["role"])=="d"){
 
                         ?>
                         <div class="old-player in-roster-player" 
-                            <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                            <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                            <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                            <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>   
-                            <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?>
+                            <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                            <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                            <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                            <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
-                            <div class="info-player-item">
-                                <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                              <div class="info-player-item">
+                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
                             </div>
-                        </div>
+                          </div>
                        <?php }
                         } ?>
 
@@ -152,23 +280,23 @@ if(!isset($_SESSION['username'])) {
 
                         <?php foreach($roster as $player){
 
-                            if(strtolower($player->getPlayer()->getRole())=="c"){
+                            if(strtolower($player["player"]["role"])=="c"){
 
                         ?>
                         <div class="old-player in-roster-player" 
-                            <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                            <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                            <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                            <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>   
-                            <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?>
+                            <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                            <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                            <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                            <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
-                            <div class="info-player-item">
-                                <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                              <div class="info-player-item">
+                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
                             </div>
-                        </div>
+                          </div>
                        <?php }
                         } ?>
 
@@ -178,23 +306,23 @@ if(!isset($_SESSION['username'])) {
 
                         <?php foreach($roster as $player){
 
-                            if(strtolower($player->getPlayer()->getRole())=="a"){
+                            if(strtolower($player["player"]["role"])=="a"){
 
                         ?>
                         <div class="old-player in-roster-player" 
-                            <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                            <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                            <?php echo "role=\"".$player->getPlayer()->getRole()."\" "; ?>
-                            <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>   
-                            <?php if($team->getPlayers()!=null) {  if($team->getPlayers()->searchID($player->getPlayer()->getId())) { echo "style=\"display:none;\" "; } } ?>
+                            <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                            <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                            <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                            <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
-                            <div class="info-player-item">
-                                <div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                              <div class="info-player-item">
+                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
                             </div>
-                        </div>
+                          </div>
                        <?php }
                         } ?>
 
@@ -229,20 +357,23 @@ if(!isset($_SESSION['username'])) {
                             <div class="old-player p-but"><div class="name-role">Portieri</div></div>
 
                             <?php 
-                            if($team->getPlayers()!=null){
+                            if(isset($result["players"])){
 
-                                foreach($team->getPlayers()->getByRole("p") as $pla){
+                                foreach($result["players"] as $pla){
+	                                
+	                                if(strtolower($pla["player"]["role"])=="p"){
 
-                                    if($pla->getPosition()==0){ ?>
-                                        <?php $player=$pla->getPlayer(); ?>
-                                        <div class="old-player in-team-player" position="0"
-                                            <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                                            <?php echo "name=\"".$player->getName()."\" "; ?> 
-                                            role="P"
-                                            <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                            <div class="name-player-item"><?php echo $player->getName(); ?></div>
-                                        </div>
-                            <?php   }
+	                                    if($pla["position"]==0){ ?>
+	                                        <?php $player=$pla["player"]; ?>
+	                                        <div class="old-player in-team-player" position="0"
+	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+	                                            role="P"
+	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+	                                        </div>
+	                            <?php   }
+		                            }
                                 }
                             }
                             ?>
@@ -254,20 +385,23 @@ if(!isset($_SESSION['username'])) {
                             <div class="old-player d-but"><div class="name-role">Difensori</div></div>
 
                             <?php 
-                            if($team->getPlayers()!=null){
+                            if(isset($result["players"])){
 
-                                foreach($team->getPlayers()->getByRole("d") as $pla){
+                                foreach($result["players"] as $pla){
+	                                
+	                                if(strtolower($pla["player"]["role"])=="d"){
 
-                                    if($pla->getPosition()==0){ ?>
-                                        <?php $player=$pla->getPlayer(); ?>
-                                        <div class="old-player in-team-player" position="0"
-                                            <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                                            <?php echo "name=\"".$player->getName()."\" "; ?> 
-                                            role="P"
-                                            <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                            <div class="name-player-item"><?php echo $player->getName(); ?></div>
-                                        </div>
-                            <?php   }
+	                                    if($pla["position"]==0){ ?>
+	                                        <?php $player=$pla["player"]; ?>
+	                                        <div class="old-player in-team-player" position="0"
+	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+	                                            role="D"
+	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+	                                        </div>
+	                            <?php   }
+		                            }
                                 }
                             }
                             ?>
@@ -278,20 +412,23 @@ if(!isset($_SESSION['username'])) {
                             <div class="old-player c-but"><div class="name-role">Centrocampisti</div></div>
 
                             <?php 
-                            if($team->getPlayers()!=null){
+                            if(isset($result["players"])){
 
-                                foreach($team->getPlayers()->getByRole("c") as $pla){
+                                foreach($result["players"] as $pla){
+	                                
+	                                if(strtolower($pla["player"]["role"])=="c"){
 
-                                    if($pla->getPosition()==0){ ?>
-                                        <?php $player=$pla->getPlayer(); ?>
-                                        <div class="old-player in-team-player" position="0"
-                                            <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                                            <?php echo "name=\"".$player->getName()."\" "; ?> 
-                                            role="P"
-                                            <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                            <div class="name-player-item"><?php echo $player->getName(); ?></div>
-                                        </div>
-                            <?php   }
+	                                    if($pla["position"]==0){ ?>
+	                                        <?php $player=$pla["player"]; ?>
+	                                        <div class="old-player in-team-player" position="0"
+	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+	                                            role="C"
+	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+	                                        </div>
+	                            <?php   }
+		                            }
                                 }
                             }
                             ?>
@@ -302,20 +439,23 @@ if(!isset($_SESSION['username'])) {
                             <div class="old-player a-but"><div class="name-role">Attaccanti</div></div>
 
                             <?php 
-                            if($team->getPlayers()!=null){
+                            if(isset($result["players"])){
 
-                                foreach($team->getPlayers()->getByRole("a") as $pla){
+                                foreach($result["players"] as $pla){
+	                                
+	                                if(strtolower($pla["player"]["role"])=="a"){
 
-                                    if($pla->getPosition()==0){ ?>
-                                        <?php $player=$pla->getPlayer(); ?>
-                                        <div class="old-player in-team-player" position="0"
-                                            <?php echo "id=\"".$player->getId()."_team\" "; ?>
-                                            <?php echo "name=\"".$player->getName()."\" "; ?> 
-                                            role="P"
-                                            <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                            <div class="name-player-item"><?php echo $player->getName(); ?></div>
-                                        </div>
-                            <?php   }
+	                                    if($pla["position"]==0){ ?>
+	                                        <?php $player=$pla["player"]; ?>
+	                                        <div class="old-player in-team-player" position="0"
+	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+	                                            role="A"
+	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+	                                        </div>
+	                            <?php   }
+		                            }
                                 }
                             }
                             ?>
@@ -329,15 +469,20 @@ if(!isset($_SESSION['username'])) {
                         <table id="P_reserve" max="1">
                             <tr class="p-but"><td class="name-role">Portieri</td></tr>
                             <?php
-                        if($team->getPlayers()!=null){
-                            foreach($team->getPlayers()->getByRole("p") as $pla){
+                        if(isset($result["players"])){
 
-                                if($pla->getPosition()==1){ ?>
-                                <?php $player=$pla->getPlayer(); ?>
-                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                                <?php echo "name=\"".$player->getName()."\" "; ?> role="P" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                <td><?php echo $player->getName(); ?></td></tr>
-                                <?php }
+                            foreach($result["players"] as $pla){
+	                            
+	                          	if(strtolower($pla["player"]["role"])=="p"){
+
+	                                if($pla["position"]==1){ ?>
+	                                <?php $player=$pla["player"]; ?>
+	                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player["id"]."_reserve\" "; ?>
+	                                <?php echo "name=\"".$player["name"]."\" "; ?> role="P" <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                <td><?php echo $player["name"]; ?></td></tr>
+	                                <?php
+		                            }
+		                        }
 
                             }
                         }
@@ -347,15 +492,20 @@ if(!isset($_SESSION['username'])) {
                         <table id="D_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
                             <tr class="d-but"><td class="name-role">Difensori</td></tr>
                             <?php
-                        if($team->getPlayers()!=null){
-                            foreach($team->getPlayers()->getByRole("d") as $pla){
+                        if(isset($result["players"])){
 
-                                if($pla->getPosition()==1){ ?>
-                                <?php $player=$pla->getPlayer(); ?>
-                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                                <?php echo "name=\"".$player->getName()."\" "; ?> role="D" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                <td><?php echo $player->getName(); ?></td></tr>
-                                <?php }
+                            foreach($result["players"] as $pla){
+	                            
+	                          	if(strtolower($pla["player"]["role"])=="d"){
+
+	                                if($pla["position"]==1){ ?>
+	                                <?php $player=$pla["player"]; ?>
+	                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player["id"]."_reserve\" "; ?>
+	                                <?php echo "name=\"".$player["name"]."\" "; ?> role="D" <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                <td><?php echo $player["name"]; ?></td></tr>
+	                                <?php
+		                            }
+		                        }
 
                             }
                         }
@@ -365,15 +515,20 @@ if(!isset($_SESSION['username'])) {
                         <table id="C_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
                             <tr class="c-but"><td class="name-role">Centrocampisti</td></tr>
                             <?php
-                        if($team->getPlayers()!=null){
-                            foreach($team->getPlayers()->getByRole("c") as $pla){
+                        if(isset($result["players"])){
 
-                                if($pla->getPosition()==1){ ?>
-                                <?php $player=$pla->getPlayer(); ?>
-                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                                <?php echo "name=\"".$player->getName()."\" "; ?> role="C" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                <td><?php echo $player->getName(); ?></td></tr>
-                                <?php }
+                            foreach($result["players"] as $pla){
+	                            
+	                          	if(strtolower($pla["player"]["role"])=="c"){
+
+	                                if($pla["position"]==1){ ?>
+	                                <?php $player=$pla["player"]; ?>
+	                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player["id"]."_reserve\" "; ?>
+	                                <?php echo "name=\"".$player["name"]."\" "; ?> role="C" <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                <td><?php echo $player["name"]; ?></td></tr>
+	                                <?php
+		                            }
+		                        }
 
                             }
                         }
@@ -383,15 +538,20 @@ if(!isset($_SESSION['username'])) {
                         <table id="A_reserve" <?php echo "max=\"".$max_role_reserve."\" "; ?>>
                             <tr class="a-but"><td class="name-role">Attaccanti</td></tr>
                             <?php
-                        if($team->getPlayers()!=null){
-                            foreach($team->getPlayers()->getByRole("a") as $pla){
+                        if(isset($result["players"])){
 
-                                if($pla->getPosition()==1){ ?>
-                                    <?php $player=$pla->getPlayer(); ?>
-                                    <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player->getId()."_reserve\" "; ?>
-                                    <?php echo "name=\"".$player->getName()."\" "; ?> role="A" <?php echo "id_player=\"".$player->getId()."\" "; ?> >
-                                    <td><?php echo $player->getName(); ?></td></tr>
-                                <?php }
+                            foreach($result["players"] as $pla){
+	                            
+	                          	if(strtolower($pla["player"]["role"])=="a"){
+
+	                                if($pla["position"]==1){ ?>
+	                                <?php $player=$pla["player"]; ?>
+	                                <tr class="in-reserve-player"  position="1" <?php echo "id=\"".$player["id"]."_reserve\" "; ?>
+	                                <?php echo "name=\"".$player["name"]."\" "; ?> role="A" <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+	                                <td><?php echo $player["name"]; ?></td></tr>
+	                                <?php
+		                            }
+		                        }
 
                             }
                         }

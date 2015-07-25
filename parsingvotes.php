@@ -4,7 +4,7 @@ function __autoload($class_name) {
 }
 
 
-    $database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+    $database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $database->getPointsByUser(1,1);
 
 ?>

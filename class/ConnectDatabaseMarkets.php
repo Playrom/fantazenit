@@ -1,8 +1,15 @@
 <?php
 
+
+require_once 'ConnectDatabaseUsers.php';
+
 class ConnectDatabaseMarkets extends ConnectDatabase{
-    function createRoster($user,$players,$ids){
+    function createRoster($id_user,$ids){
+        
 		try{
+			
+			$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+			$db_players = new ConnectDatabasePlayers($db_users->mysqli);
 
 			$tempQuery="SELECT * from `rosters` where id_user=?;";
 
@@ -10,13 +17,16 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $user->getId())) {
+			if (!$stmt->bind_param("i", $id_user)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
+						
+			$user = $db_users->getUserById(intval($id_user));
+			$players = $db_players->dumpSingoliToList(null,null);
 
 
 			$roster=new RosterList();
@@ -36,7 +46,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $user->getId())) {
+			if (!$stmt->bind_param("i", $id_user)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -53,8 +63,11 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				if (!($stmt = $this->mysqli->prepare($tempQuery))) {
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 				}
+				
+				$player_id = $players[$id]->getId();
+				$player_value = $players[$id]->getValue();
 
-				if (!$stmt->bind_param("iii", $user->getId(),$players[$id]->getId(),$players[$id]->getValue())) {
+				if (!$stmt->bind_param("iii", $id_user,$player_id,$player_value)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 
@@ -72,7 +85,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("ii", $new_balance,$user->getId())) {
+			if (!$stmt->bind_param("ii", $new_balance,$id_user)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -80,8 +93,6 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
-			$user->setBalance($new_balance);
-			$user->setPlayers($roster);
 
 			return true;
 
@@ -102,7 +113,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	
 
 
-	function changePlayer($old_player,$new_player,$user,$players,$id_market){
+	function changePlayer($old_player,$new_player,$user,$id_market){
 		try{
 			
 			$num_pla=count($user->getPlayers()->getByRole($new_player->getRole()));
@@ -142,8 +153,11 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			if(!($stmt = $this->mysqli->prepare($delete))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
+			
+			$id_user = $user->getId();
+			$id_old  = $old_player->getId();
 
-			if (!$stmt->bind_param("ii", $user->getId(),$old_player->getId())) {
+			if (!$stmt->bind_param("ii", $id_user,$id_old)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -160,8 +174,10 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			}
 
 			$new_balance=$old_player->getValue()-$new_player->getValue();
+			
+			$id_new = $new_player->getId();
 
-			if (!$stmt->bind_param("iii", $user->getId(),$new_player->getId(),$new_balance)) {
+			if (!$stmt->bind_param("iii", $id_user,$id_new,$new_balance)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -178,8 +194,11 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			if(!($stmt = $this->mysqli->prepare($addTransfer))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
+			
+			$new_value = $new_player->getValue();
+			$old_value = $old_player->getValue();
 
-			if (!$stmt->bind_param("iiiiii", $user->getId(),$id_market,$new_player->getId(),$old_player->getId(),$new_player->getValue(),$old_player->getValue())) {
+			if (!$stmt->bind_param("iiiiii", $id_user,$id_market,$id_new,$id_old,$new_value,$old_value)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -198,13 +217,15 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("ii", $new_balance,$user->getId())) {
+			if (!$stmt->bind_param("ii", $new_balance,$id_user)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
+			
+			return 0;
 
 
 		}catch(exception $e) {
@@ -214,8 +235,21 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	}
 
 
-	function getTransfers($user,$players){
+    /**
+     * Get Transfers of User
+     * @param $user User
+     * @return Transfers[]
+     */
+
+	function getTransfers($user){
 		$transfers=array();
+
+
+        $db_players=new ConnectDatabasePlayers($this->mysqli);
+
+        $players=$db_players->dumpSingoliToList(null,null);
+        
+        $id_user = $user;
 
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=?";
@@ -224,7 +258,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $user->getId())) {
+			if (!$stmt->bind_param("i", $id_user)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -245,10 +279,9 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$id_market=$row['id_market'];
                 
 				$transfers[$id]=new Transfer($id,$user,$id_market,$old_player,$new_player,$date);
-
 			}
-            
-            $user->setTransfers($transfers);
+
+
 
 			return $transfers;
 
@@ -260,9 +293,12 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	}
 
 
-	function getTransfersByIdMarket($user,$players,$id_market){
+	function getTransfersByIdMarket($id_user,$id_market){
 		$transfers=array();
-
+		$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+		$db_players = new ConnectDatabasePlayers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+		
+		
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=? and id_market=?";
 
@@ -270,28 +306,33 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("ii", $user->getId(),$id_market)) {
+			if (!$stmt->bind_param("ss", $id_user,$id_market)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
-
+			
+			
 			$res=$stmt->get_result();
 			$res->data_seek(0);
+			
 
 			while ($row = $res->fetch_assoc()) {
+
 				$id=$row['id_transfer'];
 				$old_cost=$row['old_player_cost'];
 				$new_cost=$row['new_player_cost'];
-				$old_player=new RosterPlayer($players[intval($row['id_old_player'])],$old_cost);
-				$new_player=new RosterPlayer($players[intval($row['id_new_player'])],$new_cost);
+				
+				$old_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_old_player'])),$old_cost);
+				$new_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_new_player'])),$new_cost);
+				
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);;
 				$id_market=$row['id_market'];
 
-				$transfers[$id]=new Transfer($id,$user,$id_market,$old_player,$new_player,$date);
+				$transfers[$id]=new Transfer($id,$db_users->getUserById($id_user),$id_market,$old_player,$new_player,$date);
 
 			}
 
@@ -334,7 +375,12 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$start_date=$row['start_date'];
 				$finish_date=$row['finish_date'];
 				$max_change=$row['max_change'];
-				$arr[]=new Market($id,$name,$start_date,$finish_date,$max_change);
+				
+				$date_1=DateTime::createFromFormat('Y-m-d H:i:s', $start_date);
+              
+                $date_2=DateTime::createFromFormat('Y-m-d H:i:s', $finish_date);
+				
+				$arr[]=new Market($id,$name,$date_1, $date_2,$max_change);
 
 			}
 
@@ -375,6 +421,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$max_change=$row['max_change'];
 
                 $date_1=DateTime::createFromFormat('Y-m-d H:i:s', $start_date);
+              
                 $date_2=DateTime::createFromFormat('Y-m-d H:i:s', $finish_date);
 
 
@@ -472,8 +519,11 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
-
-			if (!$stmt->bind_param("sssi", $name,$date_1->format("Y-m-d H:i:00"),$date_2->format("Y-m-d H:i:00"),$max_change)) {
+			
+			$first_date = $date_1->format("Y-m-d H:i:00");
+			$end_date = $date_2->format("Y-m-d H:i:00");
+			
+			if (!$stmt->bind_param("sssi", $name,$first_date,$end_date,$max_change)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 

@@ -1,7 +1,13 @@
 <?php
 
 class TeamPlayerRound{
+    /**
+     * @var Player $player
+     */
 	private $player; //Player Instance
+    /**
+     * @var Int $position
+     */
 	private $position;
 
 	public function __construct($player,$position){
@@ -10,12 +16,39 @@ class TeamPlayerRound{
 
  	}
 
+    /**
+     * Map the object
+     */
+
+    function map(){
+        $arr=array();
+
+        $arr["player"]=$this->player->map();
+        $arr["position"]=$this->position;
+
+        return $arr;
+    }
+
+    /**
+     * Map the object by ROUND
+     */
+
+    function mapByRound($round){
+        $arr=array();
+
+        $arr["player"]=$this->player->mapByRound($round);
+        $arr["position"]=$this->position;
+
+        return $arr;
+    }
+
+
 
 
     /**
      * Gets the value of player.
      *
-     * @return mixed
+     * @return Player
      */
     public function getPlayer()
     {
@@ -25,7 +58,7 @@ class TeamPlayerRound{
     /**
      * Sets the value of player.
      *
-     * @param mixed $player the player 
+     * @param Player $player
      *
      * @return self
      */
@@ -39,7 +72,7 @@ class TeamPlayerRound{
     /**
      * Gets the value of position.
      *
-     * @return mixed
+     * @return int
      */
     public function getPosition()
     {
@@ -49,7 +82,7 @@ class TeamPlayerRound{
     /**
      * Sets the value of position.
      *
-     * @param mixed $position the position 
+     * @param int
      *
      * @return self
      */

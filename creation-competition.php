@@ -2,15 +2,10 @@
 $title="Creazione Competizione";
 include('header.php');
 
+if($username!=null){
 
-if(isset($_SESSION['username'])){
+    if($userAuth==1){
 
-    $username=$_SESSION['username'];
-
-    $user=$database_users->getUserByUsername($username);
-    $config=$database->dumpConfig();
-
-    if($user->getAuth()==1){
 
         $name="";
         $first_round=0;
@@ -24,18 +19,38 @@ if(isset($_SESSION['username'])){
             $first_round=$_POST['first_round'];
             $num_rounds=$_POST['num_rounds'];
             
-            $id=$database_competitions->createCompetition($name,$first_round,$num_rounds);
+            $arr_data = array("name" => $name , "first_round" => $first_round , "num_rounds" => $num_rounds );
+                     
+			$params = array('postParams' => $arr_data);
             
-            if(isset($_SESSION['rounds'])) {
-
-                $rounds=$_SESSION['rounds'];
-                $database_competitions->setRoundsCompetition($id,$rounds);
+            $json=$apiAccess->accessApi("/competitions/$id","POST",$params);
+            
+            $id = null;
+            
+            if($json["error"]==true){
+                var_dump($json);
+            }else{
+	            $id = $json["data"];
+            }
+            
+            if($id!=null && isset($_SESSION['rounds'])) {
+	            
+	            $rounds=$_SESSION['rounds'];
+	            
+	            $arr_data = array("id" => $id , "name" => $name , "first_round" => $first_round , "num_rounds" => $num_rounds ,"users" => $users , "rounds" => $rounds);
+                     
+				$params = array('postParams' => $arr_data);
+	            
+	            $json=$apiAccess->accessApi("/competitions/$id","PUT",$params);
+	            	            
+	            if($json["error"]==true){
+	                var_dump($json);
+	            }
+	        
                 unset($_SESSION['rounds']);
 
             }
-            
-            $database_competitions->setUsersInCompetition($id,$users);
-            
+                        
             header("Location:settings-competitions.php");
             
         }else if(isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds']) && isset($_POST['rounds'])){
@@ -47,7 +62,19 @@ if(isset($_SESSION['username'])){
             $rounds=$_POST['rounds'];
             //$database->setRoundsCompetition($id,$rounds);
             $_SESSION['rounds']=$rounds;
-            $users=$database_users->getUsers();
+            
+            $users = array();
+
+
+			$json=$apiAccess->accessApi("/users","GET");
+                
+            if($json["error"]==true){
+                var_dump($json);
+            }else{
+	            $users = $json["data"];
+            }
+
+
             ?>
 
             <div class="main competition_creation">
@@ -72,9 +99,9 @@ if(isset($_SESSION['username'])){
                         <ul class="list">
                         <?php foreach($users as $team){ ?>
                             <li class="squaredFour">
-                                <input type="checkbox" class="select_teams" <?php echo "value=\"".$team->getId()."\""; ?> name="users[]">
+                                <input type="checkbox" class="select_teams" <?php echo "value=\"".$team["id"]."\""; ?> name="users[]">
                                 <label for="squaredFour"></label>
-                                <div class="user_name"><?php echo $team->getNameTeam(); ?></div>
+                                <div class="user_name"><?php echo $team["name_team"]; ?></div>
                             </li>
                         <?php } ?>
                         </ul>

@@ -12,12 +12,26 @@ if(!isset($_SESSION['username'])) {
 
 }else if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids'])){
 
-    $user=$database_users->getUserByUsername($_SESSION['username']);
+    $team=$apiAccess->accessApi("/users/".$userId,"GET");
+    $user = null;
+    
+    if($team["error"]==false){
+	    $user = $team["data"];
+    }
 
-    $players=$database_players->dumpSingoliToList(null,null);
-    $ids_string=$_POST['ids'];
-
-    $database_markets->createRoster($user,$players,$ids_string);
+    $ids=$_POST['ids'];
+            
+    $arr_data = array("ids" => $ids , "id_user" => intval($userId));
+    
+    $params = array('postParams' => $arr_data);
+            
+    $json=$apiAccess->accessApi("/users/roster","POST",$params);
+    
+    var_dump($json);
+    
+    if($json["error"]){
+	    var_dump($json);
+    }
 
 }
 
@@ -30,12 +44,25 @@ if($config['creation_market']==0){ ?>
 
 <?php }else if(isset($_SESSION['username'])){
 
-    $username=$_SESSION['username'];
-    $user=$database_users->getUserByUsername($username);
+    
+    $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
+    $user = null;
+    
+    $roster = null;
+    
+    if($team["error"] == false){
+	    $user = $team["data"];
+	    $roster=$user["players"];
+    }
+    
 
-    $players=$database_players->dumpSingoliToList(null, null);
-    /* @var RosterList $roster */
-    $roster=$user->getPlayers();
+	$json = $apiAccess->accessApi("/players","GET");
+    
+    if($json["error"]==false){
+	    $players = $json["data"];
+    }    /* @var RosterList $roster */
+    
+    
 
     $max_por=3;
     $max_def=7;
@@ -66,8 +93,8 @@ if($config['creation_market']==0){ ?>
         <div class="row">
             <div class="col-md-12">
     		    <div id="team-info">
-    		        <div class="name-team"><?php echo $user->getNameTeam(); ?></div>
-    		        <div class="balance">Soldi Disponibili:<div id="balance-display"><?php echo $user->getBalance(); ?></div></div>
+    		        <div class="name-team"><?php echo $user["name_team"]; ?></div>
+    		        <div class="balance">Soldi Disponibili:<div id="balance-display"><?php echo $user["balance"]; ?></div></div>
     		    </div>
             </div>
         </div>
@@ -78,16 +105,16 @@ if($config['creation_market']==0){ ?>
                 <div class="roster-item" id="P_free" <?php echo "max=\"".$max_por."\""; ?> >
 
                     <?php foreach($roster as $player){
-                        if(strtolower($player->getPlayer()->getRole())=="p"){
+                        if(strtolower($player["player"]["role"])=="p"){
 
                     ?>
-                      <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?>  >
-                          <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                          <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
+                      <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                        <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                        <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
+                          <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                          <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
                           <div class="info-player-item">
-                        	<div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                        	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
                         </div>
                       </div>
                    <?php }
@@ -99,18 +126,18 @@ if($config['creation_market']==0){ ?>
 
                     <?php foreach($roster as $player){
 
-                        if(strtolower($player->getPlayer()->getRole())=="d"){
+                        if(strtolower($player["player"]["role"])=="d"){
 
                     ?>
-                    <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> >
-                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                        <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
-                        <div class="info-player-item">
-                        	<div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                    <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                        <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                        <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
+                          <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                          <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                          <div class="info-player-item">
+                        	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
                         </div>
-                    </div>
+                      </div>
                    <?php }
                     } ?>
 
@@ -120,18 +147,18 @@ if($config['creation_market']==0){ ?>
 
                     <?php foreach($roster as $player){
 
-                        if(strtolower($player->getPlayer()->getRole())=="c"){
+                        if(strtolower($player["player"]["role"])=="c"){
 
                     ?>
-                    <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> >
-                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                        <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
-                        <div class="info-player-item">
-                        	<div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                    <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                        <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                        <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
+                          <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                          <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                          <div class="info-player-item">
+                        	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
                         </div>
-                    </div>
+                      </div>
                    <?php }
                     } ?>
 
@@ -141,18 +168,18 @@ if($config['creation_market']==0){ ?>
 
                     <?php foreach($roster as $player){
 
-                        if(strtolower($player->getPlayer()->getRole())=="a"){
+                        if(strtolower($player["player"]["role"])=="a"){
 
                     ?>
-                    <div class="old-player" <?php echo "id=\"".$player->getPlayer()->getId()."\" "; ?>
-                        <?php echo "data-value=\"".$player->getPlayer()->getValue()."\" "; ?>
-                        <?php echo "name=\"".$player->getPlayer()->getName()."\" "; ?> >
-                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getPlayer()->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getPlayer()->getRole()); ?></span></div>
-                        <div class="name-player-item"><?php echo $player->getPlayer()->getName(); ?></div>
-                        <div class="info-player-item">
-                        	<div class="value-player-item"><?php echo $player->getPlayer()->getValue(); ?></div>
+                    <div class="old-player" <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
+                        <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
+                        <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
+                          <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                          <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                          <div class="info-player-item">
+                        	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
                         </div>
-                    </div>
+                      </div>
                    <?php }
                     } ?>
 
@@ -180,19 +207,19 @@ if($config['creation_market']==0){ ?>
 
                     <ul class="list" id="free-table">
                           <?php /* @var Player $player */  foreach($players as $player){   ?>
-        	                <li class="new-player" <?php echo "id=\"".$player->getId()."_free\" "; 
-        		            	echo " id_player=\"".$player->getId()."\" "; ?>
+        	                <li class="new-player" <?php echo "id=\"".$player["id"]."_free\" "; 
+        		            	echo " id_player=\"".$player["id"]."\" "; ?>
         	                    class="free-player"
-        	                    <?php echo "data-value=\"".$player->getValue()."\" "; ?>
-        	                    <?php echo "role=\"".$player->getRole()."\" "; ?>
-        	                    <?php echo "name=\"".$player->getName()."\" "; ?>
-        	                    <?php if($roster->searchPlayer($player->getId())!=null){ ?> style="display:none;" in-roster="yes" <?php } ?>
+        	                    <?php echo "data-value=\"".$player["value"]."\" "; ?>
+        	                    <?php echo "role=\"".$player["role"]."\" "; ?>
+        	                    <?php echo "name=\"".$player["name"]."\" "; ?>
+        	                    <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
         	                >
-        		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player->getRole())."-but\" "; ?> ><?php echo strtoupper($player->getRole()); ?></span></div>
-        		                <div class="name-player-item nam"><?php echo $player->getName(); ?></div>
+        		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
+        		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
         						<div class="info-player-item">
-        			                <div class="value-player-item val"><?php echo $player->getValue(); ?></div>
-        							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player->getId();?>">i</a></div>
+        			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
+        							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
         						</div>
         		            </li>
                        <?php } ?>

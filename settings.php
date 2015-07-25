@@ -3,64 +3,102 @@ $title="Impostazioni";
 include('header.php');
 
 
-    if(isset($_SESSION['username'])){
-        $username=$_SESSION['username'];
+    if($username!=null && $userAuth==1){
+
+        $editConfig=array();
 
         if(isset($_POST['tactics'])){
             $value=$_POST['tactics'];
             $name="available-tactics";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max-role-reserve'])){
             $value=$_POST['max-role-reserve'];
             $name="max-role-reserve";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
 
         if(isset($_POST['max_por'])){
             $value=$_POST['max_por'];
             $name="max_por";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
 
         if(isset($_POST['max_def'])){
             $value=$_POST['max_def'];
             $name="max_def";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max_cen'])){
             $value=$_POST['max_cen'];
             $name="max_cen";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max_att'])){
             $value=$_POST['max_att'];
             $name="max_att";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['max_sub'])){
             $value=$_POST['max_sub'];
             $name="max_sub";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
         }
         
         if(isset($_POST['default_competition'])){
             $value=$_POST['default_competition'];
             $name="default_competition";
-            $database->editConfig($name,$value);
+            $editConfig[]=array(
+                "name"=>$name,
+                "value"=>$value
+            );
+        }
+        
+        $config=null;
+        
+        if(count($editConfig)){
+	    	$result=$apiAccess->accessApi("/config","POST",array("postParams" => $editConfig));
+	    }else{
+		    $result=$apiAccess->accessApi("/config","GET");
+		}
+		
+		if($result["error"]==false){
+			$config=$result["data"];
+		}
+		
+		$competitions = null;
+        
+        $json = $apiAccess->accessApi("/competitions","GET");
+        if($json["error"] == false){
+	        $competitions = $json["data"];
         }
 
-
-        $user=$database_users->getUserByUsername($username);
-
-        $config=$database->dumpConfig();
-        
-
-        if($user->getAuth()==1){ ?>
+         ?>
         <div class="main">
             <a href="settings-competitions.php">Impostazioni Competizioni</a>
             <a href="settings-market.php">Impostazioni Mercati</a>
@@ -121,11 +159,11 @@ include('header.php');
                 <div class="form-group">
                     <h3 class="col-md-8 control-label left-label">Competizione di Default&nbsp;&nbsp;<small>La Competizione principale della Lega</small></h3>
                     <div class="col-md-4">
-                        <?php $competitions=$database_competitions->getCompetitions(); $comp=$database_competitions->getCompetition($config['default_competition']); ?>
+                        <?php if($competitions!=null) { $comp=$competitions[$config['default_competition']]; ?>
                         <select class="form-control"  name="default_competition" >
                             <?php foreach($competitions as $competition){ ?>
-                                <option <?php echo "value=\"".$competition->getId()."\""; if($comp!=null && $competition->getId()==$comp->getId()) echo " selected"; ?> ><?php echo $competition->getName(); ?></option> 
-                            <?php } ?>
+                                <option <?php echo "value=\"".$competition["id"]."\""; if($comp!=null && $competition["id"]==$comp["id"]) echo " selected"; ?> ><?php echo $competition["name"]; ?></option> 
+                            <?php } } ?>
                         </select>
                     </div>
                 </div>
@@ -138,7 +176,7 @@ include('header.php');
                 </div>
             </form>
         </div>
-        <?php }
+        <?php 
 
 
     }else{

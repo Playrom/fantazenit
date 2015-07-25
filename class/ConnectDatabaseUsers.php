@@ -2,21 +2,26 @@
 
 class ConnectDatabaseUsers extends ConnectDatabase{
     function signupUser(User $user){
-
+	    
+		
 		$query="select * from `users` where email LIKE ?";
 		$queryInsert="insert into `users`( `name`, `surname`, `username`, `password`, `email`,`balance`,`name_team`,`telephone`,`url_fb`) VALUES (?,?,?,?,?,?,?,?,?)";
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
+			
+			
+			$email = strtolower($user->getEmail());
 
-			if (!$stmt->bind_param("s", strtolower($user->getEmail()))) {
+			if (!$stmt->bind_param("s", $email)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
+			
 
 			$res=$stmt->get_result();
 			$res->data_seek(0);
@@ -27,17 +32,32 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			if (!($stmt = $this->mysqli->prepare($queryInsert))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
-
-			if (!$stmt->bind_param("sssssisss", $user->getName(),$user->getSurname(),$user->getUsername(),$user->getPassword(),strtolower($user->getEmail()),$user->getBalance(),$user->getNameTeam(),$user->getTelephone(),$user->getUrlFb())) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			
+			
+			$name = $user->getName();
+			$surname = $user->getSurname();
+			$username = $user->getUsername();
+			$password = $user->getPassword();
+			$email = strtolower($user->getEmail());
+			$balance =  intval($user->getBalance());
+			$name_team = $user->getNameTeam();
+			$telephone = $user->getTelephone();
+			$url_fb = $user->getUrlFb();
+			
+		
+			if (!$stmt->bind_param("sssssisss", $name,$surname, $username, $password ,$email , $balance , $name_team , $telephone , $url_fb)) {
+			    //echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("error");
+			    return false;
 			}
 
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			    return false;
 			}
-
-				return true;
+			
+			
+			return true;
 
 		}catch(exception $e) {
 			echo "\nERRORE REGISTRAZIONE UTENTE: ".$e;
@@ -108,6 +128,46 @@ class ConnectDatabaseUsers extends ConnectDatabase{
         return false;
 
 }
+
+    /*
+     * Get user By Api Key
+     *
+     * @param $apiKey String
+     *
+     * @return User
+     */
+
+    function getUserByApiKey($apiKey){
+
+        $query="select * from `users` where `apiKey`=?";
+
+        try{
+            if (!($stmt = $this->mysqli->prepare($query))) {
+                echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+            }
+
+            if (!$stmt->bind_param("s", $apiKey)) {
+                echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            if (!$stmt->execute()) {
+                echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            $res=$stmt->get_result();
+            $res->data_seek(0);
+            while ($row = $res->fetch_assoc()) {
+                return $this->getUserById($row['id']);
+            }
+
+        }catch(exception $e) {
+            echo $e;
+            return false;
+        }
+
+        return false;
+
+    }
     
     function getUsers(){
 
@@ -115,6 +175,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
 		$data_markets=new ConnectDatabaseMarkets($this->mysqli);
+
 
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
@@ -132,6 +193,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			while ($row = $res->fetch_assoc()) {
 
 				$id=$row['id'];
+
 				$name=$row['name'];
 				$surname=$row['surname'];
 				$username=$row['username'];
@@ -140,10 +202,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$password=$row['password'];
 				$name_team=$row['name_team'];
 				$email=$row['email'];
-                                $telephone=$row['telephone'];
-                                $url_fb=$row['url_fb'];
-                                
-                                $apiKey=$row['apiKey'];
+                $telephone=$row['telephone'];
+                $url_fb=$row['url_fb'];
+
+                $apiKey=$row['apiKey'];
                 
                 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
@@ -158,8 +220,8 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
-                $data_markets->getTransfers($us,$data_players->dumpSingoliToList(null,null));
+				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
+                //$data_markets->getTransfers($us);
                 $users[]=$us;
             }
             return $users;
@@ -185,8 +247,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
+			
+			$email = strtolower($email);
 
-			if (!$stmt->bind_param("s", strtolower($email))) {
+			if (!$stmt->bind_param("s", $email)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -223,7 +287,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 
@@ -284,7 +348,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 
@@ -299,10 +363,10 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 	}
 
 	function getUserById($id){
-
+		
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
-
-		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where id=?";
+		
+		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where id=? ; ";
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -331,7 +395,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
                 $telephone=$row['telephone'];
                 $url_fb=$row['url_fb'];
                 
-                                $apiKey=$row['apiKey'];
+                $apiKey=$row['apiKey'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -344,7 +408,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,NULL,$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
 			}
 
 

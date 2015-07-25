@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="Fanta Zenit">
+  <component name="PublishConfigData" autoUpload="Always" serverName="FantaZenit">
     <serverData>
-      <paths name="Fanta Zenit">
+      <paths name="FantaZenit">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-            <mapping local="" />
           </mappings>
         </serverdata>
       </paths>

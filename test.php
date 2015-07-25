@@ -34,7 +34,7 @@ $final_roster=array_combine($keys,$data);
 
 //var_dump($players->getPlayer('PALLADINO'));
 
-$database=new ConnectDatabase("localhost","root","aicon07","fantacalcio",3306);
+$database=new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 //var_dump($database->dumpSingoliToList('TEVEZ',NULL));
 var_dump($database->dumpPlayer('TEVEZ'));
 //$database->updatePlayers($players);

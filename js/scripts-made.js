@@ -369,9 +369,15 @@
                 valuecell.innerHTML = obj.getAttribute("data-value");
                 valuecell.className = "value-player-item";
                 
+                var infocell = document.createElement('div');
+                infocell.className = "info-player-item";
+                
+                
                 row.appendChild(rolecell);
                 row.appendChild(namecell);
-                row.appendChild(valuecell);
+                row.appendChild(infocell);
+                infocell.appendChild(valuecell);
+                
                 table.appendChild(row);
                 console.log(row);
                 
