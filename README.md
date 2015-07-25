@@ -91,13 +91,11 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: gestionegiornate.php
 * Edit: signup.php
 
-## REST API da editare
+# Alpha 0.6 -
 
-* cron
-
+* New: Profile Page
+* New: JSON API Edit User
+* New: Navigation Bar and Error Section on Top of the Page
 
 # Da Fare
-
-## DATA MERCATO E MERCATO TO JSON IN PAGINA SQUADRE
- 
-* pagina aggiunta crediti
+--

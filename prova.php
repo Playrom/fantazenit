@@ -1,10 +1,15 @@
 <?php
 
-include('header.php');
+require_once 'functions.api.php';
+require_once 'config.php';
 
-var_dump($database_rounds->getTeam(1,35));
-var_dump($database_rounds->getTeam(1,34));
-var_dump($database_rounds->isValidFormation(1,35));
+$apiAccess=new ApiAccess(API_PATH);
 
+$userToken=$_SESSION['userToken'];
+$apiAccess->setToken($userToken);
+
+$json=$apiAccess->accessApi("/me","GET");
+
+print_r($json);
 
 ?>

@@ -47,6 +47,73 @@ $app->get('/hello/:name', function ($name) {
     echoRespnse(200, $response);
 });
 
+
+$app->post('/me', function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    
+    $response = null;
+    
+    if(isset($data["current_pass"])){
+	    $user = $db_users->getUserByApiKey($apiKey);
+	    
+	    $current_pass = $data["current_pass"];
+	    
+	    error_log("current = ".$user->getPassword());
+	    error_log("current written = ".$current_pass);
+	    
+	    
+	    if($user->getPassword() == $current_pass){
+		    
+		    $pass = null;
+		    $email = null;
+		    $url_fb = null;
+		    
+			error_log($current_pass);
+		    
+		    if(isset($data["email"]) && $data["email"]!=""){
+			    $email = $data["email"];
+		    }
+		    
+		    if(isset($data["url_fb"]) && $data["url_fb"] != ""){
+			    $url_fb = $data["url_fb"];
+		    }
+		    
+		    if(isset($data["new_pass"]) && $data["new_pass"] != ""){
+			    $pass = $data["new_pass"];
+		    }
+		    
+			error_log($current_pass);
+
+		    
+		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb);
+		    
+		    
+	    }
+    
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Old Password Not Correct";
+    }
+    
+
+    echoRespnse(200, $response);
+
+
+});
+
+
+
+
 $app->get('/me', function () use ($app) {
 
     $apiKey = $app->request->headers->get('Token');
@@ -131,7 +198,7 @@ $app->post('/users', function () use ($app) {
     
     if($db_users->getUserByEmail($email) == null || $db_users->getUserByUsername($username) == null ){
 
-        $ret=$db_users->signupUser(new User(-1,$username,$name,$surname,$password,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb));        
+        $ret=$db_users->signupUser(new User(-1,$username,$name,$surname,$password,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb,NULL));        
 		
         if($ret){
 	        $response["error"] = false;

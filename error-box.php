@@ -1,0 +1,23 @@
+<div class="container-fluid alert-box">
+    <div class="alert alert-danger error_display" role="alert">
+		<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+		<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
+	</div>
+	                
+    <?php if($userId!=null && !$json_team["valid_formation"]) { ?>
+        <div class="alert alert-danger error_display" role="alert">
+			<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+			<span class="sr-only"></span>Attenzione , Hai modificato la tua rosa dall'ultima formazione inserita
+		</div>
+    <?php } ?>
+    
+    <?php if($error_json!=null){
+	    foreach($error_json as $error){ ?>
+		    <div class="alert alert-danger error_display" role="alert">
+				<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+				<span class="sr-only"></span>Attenzione , <?php echo $error["message"]; ?>
+			</div>
+	    <?php
+		}
+    } ?>
+</div>

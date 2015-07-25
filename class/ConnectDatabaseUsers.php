@@ -206,6 +206,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
                 $url_fb=$row['url_fb'];
 
                 $apiKey=$row['apiKey'];
+                $url_avatar=$row['url_avatar'];
                 
                 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
@@ -220,7 +221,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
+				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
                 //$data_markets->getTransfers($us);
                 $users[]=$us;
             }
@@ -270,10 +271,12 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				$balance=$row['balance'];
 				$password=$row['password'];
 				$name_team=$row['name_team'];
-                                $telephone=$row['telephone'];
-                                $url_fb=$row['url_fb'];
-                                
-                                $apiKey=$row['apiKey'];
+	            $telephone=$row['telephone'];
+	            $url_fb=$row['url_fb'];
+	            
+                $url_avatar=$row['url_avatar'];
+	            
+	            $apiKey=$row['apiKey'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -287,7 +290,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 				}
 
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
 			}
 
 
@@ -335,7 +338,9 @@ class ConnectDatabaseUsers extends ConnectDatabase{
                 $telephone=$row['telephone'];
                 $url_fb=$row['url_fb'];
                 
-                                $apiKey=$row['apiKey'];
+                $apiKey=$row['apiKey'];
+                
+                $url_avatar=$row['url_avatar'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -348,7 +353,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
 			}
 
 
@@ -396,6 +401,8 @@ class ConnectDatabaseUsers extends ConnectDatabase{
                 $url_fb=$row['url_fb'];
                 
                 $apiKey=$row['apiKey'];
+                
+                $url_avatar=$row['url_avatar'];
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
@@ -408,7 +415,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey);
+				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
 			}
 
 
@@ -421,6 +428,87 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 		return null;
 
 	}
+	
+	
+	function editUser($id,$password,$email,$url_fb){
+		
+		
+		try{
+			
+			if($password!=null && $password!=""){
+				$query="UPDATE `users` SET password=? where id=? ; ";
+
+				if (!($stmt = $this->mysqli->prepare($query))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    return false;
+				}
+	
+				if (!$stmt->bind_param("si", $password , $id)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+
+			}
+			
+			if($email!=null && $email!=""){
+				$query="UPDATE `users` SET email=? where id=? ; ";
+
+				if (!($stmt = $this->mysqli->prepare($query))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    return false;
+				}
+	
+				if (!$stmt->bind_param("si", $email , $id)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+
+			}
+			
+			if($url_fb!=null && $url_fb!=""){
+				$query="UPDATE `users` SET url_fb=? where id=? ; ";
+
+				if (!($stmt = $this->mysqli->prepare($query))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    return false;
+				}
+	
+				if (!$stmt->bind_param("si", $url_fb , $id)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+
+			}
+			
+			
+			return true;
+
+
+
+		}catch(exception $e) {
+			echo "\nERRORE EDIT USER ID: ".$e;
+			return false;
+		}
+
+		return false;
+
+	}
+	
 }
     
     ?>

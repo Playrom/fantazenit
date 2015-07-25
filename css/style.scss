@@ -1,25 +1,42 @@
 $red:#FF0000;
+$gray:#AAAAAA;
+$white:#FFFFFF;
+$menu-background: #ededed; 
 
 body {
-    background: #F7F2F2 !important;
+    background: #EEEEEE !important;
     margin: 0;
     font-family: "Open Sans", arial;
 }
 
 * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-#wrapper {
-    width: 1100px;
+.centering{
+	width: 1200px;
     margin: 0 auto;
 }
+
+#wrapper {
+    float: left;
+    position: relative;
+    -webkit-box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+	-moz-box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+	box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
 #header {
     width: 100%;
     height: 100px;
-    background:#f7f2f2;
+    background:#FFFFFF;
     float: left;
     position: relative;
+    
 }
 
 #logo{
@@ -31,6 +48,8 @@ body {
     float: left;
     position: relative;
 }
+
+
 
 #menu-top{
 	float:right;
@@ -61,31 +80,144 @@ body {
 	}
 }
 
-.menu-info {
-	@extend #menu-top;
-	li{
-		line-height: 50px;
+
+
+.main-menu{
+	float: left;
+	position: relative;
+	width: 100%;
+	height: 100px;
+	background: $menu-background;
+}
+
+.user-menu{
+	position: relative;
+	float: left;
+	width: auto;
+	height: 100%;
+}
+
+.avatar{
+	float: left;
+	position: relative;
+	margin: 10px;
+	
+	height: 80px;
+	width: 80px;
+	background: $red;
+}
+
+.user-info{
+	height: 100%;
+	float: left;
+	position: relative;
+	
+	.user-info-item{
+		color: $red;
+		float: left;
+		position: relative;
+		margin: 10px;
+		height: 35px;
+		line-height: 35px;
+		width: 100%;
+		font-size: 30px;
+	}
+	
+	
+	.username{
+		margin-bottom: 5px;
+	}
+	
+	.name-team{
+		margin-top: 5px;
+		font-size: 26px;
+		color: black;
+	}
+	
+}
+
+.menu{
+	list-style: none; 
+	margin: 0;
+	float: right;
+	position: relative;
+	padding: 0;
+	height: 100%;
+	font-size: 25px;
+	line-height: 40px;
+	z-index: 2000;
+	color: $red; 
+	width: auto;
+	
+	* {
+		list-style: none;
+	}
+	
+	a{
+		color: $red;
+	}
+	
+	> li{
+		display: inline;
+		height: 100px;
+		padding: 30px 10px;		
+		
+		position: relative;
+		float: left;
+		
+		margin: 0 10px;
+	}
+	
+	li:hover ul {
+	    display: block;
+	}
+	
+	ul{
+		position: absolute;
+		top: 100px;
+		left: 0;
+		padding: 0;
+		background: $gray;
+		display: none;
+		width: 300px;
+		
+		li:first-child{
+			border: none !important;
+		}
+		
+		li{
+			font-size: 20px;
+			height: 55px;
+			line-height: 35px;
+			width: auto;
+			float: left;
+			position: relative;
+			color: $white !important;
+			width: 100%;
+			border-top: 1px solid $white;
+			color: $white;
+			padding: 10px;
+			
+			a{
+				color: $white;
+			}
+		}
+	}
+	
+	.admin-menu{
+		right: 0;
+		left: auto;
 	}
 }
 
-.menu-info li{
-    line-height: 50px;
+.not-logged{
+	float: left !important;
 }
 
-.menu-settings {
-    background: #FF0000 !important;
-}
-
-.menu-settings *{
-    color: #FFF !important;
-}
-
-.menu-info {
-    width: 100%;
-    height: 50px;
-    float: left;
-    position: relative;
-    background: #586969;
+.alert-box{
+	width: 100%;
+	height: auto;
+	background: $white;
 }
 
 #slide_competitions{
@@ -124,7 +256,7 @@ body {
     position: relative;
     float: left;
     width: 100%;
-    background: #ededed;
+    background: $menu-background;
     padding:0 0 10px 0;
 }
 
@@ -144,6 +276,7 @@ body {
 	width: 100%;
     background: #FFF;
     padding: 5px;
+    margin-top: 10px;
 }
 .name-team {
     position: relative;
@@ -152,6 +285,7 @@ body {
     color: #0f2bf8;
     height: 100%;
     line-height: 30px;
+    
     
 	a {
 	    text-decoration: none;
@@ -590,6 +724,7 @@ tr:last-child {
 
 .complete-standing{
 	width: 100%;
+	line-height: 30px;
 }
 
 .value_player{
@@ -641,8 +776,8 @@ tr:last-child {
 .error_display{
     /*background: #FF0000;
     opacity: 0.5;*/
-    width: 98%;
-    margin:1%;
+    width: 100%;
+    margin:1% 0  !important;
     /*padding: 1%;
     color:#FFF;
     float:left;
@@ -1113,6 +1248,7 @@ input[type=checkbox] {
 .home_page{
     float: left;
     position: relative;
+    margin-top: 20px;
 }
 
 .row_home{
@@ -1123,10 +1259,14 @@ input[type=checkbox] {
 }
 
 .box_home{
-    background: #FFF;
+    background: $white;
     float:left;
     position: relative;
     width: 100%;
+    
+    /*-webkit-box-shadow: 2px 2px 10px 4px rgba(0,0,0,0.37);
+	-moz-box-shadow: 2px 2px 10px 4px rgba(0,0,0,0.37);
+	box-shadow: 2px 2px 10px 4px rgba(0,0,0,0.37);*/
 }
 
 .box_home .name_market{
@@ -1216,6 +1356,10 @@ input[type=checkbox] {
     box-sizing: content-box !important;
 }
 
+.county , .county *{
+	background:$white !important;
+}
+
 .county-label-days,.county-label-hours,.county-label-minutes,.county-label-seconds{
     width: 70px !important;
 }
@@ -1228,3 +1372,12 @@ span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 	font-size: 40px;
 }
 
+
+
+/* PROFILE */
+
+.settings-profile{
+	background: $white;
+	margin-top: 10px;
+	padding: 10px;
+}

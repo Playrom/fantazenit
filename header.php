@@ -49,16 +49,23 @@ $user=null;
 $userId=null;
 $userAuth=null;
 $username = null;
+$error_json = array();
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
-        //$user=$database_users->getUserByUsername($username);
+        
         $userId=$_SESSION['userId'];
         $userAuth=$_SESSION['userAuth'];
         $userToken=$_SESSION['userToken'];
         $apiAccess->setToken($userToken);
-}
+        
+        $json = $apiAccess->accessApi("/users/$userId","GET");
 
+		if($json["error"]==false){
+			$user = $json["data"];
+		}
+		
+}
 
 
 $round=1;
@@ -159,47 +166,113 @@ if(isset($config['current_round'])){
     </head>
 
     <body>
-
+	<div class="centering">
         <div id="wrapper">
             <div id="header">
 
                 <a href="index.php"><div id="logo"></div></a>
                 <div id="menu-top">
 	                <ul>
-		                <li><a href="index.php">Home</a></li>
-	                	<li><a href="formations.php">Formazioni</a></li>
-	                	<li><a href="teams.php">Squadre</a></li>
-	                	<li><a href="standings.php">Classifiche</a></li>
-		                <?php if($userId!=null) { ?><li><a href="logout.php">Logout</a></li><?php } else { ?><li><a href="login.php">Login</a></li><?php } ?>
+		                <li><a href="/index.php">Home</a></li>
+	                	<li><a href="news.php">News ( NON FUNZIONANTE )</a></li>
+
 	                </ul>
                 </div>
             </div>
+            
+            
+            <div class="main-menu">
+            
+            	<?php if($userId!=null) { ?>
+		            <div class="user-menu">
+			        	
+			        	<div class="avatar">
+				        	<?php
+					        	if($user["url_avatar"]!=null){
+						        	
+					        	}else{
+						        	
+					        	}
+					        	
+					        ?>
+			        	</div>
+			        	
+			        	<div class="user-info">
+				        	<div class="user-info-item username"><?php echo $user["username"]; ?></div>
+							<div class="user-info-item name-team"><?php echo $user["name_team"]; ?></div>
+			        	</div>
+			        	
+		            </div>
+				<?php }else{ ?>
+					 <ul class="menu not-logged">
+						 <li>
+						 	<a href="login.php">Accedi</a>
+						 </li>
+						 
+						 <li>
+						 	<a href="signup.php">Registrati</a>
+						 </li>
+					 </ul>
+				
+				
+				<?php } ?>
+		            
+	            
+	            <ul class="menu">
+		            
+		            <li>
+						<a href="index.php">Riepilogo</a>
+					</li>
+	            
+		            <li>Info&#8595
+		        		<ul>
+			                <li><a href="formations.php">Formazioni</a></li>
+			                <li><a href="teams.php">Squadre</a></li>
+			                <li><a href="standings.php">Classifiche</a></li>
+			                
+							<?php if($userId!=null) { ?>
+								<li><a href="logout.php">Logout</a></li>
+							<?php } else { ?>
+								<li><a href="login.php">Login</a></li>
+							<?php } ?>
+		        		</ul>
+		        	</li>
+		            
+	            	<?php if($userId!=null) { ?>
+			            
+			        	<li>Squadra&#8595
+			        		<ul>
+				                <li><a href="maketeam.php">Inserisci Formazione</a></li>
+				                <li><a href="createroster.php">Crea Rosa</a></li>
+				                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
+			        		</ul>
+			        	</li>
+			        	
+			        	<?php if($userAuth==1) { ?>
+				            
+				            <li>Amministrazione&#8595
+				            	<ul class="admin-menu">
+					                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
+					                <li><a href="loadfile.php">Carica Dati</a></li>
+					                <li><a href="settings.php">Impostazioni</a></li>
+					                <li><a href="settings-competitions.php">Impostazioni Competizioni</a></li>
+					                <li><a href="settings-market.php">Impostazioni Mercati</a></li>
+					                <li><a href="settings-handicaps.php">Impostazioni Penalizzazioni</a></li>
+				            	</ul>
+				            </li>
+				            
+				        <?php } ?>
+					<?php } ?>
+			        
+	            </ul>
+	            
+            </div>
+            
+            
             <!-- <div id="menu-settings"></div> -->
-            <?php if($userId!=null) { ?>
-	            <div class="menu-info">
-	                <li><a href="maketeam.php">Inserisci Formazione</a></li>
-	                <li><a href="createroster.php">Crea Rosa</a></li>
-	                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
-	            </div>
-	        <?php } ?>
+	            
 
-	        <?php if($userId!=null && $userAuth==1) { ?>
-	            <div class="menu-info menu-settings">
-	                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
-	                <li><a href="loadfile.php">Carica Dati</a></li>
-	                <li><a href="settings.php">Impostazioni</a></li>
-	            </div>
-	        <?php } ?>
+	        
 
             <div id="content">
-                <div class="alert alert-danger error_display" role="alert">
-					<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-					<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
-				</div>
-				                
-                <?php if($userId!=null && !$json_team["valid_formation"]) { ?>
-                    <div class="alert alert-danger error_display" role="alert">
-						<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-						<span class="sr-only"></span>Attenzione , Hai modificato la tua rosa dall'ultima formazione inserita
-					</div>
-                <?php } ?>
+	            

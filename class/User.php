@@ -64,6 +64,11 @@ class User{
      * @var String $apiKey
      */
     private $apiKey;
+    
+    /**
+     * @var String $url_avatar
+     */
+    private $url_avatar;
 
 
     /**
@@ -83,7 +88,7 @@ class User{
      * @param String $url_fb
      * @param String $apiKey
      */
-    public function __construct($id=-1,$username,$name,$surname,$password,$email,$reg_date=NULL,$auth=0,$balance,$players=NULL,$transfers=array(),$name_team,$telephone,$url_fb=NULL,$apiKey=NULL){
+    public function __construct($id=-1,$username,$name,$surname,$password,$email,$reg_date=NULL,$auth=0,$balance,$players=NULL,$transfers=array(),$name_team,$telephone,$url_fb=NULL,$apiKey=NULL,$url_avatar=NULL){
         $this->id=$id;
         $this->username=$username;
         $this->name=$name;
@@ -100,6 +105,7 @@ class User{
         $this->url_fb=$url_fb;
         
         $this->apiKey=$apiKey;
+        $this->url_avatar=$url_avatar;
     }
 
     /**
@@ -131,6 +137,7 @@ class User{
         $arr['url_fb'] = $this->url_fb;
         
         $arr['apiKey'] = $this->apiKey;
+        $arr['url_avatar'] = $this->url_avatar;
 
 
 
@@ -151,7 +158,7 @@ class User{
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
         //$arr['password']=  $this->password;
-        //$arr['email']=  $this->email;
+        $arr['email']=  $this->email;
         $arr['auth'] = $this->auth;
         $arr['balance'] = $this->balance;
 
@@ -160,6 +167,7 @@ class User{
         $arr['url_fb'] = $this->url_fb;
 
         $arr['apiKey'] = $this->apiKey;
+        $arr['url_avatar'] = $this->url_avatar;
 
 
 
@@ -188,8 +196,10 @@ class User{
         $arr['name_team'] = $this->name_team;
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
-
+        $arr['username']=$this->username;
+        $arr['email']=  $this->email;
         $arr['url_fb'] = $this->url_fb;
+        $arr['url_avatar'] = $this->url_avatar;
 
         return $arr;
 
@@ -216,8 +226,9 @@ class User{
         $arr['name_team'] = $this->name_team;
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
-
+        $arr['email']=  $this->email;
         $arr['url_fb'] = $this->url_fb;
+        $arr['url_avatar'] = $this->url_avatar;
 
         return $arr;
 
@@ -553,4 +564,21 @@ class User{
         $this->apiKey=$apiKey;
         return $this;
     }
+    
+     /**
+     * @return String
+     */
+    public function getUrlAvatar(){
+        return $this->url_avatar;
+    }
+
+    /**
+     * @param String
+     * @return $this
+     */
+    public function setUrlAvatar($url){
+        $this->url_avatar=$url;
+        return $this;
+    }
+
 }

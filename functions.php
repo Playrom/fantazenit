@@ -88,7 +88,7 @@ function getStandingsByIdUser($id_competition,$id_user){
             $pos++; 
         }
 
-    $ret.="<div class=\"old-player finalvote complete-standing\" onclick=\"javascript:location.href='standings.php?competition=".$id_competition."'\">Classifica Completa -> </div></div>";
+    $ret.="<div class=\"old-player finalvote complete-standing\" onclick=\"javascript:location.href='standings.php?competition=".$id_competition."'\">Classifica Completa &#8594 </div></div>";
 
     return $ret;
 
@@ -210,7 +210,7 @@ function getStandingsRoundByIdUser($id_competition,$id_round,$id_user){ // ID_RO
         $pos++;
     }
 
-    $ret.="<div class=\"old-player finalvote complete-standing\" onclick=\"javascript:location.href='standings.php?competition=$id_competition&round=$id_round'\">Classifica Completa -> </div></div>";
+    $ret.="<div class=\"old-player finalvote complete-standing\" onclick=\"javascript:location.href='standings.php?competition=$id_competition&round=$id_round'\">Classifica Completa &#8594 </div></div>";
 
     return $ret;
 
