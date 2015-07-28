@@ -385,7 +385,7 @@ $app->post('/teams', function () use ($app) {
 
 	    $error_code=null;
 
-	    if($db->checkApi($apiKey) && $user!=null && $id_user==$user->getId()){
+	    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
 	        $response["error"] = false;
 	        error_log("enter");
 

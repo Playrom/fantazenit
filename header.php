@@ -181,90 +181,97 @@ if(isset($config['current_round'])){
             </div>
             
             
-            <div class="main-menu">
+            <div class="container-fluid main-menu">
+	            
+	            <div class="row">
+		            
+		            <div class="col-md-12">
             
-            	<?php if($userId!=null) { ?>
-		            <div class="user-menu">
-			        	
-			        	<div class="avatar">
-				        	<?php
-					        	if($user["url_avatar"]!=null){
-						        	
-					        	}else{
-						        	
-					        	}
+		            	<?php if($userId!=null) { ?>
+				            <div class="user-menu">
 					        	
-					        ?>
-			        	</div>
-			        	
-			        	<div class="user-info">
-				        	<div class="user-info-item username"><?php echo $user["username"]; ?></div>
-							<div class="user-info-item name-team"><?php echo $user["name_team"]; ?></div>
-			        	</div>
-			        	
-		            </div>
-				<?php }else{ ?>
-					 <ul class="menu not-logged">
-						 <li>
-						 	<a href="login.php">Accedi</a>
-						 </li>
-						 
-						 <li>
-						 	<a href="signup.php">Registrati</a>
-						 </li>
-					 </ul>
-				
-				
-				<?php } ?>
-		            
-	            
-	            <ul class="menu">
-		            
-		            <li>
-						<a href="index.php">Riepilogo</a>
-					</li>
-	            
-		            <li>Info&#8595
-		        		<ul>
-			                <li><a href="formations.php">Formazioni</a></li>
-			                <li><a href="teams.php">Squadre</a></li>
-			                <li><a href="standings.php">Classifiche</a></li>
-			                
-							<?php if($userId!=null) { ?>
-								<li><a href="logout.php">Logout</a></li>
-							<?php } else { ?>
-								<li><a href="login.php">Login</a></li>
-							<?php } ?>
-		        		</ul>
-		        	</li>
-		            
-	            	<?php if($userId!=null) { ?>
+					        	<div class="avatar">
+						        	<?php
+							        	if($user["url_avatar"]!=null){
+								        	
+							        	}else{
+								        	
+							        	}
+							        	
+							        ?>
+					        	</div>
+					        	
+					        	<div class="user-info">
+						        	<div class="user-info-item username"><?php echo $user["username"]; ?></div>
+									<div class="user-info-item name-team"><?php echo $user["name_team"]; ?></div>
+					        	</div>
+					        	
+				            </div>
+						<?php }else{ ?>
+							 <ul class="menu not-logged">
+								 <li>
+								 	<a href="login.php">Accedi</a>
+								 </li>
+								 
+								 <li>
+								 	<a href="signup.php">Registrati</a>
+								 </li>
+							 </ul>
+						
+						
+						<?php } ?>
+				            
 			            
-			        	<li>Squadra&#8595
-			        		<ul>
-				                <li><a href="maketeam.php">Inserisci Formazione</a></li>
-				                <li><a href="createroster.php">Crea Rosa</a></li>
-				                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
-			        		</ul>
-			        	</li>
-			        	
-			        	<?php if($userAuth==1) { ?>
+			            <ul class="menu">
 				            
-				            <li>Amministrazione&#8595
-				            	<ul class="admin-menu">
-					                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
-					                <li><a href="loadfile.php">Carica Dati</a></li>
-					                <li><a href="settings.php">Impostazioni</a></li>
-					                <li><a href="settings-competitions.php">Impostazioni Competizioni</a></li>
-					                <li><a href="settings-market.php">Impostazioni Mercati</a></li>
-					                <li><a href="settings-handicaps.php">Impostazioni Penalizzazioni</a></li>
-				            	</ul>
-				            </li>
+				            <li>
+								<a href="index.php">Riepilogo</a>
+							</li>
+			            
+				            <li>Info&#8595
+				        		<ul>
+					                <li><a href="formations.php">Formazioni</a></li>
+					                <li><a href="teams.php">Squadre</a></li>
+					                <li><a href="standings.php">Classifiche</a></li>
+					                
+									<?php if($userId!=null) { ?>
+										<li><a href="logout.php">Logout</a></li>
+									<?php } else { ?>
+										<li><a href="login.php">Login</a></li>
+									<?php } ?>
+				        		</ul>
+				        	</li>
 				            
-				        <?php } ?>
-					<?php } ?>
-			        
-	            </ul>
+			            	<?php if($userId!=null) { ?>
+					            
+					        	<li>Squadra&#8595
+					        		<ul>
+						                <li><a href="maketeam.php">Inserisci Formazione</a></li>
+						                <li><a href="createroster.php">Crea Rosa</a></li>
+						                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
+					        		</ul>
+					        	</li>
+					        	
+					        	<?php if($userAuth==1) { ?>
+						            
+						            <li>Amministrazione&#8595
+						            	<ul class="admin-menu">
+							                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
+							                <li><a href="editformations.php">Modifica Formazioni</a></li>
+							                <li><a href="loadfile.php">Carica Dati</a></li>
+							                <li><a href="settings.php">Impostazioni</a></li>
+							                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
+							                <li><a href="settings-market.php">Gestisci Mercati</a></li>
+							                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
+						            	</ul>
+						            </li>
+						            
+						        <?php } ?>
+							<?php } ?>
+					        
+			            </ul>
+		            </div>
+	            </div>
 	            
             </div>
             

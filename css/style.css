@@ -11,6 +11,9 @@ body {
 .centering {
   width: 1200px;
   margin: 0 auto; }
+  @media screen and (max-width: 1200px) {
+    .centering {
+      width: 100%; } }
 
 #wrapper {
   float: left;
@@ -64,6 +67,9 @@ body {
   width: 100%;
   height: 100px;
   background: #ededed; }
+  @media screen and (max-width: 1200px) {
+    .main-menu {
+      height: auto; } }
 
 .user-menu {
   position: relative;
@@ -74,7 +80,7 @@ body {
 .avatar {
   float: left;
   position: relative;
-  margin: 10px;
+  margin: 10px 10px 10px 0;
   height: 80px;
   width: 80px;
   background: #FF0000; }
@@ -160,6 +166,15 @@ body {
   height: auto;
   background: #FFFFFF; }
 
+/* STYLING CLASSES */
+.white-with-padding {
+  padding: 10px;
+  background: #FFFFFF; }
+
+.margin-10 {
+  margin: 10px 10px 0 10px; }
+
+/* MAIN */
 #slide_competitions {
   width: 20%;
   float: right;
@@ -176,7 +191,7 @@ body {
 .main {
   position: relative;
   float: left;
-  width: 1080px;
+  width: 100%;
   margin: 10px 10px 0 10px;
   padding: 10px;
   background: #FFF; }

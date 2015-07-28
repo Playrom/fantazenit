@@ -119,6 +119,9 @@ class ConnectDatabaseUsers extends ConnectDatabase{
             while ($row = $res->fetch_assoc()) {
                 return true;
             }
+            
+            $user = $this->getUserByApiKey($apiKey);
+            
 
         }catch(exception $e) {
             echo $e;
@@ -127,6 +130,49 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 
         return false;
 
+}
+
+/**
+* A method that return true if the api is an api valid for an Admin User
+* @param String $apiKey
+* @return boolean
+*/
+
+function checkAuthOverride($apiKey){
+	$query="select * from `users` where `apiKey`=?";
+        
+        try{
+            if (!($stmt = $this->mysqli->prepare($query))) {
+                echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+            }
+
+            if (!$stmt->bind_param("s", $apiKey)) {
+                echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            if (!$stmt->execute()) {
+                echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+
+            $res=$stmt->get_result();
+            $res->data_seek(0);
+            while ($row = $res->fetch_assoc()) {
+                if($row['auth'] >= 1 ){
+	                return true;
+                }else{
+	                return false;
+                }
+            }
+            
+            
+            
+
+        }catch(exception $e) {
+            echo $e;
+            return false;
+        }
+
+        return false;
 }
 
     /*
@@ -158,6 +204,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
             $res->data_seek(0);
             while ($row = $res->fetch_assoc()) {
                 return $this->getUserById($row['id']);
+                
             }
 
         }catch(exception $e) {
@@ -368,6 +415,7 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 	}
 
 	function getUserById($id){
+		
 		
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
 		

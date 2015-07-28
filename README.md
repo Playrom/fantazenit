@@ -93,9 +93,13 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 # Alpha 0.6 -
 
-* New: Profile Page
-* New: JSON API Edit User
+* Feature: Profile Page
+* New API: JSON API Edit User
 * New: Navigation Bar and Error Section on Top of the Page
+
+* Feature: Edit Formation By Administrator
+* Edit: Start to Implement CSS Media Query in Header
+* New Method: Added in ConnectDatabaseUsers "checkAuthOverride" a method that return true if the api is an api valid for an Admin User
 
 # Da Fare
 --
