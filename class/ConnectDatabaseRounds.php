@@ -834,11 +834,37 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		$stat=$data_players->dumpStatsByRound($roling[$step]->getPlayer()->getId(),$round);
 		$nextSub=false;
 		if($stat!=null && !isset($alread_in[$roling[$step]->getPlayer()->getId()])){
+			
+			$role = $roling[$step]->getPlayer()->getRole();
+			
 			$vote=$stat['final']->getValue();
+			$original = $stat["vote"]->getValue();
 			if($vote==-1){
 				$nextSub=true;
 			}else{
-				$ret=array('vote'=>$vote,'id'=>$roling[$step]->getPlayer()->getId());
+				
+				$noEdit = $original;
+				
+				if($original == -1){ // MI SERVE VOTO FINALE MENO BONUS E MALUS
+										
+					if($original==-1 && strtolower($role)=="p"){
+		                if($stat['red_card']->getValue()==1){
+		                    $noEdit=4;
+		                } // DA CONTROLLARE IL MINUTAGGIO
+		                //$vote=$vote+$scored-$taken+$free_keep-$free_miss+$free_score-$auto-$yellow-$red+$assist+$stop_assist+$gdp+$gdv;
+		            }else if($original==-1 && strtolower($role)!="p"){
+		                if($stat['red_card']->getValue()==1){
+		                    $noEdit=4;
+		                }else if($stat['scored']->getValue()>0 || $stat['free_kick_keeped']->getValue()>0 || $stat['free_kick_scored']->getValue()>0 || $stat['assist']->getValue()>0 || $stat['stop_assist']->getValue()>0){
+		                    $noEdit=6;
+		                }else if($stat['free_kick_missed']->getValue()>0 || $stat['autogol']->getValue()>0){
+		                   $noEdit=6;
+		                }
+		            }
+					
+				}
+				
+				$ret=array('vote'=>$vote,"originale" => $original , 'role' => $role , "noEdit" => $noEdit ,  'id'=>$roling[$step]->getPlayer()->getId());
 				return $ret;
 			}
 		}else{
@@ -918,6 +944,16 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 						$start=$tit[0];
 						$fin=$tit[1];
 						$alread_in=array();
+						$modificatore = false;
+						
+						if($team->getDef()>3){
+							$modificatore = true;
+						}
+						
+						$modArr = array();
+						$modArr["portiere"] = array();
+						$modArr["centro"] = array();
+						
 						foreach($start as $pla){
 							$player=$pla->getPlayer();
 							$id_player=$player->getId();
@@ -932,6 +968,13 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 									$enterSub=true;
 								}else{
 									$vote=$stat['final']->getValue();
+									
+									if($modificatore==true && $player->getRole()=="D"){
+										$modArr["centro"] = $stat['vote']->getValue();
+									}else if($modificatore==true && $player->getRole()=="P"){
+										$modArr["portiere"] = $stat['vote']->getValue();
+									}
+									
 									$result=$result+$vote;
 								}
 							}else{
@@ -949,6 +992,21 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 									if($subvote!=0){
 										$sub++;
+										
+										if($modificatore==true && $arr["role"]=="D"){
+											if($arr["originale"] == $arr["noEdit"]){
+												$modArr["centro"] = $arr["originale"];
+											}else{
+												$modArr["centro"] = $arr["noEdit"];
+											}
+										}else if($modificatore==true && $arr["role"]=="P"){
+											if($arr["originale"] == $arr["noEdit"]){
+												$modArr["portiere"] = $arr["originale"];
+											}else{
+												$modArr["portiere"] = $arr["noEdit"];
+											}
+										}
+										
 										$result=$result+$subvote;
 									}
 								}
@@ -958,6 +1016,28 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 						}
 						$gol=0;
+						
+						if(count($modArr["portiere"])>0 && count($modArr["centro"])>3){
+							// OK MODIFICATORE VALE
+							
+							$punti_mod = $modArr["portiere"][0];
+							
+							$arrcen = rsort($modArr["centro"]);
+							
+							for($i = 0 ; $i<3 ; $i++){
+								$punti_mod = $punti_mod + $arrcen[$i];
+							}
+							
+							$media = $punti_mod / 4;
+							
+							if($media >= 7){
+								$result = $result + 6;
+							}else if($media >= 6.5 && $media < 7){
+								$result = $result + 3;
+							}else if($media >= 6 && $media < 6.5){
+								$result = $result + 1;
+							}
+						}
 
 						
 

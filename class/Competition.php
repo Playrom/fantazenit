@@ -20,18 +20,25 @@ class Competition{
      * @var int $num_rounds
      */
     private $num_rounds;
-
+	
+	/**
+     * @var String $type
+     */
+    private $type;
+	
     /**
      * @param int
      * @param string
      * @param int
      * @param int
+     * @param string
      */
-    function __construct($id,$name,$first_round,$num_rounds){
+    function __construct($id,$name,$first_round,$num_rounds,$type){
 		$this->id=intval($id);
 		$this->name=$name;
 		$this->first_round=$first_round;
 		$this->num_rounds=$num_rounds;
+		$this->type = $type;
                 
 	}
 
@@ -48,6 +55,7 @@ class Competition{
         $arr["name"] = $this->name;
         $arr["first_round"] = $this->first_round;
         $arr["num_rounds"] = $this->num_rounds;
+        $arr["type"] = $this->type;
 
         return $arr;
 
@@ -109,7 +117,25 @@ class Competition{
      * @param int
      */
     public function setNumRounds($num_rounds){
-	$this->num_rounds=$num_rounds;
+		$this->num_rounds=$num_rounds;
+	}
+	
+	/**
+     * @return String
+     */
+    public function getTypeCompetition(){
+    return $this->type;
 }
+
+
+    
+    /**
+     * @param $value String
+     */
+    public function setTypeCompetition($value){
+    $this->type = $value;
+}
+	
+
 
 }

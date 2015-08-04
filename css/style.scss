@@ -3,10 +3,21 @@ $gray:#AAAAAA;
 $white:#FFFFFF;
 $menu-background: #ededed; 
 
+@font-face {
+    font-family: boton-light;
+    src: url(risorse/boton-light.ttf);
+}
+
+@font-face {
+    font-family: boton-regular;
+    src: url(risorse/boton-regular.ttf);
+}
+
 body {
     background: #EEEEEE !important;
     margin: 0;
-    font-family: "Open Sans", arial;
+    //font-family: "Open Sans", arial;
+    font-family: boton-light;
 }
 
 * {
@@ -54,7 +65,7 @@ body {
 
 
 
-#menu-top{
+.menu-top{
 	float:right;
 	position:relative;
 	width: 900px;
@@ -111,7 +122,12 @@ body {
 	
 	height: 80px;
 	width: 80px;
-	background: $red;
+	background: none;
+	
+	img{
+		max-height: 80px;
+		width: auto;
+	}
 }
 
 .user-info{
@@ -173,6 +189,8 @@ body {
 		float: left;
 		
 		margin: 0 10px;
+		
+		cursor: pointer;
 	}
 	
 	li:hover ul {
@@ -239,8 +257,97 @@ body {
 	margin: 10px 10px 0 10px;
 }
 
+.white-background{
+	background: $white;
+}
+
+/* SLIDE */
+
+.slide {
+  position: relative;
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  }
+
+.slide li {
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  display: none;
+  width: 100%;
+  left: 0;
+  top: 0;
+  }
+
+.slide li:first-child {
+  position: relative;
+  display: block;
+  float: left;
+  }
+
+.slide img {
+  display: block;
+  height: auto;
+  float: left;
+  width: 100%;
+  border: 0;
+  }
+
+/* HOME */
+
+.presentation{
+	font-family: boton-light;
+	
+	
+	p{
+		font-size: 25px;
+	}
+	
+	h1{
+		color: $red;
+	}
+}
+
+.motivi{
+	background: $white;
+	
+}
+
+.join{
+	background: $white;
+	
+	height: 270px;
+	
+	
+	a , a:hover{
+		
+		float: left;
+		position: relative;
+	
+		background: $red;
+		color: $white;
+		text-decoration: none;
+		font-size: 40px;
+		padding: 30px 15%;
+		width: 50%;
+		margin: 70px 25%;
+		height: 130px;
+		line-height: 70px;
+		text-align: center;
+		
+		-webkit-box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+		-moz-box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+		box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+	}
+	
+	
+}
 
 /* MAIN */
+
+
 
 #slide_competitions{
 	width: 20%;
@@ -259,12 +366,12 @@ body {
 
 
 .main{
-    position: relative;
-    float: left;
     width: 100%;
-    margin: 10px 10px 0 10px;
+    margin-top:10px;
     padding: 10px;
     background: #FFF;
+    float: left;
+    position: relative;
 }
 
 .half_size{
@@ -287,7 +394,39 @@ body {
 	position: relative;
 	width: 100%;
 	background: #FF0000;
-	height: 100px;
+	height: 150px;
+	
+	*{
+		color: $white !important;
+	}
+	
+	.menu-top{
+		float: left;
+		height: 150px;
+		
+		ul{
+			float: left;
+			height: 150px;
+			
+			li{
+				line-height: 150px;
+			}
+		}
+	}
+}
+
+.logozenit{
+	height: 150px;
+	float: right;
+	position: relative;
+	
+	img{
+		max-height: 150px;
+		padding: 25px;
+		width: auto;
+		float: right;
+		position: relative;
+	}
 }
 
 #team-info {
@@ -408,6 +547,11 @@ a.current-round{
 	position: relative;
 	height: 30px;
 	line-height: 30px;
+}
+
+.team-player-item{
+	@extend .value-player-item;
+	color: $red;
 }
 
 .value-player-item{
@@ -690,7 +834,7 @@ table.roster-item {
 }
 
 .row_formation{
-    margin: 10px 0 0 0 ;
+    margin-top: 10px ;
 }
 
 .title_formation {
@@ -1126,6 +1270,13 @@ input[type=checkbox] {
     margin-right: 5px;
 }
 
+.select_teams{
+	margin: 0 !important;
+	padding: 0 !important;
+	position: relative !important;
+	float: left !important;
+}
+
 /* end .squaredFour */
 
 
@@ -1387,11 +1538,19 @@ input[type=checkbox] {
 }
 
 .first, .first .county-days, .county-hours,.county-minutes,.county-seconds ,.county-hours-wrapper,.county-minutes-wrapper,.county-seconds-wrapper{
-    width: 45px !important;
+    width: 62px !important;
 }
 
 span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 	font-size: 40px;
+    padding-top: 5px;
+    text-align: center;
+
+}
+
+.county.red .county-label-days, .county.red .county-label-hours, .county.red .county-label-minutes, .county.red .county-label-seconds{
+	padding-top: 5px !important;
+	width: 87px !important;
 }
 
 

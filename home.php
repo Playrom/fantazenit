@@ -19,9 +19,11 @@ $json = $apiAccess->accessApi("/rounds/".($round-1),"GET");
 
 $points = null;
 
-if($json["error"]==false){
+if($json["error"]==false && $userId!=null){
 	$points = $json["data"]["results"][$userId]["points"];
 }
+
+include('error-box.php');
 
 ?>
 
@@ -33,11 +35,23 @@ if($json["error"]==false){
                 <div class="welcome three_quarter box_home" <?php if($players==null) echo "onclick=\"javascript:location.href='maketeam.php'\""; ?> >
                     
                     Benvenuto <?php echo $username; ?><br>
-                    <span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $points; ?></span> punti nella <?php echo $config['last-round']; ?>° Giornata<br>
-                    <?php if($players!=null){ ?>
+                    
+                    <?php 
+	                if($config["last-round"] != 0){ ?>
+                    
+                    	<span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $points; ?></span> punti nella <?php echo $config['last-round']; ?>° Giornata<br>
+                    
+                    <?php 
+	                }
+	                
+	                if($players!=null){ ?>
+                        
                         Hai già inserito la Formazione per la <?php echo $config['current_round'] ?>° Giornata
+                    
                     <?php }else{ ?>
+                        
                         Devi inserire la Formazione per la <?php echo $config['current_round'] ?>° Giornata
+                    
                     <?php } ?>
                     
                     </span>
@@ -57,7 +71,7 @@ if($json["error"]==false){
         </div>
     </div>
     
-    <?php if($config['last-round']!=null){ ?>
+    <?php if($config['last-round']!=null && $config['last-round']!=0){ ?>
     
     <div class="row">
         <div class="third_row_home row_home">

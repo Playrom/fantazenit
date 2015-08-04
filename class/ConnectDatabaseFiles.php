@@ -18,17 +18,36 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 
 		$lines=$dom->getElementsByTagName('tr');
 		$i=0;
+		
+		$not_same_year = false;
+		
 		foreach($lines as $item){
+			
+			
 
 			$enter=true;
 			$col=$item->getElementsByTagName('td');
 			foreach($col as $k){
-				if($k->hasAttribute("colspan")) $enter=false;
+				if($k->hasAttribute("colspan")) {
+					$enter=false;
+					
+					if($col->item(0)!=null){
+						$children=$col->item(0)->childNodes;
+						foreach($children as $child){
+							if(strpos($child->ownerDocument->saveXML($child),"VOTI") == true){
+								if(strpos($child->ownerDocument->saveXML($child),"2016") == false){
+									$not_same_year = true;
+								}
+							}
+						}
+					}
+					
+				}
 			}
 
 			$is_people=true;
 
-			if($enter){
+			if($enter && !$not_same_year){
 				$html='';
 				$children=$col->item(0)->childNodes;
 				foreach($children as $child){
@@ -122,16 +141,36 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 
 		$lines=$dom->getElementsByTagName('tr');
 		$i=0;
+		
+		$not_same_year = false;
+		
 		foreach($lines as $item){
 			$enter=true;
 			$col=$item->getElementsByTagName('td');
 			foreach($col as $k){
-				if($k->hasAttribute("colspan")) $enter=false;
+				if($k->hasAttribute("colspan")) {
+					$enter=false;
+					
+					if($col->item(0)!=null){
+						$children=$col->item(0)->childNodes;
+						foreach($children as $child){
+							if(strpos($child->ownerDocument->saveXML($child),"QUOTAZIONI") == true){
+								if(strpos($child->ownerDocument->saveXML($child),"2016") == false){
+									$not_same_year = true;
+								}
+							}
+						}
+					}
+					
+					
+				}
 			}
+			
+			var_dump($not_same_year);
 
 			$is_people=false;
 
-			if($enter){
+			if($enter && !$not_same_year){
 				$html='';
 				
 				if($col->item(0)!=null){

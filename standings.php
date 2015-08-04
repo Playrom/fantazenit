@@ -40,6 +40,7 @@
 			    
 			    $handicaps = $json["data"]["handicaps"];
 			    $standings = $json["data"]["standings"];
+			    $type = $json["data"]["competition"]["type"];
 			    			    
 			}else{
 				$error = $json["message"];
@@ -60,6 +61,7 @@
 			    
 			    $handicaps = $json["data"]["handicaps"];
 			    $standings = $json["data"]["standings"];
+			    $type = $json["data"]["competition"]["type"];
 			    
 			}else{
 				$error = $json["message"];

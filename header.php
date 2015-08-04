@@ -50,6 +50,7 @@ $userId=null;
 $userAuth=null;
 $username = null;
 $error_json = array();
+$error_messages = array();
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
@@ -86,7 +87,7 @@ if(isset($config['current_round'])){
         <link href="css/ion.rangeSlider.css" rel="stylesheet" />
         <link href="css/normalize.min.css" rel="stylesheet"/>
         <link href="css/ion.rangeSlider.skinFlat.css" rel="stylesheet" />
-        <link href="css/style.css" rel="stylesheet" />
+
         <link href="css/jquery.datetimepicker.css" rel="stylesheet" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
@@ -94,6 +95,8 @@ if(isset($config['current_round'])){
         <link href="css/footable.core.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!--<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">-->
+        
+        <link href="css/style.css" rel="stylesheet" />
         
 		<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         <script src="js/jquery-1.11.0.min.js"></script>
@@ -171,9 +174,10 @@ if(isset($config['current_round'])){
             <div id="header">
 
                 <a href="index.php"><div id="logo"></div></a>
-                <div id="menu-top">
+                <div class="menu-top">
 	                <ul>
-		                <li><a href="/index.php">Home</a></li>
+		                <li><a href="home.php">Home</a></li>
+	                	<li><a href="lista.php">Lista Giocatori</a></li>
 	                	<li><a href="news.php">News ( NON FUNZIONANTE )</a></li>
 
 	                </ul>
@@ -194,9 +198,10 @@ if(isset($config['current_round'])){
 						        	<?php
 							        	if($user["url_avatar"]!=null){
 								        	
-							        	}else{
-								        	
-							        	}
+							        	}else{ ?>
+								        	<img src="img/default_avatar.png" />
+							        	<?php
+								        }
 							        	
 							        ?>
 					        	</div>
@@ -225,7 +230,7 @@ if(isset($config['current_round'])){
 			            <ul class="menu">
 				            
 				            <li>
-								<a href="index.php">Riepilogo</a>
+								<a href="home.php">Riepilogo</a>
 							</li>
 			            
 				            <li>Info&#8595
@@ -246,6 +251,7 @@ if(isset($config['current_round'])){
 					            
 					        	<li>Squadra&#8595
 					        		<ul>
+						        		<li><a href="profile.php">Il Mio Profilo</a></li>
 						                <li><a href="maketeam.php">Inserisci Formazione</a></li>
 						                <li><a href="createroster.php">Crea Rosa</a></li>
 						                <li><a href="changeroster.php">Mercato di Riparazione</a></li>

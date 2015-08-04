@@ -61,7 +61,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 			$arr=array();
 
 			while ($row = $res->fetch_assoc()) {
-				return new Competition($id_competition,$row['name'],$row['first_round'],$row['num_rounds']);
+				return new Competition($id_competition,$row['name'],$row['first_round'],$row['num_rounds'],$row['type']);
 			}
 
 			return null;
@@ -95,7 +95,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 			while ($row = $res->fetch_assoc()) {
 				$id_competition=$row['id'];
 				$name=$row['name'];
-				$ret[]=new Competition($id_competition,$name,$row['first_round'],$row['num_rounds']);
+				$ret[]=new Competition($id_competition,$name,$row['first_round'],$row['num_rounds'],$row['type']);
 			}
 
 			return $ret;
@@ -107,15 +107,18 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 		}
 	}
 
-	function createCompetition($name,$first_round,$num_rounds){
+	function createCompetition($name,$first_round,$num_rounds,$type){
+		
+		error_log($type);
+		
 		try{
-			$tempQuery="INSERT INTO `competitions` (`name`,`first_round`,`num_rounds`) VALUES (?,?,?)";
+			$tempQuery="INSERT INTO `competitions` (`name`,`first_round`,`num_rounds` , `type`) VALUES (?,?,?,?)";
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("sii", $name,$first_round,$num_rounds)) {
+			if (!$stmt->bind_param("siis", $name,$first_round,$num_rounds,$type)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -184,20 +187,25 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	}
 
 	function editCompetition($id,$name,$first_round,$num_rounds){
+		
+		
 		try{
 
 			is_num($first_round);
 			is_num($num_rounds);
+			
+			error_log($id);
+			error_log($name);
 
 			$this->mysqli->autocommit(FALSE);
 
-			$tempQuery="REPLACE INTO `competitions` (`id`,`name`,`first_round`,`num_rounds`) VALUES (?,?,?,?)";
+			$tempQuery="UPDATE `competitions` SET name=? , first_round=? , num_rounds=? where id=?";
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("isii", $id,$name,$first_round,$num_rounds)) {
+			if (!$stmt->bind_param("siii",$name,$first_round,$num_rounds,$id)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -304,6 +312,40 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 		}
 	}
+	
+	function isUserInCompetitionGroup($id_user , $id_group){
+		$tempQuery="SELECT * FROM round_robin  WHERE id_user=? and id_group=? ";
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("ii", $id_user,$id_group)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$arr=array();
+
+			while ($row = $res->fetch_assoc()) {
+				return true;
+			}
+
+			return false;
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return false;
+
+		}
+	}
 
 	function getUsersInCompetition($id_competition){
 		$tempQuery="SELECT users_in_competitions.* ,users.* FROM users_in_competitions LEFT OUTER JOIN users ON users.id = users_in_competitions.id_user WHERE id_competition=?";
@@ -384,6 +426,48 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 		}
     }
+    
+    function getUsersInCompetitionGroup($id_group){
+		$tempQuery="SELECT round_robin.* ,users.* FROM round_robin LEFT OUTER JOIN users ON users.id = round_robin.id_user WHERE id_group=?";
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("i", $id_group)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$arr=array();
+
+
+			while ($row = $res->fetch_assoc()) {
+				$ret["id"]=$row['id_user'];
+                $ret["name_team"] = $row["name_team"];
+                $ret["username"] = $row["username"];
+                $ret["name"] = $row["name"];
+                $ret["surname"] = $row["surname"];
+
+
+                $arr[] = $ret;
+			}
+
+			return $arr;
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return null;
+
+		}
+	}
 
 	function getStandings($id_competition){
 
@@ -392,8 +476,416 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 		$rounds=$data_rounds->getRoundsByCompetition($id_competition);
 		$results=array();
+		
+		$type = $this->getCompetition($id_competition)->getTypeCompetition();
+		
+		
+		if($type=="CHAMPIONSHIP"){
+			
+			return $this->getStandingsChampionship($id_competition);
+			
+		}else if($type=="DIRECT"){
+			
+			return $this->getStandingsDirect($id_competition);
+			
+		}else{
+			return null;
+		}
+
+	}
+	
+	private function getStandingsChampionship($id_competition){
+
+		$data_rounds=new ConnectDatabaseRounds($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
+
+		$rounds=$data_rounds->getRoundsByCompetition($id_competition);
+		$results=array();
+		
+		
+		foreach($rounds as $round){
+			$tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
+			
+
+			try{
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->bind_param("i", $round)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+				
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+
+				$round_result=array();
+				
+
+				while ($row = $res->fetch_assoc()) {
+					
+					
+					$id_user=$row['id_user'];
+
+					$handicaps=$data_handicaps->getHandicapsRoundsByUserIdAndRound($id_user,$round);
+					
+
+					$result=$row['points'];
+					$gol=$row['gol'];
+
+					foreach($handicaps as $handicap){
+						
+						
+						if(intval($handicap->getRound())==intval($round)){
+							$round_handicap=$handicap->getPoints();
+							$result=$result+$round_handicap;
+							if($result>=66){
+								$gol=floor(($result-66)/6)+1;
+							}
+						}
+					}
+
+					
+
+					$round_result[$id_user]['points']=$result;
+					$round_result[$id_user]['gol']=$gol;
+					$round_result[$id_user]['user']=$row['id_user'];
+				}
+
+				$results[]=$round_result;
 
 
+			}catch(exception $e) {
+				echo "ex: ".$e;
+				return true;
+
+			}
+		}
+		
+		
+		
+		$classifica=array();
+		$users=$this->getUsersInCompetition($id_competition);
+		
+
+		foreach($users as $user){
+						
+			
+			
+			
+			$gols=0;
+			$points=0;
+			foreach($results as $round){
+				if(isset($round[intval($user["id"])])){
+                    $res=$round[intval($user["id"])];
+                    $gols+=$res['gol'];
+                    $points+=$res['points'];
+                }
+			}
+			
+			$handicaps_competitions=$data_handicaps->getHandicapsCompetitionsByUserIdAndCompetition($user["id"],$id_competition);
+					
+
+			foreach($handicaps_competitions as $handicap){
+				
+				if($handicap->getCompetition()!=null){
+				
+					if(intval($handicap->getCompetition()->getId())==intval($id_competition)){
+						$points_handicap=$handicap->getPoints();
+						$points=$points+$points_handicap;
+					}
+				}
+			}
+			
+			$temp['id_user']=$user["id"];
+			$temp['gol']=$gols;
+			$temp['points']=$points;
+			$classifica[]=$temp;
+		}
+
+		usort($classifica, function($a, $b) { // SORT DESC ONLY BY POINTS
+			$diff=$b['points'] - $a['points'];
+		    return $diff;
+		});
+		return $classifica;
+
+	}
+	
+	function getPhases($id_competition){
+		
+		
+		$comp = $this->getCompetition($id_competition);
+		
+		if($comp!=null && $comp->getTypeCompetition()=="DIRECT"){
+			
+			
+			$tempQuery="SELECT * FROM phases  WHERE id_competition=? ";
+			
+
+			try{
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->bind_param("i", $id_competition)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+				
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+
+				$phases = array();
+				
+				while ($row = $res->fetch_assoc()) {
+					
+					$id_phase = $row["id_phase"];
+					$type = $row["type"];
+					
+					$groups = null;
+					
+					if($type == "ROUND_ROBIN"){
+						 $groups = $this->getGroups($id_competition,$id_phase);
+					}
+					
+					$phases[] = new Phase($id_phase , $row["id_competition"] , $row["name"] , $type , $row["settings"] , $groups);
+					
+				}
+				
+				return $phases;
+
+
+			}catch(exception $e) {
+				echo "ex: ".$e;
+				return true;
+
+			}
+			
+			
+		}
+	}
+	
+	function getGroups($id_competition,$id_phase){
+		
+		
+		$comp = $this->getCompetition($id_competition);
+		
+		if($comp!=null && $comp->getTypeCompetition()=="DIRECT"){
+			
+			
+			$tempQuery="SELECT * FROM groups  WHERE id_competition=?  and id_phase=?";
+			
+
+			try{
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->bind_param("ii", $id_competition,$id_phase)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+				
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+
+				$groups = array();
+				
+				while ($row = $res->fetch_assoc()) {
+					$id_group = $row["id_group"] ;
+					$groups[] = new Group($row["id_phase"] , $row["id_competition"] , $row["name"] , $id_group , $this->getMatchesByGroup($id_competition,$id_phase, $id_group));
+					
+				}
+				
+				return $groups;
+
+
+			}catch(exception $e) {
+				echo "ex: ".$e;
+				return true;
+
+			}
+			
+			
+		}
+	}
+	
+	function getMatches($id_competition,$id_phase){
+		
+		
+		$comp = $this->getCompetition($id_competition);
+		
+		if($comp!=null && $comp->getTypeCompetition()=="DIRECT"){
+			
+			
+			$tempQuery="SELECT * FROM matches WHERE id_competition=?  and id_phase=?";
+			
+
+			try{
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->bind_param("ii", $id_competition,$id_phase)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+				
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+
+				$matchess = array();
+				
+				while ($row = $res->fetch_assoc()) {
+					
+					$matches[] = new Match($row["id_phase"] , $row["id_match"] , $row["id_competition"] , $row["id_one"] ,$row["id_two"] , $row["round"] , $row["result"] , $row["id_group"]);
+					
+				}
+				
+				return $matches;
+
+
+			}catch(exception $e) {
+				echo "ex: ".$e;
+				return true;
+
+			}
+			
+			
+		}
+	}
+	
+	function getMatchesByGroup($id_competition,$id_phase , $id_group){
+		
+		error_log($id_competition);
+		error_log($id_phase);
+		error_log($id_group);
+		
+		
+		$comp = $this->getCompetition($id_competition);
+		
+		$users = $this->getUsersInCompetitionGroup($id_group);
+		
+		
+		if($comp!=null && $comp->getTypeCompetition()=="DIRECT" && $users != null){
+			
+			
+			$tempQuery="SELECT * FROM matches WHERE id_competition=?  and id_phase=?";
+			
+
+			try{
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->bind_param("ii", $id_competition,$id_phase)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+				
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+
+				$matchess = array();
+				
+				while ($row = $res->fetch_assoc()) {
+					
+					foreach($users as $user){
+						if($user["id"] == $row["id_one"] || $user["id"] == $row["id_two"]){
+							$matches[] = new Match($row["id_phase"] , $row["id_match"] , $row["id_competition"] , $row["id_one"] ,$row["id_two"] , $row["round"] , $row["result"] , $row["id_group"]);
+							break;
+						}
+					}
+					
+					
+				}
+				
+				return $matches;
+
+
+			}catch(exception $e) {
+				echo "ex: ".$e;
+				return true;
+
+			}
+			
+			
+		}
+	}
+	
+	function getMatch($id_match){
+					
+		$tempQuery="SELECT * FROM matches WHERE id_match=?";
+		
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("i", $id_match)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+			
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			
+			while ($row = $res->fetch_assoc()) {
+				
+				return new Match($row["id_phase"] , $row["id_match"] , $row["id_competition"] , $row["id_one"] ,$row["id_two"] , $row["round"] , $row["result"] , $row["id_group"]);
+				
+			}
+			
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return true;
+
+		}
+		
+			
+	}
+	
+	
+	private function getStandingsDirect($id_competition){
+
+		$data_rounds=new ConnectDatabaseRounds($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
+
+		$rounds=$data_rounds->getRoundsByCompetition($id_competition);
+		$results=array();
+		
+		$competition = $this->getCompetition($id_competition);
+		
+		
+		
 		foreach($rounds as $round){
 			$tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
 			

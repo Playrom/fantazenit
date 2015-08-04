@@ -32,6 +32,11 @@ if($username != null){
         $url_fb = $_POST["url_fb"];
         $editConfig["url_fb"]=$url_fb;
     }
+    
+    if(isset($_POST['name_team'])){
+        $name_team = $_POST["name_team"];
+        $editConfig["name_team"]=$name_team;
+    }
 
     if(isset($_POST['current_pass'])){
         $current_pass = $_POST["current_pass"];
@@ -68,6 +73,8 @@ if($username != null){
         $roster=$arr["players"];
         $transfers=$arr["transfers"];
         
+    }else{
+	    $error_json[] = $team;
     }
     
     include("error-box.php");
@@ -258,9 +265,16 @@ if($username != null){
 	                        <input class="form-control" type="text" name="url_fb" <?php echo "value=\"".$user['url_fb']."\""; ?> >
 	                    </div>
 	                </div>
+	                
+	                <div class="form-group">
+	                    <h3 class="col-md-8 control-label left-label">Nome Squadra&nbsp;&nbsp;<small></small></h3>
+	                    <div class="col-md-4">
+	                        <input class="form-control" type="text" name="name_team" <?php echo "value=\"".$user['name_team']."\""; ?> >
+	                    </div>
+	                </div>
 	
 	                <div class="form-group">
-	                    <h3 class="col-md-8 control-label left-label">Password Attuale&nbsp;&nbsp;<small></small></h3>
+	                    <h3 class="col-md-8 control-label left-label">Password Attuale&nbsp;&nbsp;<small>Campo Obbligatorio in caso di modifiche</small></h3>
 	                    <div class="col-md-4">
 	                        <input class="form-control" type="password" name="current_pass" >
 	                    </div>

@@ -6,7 +6,7 @@ include('header.php');
 <?php
 
 if(isset($_SESSION['username'])) {
-     header("Location:index.php");
+     header("Location:home.php");
 
 }else if(isset($_POST['user']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['email']) && isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['name_team']) &&      isset($_POST['telephone'])){
     
@@ -93,13 +93,17 @@ if(isset($_SESSION['username'])) {
     
 }else{ ?>
 
-    <?php if(isset($_SESSION['wrong_pass'])){ ?>
-        <div class="error_display esecution_error">Errore: Le due password non coincidono</div>
-    <?php } ?>
+    <?php if(isset($_SESSION['wrong_pass'])){ 
+		$error_messages[] = "Errore: Le due password non coincidono";    
+	} ?>
     
-    <?php if(isset($_SESSION['wrong_username'])){ ?>
-        <div class="error_display esecution_error">Errore: Username o Email già utilizzati</div>
-    <?php } ?>
+    <?php if(isset($_SESSION['wrong_username'])){ 
+		$error_messages[] = "Errore: Username o Email già utilizzati";    
+     } ?>
+     
+    <?php
+	     include('error-box.php');
+	?>
 
     <form action="signup.php" name="signup" class="signup_form form-horizontal" method="post">
         <h3>Registrazione al Fanta Zenit</h3>

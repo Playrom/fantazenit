@@ -3,7 +3,6 @@
     var list2;
 
     $(document).ready(function () {
-
         disable_but(true);
 
         $("#range_1").ionRangeSlider({
@@ -81,7 +80,7 @@
     var select_all_teams = function(bo){
 
         var items=document.querySelectorAll('.select_teams');
-        console.log(items);
+
         
         
         for(var i=0;i<items.length;i++){
@@ -117,8 +116,8 @@
     var change = function (obj) {
         var min = obj["fromNumber"];
         var max = obj["toNumber"];
-        console.log(min);
-        console.log(max);
+
+
         var players = document.getElementsByClassName("new-player");
         var dis = "none";
 
@@ -286,8 +285,8 @@
 
         for (var i = 0; i < players.length; ++i) {
             var item = players[i];
-            console.log(item.id);
-            console.log(id);
+
+
             if (item.id == id) {
                 item.innerHTML = obj.innerHTML;
                 cost_change_market();
@@ -304,7 +303,7 @@
         var id = +obj.id + "_free";
         var table_element = document.getElementById(id);
         
-        console.log(table_element);
+
 
         var element = document.getElementsByClassName('but-over');
         var role_select;
@@ -318,7 +317,6 @@
 
         }
         
-        console.log(role);
 
 		
         if (role==null || role.toLowerCase() == table_element.getAttribute("role").toLowerCase()) {
@@ -328,8 +326,6 @@
             table_element.setAttribute("in-roster", "none");
         }
         
-        console.log(table_element);
-
         var index = obj.rowIndex;
 
         obj.parentNode.removeChild(obj);
@@ -341,21 +337,21 @@
         var obj = pass.currentTarget;
         var table = document.getElementById(obj.getAttribute("role") + "_free");
         var value = obj.getAttribute("data-value");
-        console.log("balance " + balance());
-        console.log("value " + parseInt(value));
+
         if ((balance() - parseInt(value)) >= 0) {
             var max = parseInt(table.getAttribute("max"));
             var lenght_table = table.getElementsByClassName("old-player").length;
-            console.log(table);
-            console.log(table.getElementsByClassName("old-player"));
-            console.log(max);
-            console.log(lenght_table);
+            
             if (lenght_table < max) {
                 var row = document.createElement('div');
                 row.className = "old-player";
                 row.id = obj.getAttribute("id_player");
+				
+				console.log(obj);
+				
                 row.setAttribute("data-value", obj.getAttribute("data-value"));
                 row.setAttribute("name", obj.getAttribute("name"));
+                row.setAttribute("team", obj.getAttribute("team"));
                 //row.setAttribute("onclick","javascript:alert(1);");
                 var rolecell = document.createElement('div');
                 rolecell.innerHTML = "<span class=\"" + obj.getAttribute("role").toLowerCase() + "-but\">" + obj.getAttribute("role") + "</span>";
@@ -369,6 +365,10 @@
                 valuecell.innerHTML = obj.getAttribute("data-value");
                 valuecell.className = "value-player-item";
                 
+                var teamcell = document.createElement('div');
+                teamcell.innerHTML = obj.getAttribute("team");
+                teamcell.className = "team-player-item";
+                
                 var infocell = document.createElement('div');
                 infocell.className = "info-player-item";
                 
@@ -376,10 +376,11 @@
                 row.appendChild(rolecell);
                 row.appendChild(namecell);
                 row.appendChild(infocell);
+                
+                infocell.appendChild(teamcell);
                 infocell.appendChild(valuecell);
                 
                 table.appendChild(row);
-                console.log(row);
                 
                 obj.style.display = "none";
                 obj.setAttribute("in-roster", "yes");
@@ -428,9 +429,8 @@
         for (var i = 0, n = jsonObj.length; i < n; i++) {
             text = text + '<input type="hidden" name="ids[]" value="' + jsonObj[i] + '" />';
         }
-        console.log(text);
         var form = $(text + '</form>');
-        console.log(form);
+
         $('body').append(form); // This line is not necessary
         $(form).submit();
 

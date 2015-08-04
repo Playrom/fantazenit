@@ -18,7 +18,9 @@ require '../../class/Handicap.php';
 require '../../class/HandicapRound.php';
 require '../../class/HandicapStanding.php';
 
-
+require '../../class/Phase.php';
+require '../../class/Group.php';
+require '../../class/Match.php';
 
 require '../../class/Team.php';
 
@@ -76,11 +78,16 @@ $app->post('/me', function () use ($app) {
 		    $pass = null;
 		    $email = null;
 		    $url_fb = null;
+		    $name_team = null;
 		    
 			error_log($current_pass);
 		    
 		    if(isset($data["email"]) && $data["email"]!=""){
 			    $email = $data["email"];
+		    }
+		    
+		    if(isset($data["name_team"]) && $data["name_team"]!=""){
+			    $name_team = $data["name_team"];
 		    }
 		    
 		    if(isset($data["url_fb"]) && $data["url_fb"] != ""){
@@ -94,7 +101,7 @@ $app->post('/me', function () use ($app) {
 			error_log($current_pass);
 
 		    
-		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb);
+		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team);
 		    
 		    
 	    }
@@ -475,18 +482,19 @@ $app->post('/competitions/:id', function ($id) use ($app) {
 
     $json = $app->request->getBody();
 
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    $data = json_decode($json, true); // parse the JSON into an assoc. array	
 
     //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
 
     $name = $data["name"];
     $first_round  = $data["first_round"];
     $num_rounds = $data["num_rounds"];
-
+    $type = $data["type"];
+    
     if($db_users->checkApi($apiKey) && $user!=null ){
         $response["error"] = false;
-
-        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds);
+		
+        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds,$type);
         
         if($ret != null){
 	        $response["data"] = $ret;
@@ -502,7 +510,7 @@ $app->post('/competitions/:id', function ($id) use ($app) {
     }
 
     echoRespnse(200, $response);
-
+    
 
 });
 
@@ -526,6 +534,9 @@ $app->put('/competitions/:id', function ($id) use ($app) {
     $first_round  = $data["first_round"];
     $num_rounds = $data["num_rounds"];
     $users = $data["users"];
+    
+    error_log($id);
+    error_log($name);
 
     if($db_users->checkApi($apiKey) && $user!=null ){
         $response["error"] = false;
@@ -653,7 +664,7 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
     }
     
 
-    if($standings!=null && $teams!=null && $competition!=null){
+    if($competition!=null){
         $response["error"] = false;
         $response["data"]["standings"]=$standings;
         $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
@@ -663,6 +674,13 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
         $ids = array();
         foreach($teams as $team){
 		    $ids[]  = $team["id"];
+	    }
+	    
+	    if($competition["type"] == "DIRECT"){
+		   $phases = $db_competitions->getPhases($id_competition);
+		   foreach($phases as $phase){
+		   		$response["data"]["phases"][] = $phase->map();
+		   }
 	    }
 	    
 	    $response["data"]["ids"] = $ids;

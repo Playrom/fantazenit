@@ -1,7 +1,15 @@
+@font-face {
+  font-family: boton-light;
+  src: url(risorse/boton-light.ttf); }
+
+@font-face {
+  font-family: boton-regular;
+  src: url(risorse/boton-regular.ttf); }
+
 body {
   background: #EEEEEE !important;
   margin: 0;
-  font-family: "Open Sans", arial; }
+  font-family: boton-light; }
 
 * {
   -webkit-box-sizing: border-box;
@@ -40,24 +48,24 @@ body {
   float: left;
   position: relative; }
 
-#menu-top {
+.menu-top {
   float: right;
   position: relative;
   width: 900px;
   height: 100px; }
-  #menu-top ul {
+  .menu-top ul {
     float: right;
     position: relative;
     display: inline-block;
     list-style: none;
     margin: 0; }
-  #menu-top li {
+  .menu-top li {
     display: inline;
     line-height: 100px;
     height: 100px;
     margin: 5px;
     text-decoration: none !important; }
-  #menu-top li, #menu-top a {
+  .menu-top li, .menu-top a {
     text-decoration: none;
     color: #FF0000; }
 
@@ -83,7 +91,10 @@ body {
   margin: 10px 10px 10px 0;
   height: 80px;
   width: 80px;
-  background: #FF0000; }
+  background: none; }
+  .avatar img {
+    max-height: 80px;
+    width: auto; }
 
 .user-info {
   height: 100%;
@@ -127,7 +138,8 @@ body {
     padding: 30px 10px;
     position: relative;
     float: left;
-    margin: 0 10px; }
+    margin: 0 10px;
+    cursor: pointer; }
   .menu li:hover ul {
     display: block; }
   .menu ul {
@@ -174,6 +186,69 @@ body {
 .margin-10 {
   margin: 10px 10px 0 10px; }
 
+.white-background {
+  background: #FFFFFF; }
+
+/* SLIDE */
+.slide {
+  position: relative;
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  padding: 0;
+  margin: 0; }
+
+.slide li {
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  display: none;
+  width: 100%;
+  left: 0;
+  top: 0; }
+
+.slide li:first-child {
+  position: relative;
+  display: block;
+  float: left; }
+
+.slide img {
+  display: block;
+  height: auto;
+  float: left;
+  width: 100%;
+  border: 0; }
+
+/* HOME */
+.presentation {
+  font-family: boton-light; }
+  .presentation p {
+    font-size: 25px; }
+  .presentation h1 {
+    color: #FF0000; }
+
+.motivi {
+  background: #FFFFFF; }
+
+.join {
+  background: #FFFFFF;
+  height: 270px; }
+  .join a, .join a:hover {
+    float: left;
+    position: relative;
+    background: #FF0000;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 40px;
+    padding: 30px 15%;
+    width: 50%;
+    margin: 70px 25%;
+    height: 130px;
+    line-height: 70px;
+    text-align: center;
+    -webkit-box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.37);
+    -moz-box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.37);
+    box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.37); }
+
 /* MAIN */
 #slide_competitions {
   width: 20%;
@@ -189,12 +264,12 @@ body {
   width: 100%; }
 
 .main {
-  position: relative;
-  float: left;
   width: 100%;
-  margin: 10px 10px 0 10px;
+  margin-top: 10px;
   padding: 10px;
-  background: #FFF; }
+  background: #FFF;
+  float: left;
+  position: relative; }
 
 .half_size {
   width: 50% !important;
@@ -214,7 +289,28 @@ body {
   position: relative;
   width: 100%;
   background: #FF0000;
-  height: 100px; }
+  height: 150px; }
+  #footer * {
+    color: #FFFFFF !important; }
+  #footer .menu-top {
+    float: left;
+    height: 150px; }
+    #footer .menu-top ul {
+      float: left;
+      height: 150px; }
+      #footer .menu-top ul li {
+        line-height: 150px; }
+
+.logozenit {
+  height: 150px;
+  float: right;
+  position: relative; }
+  .logozenit img {
+    max-height: 150px;
+    padding: 25px;
+    width: auto;
+    float: right;
+    position: relative; }
 
 #team-info {
   position: relative;
@@ -314,7 +410,10 @@ a.current-round {
   height: 30px;
   line-height: 30px; }
 
-.value-player-item, .info-player-link-item {
+.team-player-item {
+  color: #FF0000; }
+
+.value-player-item, .team-player-item, .info-player-link-item {
   margin: 5px 5px 5px 0;
   float: left;
   position: relative;
@@ -553,7 +652,7 @@ table.roster-item {
   margin-left: 10px; }
 
 .row_formation {
-  margin: 10px 0 0 0; }
+  margin-top: 10px; }
 
 .title_formation {
   padding: 1% 1% 1% 2%;
@@ -913,6 +1012,12 @@ input[type=checkbox] {
   margin-top: 5px;
   margin-right: 5px; }
 
+.select_teams {
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  float: left !important; }
+
 /* end .squaredFour */
 #select_all {
   margin-right: 1% !important; }
@@ -1107,10 +1212,16 @@ input[type=checkbox] {
   width: 70px !important; }
 
 .first, .first .county-days, .county-hours, .county-minutes, .county-seconds, .county-hours-wrapper, .county-minutes-wrapper, .county-seconds-wrapper {
-  width: 45px !important; }
+  width: 62px !important; }
 
 span.county-days, span.county-minutes, span.county-hours, span.county-seconds {
-  font-size: 40px; }
+  font-size: 40px;
+  padding-top: 5px;
+  text-align: center; }
+
+.county.red .county-label-days, .county.red .county-label-hours, .county.red .county-label-minutes, .county.red .county-label-seconds {
+  padding-top: 5px !important;
+  width: 87px !important; }
 
 /* PROFILE */
 .settings-profile {

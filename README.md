@@ -101,5 +101,13 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Start to Implement CSS Media Query in Header
 * New Method: Added in ConnectDatabaseUsers "checkAuthOverride" a method that return true if the api is an api valid for an Admin User
 
+* New: Landing Page index.php , home page moved to home.php
+* Feature: lista.php , display quotazioni
+* Feature: Modificatore di difesa
+* Edit: Css Improvements , ex. Footer
+* Feature: in profile.php , edit Name Team. Modificata JSON Api e ConnectDatabaseUsers per implementare questa funzionalità
+
+* Feature: in changeroster e createroster compare nome team accanto al nome del giocatore e quotazione
+
 # Da Fare
 --

@@ -20,4 +20,14 @@
 	    <?php
 		}
     } ?>
+    
+    <?php if($error_messages!=null){
+	    foreach($error_messages as $error){ ?>
+		    <div class="alert alert-danger error_display" role="alert">
+				<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+				<span class="sr-only"></span>Attenzione , <?php echo $error; ?>
+			</div>
+	    <?php
+		}
+    } ?>
 </div>
