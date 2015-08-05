@@ -115,5 +115,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Pagina Regolamento
 * New: Nuovo Font per gli H1, boton-regular
 
+* Edit: CSS Responsive
+
 # Da Fare
 --

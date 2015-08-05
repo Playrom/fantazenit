@@ -97,7 +97,7 @@
 	            </div>
 	        </div>
 
-			<div class="row standing">
+			<div class="row row_formation">
 				<div class="col-md-12">
 				    <div class="formation">
 				        <?php 

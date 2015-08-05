@@ -199,7 +199,7 @@ if($username != null){
 	
 	        </div>
 	
-	        <div class="col-md-6">
+	        <div class="col-md-6 margin-10-when-resize">
 	
 	            <div class="title_team_single title_transfers_single ">OPERAZIONI DI MERCATO</div>
 	            

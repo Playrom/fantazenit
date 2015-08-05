@@ -204,7 +204,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				
 				        if($conteggio %2 !=0) { echo "<div class=\"row_formation row\" >"; } ?>
 				
-				            <div class="col-md-6">
+				            <div class="col-md-6 margin-10-when-resize">
 				
 				                <div <?php if(count($start)>0){ echo "class=\"formation\""; } else { echo "class=\"formation no_formation\""; } ?> >
 				

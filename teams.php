@@ -190,7 +190,6 @@ include('header.php');
                     </div>
                 </div>
             </div>
-            <div class="row">
        <?php
             
             $json=$apiAccess->accessApi("/users","GET");
@@ -198,13 +197,16 @@ include('header.php');
             $users=$json["data"];
 
             $count=0;
-            foreach($users as $temp){ $count++;
+            foreach($users as $temp){ 
+	            $count++;
                 $id = $temp['id'];
                 $json=$apiAccess->accessApi("/users/".$id,"GET");
 
                 $team = $json["data"];
+                
+				if($count %2 !=0) { echo "<div class=\"row_formation row\" >"; }
                 ?>
-                <div class="row_formation col-md-6">
+                <div class="col-md-6">
                     <div <?php if($count&1){echo " class=\"team_item_list\"";}else{echo " class=\"team_item_list\"";} ?> >
                         <div class="name_team"><a <?php echo "href=\"?id=".$team["id"]."\""; ?>><?php echo $team["name_team"]; ?></a></div>
                         <div class="name_user name_team"><?php echo $team["name"]." ".$team["surname"]; ?></div>
@@ -215,6 +217,7 @@ include('header.php');
                     </div>
                 </div>
             <?php
+				if($count %2 ==0) { echo "</div>"; }
             }
             ?>
             </div>
