@@ -107,7 +107,13 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Css Improvements , ex. Footer
 * Feature: in profile.php , edit Name Team. Modificata JSON Api e ConnectDatabaseUsers per implementare questa funzionalità
 
-* Feature: in changeroster e createroster compare nome team accanto al nome del giocatore e quotazione
+* New: in changeroster e createroster compare nome team accanto al nome del giocatore e quotazione
+
+* New: privacypolicy  , google analytics, cookie law blocker
+
+* Feature: Avatar Profilo, modificato profile.php , utilizzato framework cropper il funzionamento, modificato JSON API con "/me/avatar"
+* New: Pagina Regolamento
+* New: Nuovo Font per gli H1, boton-regular
 
 # Da Fare
 --

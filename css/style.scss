@@ -2,15 +2,22 @@ $red:#FF0000;
 $gray:#AAAAAA;
 $white:#FFFFFF;
 $menu-background: #ededed; 
+$almost_black: #515151;
+$blue: #246BB2;
 
 @font-face {
     font-family: boton-light;
-    src: url(risorse/boton-light.ttf);
+    src: url(../fonts/boton-light.ttf);
 }
 
 @font-face {
     font-family: boton-regular;
-    src: url(risorse/boton-regular.ttf);
+    src: url(../fonts/boton-regular.ttf);
+}
+
+@font-face {
+    font-family: boton-medium;
+    src: url(../fonts/boton-medium.ttf);
 }
 
 body {
@@ -18,6 +25,10 @@ body {
     margin: 0;
     //font-family: "Open Sans", arial;
     font-family: boton-light;
+}
+
+h1,h2,h3{
+	font-family: boton-regular;
 }
 
 * {
@@ -313,7 +324,17 @@ body {
 .motivi{
 	background: $white;
 	
+	h1,h3{
+		color: $red;
+	}
+	
+	h2{
+		color: $blue;
+	}
+	
 }
+
+
 
 .join{
 	background: $white;
@@ -343,6 +364,16 @@ body {
 	}
 	
 	
+}
+
+.container-fluid{
+	ul{
+		font-size: 20px;
+	}
+	
+	p{
+		text-align:justify;
+	}
 }
 
 /* MAIN */
@@ -520,6 +551,8 @@ a.current-round{
 	width: 100%;
     background: #FFF;
 }
+
+
 
 .old-player{
     border-bottom: 1px solid #f8f8f8;
@@ -732,7 +765,7 @@ table.roster-item {
     font-size: 20px;
     color: #FFF;
     text-align: center;
-    background: #246BB2;
+    background: $blue;
     cursor: pointer;
     line-height: 35px;
     float: left;
@@ -839,7 +872,7 @@ table.roster-item {
 
 .title_formation {
     padding: 1% 1% 1% 2%;
-    background: #246BB2;
+    background: $blue;
     color: #FFF;
     font-size: 22px;
     position: relative;
@@ -867,7 +900,7 @@ tr:last-child {
 }
 
 .total_info {
-    background: #246BB2;
+    background:$blue;
     text-align: right;
     color: #FFF;
     line-height: 30px;
@@ -882,7 +915,7 @@ tr:last-child {
 }
 
 .finalvote ,.handicap-formation{
-    background: #515151;
+    background: $almost_black;
     color: #FFF;
 }
 
@@ -896,21 +929,44 @@ tr:last-child {
 .value_player{
     text-align: center;
 }
-#team table, #reserve_team table {
+
+.team table, #reserve_team table {
     width: 100%;
     position: relative;
     float: left;
     padding: 1%;
     background: #FFF;
 }
-#team, #reserve_team {
-    width: 49%;
+.team, #reserve_team {
+    width: 100%;
     float: left;
     position: relative;
     margin-bottom: 10px;
 }
+
+.campo-verde{
+	background: -webkit-linear-gradient(#074900 0%, #2a6110 100%);
+	
+	.roster-item{
+		background: none;
+		
+		.old-player{
+			color: $white;
+			text-align: center;
+			border: none;
+			
+			.name-player-item{
+				width: 100%;
+				margin: 0;
+				line-height: 40px;
+			}
+		}
+	}
+}
+
+
 #reserve_team {
-    margin-left: 2%;
+    //margin-left: 2%;
 }
 
 .username_title {

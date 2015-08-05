@@ -28,8 +28,8 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
 	    $json=$apiAccess->accessApi("/teams","POST",$params);
 	    
 	    
-	    if($json["error"]){
-		    var_dump($json);
+	    if($json["error"]==true){
+		    $error_json[] = $json;
 	        
 	    }
 	        
@@ -49,6 +49,8 @@ if(!isset($_SESSION['username'])) {
     $user = null;
 	if($json["error"] == false){
 		$user = $json["data"];
+	}else{
+		$error_json[] = $json;
 	}
 		
 	$json=$apiAccess->accessApi("/players","GET");
@@ -57,6 +59,8 @@ if(!isset($_SESSION['username'])) {
 	
 	if($json["error"] == false){
 		$players=$json["data"];
+	}else{
+		$error_json[] = $json;
 	}
 	
 	
@@ -85,7 +89,9 @@ if(!isset($_SESSION['username'])) {
     
     if($json_round["error"]==false){
 	    $possibleToEdit = $json_round["data"]["formations_editing"];
-    }
+    }else{
+		$error_json[] = $json_round;
+	}
         
     
     
@@ -103,7 +109,7 @@ if(!isset($_SESSION['username'])) {
 	$team = null;
 	$result = null ;
 	
-	if(!$json_team["error"]){
+	if($json_team["error"]==false){
 	
 	    if($json_team["data"]!=null){
 	        $result=$json_team["data"];
@@ -207,6 +213,8 @@ if(!isset($_SESSION['username'])) {
     }
 
     $official_players=($max_role_reserve*3)+1+$num_giocatori;
+    
+    include("error-box.php");
 
     if($json_round["data"]["formations_editing"]){
 
@@ -349,13 +357,13 @@ if(!isset($_SESSION['username'])) {
 
                     <div id="save" onclick="getValues();">Salva Formazione</div>
 
-                    <div id="team">
+                    <div class="team campo-verde">
 
 
-                        <div class="roster-item " id="P_table" <?php echo "max=\"".$max_por."\""; ?>>
+                        <div class="roster-item" id="P_table" <?php echo "max=\"".$max_por."\""; ?>>
                             
-                            <div class="old-player p-but"><div class="name-role">Portieri</div></div>
-
+                            <!-- <div class="old-player p-but"><div class="name-role">Portieri</div></div> -->
+							<div class="col-md-4"></div>
                             <?php 
                             if(isset($result["players"])){
 
@@ -365,18 +373,21 @@ if(!isset($_SESSION['username'])) {
 
 	                                    if($pla["position"]==0){ ?>
 	                                        <?php $player=$pla["player"]; ?>
-	                                        <div class="old-player in-team-player" position="0"
-	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
-	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
-	                                            role="P"
-	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
-	                                        </div>
+		                                    <div class="col-md-4">
+		                                        <div class="old-player in-team-player" position="0"
+		                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+		                                            role="P"
+		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                        </div>
+		                                    </div>
 	                            <?php   }
 		                            }
                                 }
                             }
                             ?>
+                            <div class="col-md-4"></div>
                         </div>
 
 
@@ -393,13 +404,15 @@ if(!isset($_SESSION['username'])) {
 
 	                                    if($pla["position"]==0){ ?>
 	                                        <?php $player=$pla["player"]; ?>
-	                                        <div class="old-player in-team-player" position="0"
-	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
-	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
-	                                            role="D"
-	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
-	                                        </div>
+											<div <?php echo "class=\"col-md-".getCol($max_def)." player_column\""; ?> >
+		                                        <div class="old-player in-team-player" position="0"
+		                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+		                                            role="D"
+		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                        </div>
+											</div>
 	                            <?php   }
 		                            }
                                 }
@@ -420,13 +433,15 @@ if(!isset($_SESSION['username'])) {
 
 	                                    if($pla["position"]==0){ ?>
 	                                        <?php $player=$pla["player"]; ?>
-	                                        <div class="old-player in-team-player" position="0"
-	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
-	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
-	                                            role="C"
-	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
-	                                        </div>
+											<div <?php echo "class=\"col-md-".getCol($max_cen)." player_column\""; ?> >
+		                                        <div class="old-player in-team-player" position="0"
+		                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+		                                            role="C"
+		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                        </div>
+											</div>
 	                            <?php   }
 		                            }
                                 }
@@ -447,13 +462,15 @@ if(!isset($_SESSION['username'])) {
 
 	                                    if($pla["position"]==0){ ?>
 	                                        <?php $player=$pla["player"]; ?>
-	                                        <div class="old-player in-team-player" position="0"
-	                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
-	                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
-	                                            role="A"
-	                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-	                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
-	                                        </div>
+											<div <?php echo "class=\"col-md-".getCol($max_att)." player_column\""; ?> >
+		                                        <div class="old-player in-team-player" position="0"
+		                                            <?php echo "id=\"".$player["id"]."_team\" "; ?>
+		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
+		                                            role="A"
+		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
+		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                        </div>
+											</div>
 	                            <?php   }
 		                            }
                                 }
@@ -576,6 +593,22 @@ if(!isset($_SESSION['username'])) {
 <script src="js/jquery-1.11.0.min.js"></script>
 <script src="js/ion.rangeSlider.min.js"></script>
 <script>
+	
+	var getCol = function(num){
+
+		switch(parseInt(num)){
+			case 4:
+				return 3;
+			case 3:
+				return 4;
+			case 2:
+				return 6;
+			case 1:
+				return 12;
+			default:
+				return 12;
+		}
+	}
 
 
     var disable_but=function(bo){
@@ -584,9 +617,9 @@ if(!isset($_SESSION['username'])) {
     };
 
     var changemodule=function(mo){
-        console.log(mo);
+
         var tact=mo.value;
-        console.log(tact);
+
         var def=tact[0];
         var cen=tact[1];
         var att=tact[2];
@@ -607,26 +640,35 @@ if(!isset($_SESSION['username'])) {
         };
 
     var in_module_change=function(def_tab,def){
-        console.log(def);
 
-        var len=def_tab.getElementsByClassName("in-team-player").length;
-        console.log(len);
+
+        var len=def_tab.getElementsByClassName("player_column").length;
+
+        
+        var elements = def_tab.getElementsByClassName("player_column");
+        
+        for(var i = 0 ; i< elements.length ; i++){
+	        elements[i].className = "col-md-" + getCol(def) + " player_column";
+        }
 
         if(len>def){
             var diff=len-def;
             def=parseInt(def);
-            console.log("diff:"+diff);
 
             for(var i=0;i<diff;i++){
                 var obj=def_tab.getElementsByClassName("in-team-player")[def];
-                console.log(obj);
+
                 var roster_table=document.getElementById(obj.getAttribute("role"));
                 var id=obj.getAttribute("id_player");
                 var id_element=id;
                 var table_element=document.getElementById(id_element);
                 table_element.style.display="block";
-
-                document.getElementById(obj.id).remove();
+                
+                var element = document.getElementById(obj.id);
+                
+                var toRemove = element.parentNode;
+                
+                toRemove.parentNode.removeChild(toRemove);
             }
 
         }
@@ -635,8 +677,7 @@ if(!isset($_SESSION['username'])) {
     var change = function(obj){
         var min=obj["fromNumber"];
         var max=obj["toNumber"];
-        console.log(min);
-        console.log(max);
+        
         var players=document.getElementsByClassName("new-player");
         for (var i = 0; i < players.length; ++i) {
             var player = players[i];
@@ -652,37 +693,36 @@ if(!isset($_SESSION['username'])) {
     var ol=null,ne=null;
     var remove_roster=function(pass){
         var obj=pass.currentTarget;
-        console.log(obj);
+
         var roster_table=document.getElementById(obj.getAttribute("role")+"_free");
-        console.log(roster_table);
+
         var id=obj.getAttribute("id_player");
-        console.log(id);
+
         var id_element=id;
-        console.log(id_element);
+
         var table_element=document.getElementById(id_element);
-        console.log(table_element);
+
         table_element.style.display="block";
         var index=obj.rowIndex;
-        console.log(index);
 
-        obj.parentNode.removeChild(obj);
+		obj.parentNode.parentNode.removeChild(obj.parentNode);
 
     };
 
     var remove_reserve=function(pass){
         var obj=pass.currentTarget;
-        console.log(obj);
+
         var roster_table=document.getElementById(obj.getAttribute("role"));
-        console.log(roster_table);
+
         var id=obj.getAttribute("id_player");
-        console.log(id);
+
         var id_element=id;
-        console.log(id_element);
+
         var table_element=document.getElementById(id_element);
-        console.log(table_element);
+
         table_element.style.display="block";
         var index=obj.rowIndex;
-        console.log(index);
+
 
         obj.parentNode.removeChild(obj);
 
@@ -691,18 +731,13 @@ if(!isset($_SESSION['username'])) {
     var add_roster=function(pass){
         var obj=pass.currentTarget;
 
-        console.log(obj);
-        console.log(obj.getAttribute("role")+"_table");
 
         var table=document.getElementById(obj.getAttribute("role")+"_table");
-        console.log(table);
+
 
         var max_team=parseInt(table.getAttribute("max"));
         var lenght_table=table.getElementsByClassName("in-team-player").length;
 
-        console.log(table);
-        console.log(max_team);
-        console.log(lenght_table);
 
         if(lenght_table<max_team){
 
@@ -720,24 +755,29 @@ if(!isset($_SESSION['username'])) {
             namecell.innerHTML = obj.getAttribute("name");
             namecell.className = "name-player-item";
             
+            var wrapper = document.createElement('div');
+            
+            console.log(max_team);
+            
+            wrapper.className = "player_column col-md-" + getCol(max_team);
+            
+            
             row.appendChild(namecell);
-            table.appendChild(row);
-            console.log(row);
+            wrapper.appendChild(row);
+
+            table.appendChild(wrapper);
+
 
             obj.style.display="none";
 
         }else{
 
             var table_reserve=document.getElementById(obj.getAttribute("role")+"_reserve");
-            console.log(table_reserve);
+
 
             var max_reserve=parseInt(table_reserve.getAttribute("max"));
 
             var lenght_table_reserve=table_reserve.getElementsByClassName("in-reserve-player").length;
-
-            console.log(table_reserve);
-            console.log(max_reserve);
-            console.log(lenght_table_reserve);
 
             if(lenght_table_reserve<max_reserve){
 
@@ -757,7 +797,7 @@ if(!isset($_SESSION['username'])) {
                 
                 row.appendChild(namecell);
                 table_reserve.appendChild(row);
-                console.log(row);
+
 
                 obj.style.display="none";
 
@@ -824,14 +864,13 @@ if(!isset($_SESSION['username'])) {
         var tot=reserves.length+jsonObj.length;
         var official=document.getElementById("official_players").getAttribute("number");
 
-        console.log(official);
-        console.log(tot);
-
+  
+  
         if(tot==official){
 
 
             jsonString = JSON.stringify(jsonObj);
-            console.log(jsonString);
+
 
            var url = 'maketeam.php';
            var text='<form action="' + url + '" method="post">';
@@ -845,16 +884,16 @@ if(!isset($_SESSION['username'])) {
            }
 
            var tactic_form=document.getElementById("module");
-           console.log(tactic_form);
+
            var tactic=tactic_form.options[tactic_form.selectedIndex].value;
-           console.log(tactic);
+
 
            var round=tactic_form.getAttribute("round");
            text=text+'<input type="hidden" name="round" value="'+round+'" />';
            text=text+'<input type="hidden" name="tactic" value="'+tactic+'" />';
-           console.log(text);
+
             var form = $(text + '</form>');
-            console.log(form);
+
 
             $('body').append(form);  // This line is not necessary
             $(form).submit();
@@ -896,3 +935,18 @@ if(!isset($_SESSION['username'])) {
 </script>
 
 <?php include('footer.php'); ?>
+
+<?php function getCol($num){
+	switch($num){
+		case 4:
+			return 3;
+		case 3:
+			return 4;
+		case 2:
+			return 6;
+		case 1:
+			return 12;
+		default:
+			return 12;
+	}
+}

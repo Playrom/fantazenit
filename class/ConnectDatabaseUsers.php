@@ -478,7 +478,7 @@ function checkAuthOverride($apiKey){
 	}
 	
 	
-	function editUser($id,$password,$email,$url_fb,$name_team){
+	function editUser($id,$password,$email,$url_fb,$name_team,$url_avatar){
 		
 		
 		try{
@@ -552,6 +552,26 @@ function checkAuthOverride($apiKey){
 				}
 	
 				if (!$stmt->bind_param("si", $name_team , $id)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+
+			}
+			
+			if($url_avatar!=null && $url_avatar!=""){
+				$query="UPDATE `users` SET url_avatar=? where id=? ; ";
+
+				if (!($stmt = $this->mysqli->prepare($query))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    return false;
+				}
+	
+				if (!$stmt->bind_param("si", $url_avatar , $id)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				    return false;
 				}

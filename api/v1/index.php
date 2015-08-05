@@ -101,9 +101,47 @@ $app->post('/me', function () use ($app) {
 			error_log($current_pass);
 
 		    
-		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team);
+		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team,null);
 		    
 		    
+	    }
+    
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Old Password Not Correct";
+    }
+    
+
+    echoRespnse(200, $response);
+
+
+});
+
+
+$app->post('/me/avatar' , function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    
+    $response = null;
+    
+    if(isset($data["avatar"])){
+	    $user = $db->getUserByApiKey($apiKey);
+	    
+	    $url = $data["avatar"];
+	    
+	    if($db->checkApi($apiKey) && $user!=null){
+		    $result = $db->editUser($user->getId(),null,null,null,null,$url);
+		    
+		    $response["error"] = !$result;
 	    }
     
     }else {

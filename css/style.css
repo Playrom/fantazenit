@@ -1,15 +1,22 @@
 @font-face {
   font-family: boton-light;
-  src: url(risorse/boton-light.ttf); }
+  src: url(../fonts/boton-light.ttf); }
 
 @font-face {
   font-family: boton-regular;
-  src: url(risorse/boton-regular.ttf); }
+  src: url(../fonts/boton-regular.ttf); }
+
+@font-face {
+  font-family: boton-medium;
+  src: url(../fonts/boton-medium.ttf); }
 
 body {
   background: #EEEEEE !important;
   margin: 0;
   font-family: boton-light; }
+
+h1, h2, h3 {
+  font-family: boton-regular; }
 
 * {
   -webkit-box-sizing: border-box;
@@ -228,6 +235,10 @@ body {
 
 .motivi {
   background: #FFFFFF; }
+  .motivi h1, .motivi h3 {
+    color: #FF0000; }
+  .motivi h2 {
+    color: #246BB2; }
 
 .join {
   background: #FFFFFF;
@@ -248,6 +259,12 @@ body {
     -webkit-box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.37);
     -moz-box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.37);
     box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.37); }
+
+.container-fluid ul {
+  font-size: 20px; }
+
+.container-fluid p {
+  text-align: justify; }
 
 /* MAIN */
 #slide_competitions {
@@ -704,21 +721,31 @@ tr:last-child {
 .value_player {
   text-align: center; }
 
-#team table, #reserve_team table {
+.team table, #reserve_team table {
   width: 100%;
   position: relative;
   float: left;
   padding: 1%;
   background: #FFF; }
 
-#team, #reserve_team {
-  width: 49%;
+.team, #reserve_team {
+  width: 100%;
   float: left;
   position: relative;
   margin-bottom: 10px; }
 
-#reserve_team {
-  margin-left: 2%; }
+.campo-verde {
+  background: -webkit-linear-gradient(#074900 0%, #2a6110 100%); }
+  .campo-verde .roster-item {
+    background: none; }
+    .campo-verde .roster-item .old-player, .campo-verde .roster-item .new-player {
+      color: #FFFFFF;
+      text-align: center;
+      border: none; }
+      .campo-verde .roster-item .old-player .name-player-item, .campo-verde .roster-item .new-player .name-player-item {
+        width: 100%;
+        margin: 0;
+        line-height: 40px; }
 
 .username_title {
   float: left;

@@ -94,6 +94,8 @@ if(isset($config['current_round'])){
 		<link rel="stylesheet" href="css/county.css">
         <link href="css/footable.core.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/crop.css" rel="stylesheet">
+		<link href="css/cropper.min.css" rel="stylesheet">
         <!--<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">-->
         
         <link href="css/style.css" rel="stylesheet" />
@@ -110,6 +112,11 @@ if(isset($config['current_round'])){
 		<script src="js/county.js"></script>
         <script src="js/footable.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js"></script>
+		<script src="js/crop.js"></script>
+		<script src="js/cropper.min.js"></script>
+
+        
+        <script src="js/jquery.cookiesdirective.js"></script>
 
         <!--<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -178,6 +185,7 @@ if(isset($config['current_round'])){
 	                <ul>
 		                <li><a href="home.php">Home</a></li>
 	                	<li><a href="lista.php">Lista Giocatori</a></li>
+	                	<li><a href="regolamento.php">Regolamento</a></li>
 	                	<li><a href="news.php">News ( NON FUNZIONANTE )</a></li>
 
 	                </ul>
@@ -196,9 +204,11 @@ if(isset($config['current_round'])){
 					        	
 					        	<div class="avatar">
 						        	<?php
-							        	if($user["url_avatar"]!=null){
-								        	
-							        	}else{ ?>
+							        	if($user["url_avatar"]!=null){ ?>
+								        	<img <?php echo "src=\"".$user["url_avatar"]."\""; ?> />
+							        	<?php 
+								        }else{ 
+								        ?>
 								        	<img src="img/default_avatar.png" />
 							        	<?php
 								        }
