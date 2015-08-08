@@ -106,12 +106,13 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 				}
 
-				$pla=$players[$id];
+				$pla=$players[$id["id"]];
+				$position = $id["position"];
 				$zero=0;
 				
 				$id_pla = $pla->getId();
 
-				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$zero)) {
+				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$position)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 
@@ -127,13 +128,14 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 				}
 
-				$pla=$players[$id];
+				$pla=$players[$id["id"]];
+				$position = $id["position"];
 
 				$uno=1;
 				
 				$id_pla = $pla->getId();
 
-				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$uno)) {
+				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$position)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 
@@ -277,7 +279,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 		try{
 
-			$tempQuery="SELECT * from `teams` where id_user=? and round=?;";
+			$tempQuery="SELECT * from `teams` where id_user=? and round=? order by position;";
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -1501,6 +1503,34 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
     function getLastStatRound(){
 		$tempQuery="SELECT MAX(round) as max FROM stats";
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			while ($row = $res->fetch_assoc()) {
+				return $row['max'];
+			}
+
+			return 0;
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return 0;
+
+		}
+	}
+	
+	function getLastQuoteRound(){
+		$tempQuery="SELECT MAX(round) as max FROM players";
 
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {

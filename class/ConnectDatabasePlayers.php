@@ -15,6 +15,10 @@ class ConnectDatabasePlayers extends ConnectDatabase{
     function dumpSingoliToList($name_str,$team_str){
 		$players=new PlayersList();
 		$arr=array();
+		
+		$db_rounds = new ConnectDatabaseRounds($this->mysqli);
+		
+		$last_round = $db_rounds->getLastQuoteRound();
 
 		$tempQuery="SELECT * FROM (SELECT id, MAX(round) AS round FROM players GROUP BY id ) l JOIN players b
    					ON b.id = l.id AND b.round = l.round GROUP BY b.round, b.id";
@@ -48,8 +52,16 @@ class ConnectDatabasePlayers extends ConnectDatabase{
 		    $value=$row['value'];
 		    $first_value=$row['first_value'];
 		    $diff=$row['diff'];
+		    
+		    $gone = false;
+		    
+		    if($last_round>$row["round"]){
+			    $gone = true;
+		    }
+		    
+		    
 
-		    $item=new Player($id,$name,$team,$role,$value,$first_value,$diff);
+		    $item=new Player($id,$name,$team,$role,$value,$first_value,$diff,null,$gone);
 
 		    $arr[$id]=$item;
 		}
@@ -87,6 +99,11 @@ function updatePlayers(PlayersList $players){
 
 	function dumpPlayerById($id){
 		$query="select * from `players` where id=? ORDER BY round DESC LIMIT 1";
+		
+		$db_rounds = new ConnectDatabaseRounds($this->mysqli);
+		
+		$last_round = $db_rounds->getLastQuoteRound();
+		
 			try{
 				if (!($stmt = $this->mysqli->prepare($query))) {
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -110,7 +127,14 @@ function updatePlayers(PlayersList $players){
 					$first_value=$row['first_value'];
 					$diff=$row['diff'];
 					$stats=$this->dumpStats($id);
-					$pla=new Player($id,$name,$team,$role,$value,$first_value,$diff,$stats);
+					
+					$gone = false;
+		    
+				    if($last_round>$row["round"]){
+					    $gone = true;
+				    }
+					
+					$pla=new Player($id,$name,$team,$role,$value,$first_value,$diff,$stats , $gone);
 					return $pla;
 				}
 
@@ -124,7 +148,10 @@ function updatePlayers(PlayersList $players){
 
 	function dumpPlayerByName($name){
 		$query="select * from `players` where name=? ORDER BY round DESC LIMIT 1";
-
+		
+		$db_rounds = new ConnectDatabaseRounds($this->mysqli);
+		
+		$last_round = $db_rounds->getLastQuoteRound();
 
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
@@ -149,7 +176,14 @@ function updatePlayers(PlayersList $players){
 				$first_value=$row['first_value'];
 				$diff=$row['diff'];
 				$stats=$this->dumpStats($id);
-				$pla=new Player($id,$name,$team,$role,$value,$first_value,$diff,$stats);
+				
+				$gone = false;
+		    
+			    if($last_round>$row["round"]){
+				    $gone = true;
+			    }
+				
+				$pla=new Player($id,$name,$team,$role,$value,$first_value,$diff,$stats, $gone);
 				return $pla;
 			}
 

@@ -28,6 +28,13 @@ class Transfer{
      * @var $id_market Int
      */
     private $id_market;
+    
+    /**
+     * @var Boolean free
+     */
+    private $free;
+    
+    
 
     /**
      * @param $id_transfer Int
@@ -36,14 +43,16 @@ class Transfer{
      * @param $old_player RosterPlayer
      * @param $new_player RosterPlayer
      * @param $date DateTime
+     * @parem $free Boolean
      */
-    public function __construct($id_transfer,$user,$id_market,$old_player,$new_player,$date){
+    public function __construct($id_transfer,$user,$id_market,$old_player,$new_player,$date,$free){
 		$this->id_transfer=$id_transfer;
 		$this->user=$user;
 		$this->old_player=$old_player;
 		$this->new_player=$new_player;
 		$this->date=$date;
         $this->id_market=$id_market;
+        $this->free = $free;
 	}
 
     /**
@@ -63,6 +72,8 @@ class Transfer{
         $strDate=strftime("%A %e %B %Y , %H:%M",$this->date->getTimestamp());
         $arr['date']=$strDate;
         $arr['id_market']=$this->id_market;
+        
+        $arr["free"] = $this->free;
 
         return $arr;
     }
@@ -203,6 +214,15 @@ class Transfer{
     public function setIdMarket($id){
         $this->id_market=$id;
         return $this;
+    }
+    
+    public function isFree(){
+	    return $this->free;
+    }
+    
+    public function setFree($free){
+	    $this->free = $free;
+	    return $this;
     }
 }
 

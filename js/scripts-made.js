@@ -318,8 +318,9 @@
         }
         
 
-		
-        if (role==null || role.toLowerCase() == table_element.getAttribute("role").toLowerCase()) {
+		if(table_element==null){
+			
+		}else if (role==null || role.toLowerCase() == table_element.getAttribute("role").toLowerCase()) {
             table_element.style.display = "block";
             table_element.setAttribute("in-roster", "none");
         } else {

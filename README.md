@@ -117,5 +117,9 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * Edit: CSS Responsive
 
+* New: Accettazione Privacy Policy alla registrazione
+
+* Feature: Gestione dei giocatori non piu in serie A
+
 # Da Fare
 --

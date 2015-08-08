@@ -143,8 +143,12 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
                 if(strtolower($new_player->getRole())=="a") $num=$max_att;
             }
             
+            $free = false;
+            
 			
 			if(strtolower($new_player->getRole())!=strtolower($old_player->getRole()) && $num_pla >= $num) return -1;
+			
+			if($old_player->isGone()) $free = true;
 
 			////////// DELETE FROM ROSTER
 
@@ -189,7 +193,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 
 			/////////  ADD TRANSFER
 
-			$addTransfer = "INSERT INTO `transfers` (`id_user`, `id_market`, `id_new_player`, `id_old_player`, `new_player_cost`, `old_player_cost`) VALUES (?,?,?,?,?,?);\n";
+			$addTransfer = "INSERT INTO `transfers` (`id_user`, `id_market`, `id_new_player`, `id_old_player`, `new_player_cost`, `old_player_cost` , `free`) VALUES (?,?,?,?,?,?,?);\n";
 
 			if(!($stmt = $this->mysqli->prepare($addTransfer))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -198,7 +202,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			$new_value = $new_player->getValue();
 			$old_value = $old_player->getValue();
 
-			if (!$stmt->bind_param("iiiiii", $id_user,$id_market,$id_new,$id_old,$new_value,$old_value)) {
+			if (!$stmt->bind_param("iiiiiii", $id_user,$id_market,$id_new,$id_old,$new_value,$old_value,$free)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -250,6 +254,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
         $players=$db_players->dumpSingoliToList(null,null);
         
         $id_user = $user;
+        
 
 		try{
 			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=?";
@@ -268,6 +273,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
             
 			$res=$stmt->get_result();
 			$res->data_seek(0);
+			
 			while ($row = $res->fetch_assoc()) {
 				$id=$row['id_transfer'];
 				$old_cost=$row['old_player_cost'];
@@ -277,11 +283,13 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);;
 				$id_market=$row['id_market'];
+				
+				
+				$free = $row["free"];
+				
                 
-				$transfers[$id]=new Transfer($id,$user,$id_market,$old_player,$new_player,$date);
+				$transfers[$id]=new Transfer($id,$user,$id_market,$old_player,$new_player,$date,$free);
 			}
-
-
 
 			return $transfers;
 
@@ -331,8 +339,10 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);;
 				$id_market=$row['id_market'];
+				
+				$free = $row["free"];
 
-				$transfers[$id]=new Transfer($id,$db_users->getUserById($id_user),$id_market,$old_player,$new_player,$date);
+				$transfers[$id]=new Transfer($id,$db_users->getUserById($id_user),$id_market,$old_player,$new_player,$date,$free);
 
 			}
 

@@ -1,5 +1,5 @@
 <?php
-	$title = "Listona del Fanta Zenit";
+	$title = "Quotazioni del Fanta Zenit";
 include('header.php');
 ?>
 
@@ -22,7 +22,7 @@ include('header.php');
 	        <div class="row">
 	            <div class="col-md-12">
 	    		    <div id="team-info">
-	    		        <div class="name-team">La Listona del Fantazenit</div>
+	    		        <div class="name-team">Quotazioni Fantazenit</div>
 	    		    </div>
 	            </div>
 	        </div>
@@ -59,6 +59,7 @@ include('header.php');
 	        		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
 	        		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
 	        						<div class="info-player-item">
+										<div class="team-player-item"><?php echo $player["team"]; ?></div>
 	        			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
 	        							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
 	        						</div>

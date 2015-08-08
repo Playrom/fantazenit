@@ -1,4 +1,5 @@
 <?php
+	$title = "Login";
 include('header.php');
 ?>
 
@@ -35,6 +36,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
         if($result['error']==true){
             error_log("Password Non Corretta");
+            $error_messages[]="Password Non Corretta";
         }else {
 
             if (isset($result['apiKey'])) {
@@ -62,15 +64,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
      header("Location: home.php");
 
-}else if($_SERVER['REQUEST_METHOD']=='GET'){ 
+}
 
-    if(isset($_GET['reg_complete'])) { ?>
-        <div class="alert alert-success error_display" role="alert">
-            <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>Registrazione Completata!
-        </div>
-
-    <?php } ?>
+    if(isset($_GET['reg_complete'])) { 
+		$error_messages[] = "Registrazione Completata!";
+	 } 
+	 
+	 include('error-box.php');
+	 
+	 ?>
 
         <form action="login.php" class="login_form form-horizontal" method="post">
             <div class="form-group">
@@ -99,7 +101,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         </form>
 <?php
 
-}
+
 
 include('footer.php'); 
 

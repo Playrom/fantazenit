@@ -1,8 +1,10 @@
 <div class="container-fluid alert-box">
-    <div class="alert alert-danger error_display" role="alert">
+    <!--<div class="alert alert-danger error_display" role="alert">
 		<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
 		<span class="sr-only">Error:</span>Fanta Zenit è in BETA , per qualsiasi consiglio o errore contattare Giorgio
 	</div>
+	
+	-->
 	                
     <?php if($userId!=null && !$json_team["valid_formation"]) { ?>
         <div class="alert alert-danger error_display" role="alert">
@@ -15,7 +17,7 @@
 	    foreach($error_json as $error){ ?>
 		    <div class="alert alert-danger error_display" role="alert">
 				<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-				<span class="sr-only"></span>Attenzione , <?php echo $error["message"]; ?>
+				<span class="sr-only"></span><?php echo $error["message"]; ?>
 			</div>
 	    <?php
 		}
@@ -31,3 +33,6 @@
 		}
     } ?>
 </div>
+
+<?php
+	?>

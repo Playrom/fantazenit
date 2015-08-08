@@ -329,9 +329,13 @@ include('header.php');
 			
 			<p>In caso non venga raggiunto un numero di squadre sufficienti a garantire tale formula nei numeri sopra indicati Zenit si riserva la possibilità di comunicare nelle pagine dedicate al concorso le metodologie utilizzate.</p>
 			
-			<p>L'entità dei premi sarà comunicata alla chiusura delle iscrizioni, e saranno rendicontate tutte le spese di gestione che andranno ad intaccarlo.
+			<p>L'entità dei premi sarà comunicata alla chiusura delle iscrizioni, e saranno rendicontate tutte le spese di gestione che andranno ad intaccarlo.</p>
 			
-			Il termine ultimo per comunicare l’adesione al torneo è il 21 Agosto 2015 ore 23.59.</p>
+			<p>I Premi consisteranno esclusivamente in Buoni Regalo sul Sito Amazon.IT</p>
+			
+			<p>Se nessuno reclamerà il loro valore verrà donato in Beneficenza Presso "Messa di San Antonio, Messina".</p>
+			
+			<p>Il termine ultimo per comunicare l’adesione al torneo è il 21 Agosto 2015 ore 23.59.</p>
 			
 			<p>Il termine ultimo per versare la quota di iscrizione sarà entro e non oltre il 12 Settembre 2015, pena la cancellazione definitiva da tutte le competizioni.</p>
 			

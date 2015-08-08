@@ -35,8 +35,14 @@ class Player{
      * @var StatisticsCollection $stat
      */
     private $stat=array();
+    
+    /**
+	* @var Boolean $gone
+	*/
+	
+	private $gone;
 
-	function __construct($id,$name,$team,$role,$value,$first_value,$diff,$stat=NULL){
+	function __construct($id,$name,$team,$role,$value,$first_value,$diff,$stat=NULL,$gone){
 		$this->id=$id;
 		$this->name=$name;
 		$this->team=$team;
@@ -45,6 +51,7 @@ class Player{
 		$this->first_value=$first_value;
 		$this->diff=$diff;
 		$this->stat=$stat;
+		$this->gone = $gone;
 	}	
 
 	function equalsById($id){
@@ -68,6 +75,7 @@ class Player{
         $arr['value']=$this->value;
         $arr['first_value']=  $this->first_value;
         $arr['diff']=  $this->diff;
+        $arr['gone'] = $this->gone;
 
 
 
@@ -102,7 +110,7 @@ class Player{
         $arr['first_value']=  $this->first_value;
         $arr['diff']=  $this->diff;
 
-
+        $arr['gone'] = $this->gone;
 
 
         $second_arr=null;
@@ -138,6 +146,8 @@ class Player{
         $arr['value']=$this->value;
         $arr['first_value']=  $this->first_value;
         $arr['diff']=  $this->diff;
+        
+        $arr['gone'] = $this->gone;
 
         return $arr;
 
@@ -334,6 +344,15 @@ class Player{
         $this->stat = $stat;
 
         return $this;
+    }
+    
+    public function isGone(){
+	    return $this->gone;
+    }
+    
+    public function setGone($gone){
+	    $this->gone = $gone;
+	    return $this;
     }
 }
 

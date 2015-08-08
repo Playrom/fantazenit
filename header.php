@@ -5,6 +5,7 @@ function __autoload($class_name) {
 }
 
 ob_start();
+session_set_cookie_params(3600*24*3,"/");
 session_start();
 setlocale(LC_ALL, 'it_IT.UTF-8'); 
 require_once('config.php');
@@ -82,7 +83,7 @@ if(isset($config['current_round'])){
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Fanta Zenit BETA <?php if(isset($title)){ echo " - ".$title; } ?></title>
+        <title>Fanta Zenit <?php if(isset($title)){ echo " - ".$title; } ?></title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
@@ -114,7 +115,6 @@ if(isset($config['current_round'])){
 		<script src="js/county.js"></script>
         <script src="js/footable.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js"></script>
-		<script src="js/crop.js"></script>
 		<script src="js/cropper.min.js"></script>
 
         
@@ -174,6 +174,8 @@ if(isset($config['current_round'])){
 
 			});
 			        </script>
+			        
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 
     </head>
 
@@ -185,10 +187,11 @@ if(isset($config['current_round'])){
                 <a href="index.php"><div id="logo"></div></a>
                 <div class="menu-top">
 	                <ul>
-		                <li><a href="home.php">Home</a></li>
-	                	<li><a href="lista.php">Lista Giocatori</a></li>
+		                <a href="home.php"><li>Home</li></a>
+	                	<li><a href="lista.php">Quotazioni</a></li>
 	                	<li><a href="regolamento.php">Regolamento</a></li>
-	                	<li><a href="news.php">News ( NON FUNZIONANTE )</a></li>
+	                	<li><a href="storia.php">Chi Siamo</a></li>
+	                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
 
 	                </ul>
                 </div>
@@ -247,14 +250,14 @@ if(isset($config['current_round'])){
 			            
 				            <li>Info&#8595
 				        		<ul>
-					                <li><a href="formations.php">Formazioni</a></li>
-					                <li><a href="teams.php">Squadre</a></li>
-					                <li><a href="standings.php">Classifiche</a></li>
+					                <a href="formations.php"><li>Formazioni</li></a>
+					                <a href="teams.php"><li>Squadre</li></a>
+					                <a href="standings.php"><li>Classifiche</li></a>
 					                
 									<?php if($userId!=null) { ?>
-										<li><a href="logout.php">Logout</a></li>
+										<a href="logout.php"><li>Logout</li></a>
 									<?php } else { ?>
-										<li><a href="login.php">Login</a></li>
+										<a href="login.php"><li>Login</li></a>
 									<?php } ?>
 				        		</ul>
 				        	</li>
@@ -263,10 +266,10 @@ if(isset($config['current_round'])){
 					            
 					        	<li>Squadra&#8595
 					        		<ul>
-						        		<li><a href="profile.php">Il Mio Profilo</a></li>
-						                <li><a href="maketeam.php">Inserisci Formazione</a></li>
-						                <li><a href="createroster.php">Crea Rosa</a></li>
-						                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
+						        		<a href="profile.php"><li>Il Mio Profilo</li></a>
+						                <a href="maketeam.php"><li>Inserisci Formazione</li></a>
+						                <a href="createroster.php"><li>Crea Rosa</li></a>
+						                <a href="changeroster.php"><li>Mercato di Riparazione</li></a>
 					        		</ul>
 					        	</li>
 					        	
@@ -274,13 +277,13 @@ if(isset($config['current_round'])){
 						            
 						            <li>Amministrazione&#8595
 						            	<ul class="admin-menu">
-							                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
-							                <li><a href="editformations.php">Modifica Formazioni</a></li>
-							                <li><a href="loadfile.php">Carica Dati</a></li>
-							                <li><a href="settings.php">Impostazioni</a></li>
-							                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
-							                <li><a href="settings-market.php">Gestisci Mercati</a></li>
-							                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
+							                <a href="gestionegiornate.php"><li>Gestione Giornate</li></a>
+							                <a href="editformations.php"><li>Modifica Formazioni</li></a>
+							                <a href="loadfile.php"><li>Carica Dati</li></a>
+							                <a href="settings.php"><li>Impostazioni</li></a>
+							                <a href="settings-competitions.php"><li>Gestisci Competizioni</li></a>
+							                <a href="settings-market.php"><li>Gestisci Mercati</li></a>
+							                <a href="settings-handicaps.php"><li>Gestisci Penalizzazioni</li></a>
 						            	</ul>
 						            </li>
 						            

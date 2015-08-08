@@ -58,6 +58,13 @@ h1,h2,h3{
     	margin-top: 0;
     	margin-bottom: 0;
     }
+    
+    @media screen and (max-width: 991px){
+    	-webkit-box-shadow:none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+		margin:0;
+    }
 }
 
 #header {
@@ -67,7 +74,10 @@ h1,h2,h3{
     float: left;
     position: relative;
     
+    
 }
+
+
 
 #logo{
     height: 100px;
@@ -77,6 +87,11 @@ h1,h2,h3{
     width: 200px;
     float: left;
     position: relative;
+    
+    @media screen and (max-width: 700px){
+    	width: 50%;
+    	margin: 0 25%;
+    }
 }
 
 
@@ -84,7 +99,11 @@ h1,h2,h3{
 .menu-top{
 	float:right;
 	position:relative;
-	height: 100px;
+	height: auto;
+	
+	@media screen and (max-width: 700px){
+    	width: 100%;
+    }
 
 
 	ul {
@@ -93,6 +112,11 @@ h1,h2,h3{
 		display:inline-block;
 		list-style: none;
 		margin:0;
+		
+		@media screen and (max-width: 700px){
+	    	width: 100%;
+	    	padding: 0;
+	    }
 	}
 
 	li{
@@ -101,6 +125,14 @@ h1,h2,h3{
 		height: 100px;
 		margin:5px;
 		text-decoration: none !important;
+		@media screen and (max-width: 700px){
+	    	width: 100%;
+	    	display: block;
+	    	text-align:center;
+	    	height: 50px;
+	    	line-height: 50px;
+	    }
+	    
 	}
 
 	li , a {
@@ -127,6 +159,8 @@ h1,h2,h3{
 	position: relative;
 	float: left;
 	height: 100%;
+	
+	
 }
 
 .avatar{
@@ -147,7 +181,7 @@ h1,h2,h3{
 .user-info{
 	float: left;
 	position: relative;
-	width: 170px;	
+	width: 320px;	
 	.user-info-item{
 		color: $red;
 		float: left;
@@ -193,6 +227,10 @@ h1,h2,h3{
 		color: $red;
 	}
 	
+	@media screen and (max-width: 700px){
+    	width: 100%;
+    }
+	
 	> li{
 		display: inline;
 		height: 100px;
@@ -204,6 +242,14 @@ h1,h2,h3{
 		margin: 0 10px;
 		
 		cursor: pointer;
+		
+		
+		@media screen and (max-width: 700px){
+	    	display: block;
+	    	width: 100%;
+			text-align:center;
+			
+	    }
 	}
 	
 	li:hover ul {
@@ -213,7 +259,7 @@ h1,h2,h3{
 	ul{
 		position: absolute;
 		top: 100px;
-		right: 0;
+		left: 0;
 		padding: 0;
 		background: $gray;
 		display: none;
@@ -223,6 +269,21 @@ h1,h2,h3{
 		li:first-child{
 			border: none !important;
 		}
+		
+		@media screen and (max-width: 700px){
+	    	width: 100%;
+	    }
+	    
+	    a{
+		    border-top: 1px solid $white;
+		    float: left;
+			position: relative;
+			width: 100%;
+	    }
+	    
+	    a:first-child{
+		    border-top: none !important;
+	    }
 		
 		li{
 			font-size: 20px;
@@ -236,6 +297,8 @@ h1,h2,h3{
 			border-top: 1px solid $white;
 			color: $white;
 			padding: 10px;
+			
+			
 			
 			a{
 				color: $white;
@@ -336,8 +399,12 @@ h1,h2,h3{
 		font-size: 25px;
 	}
 	
-	h1{
+	h1,h3{
 		color: $red;
+	}
+	
+	h2{
+		color: $blue;
 	}
 }
 
@@ -458,7 +525,7 @@ h1,h2,h3{
 	position: relative;
 	width: 100%;
 	background: #FF0000;
-	height: 150px;
+	min-height: 150px;
 	
 	*{
 		color: $white !important;
@@ -466,14 +533,22 @@ h1,h2,h3{
 	
 	.menu-top{
 		float: left;
-		height: 150px;
+		min-height: 150px;
 		
 		ul{
 			float: left;
-			height: 150px;
+			height: auto;
+			
+			@media screen and (max-width: 700px){
+		    	margin: 0 !important;
+		    	padding: 0 !important;
+		    }
 			
 			li{
 				line-height: 150px;
+				@media screen and (max-width: 700px){
+			    	line-height: 50px;
+			    }
 			}
 		}
 	}
@@ -484,12 +559,28 @@ h1,h2,h3{
 	float: right;
 	position: relative;
 	
+	@media screen and (max-width: 700px){
+    	width: 100%;
+    	height: auto;
+    }
+	
 	img{
 		max-height: 150px;
 		padding: 25px;
 		width: auto;
 		float: right;
 		position: relative;
+		@media screen and (max-width: 840px){
+	    	width: 100%;
+	    	
+	    }
+	    
+	    @media screen and (max-width: 700px){
+	    	width: 70%;
+	    	margin: 0 15%;
+	    	height: auto;
+	    	max-height: none;
+    	}
 	}
 }
 
@@ -785,6 +876,7 @@ a.current-round{
     padding: 5px;
     color: #FFF;
     margin-bottom: 5px;
+    line-height: 40px;
 }
 table.roster-item {
     width: 100%;
@@ -996,7 +1088,7 @@ tr:last-child {
 }
 
 .campo-verde{
-	background: -webkit-linear-gradient(#074900 0%, #2a6110 100%);
+	background:#23a900;
 	
 	.roster-item{
 		background: none;
@@ -1403,6 +1495,18 @@ input[type=checkbox] {
     float: left;
     background: #FFFFFF;
     width: 100%;
+    
+    .info{
+	    width: 76%;
+	    float: left;
+	    position: relative;
+    }
+    
+    .avatar{
+	    width: 20%;
+	    margin: 10px 2%;
+	    height: auto;
+    }
 }
 
 .team_item_list .name_team{
@@ -1432,14 +1536,9 @@ input[type=checkbox] {
 }
 
 .bottom_team .credits{
-    float: left;
-    position: relative;
-    height: 26px;
-    /* padding: 3px; */
+    
     margin: 0 1% 0 0;
-    line-height: 26px;
-    color: #FF0000;
-    width: 49%;
+    color: $red;
 }
 
 
@@ -1684,4 +1783,20 @@ span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 	background: $white;
 	margin-top: 10px;
 	padding: 10px;
+}
+
+/* IMAGE BOX */
+
+.image-box{
+	img{
+		width: auto;
+		height: 220px;
+		
+		
+	}
+	
+	height:220px;
+	border: 5px $gray solid;
+	width: 100%;
+	overflow: hidden;
 }

@@ -380,6 +380,9 @@ if($username != null){
 	    
     </div>
     
+	<script src="js/crop.js"></script>
+
+    
     
 
 <?php

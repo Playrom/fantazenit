@@ -35,7 +35,7 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 						$children=$col->item(0)->childNodes;
 						foreach($children as $child){
 							if(strpos($child->ownerDocument->saveXML($child),"VOTI") == true){
-								if(strpos($child->ownerDocument->saveXML($child),"2016") == false){
+								if(strpos($child->ownerDocument->saveXML($child),"2014") == false){
 									$not_same_year = true;
 								}
 							}
@@ -155,7 +155,7 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 						$children=$col->item(0)->childNodes;
 						foreach($children as $child){
 							if(strpos($child->ownerDocument->saveXML($child),"QUOTAZIONI") == true){
-								if(strpos($child->ownerDocument->saveXML($child),"2016") == false){
+								if(strpos($child->ownerDocument->saveXML($child),"2014") == false){
 									$not_same_year = true;
 								}
 							}
@@ -166,7 +166,6 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 				}
 			}
 			
-			var_dump($not_same_year);
 
 			$is_people=false;
 

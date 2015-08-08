@@ -1,4 +1,5 @@
 <?php
+	$title = "Le Squadre";
 include('header.php');
 ?>
 
@@ -203,17 +204,31 @@ include('header.php');
                 $json=$apiAccess->accessApi("/users/".$id,"GET");
 
                 $team = $json["data"];
-                
+                                
 				if($count %2 !=0) { echo "<div class=\"row_formation row\" >"; }
                 ?>
                 <div class="col-md-6">
+	                
                     <div <?php if($count&1){echo " class=\"team_item_list\"";}else{echo " class=\"team_item_list\"";} ?> >
-                        <div class="name_team"><a <?php echo "href=\"?id=".$team["id"]."\""; ?>><?php echo $team["name_team"]; ?></a></div>
-                        <div class="name_user name_team"><?php echo $team["name"]." ".$team["surname"]; ?></div>
-                        <div class="bottom_team name_team">
-                            <div class="credits"><?php echo $team["balance"]; ?> Crediti</div>
-                            <div class="position"></div>
-                        </div>
+	                    
+	                    <div class="avatar">
+			                <?php if($team["url_avatar"]!=null){
+				                echo "<img src=\"".$team["url_avatar"]."\" >"; 
+			                }else{ ?>
+				                <img src="img/default_avatar.png">
+			         <?php  } ?>
+		                </div>
+		                
+		                <div class="info">
+	                    
+	                        <div class="name_team"><a <?php echo "href=\"?id=".$team["id"]."\""; ?>><?php echo $team["name_team"]; ?></a></div>
+	                        <div class="name_user name_team"><?php echo $team["name"]." ".$team["surname"]; ?></div>
+	                        <div class="bottom_team name_team">
+	                            <div class="credits name_team"><?php echo $team["balance"]; ?> Crediti</div>
+	                            <div class="position"></div>
+	                        </div>
+	                        
+		                </div>
                     </div>
                 </div>
             <?php

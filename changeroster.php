@@ -133,7 +133,9 @@ if($username == null) {
 	    $now_max = $markets[0]["max_change"];
 	    
         if($trans!=null){
-	        $already_transfer=count($trans);
+	        foreach($trans as $tran){
+		        if(!$tran["free"]) $already_transfer++;
+	        }
         
 	        $now_max=intval($markets[0]["max_change"])-$already_transfer;
 	
@@ -230,7 +232,7 @@ if($username == null) {
     		                <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
     			        >
     		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-    		                <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+    		                <div class="name-player-item"><?php echo $player["player"]["name"]; ?><?php if($player["player"]["gone"]==true) echo " *"; ?></div>
     		                <div class="info-player-item">
 	                        	<div class="team-player-item"><?php echo $player["player"]["team"]; ?></div>
     		                	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
@@ -270,22 +272,24 @@ if($username == null) {
          
                     <ul class="list" id="free-table" style="display: none;">
     		          <?php  foreach($players as $player){   ?>
-    		            <li class="new-player" <?php echo "id=\"".$player["id"]."_free\" "; 
-    		            	echo " id_player=\"".$player["id"]."\" "; ?>
-    		                class="free-player"
-    		                <?php echo "data-value=\"".$player["value"]."\" "; ?>
-    		                <?php echo "role=\"".$player["role"]."\" "; ?>
-    		                <?php echo "name=\"".$player["name"]."\" "; ?>
-    		                <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
-    		            >
-    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
-    		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
-    						<div class="info-player-item">
-	                        	<div class="team-player-item"><?php echo $player["team"]; ?></div>
-    			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
-    						</div>
-    		            </li>
+    		          	<?php if($player["gone"]==false){ ?>
+	    		            <li class="new-player" <?php echo "id=\"".$player["id"]."_free\" "; 
+	    		            	echo " id_player=\"".$player["id"]."\" "; ?>
+	    		                class="free-player"
+	    		                <?php echo "data-value=\"".$player["value"]."\" "; ?>
+	    		                <?php echo "role=\"".$player["role"]."\" "; ?>
+	    		                <?php echo "name=\"".$player["name"]."\" "; ?>
+	    		                <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
+	    		            >
+	    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
+	    		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
+	    						<div class="info-player-item">
+		                        	<div class="team-player-item"><?php echo $player["team"]; ?></div>
+	    			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
+	    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
+	    						</div>
+	    		            </li>
+							<?php } ?>
     					<?php } ?>
     			    </ul>
 
