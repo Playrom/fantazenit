@@ -5,6 +5,7 @@ function __autoload($class_name) {
 }
 
 ob_start();
+session_set_cookie_params(3600*24*3,"/");
 session_start();
 setlocale(LC_ALL, 'it_IT.UTF-8'); 
 require_once('config.php');
@@ -50,6 +51,7 @@ $userId=null;
 $userAuth=null;
 $username = null;
 $error_json = array();
+$error_messages = array();
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];
@@ -81,19 +83,25 @@ if(isset($config['current_round'])){
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Fanta Zenit BETA <?php if(isset($title)){ echo " - ".$title; } ?></title>
+        <title>Fanta Zenit <?php if(isset($title)){ echo " - ".$title; } ?></title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <link href="css/ion.rangeSlider.css" rel="stylesheet" />
         <link href="css/normalize.min.css" rel="stylesheet"/>
         <link href="css/ion.rangeSlider.skinFlat.css" rel="stylesheet" />
-        <link href="css/style.css" rel="stylesheet" />
+
         <link href="css/jquery.datetimepicker.css" rel="stylesheet" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="css/county.css">
         <link href="css/footable.core.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/crop.css" rel="stylesheet">
+		<link href="css/cropper.min.css" rel="stylesheet">
         <!--<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">-->
+        
+        <link href="css/style.css" rel="stylesheet" />
         
 		<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         <script src="js/jquery-1.11.0.min.js"></script>
@@ -107,6 +115,10 @@ if(isset($config['current_round'])){
 		<script src="js/county.js"></script>
         <script src="js/footable.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js"></script>
+		<script src="js/cropper.min.js"></script>
+
+        
+        <script src="js/jquery.cookiesdirective.js"></script>
 
         <!--<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -162,6 +174,8 @@ if(isset($config['current_round'])){
 
 			});
 			        </script>
+			        
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 
     </head>
 
@@ -171,10 +185,13 @@ if(isset($config['current_round'])){
             <div id="header">
 
                 <a href="index.php"><div id="logo"></div></a>
-                <div id="menu-top">
+                <div class="menu-top">
 	                <ul>
-		                <li><a href="/index.php">Home</a></li>
-	                	<li><a href="news.php">News ( NON FUNZIONANTE )</a></li>
+		                <a href="home.php"><li>Home</li></a>
+	                	<li><a href="lista.php">Quotazioni</a></li>
+	                	<li><a href="regolamento.php">Regolamento</a></li>
+	                	<li><a href="storia.php">Chi Siamo</a></li>
+	                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
 
 	                </ul>
                 </div>
@@ -192,11 +209,14 @@ if(isset($config['current_round'])){
 					        	
 					        	<div class="avatar">
 						        	<?php
-							        	if($user["url_avatar"]!=null){
-								        	
-							        	}else{
-								        	
-							        	}
+							        	if($user["url_avatar"]!=null){ ?>
+								        	<img <?php echo "src=\"".$user["url_avatar"]."\""; ?> />
+							        	<?php 
+								        }else{ 
+								        ?>
+								        	<img src="img/default_avatar.png" />
+							        	<?php
+								        }
 							        	
 							        ?>
 					        	</div>
@@ -225,19 +245,19 @@ if(isset($config['current_round'])){
 			            <ul class="menu">
 				            
 				            <li>
-								<a href="index.php">Riepilogo</a>
+								<a href="home.php">Riepilogo</a>
 							</li>
 			            
 				            <li>Info&#8595
 				        		<ul>
-					                <li><a href="formations.php">Formazioni</a></li>
-					                <li><a href="teams.php">Squadre</a></li>
-					                <li><a href="standings.php">Classifiche</a></li>
+					                <a href="formations.php"><li>Formazioni</li></a>
+					                <a href="teams.php"><li>Squadre</li></a>
+					                <a href="standings.php"><li>Classifiche</li></a>
 					                
 									<?php if($userId!=null) { ?>
-										<li><a href="logout.php">Logout</a></li>
+										<a href="logout.php"><li>Logout</li></a>
 									<?php } else { ?>
-										<li><a href="login.php">Login</a></li>
+										<a href="login.php"><li>Login</li></a>
 									<?php } ?>
 				        		</ul>
 				        	</li>
@@ -246,9 +266,10 @@ if(isset($config['current_round'])){
 					            
 					        	<li>Squadra&#8595
 					        		<ul>
-						                <li><a href="maketeam.php">Inserisci Formazione</a></li>
-						                <li><a href="createroster.php">Crea Rosa</a></li>
-						                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
+						        		<a href="profile.php"><li>Il Mio Profilo</li></a>
+						                <a href="maketeam.php"><li>Inserisci Formazione</li></a>
+						                <a href="createroster.php"><li>Crea Rosa</li></a>
+						                <a href="changeroster.php"><li>Mercato di Riparazione</li></a>
 					        		</ul>
 					        	</li>
 					        	
@@ -256,13 +277,13 @@ if(isset($config['current_round'])){
 						            
 						            <li>Amministrazione&#8595
 						            	<ul class="admin-menu">
-							                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
-							                <li><a href="editformations.php">Modifica Formazioni</a></li>
-							                <li><a href="loadfile.php">Carica Dati</a></li>
-							                <li><a href="settings.php">Impostazioni</a></li>
-							                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
-							                <li><a href="settings-market.php">Gestisci Mercati</a></li>
-							                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
+							                <a href="gestionegiornate.php"><li>Gestione Giornate</li></a>
+							                <a href="editformations.php"><li>Modifica Formazioni</li></a>
+							                <a href="loadfile.php"><li>Carica Dati</li></a>
+							                <a href="settings.php"><li>Impostazioni</li></a>
+							                <a href="settings-competitions.php"><li>Gestisci Competizioni</li></a>
+							                <a href="settings-market.php"><li>Gestisci Mercati</li></a>
+							                <a href="settings-handicaps.php"><li>Gestisci Penalizzazioni</li></a>
 						            	</ul>
 						            </li>
 						            

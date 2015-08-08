@@ -91,7 +91,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: gestionegiornate.php
 * Edit: signup.php
 
-# Alpha 0.6 -
+# 1.0 - 8 Agosto 2015
 
 * Feature: Profile Page
 * New API: JSON API Edit User
@@ -100,6 +100,26 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Feature: Edit Formation By Administrator
 * Edit: Start to Implement CSS Media Query in Header
 * New Method: Added in ConnectDatabaseUsers "checkAuthOverride" a method that return true if the api is an api valid for an Admin User
+
+* New: Landing Page index.php , home page moved to home.php
+* Feature: lista.php , display quotazioni
+* Feature: Modificatore di difesa
+* Edit: Css Improvements , ex. Footer
+* Feature: in profile.php , edit Name Team. Modificata JSON Api e ConnectDatabaseUsers per implementare questa funzionalità
+
+* New: in changeroster e createroster compare nome team accanto al nome del giocatore e quotazione
+
+* New: privacypolicy  , google analytics, cookie law blocker
+
+* Feature: Avatar Profilo, modificato profile.php , utilizzato framework cropper il funzionamento, modificato JSON API con "/me/avatar"
+* New: Pagina Regolamento
+* New: Nuovo Font per gli H1, boton-regular
+
+* Edit: CSS Responsive
+
+* New: Accettazione Privacy Policy alla registrazione
+
+* Feature: Gestione dei giocatori non piu in serie A
 
 # Da Fare
 --

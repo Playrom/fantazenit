@@ -18,7 +18,9 @@ require '../../class/Handicap.php';
 require '../../class/HandicapRound.php';
 require '../../class/HandicapStanding.php';
 
-
+require '../../class/Phase.php';
+require '../../class/Group.php';
+require '../../class/Match.php';
 
 require '../../class/Team.php';
 
@@ -76,11 +78,16 @@ $app->post('/me', function () use ($app) {
 		    $pass = null;
 		    $email = null;
 		    $url_fb = null;
+		    $name_team = null;
 		    
 			error_log($current_pass);
 		    
 		    if(isset($data["email"]) && $data["email"]!=""){
 			    $email = $data["email"];
+		    }
+		    
+		    if(isset($data["name_team"]) && $data["name_team"]!=""){
+			    $name_team = $data["name_team"];
 		    }
 		    
 		    if(isset($data["url_fb"]) && $data["url_fb"] != ""){
@@ -94,9 +101,47 @@ $app->post('/me', function () use ($app) {
 			error_log($current_pass);
 
 		    
-		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb);
+		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team,null);
 		    
 		    
+	    }
+    
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Old Password Not Correct";
+    }
+    
+
+    echoRespnse(200, $response);
+
+
+});
+
+
+$app->post('/me/avatar' , function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    
+    $response = null;
+    
+    if(isset($data["avatar"])){
+	    $user = $db->getUserByApiKey($apiKey);
+	    
+	    $url = $data["avatar"];
+	    
+	    if($db->checkApi($apiKey) && $user!=null){
+		    $result = $db->editUser($user->getId(),null,null,null,null,$url);
+		    
+		    $response["error"] = !$result;
 	    }
     
     }else {
@@ -171,11 +216,12 @@ $app->post('/users', function () use ($app) {
 
     //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
     
+    $original_password = $data["password"];
     
     $username = $data["username"];
     $name = $data["name"];
     $surname = $data["surname"];
-    $password = $data["password"];
+    $password = md5($data["password"]);
     $email = $data["email"];
     $balance = $data["balance"];
     $name_team = $data["name_team"];
@@ -202,6 +248,52 @@ $app->post('/users', function () use ($app) {
 		
         if($ret){
 	        $response["error"] = false;
+	        
+	        $headers = "From: info@associazionezenit.it \r\n";
+			$headers .= "Reply-To: info@associazionezenit.it \r\n";
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+			
+			$message = "<h1>Iscrizione Fanta Zenit</h1>
+
+						<p>Ciao $name,</p>
+						
+						<p>Ti ringraziamo per esserti iscritto al <strong>Fanta Zenit 2015/16</strong>, ora puoi creare la tua squadra, inserire la formazione, e cominciare questo fantastico campionato.</p>
+						
+						
+						
+						<p>Per completare la tua iscrizione contatta uno degli nostri amministratori, a <a href=\"mailto:info@associazionezenit.it\">info@associazionezenit.it</a> , oppure attraverso la nostra <a href=\"http://www.facebook.com/fantazenit\">Pagina Facebook</a>, oppure puoi consegnare i soldi dell'iscrizione presso<br>Narciso Cafè, Piazza Santa Caterina , Messina<br>Goldbet , Via Calabria 26, Messina , Tra Discoteca Koko e Ristorante Porta Messina , pressi Stazione Marittima</p>
+						
+						<p>I Tuoi dati di accesso sono:</p>
+						
+						<table>
+						<tbody>
+						<tr>
+							<td>Username</td>
+							<td>$username</td>
+						</tr>
+						
+						<tr>
+							<td>Password</td>
+							<td>$original_password</td>
+						</tr>
+						</tbody>
+						</table>
+						";
+	        
+	        mail($email, "Iscrizione Fanta Zenit 2015/16", $message , $headers);
+	        
+	        $us = $db_users->getUserByEmail($email);
+	        
+	        if($us!=null){
+		        $response["data"]["id"] = $us->getId();
+		        $response["error"] = false;
+	        }else{
+		        $response["error"] = true;
+		        $response["message"] = "Non Ritorna Utente con quella email";
+	        }
+	        
+	        
         }else{
 	        $response['error'] = true;
 			$response['message'] = "Error Creating";
@@ -218,6 +310,50 @@ $app->post('/users', function () use ($app) {
 
 
 });
+
+$app->post('/users/:id/avatar' , function ($id) use ($app) {
+	
+	error_log("enter_edit");
+
+
+	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    
+    $response = null;
+    
+    error_log($id);
+    
+    if(isset($data["avatar"])){
+	    error_log($data["avatar"]);
+	    
+	    $user = $db->getUserById($id);
+	    
+	    $url = $data["avatar"];
+	    
+	    if( $user!=null){
+		    $result = $db->editUser($user->getId(),null,null,null,null,$url);
+		    
+		    $response["error"] = !$result;
+		    $response["message"] = "Avatar Non Caricato Correttamente";
+	    }
+    
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Old Password Not Correct";
+    }
+    
+
+    echoRespnse(200, $response);
+
+
+});
+
 
 
 $app->get('/users', function () use ($app) {
@@ -373,6 +509,8 @@ $app->post('/teams', function () use ($app) {
     $id_user = $data["id_user"];
     $ids  = $data["ids"];
     $reserves  = $data["reserves"];
+    
+    
     $round = $data["round"];
     $tactic = $data["tactic"];
 
@@ -387,7 +525,6 @@ $app->post('/teams', function () use ($app) {
 
 	    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
 	        $response["error"] = false;
-	        error_log("enter");
 
 	        $ret=$db_rounds->insertTeam($id_user,$ids,$reserves,$round,$tactic);
 
@@ -475,18 +612,19 @@ $app->post('/competitions/:id', function ($id) use ($app) {
 
     $json = $app->request->getBody();
 
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    $data = json_decode($json, true); // parse the JSON into an assoc. array	
 
     //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
 
     $name = $data["name"];
     $first_round  = $data["first_round"];
     $num_rounds = $data["num_rounds"];
-
+    $type = $data["type"];
+    
     if($db_users->checkApi($apiKey) && $user!=null ){
         $response["error"] = false;
-
-        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds);
+		
+        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds,$type);
         
         if($ret != null){
 	        $response["data"] = $ret;
@@ -502,7 +640,7 @@ $app->post('/competitions/:id', function ($id) use ($app) {
     }
 
     echoRespnse(200, $response);
-
+    
 
 });
 
@@ -526,6 +664,9 @@ $app->put('/competitions/:id', function ($id) use ($app) {
     $first_round  = $data["first_round"];
     $num_rounds = $data["num_rounds"];
     $users = $data["users"];
+    
+    error_log($id);
+    error_log($name);
 
     if($db_users->checkApi($apiKey) && $user!=null ){
         $response["error"] = false;
@@ -653,7 +794,7 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
     }
     
 
-    if($standings!=null && $teams!=null && $competition!=null){
+    if($competition!=null){
         $response["error"] = false;
         $response["data"]["standings"]=$standings;
         $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
@@ -663,6 +804,13 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
         $ids = array();
         foreach($teams as $team){
 		    $ids[]  = $team["id"];
+	    }
+	    
+	    if($competition["type"] == "DIRECT"){
+		   $phases = $db_competitions->getPhases($id_competition);
+		   foreach($phases as $phase){
+		   		$response["data"]["phases"][] = $phase->map();
+		   }
 	    }
 	    
 	    $response["data"]["ids"] = $ids;
@@ -1374,11 +1522,20 @@ $app->get('/markets/:id/transfers/:user', function ($id_market,$id_user) use ($a
 
     $db = new ConnectDatabaseMarkets(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
-    $transfers = $db->getTransfers($id_user);
-		
-    $result=null;
+    $transfers = $db->getTransfers($id_user);    
     
-    if($transfers!=null){
+		
+    $result=array();
+        
+    if(count($transfers) == 0){
+	    error_log("enter");
+	    $result = array();
+	    
+	    $response["error"] = false;
+        $response["data"]=$result;
+	    
+	    echoRespnse(200, $response);
+    }else if($transfers!=null){
 	    $arr = array();
 	    foreach($transfers as $transfer){
 		    if($transfer->getIdMarket() == $id_market){
@@ -1386,19 +1543,19 @@ $app->get('/markets/:id/transfers/:user', function ($id_market,$id_user) use ($a
 		    }
 	    }
         $result=$arr;
-    }
-
-
-    if($result!=null){
+        
         $response["error"] = false;
         $response["data"]=$result;
-    }else {
+	    
+	    echoRespnse(200, $response);
+    }else{
+	    
         // unknown error occurred
         $response['error'] = true;
         $response['message'] = "Dump Market ID:".$id_market."  Transfers $id_user Error";
     }
 
-    echoRespnse(200, $response);
+    
 
 
 });

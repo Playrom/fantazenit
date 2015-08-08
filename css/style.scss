@@ -2,11 +2,33 @@ $red:#FF0000;
 $gray:#AAAAAA;
 $white:#FFFFFF;
 $menu-background: #ededed; 
+$almost_black: #515151;
+$blue: #246BB2;
+
+@font-face {
+    font-family: boton-light;
+    src: url(../fonts/boton-light.ttf);
+}
+
+@font-face {
+    font-family: boton-regular;
+    src: url(../fonts/boton-regular.ttf);
+}
+
+@font-face {
+    font-family: boton-medium;
+    src: url(../fonts/boton-medium.ttf);
+}
 
 body {
     background: #EEEEEE !important;
     margin: 0;
-    font-family: "Open Sans", arial;
+    //font-family: "Open Sans", arial;
+    font-family: boton-light;
+}
+
+h1,h2,h3{
+	font-family: boton-regular;
 }
 
 * {
@@ -31,16 +53,31 @@ body {
 	box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
 	margin-top: 20px;
 	margin-bottom: 20px;
+	
+	@media screen and (max-width: 700px){
+    	margin-top: 0;
+    	margin-bottom: 0;
+    }
+    
+    @media screen and (max-width: 991px){
+    	-webkit-box-shadow:none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+		margin:0;
+    }
 }
 
 #header {
     width: 100%;
-    height: 100px;
+    min-height: 100px;
     background:#FFFFFF;
     float: left;
     position: relative;
     
+    
 }
+
+
 
 #logo{
     height: 100px;
@@ -50,15 +87,23 @@ body {
     width: 200px;
     float: left;
     position: relative;
+    
+    @media screen and (max-width: 700px){
+    	width: 50%;
+    	margin: 0 25%;
+    }
 }
 
 
 
-#menu-top{
+.menu-top{
 	float:right;
 	position:relative;
-	width: 900px;
-	height: 100px;
+	height: auto;
+	
+	@media screen and (max-width: 700px){
+    	width: 100%;
+    }
 
 
 	ul {
@@ -67,6 +112,11 @@ body {
 		display:inline-block;
 		list-style: none;
 		margin:0;
+		
+		@media screen and (max-width: 700px){
+	    	width: 100%;
+	    	padding: 0;
+	    }
 	}
 
 	li{
@@ -75,6 +125,14 @@ body {
 		height: 100px;
 		margin:5px;
 		text-decoration: none !important;
+		@media screen and (max-width: 700px){
+	    	width: 100%;
+	    	display: block;
+	    	text-align:center;
+	    	height: 50px;
+	    	line-height: 50px;
+	    }
+	    
 	}
 
 	li , a {
@@ -100,8 +158,9 @@ body {
 .user-menu{
 	position: relative;
 	float: left;
-	width: auto;
 	height: 100%;
+	
+	
 }
 
 .avatar{
@@ -111,23 +170,27 @@ body {
 	
 	height: 80px;
 	width: 80px;
-	background: $red;
+	background: none;
+	
+	img{
+		max-height: 80px;
+		width: auto;
+	}
 }
 
 .user-info{
-	height: 100%;
 	float: left;
 	position: relative;
-	
+	width: 320px;	
 	.user-info-item{
 		color: $red;
 		float: left;
 		position: relative;
-		margin: 10px;
+		margin: 10px 5%;
 		height: 35px;
 		line-height: 35px;
-		width: 100%;
 		font-size: 30px;
+		width: 90%;
 	}
 	
 	
@@ -164,6 +227,10 @@ body {
 		color: $red;
 	}
 	
+	@media screen and (max-width: 700px){
+    	width: 100%;
+    }
+	
 	> li{
 		display: inline;
 		height: 100px;
@@ -173,6 +240,16 @@ body {
 		float: left;
 		
 		margin: 0 10px;
+		
+		cursor: pointer;
+		
+		
+		@media screen and (max-width: 700px){
+	    	display: block;
+	    	width: 100%;
+			text-align:center;
+			
+	    }
 	}
 	
 	li:hover ul {
@@ -187,10 +264,26 @@ body {
 		background: $gray;
 		display: none;
 		width: 300px;
+		z-index: 3000;
 		
 		li:first-child{
 			border: none !important;
 		}
+		
+		@media screen and (max-width: 700px){
+	    	width: 100%;
+	    }
+	    
+	    a{
+		    border-top: 1px solid $white;
+		    float: left;
+			position: relative;
+			width: 100%;
+	    }
+	    
+	    a:first-child{
+		    border-top: none !important;
+	    }
 		
 		li{
 			font-size: 20px;
@@ -204,6 +297,8 @@ body {
 			border-top: 1px solid $white;
 			color: $white;
 			padding: 10px;
+			
+			
 			
 			a{
 				color: $white;
@@ -239,8 +334,151 @@ body {
 	margin: 10px 10px 0 10px;
 }
 
+.white-background{
+	background: $white;
+}
+
+/*.margin-10-when-resize{
+	
+	
+	@media screen and (max-width: 991px){
+    	margin-top: 10px;
+    }
+}*/
+
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12{
+	@media screen and (max-width: 991px){
+    	margin-top: 10px;
+    	position: relative;
+    	width: 100%;
+    	float: left;
+    }
+}
+
+/* SLIDE */
+
+.slide {
+  position: relative;
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  }
+
+.slide li {
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  display: none;
+  width: 100%;
+  left: 0;
+  top: 0;
+  }
+
+.slide li:first-child {
+  position: relative;
+  display: block;
+  float: left;
+  }
+
+.slide img {
+  display: block;
+  height: auto;
+  float: left;
+  width: 100%;
+  border: 0;
+  }
+
+/* HOME */
+
+.presentation{
+	font-family: boton-light;
+	
+	
+	p{
+		font-size: 25px;
+	}
+	
+	h1,h3{
+		color: $red;
+	}
+	
+	h2{
+		color: $blue;
+	}
+}
+
+.motivi{
+	background: $white;
+	
+	h1,h3{
+		color: $red;
+	}
+	
+	h2{
+		color: $blue;
+	}
+	
+}
+
+
+
+.join{
+	background: $white;
+	
+	height: 270px;
+	
+	
+	a , a:hover{
+		
+		float: left;
+		position: relative;
+	
+		background: $red;
+		color: $white;
+		text-decoration: none;
+		font-size: 40px;
+		padding: 30px 15%;
+		width: 50%;
+		margin: 70px 25%;
+		height: 130px;
+		line-height: 70px;
+		text-align: center;
+		
+		-webkit-box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+		-moz-box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+		box-shadow: 6px 6px 20px 8px rgba(0,0,0,0.37);
+		
+		@media screen and (max-width: 700px){
+	    	margin: 10px 10%;
+	    	padding: 10px 10%;
+	    	width: 80%;
+	    	height: 80px;
+	    	line-height: 60px;
+	    	
+	    }
+	}
+	
+	@media screen and (max-width: 700px){
+    	height: 100px;
+    }
+	
+	
+}
+
+.container-fluid{
+	ul{
+		font-size: 20px;
+	}
+	
+	p{
+		text-align:justify;
+	}
+}
 
 /* MAIN */
+
+
 
 #slide_competitions{
 	width: 20%;
@@ -259,12 +497,12 @@ body {
 
 
 .main{
-    position: relative;
-    float: left;
     width: 100%;
-    margin: 10px 10px 0 10px;
+    margin-top:10px;
     padding: 10px;
     background: #FFF;
+    float: left;
+    position: relative;
 }
 
 .half_size{
@@ -287,14 +525,69 @@ body {
 	position: relative;
 	width: 100%;
 	background: #FF0000;
-	height: 100px;
+	min-height: 150px;
+	
+	*{
+		color: $white !important;
+	}
+	
+	.menu-top{
+		float: left;
+		min-height: 150px;
+		
+		ul{
+			float: left;
+			height: auto;
+			
+			@media screen and (max-width: 700px){
+		    	margin: 0 !important;
+		    	padding: 0 !important;
+		    }
+			
+			li{
+				line-height: 150px;
+				@media screen and (max-width: 700px){
+			    	line-height: 50px;
+			    }
+			}
+		}
+	}
+}
+
+.logozenit{
+	height: 150px;
+	float: right;
+	position: relative;
+	
+	@media screen and (max-width: 700px){
+    	width: 100%;
+    	height: auto;
+    }
+	
+	img{
+		max-height: 150px;
+		padding: 25px;
+		width: auto;
+		float: right;
+		position: relative;
+		@media screen and (max-width: 840px){
+	    	width: 100%;
+	    	
+	    }
+	    
+	    @media screen and (max-width: 700px){
+	    	width: 70%;
+	    	margin: 0 15%;
+	    	height: auto;
+	    	max-height: none;
+    	}
+	}
 }
 
 #team-info {
     position: relative;
     float: left;
-    height: 40px;
-	height: 40px;
+	min-height: 40px;
 	width: 100%;
     background: #FFF;
     padding: 5px;
@@ -382,12 +675,17 @@ a.current-round{
     background: #FFF;
 }
 
+
+
 .old-player{
     border-bottom: 1px solid #f8f8f8;
-    height: 40px;
+    height: 50px;
     float:left;
     position: relative;
     width: 100%;
+    cursor: pointer;
+    
+    
 }
 
 .role-icon{
@@ -395,9 +693,12 @@ a.current-round{
 	position: relative;
 	width: auto;
 	margin:5px;
+	height: 40px;
 	
 	span{
 		padding: 5px 10px;
+		height: 40px;
+		line-height: 30px;
 		float: left; 
 	}
 }
@@ -406,21 +707,27 @@ a.current-round{
 	margin: 5px 5px 5px 0;
 	float: left;
 	position: relative;
-	height: 30px;
-	line-height: 30px;
+	height: 40px;
+	line-height: 40px;
+}
+
+.team-player-item{
+	@extend .value-player-item;
+	color: $red;
 }
 
 .value-player-item{
 	margin: 5px 5px 5px 0;
 	float: left;
 	position: relative;
-	height: 30px;
-	line-height: 30px;
+	height: 40px;
+	line-height: 40px;
 }
 
 .info-player-item{
 	float: right;
 	position: relative;
+	height: 50px;
 }
 
 .info-player-link-item{
@@ -432,6 +739,10 @@ a.current-round{
 	width: 50%;
 	list-style: none;
 	display: block;
+	
+	@media screen and (max-width: 840px){
+    	width: 100%;
+    }
 	
 }
 
@@ -509,6 +820,10 @@ a.current-round{
     float: right;
     position: relative;
     padding: 3px;
+    
+    @media screen and (max-width: 450px){
+    	width: 200px;
+    }
 }
 #players {
     position: relative;
@@ -555,14 +870,13 @@ a.current-round{
     background: #FFF;
 }
 
-.new-player {
-    width: 50%;
-}
+
 
 .name-role {
     padding: 5px;
     color: #FFF;
     margin-bottom: 5px;
+    line-height: 40px;
 }
 table.roster-item {
     width: 100%;
@@ -570,9 +884,11 @@ table.roster-item {
     float: left;
     position: relative;
 }
-.in-roster-player td, .in-team-player td, .in-reserve-player td {
-    padding: 5px;
+
+.in-roster-player , .in-team-player , .in-reserve-player  {
+    cursor: pointer;
 }
+
 .type_name {
     float: left;
     position: relative;
@@ -588,7 +904,7 @@ table.roster-item {
     font-size: 20px;
     color: #FFF;
     text-align: center;
-    background: #246BB2;
+    background: $blue;
     cursor: pointer;
     line-height: 35px;
     float: left;
@@ -661,7 +977,7 @@ table.roster-item {
 
 .standing{
     height: auto;
-    margin:10px 0 0 0;
+    margin-top:10px;
 }
 
 .user_position{
@@ -690,12 +1006,16 @@ table.roster-item {
 }
 
 .row_formation{
-    margin: 10px 0 0 0 ;
+    margin-top: 10px ;
+    
+    @media screen and (max-width: 991px){
+    	margin-top: 0;
+    }
 }
 
 .title_formation {
     padding: 1% 1% 1% 2%;
-    background: #246BB2;
+    background: $blue;
     color: #FFF;
     font-size: 22px;
     position: relative;
@@ -723,7 +1043,7 @@ tr:last-child {
 }
 
 .total_info {
-    background: #246BB2;
+    background:$blue;
     text-align: right;
     color: #FFF;
     line-height: 30px;
@@ -733,12 +1053,12 @@ tr:last-child {
 	padding: 5px; 
 	width: 40px;
 	margin:0 !important;
-	height:40px;
+	height:50px;
 	text-align: center;
 }
 
 .finalvote ,.handicap-formation{
-    background: #515151;
+    background: $almost_black;
     color: #FFF;
 }
 
@@ -752,21 +1072,44 @@ tr:last-child {
 .value_player{
     text-align: center;
 }
-#team table, #reserve_team table {
+
+.team table, #reserve_team table {
     width: 100%;
     position: relative;
     float: left;
     padding: 1%;
     background: #FFF;
 }
-#team, #reserve_team {
-    width: 49%;
+.team, #reserve_team {
+    width: 100%;
     float: left;
     position: relative;
     margin-bottom: 10px;
 }
+
+.campo-verde{
+	background:#23a900;
+	
+	.roster-item{
+		background: none;
+		
+		.old-player{
+			color: $white;
+			text-align: center;
+			border: none;
+			
+			.name-player-item{
+				width: 100%;
+				margin: 0;
+				line-height: 40px;
+			}
+		}
+	}
+}
+
+
 #reserve_team {
-    margin-left: 2%;
+    //margin-left: 2%;
 }
 
 .username_title {
@@ -1126,6 +1469,13 @@ input[type=checkbox] {
     margin-right: 5px;
 }
 
+.select_teams{
+	margin: 0 !important;
+	padding: 0 !important;
+	position: relative !important;
+	float: left !important;
+}
+
 /* end .squaredFour */
 
 
@@ -1145,6 +1495,18 @@ input[type=checkbox] {
     float: left;
     background: #FFFFFF;
     width: 100%;
+    
+    .info{
+	    width: 76%;
+	    float: left;
+	    position: relative;
+    }
+    
+    .avatar{
+	    width: 20%;
+	    margin: 10px 2%;
+	    height: auto;
+    }
 }
 
 .team_item_list .name_team{
@@ -1174,14 +1536,9 @@ input[type=checkbox] {
 }
 
 .bottom_team .credits{
-    float: left;
-    position: relative;
-    height: 26px;
-    /* padding: 3px; */
+    
     margin: 0 1% 0 0;
-    line-height: 26px;
-    color: #FF0000;
-    width: 49%;
+    color: $red;
 }
 
 
@@ -1205,12 +1562,16 @@ input[type=checkbox] {
 
 .title_transfers_single{
    background: #586969;
-    margin:0 0 0 1%;
+   width: 100%;
+   float: left;
+   position: relative;
 }
 
 .transfers{
-    margin:0 0 0 1%;
+	float: left;
+	position: relative;
     padding: 0;
+    width: 100%;
 }
 
 .name_market{
@@ -1241,7 +1602,8 @@ input[type=checkbox] {
 }
 
 .player_name{
-    line-height: 32px;
+    line-height: 50px;
+    height: 50px;
     margin-left: 5px;
     float: left;
     position: relative;
@@ -1257,19 +1619,25 @@ input[type=checkbox] {
 .info_transfer{
     float: right;
     position: relative;
+    height: 50px;
+    line-height: 50px;
 }
 
 .value_transfer{
     float: right;
     position: relative;
+    height: 50px;
+    line-height: 50px;
 }
 
 
 /* HOME PAGE */
 
+.inside{
+	width: 100%;
+}
+
 .home_page{
-    float: left;
-    position: relative;
     margin-top: 20px;
 }
 
@@ -1282,9 +1650,12 @@ input[type=checkbox] {
 
 .box_home{
     background: $white;
+    
     float:left;
-    position: relative;
     width: 100%;
+    
+    
+    
     
     /*-webkit-box-shadow: 2px 2px 10px 4px rgba(0,0,0,0.37);
 	-moz-box-shadow: 2px 2px 10px 4px rgba(0,0,0,0.37);
@@ -1300,13 +1671,13 @@ input[type=checkbox] {
 
 .three_quarter{
     //width: 63%;
-    position: relative;
+
     //float: left;
     padding: 10px;
 }
 
 .first_row_home{
-    height: 170px;
+    min-height: 170px;
 }
 
 .welcome{
@@ -1314,7 +1685,7 @@ input[type=checkbox] {
     background: rgba(255,0,0,1);
     color: #FFF;
     font-size: 35px;
-	height: 170px;
+	min-height: 170px;
 }
 
 .punti_highlight{
@@ -1338,12 +1709,14 @@ input[type=checkbox] {
 .one_quarter{
     //width: 36%;
     padding: 10px;
-    float: left;
-    position: relative;
+    
+    
 }
 
 .count_closing_time{
-    
+    float: left;
+    position: relative;
+    width: 100%;
 }
 
 .recap_last_round , .recap_standings{
@@ -1387,11 +1760,19 @@ input[type=checkbox] {
 }
 
 .first, .first .county-days, .county-hours,.county-minutes,.county-seconds ,.county-hours-wrapper,.county-minutes-wrapper,.county-seconds-wrapper{
-    width: 45px !important;
+    width: 62px !important;
 }
 
 span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 	font-size: 40px;
+    padding-top: 5px;
+    text-align: center;
+
+}
+
+.county.red .county-label-days, .county.red .county-label-hours, .county.red .county-label-minutes, .county.red .county-label-seconds{
+	padding-top: 5px !important;
+	width: 87px !important;
 }
 
 
@@ -1402,4 +1783,20 @@ span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 	background: $white;
 	margin-top: 10px;
 	padding: 10px;
+}
+
+/* IMAGE BOX */
+
+.image-box{
+	img{
+		width: auto;
+		height: 220px;
+		
+		
+	}
+	
+	height:220px;
+	border: 5px $gray solid;
+	width: 100%;
+	overflow: hidden;
 }

@@ -27,7 +27,7 @@ if($username != null && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['old'
 	    if(isset($json["error_code"])){
 		    $error_code=$json["error_code"];
 	    }else{
-		    $error_message = $json["message"];
+		    $error_json[] = $json;
 	    }
         
     }
@@ -52,6 +52,8 @@ if($username == null) {
     
     if($json["error"]==false){
 	    $players = $json["data"];
+    }else{
+	    $error_json[] = $json;
     }
         
 
@@ -68,6 +70,8 @@ if($username == null) {
 
     if($json["error"]==false){
 	    $markets = $json["data"];
+    }else{
+	    $error_json[] = $json;
     }
     
 
@@ -90,6 +94,8 @@ if($username == null) {
     
 		    if($json["error"]==false){
 			    $market = $json["data"];
+		    }else{
+			    $error_json[] = $json;
 		    }
 
         }else if(count($markets)==1){
@@ -105,6 +111,8 @@ if($username == null) {
     
 		    if($json["error"]==false){
 			    $market = $json["data"];
+		    }else{
+			    $error_json[] = $json;
 		    }
 
         }
@@ -117,13 +125,17 @@ if($username == null) {
 		
 	    if($json["error"]==false){
 		    $trans = $json["data"];
+	    }else{
+		    $error_json[] = $json;
 	    }
 	    
 	    $already_transfer = 0;
 	    $now_max = $markets[0]["max_change"];
 	    
         if($trans!=null){
-	        $already_transfer=count($trans);
+	        foreach($trans as $tran){
+		        if(!$tran["free"]) $already_transfer++;
+	        }
         
 	        $now_max=intval($markets[0]["max_change"])-$already_transfer;
 	
@@ -137,42 +149,30 @@ if($username == null) {
         $selected=false;
     }
     
-	if($error_message!=null){ ?>
-		<div class="alert alert-danger error_display" role="alert">
-			<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-			<span class="sr-only"></span><?php echo $error_message; ?>
-		</div>
-	<?php 
+	if($error_message!=null){ 
+		$error_messages[] = $error_message;
+	
 	}
 
-	if($error_code==-1){  ?>
-
-    	<div class="alert alert-danger error_display" role="alert">
-			<span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-			<span class="sr-only"></span>Attenzione , Errore Cambio Non Valido
-		</div>
-	<?php  
+	if($error_code==-1){  
+		$error_messages[] = "Attenzione , Errore Cambio Non Valido";
+		 
     	}
     ?>
 
-    <?php if(count($markets)==0){ ?>
+    <?php if(count($markets)==0){ 
+	    $error_messages[] = "Attenzione , nessuna sessione di mercato aperta";
+    } ?>
 
-        <div class="alert alert-danger error_display" role="alert">
-            <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-            <span class="sr-only"></span>Attenzione , nessuna sessione di mercato aperta
-        </div>
+    <?php if($finish){ 
 
-    <?php } ?>
+        $error_messages[] = "Hai Terminato i cambi a tua disposizione per questa sessione di mercato";
 
-    <?php if($finish){ ?>
-
-        <div class="alert alert-danger error_display" role="alert">
-            <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-            <span class="sr-only"></span>
-        </div>
-
-    <?php } ?>
-    
+    } ?>
+   
+   <?php
+	   include("error-box.php");
+	?>
     	
     
     <div class="container-fluid">
@@ -232,8 +232,9 @@ if($username == null) {
     		                <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
     			        >
     		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-    		                <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+    		                <div class="name-player-item"><?php echo $player["player"]["name"]; ?><?php if($player["player"]["gone"]==true) echo " *"; ?></div>
     		                <div class="info-player-item">
+	                        	<div class="team-player-item"><?php echo $player["player"]["team"]; ?></div>
     		                	<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div>
     		                </div>
     		            </div>
@@ -271,21 +272,24 @@ if($username == null) {
          
                     <ul class="list" id="free-table" style="display: none;">
     		          <?php  foreach($players as $player){   ?>
-    		            <li class="new-player" <?php echo "id=\"".$player["id"]."_free\" "; 
-    		            	echo " id_player=\"".$player["id"]."\" "; ?>
-    		                class="free-player"
-    		                <?php echo "data-value=\"".$player["value"]."\" "; ?>
-    		                <?php echo "role=\"".$player["role"]."\" "; ?>
-    		                <?php echo "name=\"".$player["name"]."\" "; ?>
-    		                <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
-    		            >
-    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
-    		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
-    						<div class="info-player-item">
-    			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
-    						</div>
-    		            </li>
+    		          	<?php if($player["gone"]==false){ ?>
+	    		            <li class="new-player" <?php echo "id=\"".$player["id"]."_free\" "; 
+	    		            	echo " id_player=\"".$player["id"]."\" "; ?>
+	    		                class="free-player"
+	    		                <?php echo "data-value=\"".$player["value"]."\" "; ?>
+	    		                <?php echo "role=\"".$player["role"]."\" "; ?>
+	    		                <?php echo "name=\"".$player["name"]."\" "; ?>
+	    		                <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
+	    		            >
+	    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
+	    		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
+	    						<div class="info-player-item">
+		                        	<div class="team-player-item"><?php echo $player["team"]; ?></div>
+	    			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
+	    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
+	    						</div>
+	    		            </li>
+							<?php } ?>
     					<?php } ?>
     			    </ul>
 

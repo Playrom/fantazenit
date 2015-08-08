@@ -18,8 +18,9 @@ if($username!=null){
             $name=$_POST['name'];
             $first_round=$_POST['first_round'];
             $num_rounds=$_POST['num_rounds'];
+            $type = $_POST['type'];
             
-            $arr_data = array("name" => $name , "first_round" => $first_round , "num_rounds" => $num_rounds );
+            $arr_data = array("name" => $name , "first_round" => $first_round , "num_rounds" => $num_rounds  , "type" => $type);
                      
 			$params = array('postParams' => $arr_data);
             
@@ -31,6 +32,7 @@ if($username!=null){
                 var_dump($json);
             }else{
 	            $id = $json["data"];
+	            var_dump($id);
             }
             
             if($id!=null && isset($_SESSION['rounds'])) {
@@ -45,13 +47,15 @@ if($username!=null){
 	            	            
 	            if($json["error"]==true){
 	                var_dump($json);
+	            }else{
+		            var_dump($json);
 	            }
 	        
                 unset($_SESSION['rounds']);
 
             }
                         
-            header("Location:settings-competitions.php");
+            //header("Location:settings-competitions.php");
             
         }else if(isset($_POST['name']) && isset($_POST['first_round']) && isset($_POST['num_rounds']) && isset($_POST['rounds'])){
 
@@ -60,6 +64,7 @@ if($username!=null){
             $num_rounds=$_POST['num_rounds'];
             //$id=$database->createCompetition($name,$first_round,$num_rounds);
             $rounds=$_POST['rounds'];
+            $type = $_POST['type'];
             //$database->setRoundsCompetition($id,$rounds);
             $_SESSION['rounds']=$rounds;
             
@@ -87,7 +92,8 @@ if($username!=null){
                     <input class="setting_item_input" type="hidden" name="name" class="market-select" <?php echo "value=\"".$name."\" "; ?> >
                     <input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$first_round."\" "; ?> readonly="readonly">
                     <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$num_rounds."\" "; ?> readonly="readonly">
-
+                    <input class="setting_item_input" type="hidden" name="type" class="market-select" <?php echo "value=\"".$type."\" "; ?> readonly="readonly">
+                    
                     <div id="users">
                         <div id="search_box">
                             <div id="search_element">

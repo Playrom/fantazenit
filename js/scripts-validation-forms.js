@@ -39,6 +39,11 @@ function validateForm() {
         return false;
     }
     
+    var x = document.forms["signup"]["privacy"].checked;
+    if (x == null || x == "" || x==false) {
+        return false;
+    }
+    
     return true;
 };
 
