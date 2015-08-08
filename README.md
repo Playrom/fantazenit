@@ -91,7 +91,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: gestionegiornate.php
 * Edit: signup.php
 
-# Alpha 0.6 -
+# 1.0 - 8 Agosto 2015
 
 * Feature: Profile Page
 * New API: JSON API Edit User
