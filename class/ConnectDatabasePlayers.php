@@ -68,6 +68,27 @@ class ConnectDatabasePlayers extends ConnectDatabase{
 				
 		return $arr;
 	}
+	
+function getSerieaTeams(){
+		$arr=array();
+		
+		
+
+		$tempQuery="SELECT team FROM `players` GROUP BY team";
+		
+
+
+		$res=$this->mysqli->query($tempQuery);
+
+		$res->data_seek(0);
+		while ($row = $res->fetch_assoc()) {
+
+
+		    $arr[] = $row["team"];
+		}
+				
+		return $arr;
+	}
 
 
 function updatePlayers(PlayersList $players){

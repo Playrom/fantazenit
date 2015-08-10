@@ -52,6 +52,7 @@ $userAuth=null;
 $username = null;
 $error_json = array();
 $error_messages = array();
+$valid_messages = array();
 
 if(isset($_SESSION['username'])){
         $username=$_SESSION['username'];

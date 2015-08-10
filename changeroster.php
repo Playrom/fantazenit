@@ -265,9 +265,28 @@ if($username == null) {
                         </form>
                     </div>
 
-                    <div id="search-box"><input class="search" id="search-element" placeholder="Cerca">
-                        <button id="sort-name-button" class="sort" data-sort="name_new_player">Ordina per Nome</button>
-                        <button id="sort-value-button" class="sort" data-sort="value_new_player">Ordina per Costo</button>
+                   <div id="search-box" class="search-width">
+	                    <div class="col-md-3">
+	                    	<input class="search" id="search-element" placeholder="Cerca">
+	                    </div>
+	                    
+	                    <div class="col-md-3">
+                        	<button id="sort-name-button" class="sort" data-sort="nam">Ordina per Nome</button>
+	                    </div>
+	                    
+	                    <div class="col-md-3">
+                        	<button id="sort-value-button" class="sort" data-sort="val">Ordina per Costo</button>
+	                    </div>
+	                    
+	                    <div class="col-md-3">
+                        	<button id="sort-reset-button" class="sort" onclick="resetSlide()">Reset</button>
+	                    </div>
+                    </div>
+                    
+                    <div class="search-width">
+	                    <?php foreach($seriea as $team){ ?>
+		                    <img <?php echo "src=\"teamlogo/small/".$team.".png\""; ?> class="team_logo_small" name_team="<?php echo $team; ?>" >
+	                   <?php } ?>
                     </div>
          
                     <ul class="list" id="free-table" style="display: none;">
@@ -284,7 +303,7 @@ if($username == null) {
 	    		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
 	    		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
 	    						<div class="info-player-item">
-		                        	<div class="team-player-item"><?php echo $player["team"]; ?></div>
+		                        	<div class="team-player-item team_for_list"><?php echo $player["team"]; ?></div>
 	    			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
 	    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>
 	    						</div>

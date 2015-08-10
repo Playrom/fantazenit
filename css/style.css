@@ -618,16 +618,25 @@ a.current-round {
   float: left;
   width: 100%; }
 
-#search-box {
+.search-width {
   position: relative;
   float: left;
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   background: #FFF; }
+  .search-width img {
+    float: left;
+    position: left;
+    height: auto;
+    width: 30px;
+    margin-left: 5px;
+    cursor: pointer; }
+  .search-width img:first-child {
+    margin-left: 0; }
 
 #search-element {
-  width: 50%; }
+  width: 100%; }
 
 .competition_creation #search-box {
   height: 52px; }
@@ -640,7 +649,7 @@ a.current-round {
   margin: 0; }
 
 .sort {
-  width: 24%;
+  width: 100%;
   padding: 5px; }
 
 .list {

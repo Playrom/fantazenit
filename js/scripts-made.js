@@ -30,7 +30,7 @@
         });
 
         var options = {
-            valueNames: ['nam', 'val'],
+            valueNames: ['nam', 'val','team_for_list'],
             page: 1000
         };
 
@@ -60,8 +60,25 @@
             list.filter();
             list.search();
         }
+        
+        
         resSlide = my_fun;
-
+		
+		function my_seria(team){
+			list.filter();
+			list.search();
+			list.filter(function (item) {
+            
+	            if(item.values().team_for_list == team) {
+	                return true;
+	            } else {
+	                return false;
+	            }
+	
+	        });
+		}
+		
+		setSerieA = my_seria;
 
 
 
@@ -71,6 +88,14 @@
         resSlide();
 
     }
+    
+    var select_seriea_team = function(pass){
+	   	var obj = pass.currentTarget;
+	   	var team = obj.getAttribute("name_team");
+
+	   	setSerieA(team);
+	    
+    };
 
     var count_check = function(){
         var number=document.querySelectorAll('input[type="checkbox"]:checked').length;
@@ -295,7 +320,8 @@
     };
 
     var remove_roster = function (pass) {
-        document.getElementById("search-element").value = "";
+        resetSlide();
+        
         //list.filter();
         //list.search();
         var obj = pass.currentTarget;
@@ -331,6 +357,9 @@
 
         obj.parentNode.removeChild(obj);
         cost_change_create(obj.getAttribute("data-value"), false);
+        
+        resetSlide();
+        
 
     };
 

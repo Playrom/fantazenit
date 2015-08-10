@@ -67,7 +67,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 }
 
     if(isset($_GET['reg_complete'])) { 
-		$error_messages[] = "Registrazione Completata!";
+		$valid_messages[] = "Registrazione Completata!";
 	 } 
 	 
 	 include('error-box.php');

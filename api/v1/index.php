@@ -1789,6 +1789,27 @@ $app->get('/players/:id/values', function ($id) use ($app) {
 
 });
 
+$app->get('/seriea/teams', function () use ($app) {
+
+    $db = new ConnectDatabasePlayers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+
+    $result = $db->getSerieaTeams();
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Serie A Teams Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
 
 
 

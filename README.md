@@ -121,5 +121,11 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * Feature: Gestione dei giocatori non piu in serie A
 
+# 1.1 -
+
+* New: Search player with name team
+* New: Filter team in changeroster e createroster
+* Bugfix: Player removed from roster was displayed in free table also when it was not selected his role
+
 # Da Fare
 --
