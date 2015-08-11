@@ -139,7 +139,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				        $back=null;
 				        $info_round=null;
 				
-				        if($roster==null && !$possibleToEdit && $real_round>1){
+				        if($roster==null && !$possibleToEdit && $real_round>1 && !$isCalc){
 				
 				            $json_team=$apiAccess->accessApi("/team/$id_user/$real_round?orderByRole=true","GET");
 				
@@ -217,6 +217,12 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                    <div class="roster-item">
 				                        <!-- Riga Legenda <div class="old-player info_player"></div> -->
 				                        <?php if(count($start)>0){
+					                        
+					                        	$modificatore = $team["modificatore"];
+					                        	
+					                        	if(!$findBySistem){
+						                        	$findBySistem=$team["recovered"];
+					                        	}
 					                        
 				                                foreach($start as $player){
 				
@@ -345,6 +351,16 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                            <div class="old-player total_info">
 				                                Totale:<?php echo $tot_points; ?>
 				                            </div>
+				                            
+				                            <?php if($modificatore){ // IF START NULL ?>
+				
+						                        <div class="old-player" >
+						                            Utilizzato Modificatore
+						                        </div>
+						
+						                    <?php }  ?>	
+				                            
+				                            
 				
 				                        <?php }else{ ?>
 				
@@ -353,6 +369,8 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                            </div>
 				
 				                        <?php } ?>
+				                        
+				                        
 				
 				                    <?php } else { // IF COUNT START >0 ?>
 				
@@ -361,6 +379,8 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                        </div>
 				
 				                    <?php } ?>
+				                    
+				                    
 				
 				                    <?php if($findBySistem){ // IF START NULL ?>
 				
@@ -369,6 +389,8 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                        </div>
 				
 				                    <?php }  ?>
+				                    
+				                    
 				                    
 				                    </div>
 				                </div>

@@ -56,7 +56,7 @@ if($username == null) {
 	    $error_json[] = $json;
     }
         
-
+    
     if(isset($team["data"])){
         $arr=$team["data"];
 		
@@ -74,6 +74,15 @@ if($username == null) {
 	    $error_json[] = $json;
     }
     
+    $json = $apiAccess->accessApi("/seriea/teams","GET");
+    
+    $seriea = array();
+    
+    if($json["error"]==false){
+	    $seriea = $json["data"];
+    }else{
+	    $error_json[] = $json;
+    }
 
     $market=null;
     $now_max=null;
@@ -345,5 +354,7 @@ if($username == null) {
 
     });
 
+	 $("body").on('click', '.team_logo_small', select_seriea_team);
+	 
 </script>
 <?php include('footer.php'); ?>

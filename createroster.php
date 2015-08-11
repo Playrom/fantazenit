@@ -260,6 +260,7 @@ if($config['creation_market']==0){
 	        		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
 	        		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>
 	        						<div class="info-player-item">
+		        						<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
 										<div class="team-player-item team_for_list"><?php echo $player["team"]; ?></div>
 	        			                <div class="value-player-item val"><?php echo $player["value"]; ?></div>
 	        							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["id"];?>">i</a></div>

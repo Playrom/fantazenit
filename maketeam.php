@@ -372,9 +372,9 @@ if(!isset($_SESSION['username'])) {
                               foreach($modules as $module){
                                 if(strtolower($tactic)==strtolower($module)){
                               ?>
-                                <option selected="selected" <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
+                                <option selected="selected" <?php echo "value=\"".$module."\""; ?> ><?php echo $module[0]."-".$module[1]."-".$module[2];?></option>
                               <?php } else { ?>
-                                <option <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
+                                <option <?php echo "value=\"".$module."\""; ?> ><?php echo $module[0]."-".$module[1]."-".$module[2];?></option>
                               <?php } } ?>
                         </select>
                         <?php if($rescued_team) { ?><span class="rescued">Formazione Recuperata dal Turno Precedente</span><?php } ?>
@@ -508,7 +508,7 @@ if(!isset($_SESSION['username'])) {
                     <div id="reserve_team">
                         <div class="type_name">Panchina</div>
 
-                        <div class="roster-item " id="P_reserve" <?php echo "max=\"".$max_role_reserve."\""; ?>>
+                        <div class="roster-item " id="P_reserve" <?php echo "max=\"1\""; ?>>
                             
                             <div class="old-player p-but"><div class="name-role">Portieri</div></div>
 

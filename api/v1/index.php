@@ -601,6 +601,28 @@ $app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
 
 });
 
+$app->delete('/team/:id_team/:round', function ($id,$round) use ($app) {
+
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+
+    
+	$result = !$db_rounds->deleteTeam($id,$round);
+
+
+    if($result!=null && $result == false){
+        $response["error"] = false;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Delete Team Error";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->post('/competitions/:id', function ($id) use ($app) {
 
 	$apiKey = $app->request->headers->get('Token');

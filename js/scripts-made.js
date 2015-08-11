@@ -50,6 +50,8 @@
 
 
         function my_fun() {
+	        select_role_create("","");
+
             $("#range_1").ionRangeSlider("update", {
                 min: 1, // change min value
                 max: 50, // change max value
@@ -189,36 +191,64 @@
     }
 
     var select_role_create = function (role, obj) {
+                
+        console.log(role);
         
-        resetSlide();
-
-        var element = document.getElementsByClassName('but-over');
-        for (i = 0; i < element.length; i++) {
-            element[i].style.display = "none";
-            element[i].parentNode.setAttribute("onmouseout", "stophover(this)");
-        }
-
-        element = obj.getElementsByClassName('but-over');
-        obj.removeAttribute("onmouseout");
-        element[0].style.display = "block";
-
-
-        var free_table = document.getElementById("free-table");
-        
-        var arr = free_table.getElementsByClassName("new-player");
-        for (i = 0; i < arr.length; i++) {
-            var element = arr[i];
-            if (element.getAttribute("role").toLowerCase() != role.toLowerCase()) {
-                element.style.display = "none";
-
-            } else {
+        if(role==""){
+	        
+	        var element = document.getElementsByClassName('but-over');
+	        for (i = 0; i < element.length; i++) {
+	            element[i].style.display = "none";
+	            element[i].parentNode.setAttribute("onmouseout", "stophover(this)");
+	        }
+	
+	
+	
+	        var free_table = document.getElementById("free-table");
+	        
+	        var arr = free_table.getElementsByClassName("new-player");
+	        for (i = 0; i < arr.length; i++) {
+	            var element = arr[i];
+	            
                 if (element.getAttribute("in-roster") == "yes") {
                     element.style.display = "none";
                 } else {
                     element.style.display = "block";
                 }
-            }
-        };
+	            
+	        };
+	        
+	        
+        }else{
+
+	        var element = document.getElementsByClassName('but-over');
+	        for (i = 0; i < element.length; i++) {
+	            element[i].style.display = "none";
+	            element[i].parentNode.setAttribute("onmouseout", "stophover(this)");
+	        }
+	
+	        element = obj.getElementsByClassName('but-over');
+	        obj.removeAttribute("onmouseout");
+	        element[0].style.display = "block";
+	
+	
+	        var free_table = document.getElementById("free-table");
+	        
+	        var arr = free_table.getElementsByClassName("new-player");
+	        for (i = 0; i < arr.length; i++) {
+	            var element = arr[i];
+	            if (element.getAttribute("role").toLowerCase() != role.toLowerCase()) {
+	                element.style.display = "none";
+	
+	            } else {
+	                if (element.getAttribute("in-roster") == "yes") {
+	                    element.style.display = "none";
+	                } else {
+	                    element.style.display = "block";
+	                }
+	            }
+	        };
+	    }
 
 
         

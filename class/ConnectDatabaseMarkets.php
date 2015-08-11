@@ -6,6 +6,9 @@ require_once 'ConnectDatabaseUsers.php';
 class ConnectDatabaseMarkets extends ConnectDatabase{
     function createRoster($id_user,$ids){
         
+        $db_rounds = new ConnectDatabaseRounds($this->mysqli);
+        $config = $this->dumpConfig();
+        
 		try{
 			
 			$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
@@ -92,12 +95,17 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
-
-
-			return true;
-
-
-
+			
+			error_log("end");
+			
+			$res = $db_rounds->deleteTeam($id_user,$config['current_round']);
+			
+			
+			if($res){
+				return true;
+			}else{
+				return false;
+			}
 
 
 

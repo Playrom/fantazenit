@@ -6,14 +6,18 @@ class Team{
     private $cen;
     private $att;
 	private $players; //TeamPlayerList
+	private $recovered;
+	private $modificatore;
 
-	function __construct($id_user,$round,$def,$cen,$att,$players){
+	function __construct($id_user,$round,$def,$cen,$att,$players,$recovered=false,$modificatore=false){
 		$this->id_user=$id_user;
 		$this->round=$round;
 		$this->def=$def;
 		$this->cen=$cen;
 		$this->att=$att;
 		$this->players=$players;
+		$this->recovered = $recovered;
+		$this->modificatore = $modificatore;
 	}
 
 	/*
@@ -34,7 +38,9 @@ class Team{
         }else{
             $arr["players"] = null;
         }
-
+        
+        $arr["recovered"] = $this->recovered;
+        $arr["modificatore"] = $this->modificatore;
         return $arr;
     }
 
@@ -56,6 +62,9 @@ class Team{
         }else{
             $arr["players"] = null;
         }
+        
+        $arr["recovered"] = $this->recovered;
+        $arr["modificatore"] = $this->modificatore;
 
         return $arr;
     }
@@ -74,6 +83,9 @@ class Team{
         }else{
             $arr["players"] = null;
         }
+        
+        $arr["recovered"] = $this->recovered;
+        $arr["modificatore"] = $this->modificatore;
 
         return $arr;
     }
@@ -219,12 +231,63 @@ class Team{
      *
      * @return self
      */
-    public function _setPlayers($players)
+    public function setPlayers($players)
     {
         $this->players = $players;
 
         return $this;
     }
+    
+    /**
+     * Is This Team Recovered
+     *
+     * @return boolean
+     */
+    public function isRecovered()
+    {
+        return $this->recovered;
+    }
+    
+    /**
+     * Sets the recovered value
+     *
+     * @param boolean $val
+     *
+     * @return self
+     */
+    public function setRecovered($val)
+    {
+        $this->recovered = $recovered;
+
+        return $this;
+    }
+    
+    /**
+     * Is This Team With Modificatore
+     *
+     * @return boolean
+     */
+    public function isModificatore()
+    {
+        return $this->modificatore;
+    }
+    
+    /**
+     * Sets the modificatore value
+     *
+     * @param boolean $val
+     *
+     * @return self
+     */
+    public function setModificatore($val)
+    {
+        $this->modificatore = $modificatore;
+
+        return $this;
+    }
+
+    
+    
 
 
     

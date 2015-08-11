@@ -74,14 +74,16 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		}
 	}
 
-    function insertTeam($id_user,$ids,$reserves,$round,$tactic){
+    function insertTeam($id_user,$ids,$reserves,$round,$tactic,$recovered=false){
+	    
+	    error_log($recovered);
+	    error_log($round);
 	   
     	$data_players=new ConnectDatabasePlayers($this->mysqli);
 
 		try{
 			
-
-
+			
 			$players=$data_players->dumpSingoliToList(null,null);
 			
 
@@ -98,8 +100,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
-            
+                        
 			foreach($ids as $id){
+				
 				$prepQuery="INSERT INTO `teams` ( `id_user`, `id_player`, `round` , `position`) VALUES (?,?,?,?);";
 
 				if(!($stmt = $this->mysqli->prepare($prepQuery))) {
@@ -145,13 +148,19 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			}
 			
 
-			$tacticQuery="REPLACE INTO tactics (`id_user`,`tactic`,`round`) VALUES (?,?,?);";
+			$tacticQuery="REPLACE INTO tactics (`id_user`,`tactic`,`round`,`recovered`) VALUES (?,?,?,?);";
+			
+			$val = 0;
+			
+			if($recovered){
+				$val = 1;
+			}
 
 			if(!($stmt = $this->mysqli->prepare($tacticQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("isi", $id_user,$tactic,$round)) {
+			if (!$stmt->bind_param("isii", $id_user,$tactic,$round,$val)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -161,6 +170,44 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 			return true;
 
+		}catch(exception $e) {
+			echo "\nERRORE INSERIMENTO FORMAZIONE: ".$e;
+			return false;
+		}
+	}
+	
+	function deleteTeam($id_user,$round){
+		$query="DELETE from `teams` where id_user=? and round=?;";
+		$query2 =  "DELETE from `tactics` where id_user=? and round=?;";
+
+		try{
+		
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+			
+			if (!$stmt->bind_param("ii", $id_user,$round)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+	
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+			
+			if (!($stmt = $this->mysqli->prepare($query2))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+			
+			if (!$stmt->bind_param("ii", $id_user,$round)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+	
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+			
+			return true;
+			
 		}catch(exception $e) {
 			echo "\nERRORE INSERIMENTO FORMAZIONE: ".$e;
 			return false;
@@ -334,6 +381,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			$dif=0;
 			$cen=0;
 			$att=0;
+			
+			$recovered = false;
+			$modificatore = false;
 
 			while ($row = $res->fetch_assoc()) {
 				$tactic=$row['tactic'];
@@ -346,11 +396,14 @@ class ConnectDatabaseRounds extends ConnectDatabase{
                 }else{
                     $players_team=null;
                 }
+                
+                $recovered = $row['recovered'];
+                $modificatore = $row['modificatore'];
 
 			}
 
 
-			$team=new Team($id_user,$round,$dif,$cen,$att,$players_team);
+			$team=new Team($id_user,$round,$dif,$cen,$att,$players_team,$recovered,$modificatore);
 
 			return $team;
 
@@ -890,6 +943,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			$config=$this->dumpConfig();
 
 			$max_sub=2;
+			
+			$error = null;
+			
 			if(isset($config['max_sub'])) $max_sub=$config['max_sub'];
 
 			try{
@@ -927,16 +983,41 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		                $reserves=array();
 
 		                foreach($start as $pl){
-			                $ids[]=$pl->getPlayer()->getId();
+			                $temp=array();
+			                $temp["id"]=$pl->getPlayer()->getId();
+			                $temp["position"]=$pl->getPosition();
+			                $ids[]=$temp;
 			            }
 
 			            foreach($back as $pl){
-			                $reserves[]=$pl->getPlayer()->getId();
+			                $temp=array();
+			                $temp["id"]=$pl->getPlayer()->getId();
+			                $temp["position"]=$pl->getPosition();
+			                $reserves[]=$temp;
 			            }
 
 			            $tactic=$team->getDef().$team->getCen().$team->getAtt();
+			            
+			            $destroy_team = true;
+			            
+			            if($round>5){ // Check Se formazione non messa per 5 giornate
+				            for($i=$round-1;$i>$round-5;$i--){
+					            $checking_team = $this->getTeam($id_user,$i); // Prelevo il team
+					            if(!$checking_team->isRecovered()){
+						            $destroy_team=false;
+					            }
+				            }
+			            }else{
+				            $destroy_team = false;
+			            }
+			            
+			            if(!$destroy_team){ // SE NELLE SCORSE 5 GIORNATE il team almeno una volta non è stato recuperato recuperalo
+			            	$this->insertTeam($id_user,$ids,$reserves,$round,$tactic,true);
+			            }else{ // ALTRIMENTI IMPOSTA A NO I PLAYERS DEL TEAM
+				            $team->setPlayers(null);
+				            $error = "5 Giornate senza aver inserito formazione";
+			            }
 
-			            $this->insertTeam($id_user,$ids,$reserves,$round,$tactic);
 
 					}
 
@@ -972,9 +1053,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 									$vote=$stat['final']->getValue();
 									
 									if($modificatore==true && $player->getRole()=="D"){
-										$modArr["centro"] = $stat['vote']->getValue();
+										$modArr["centro"][] = $stat['vote']->getValue();
 									}else if($modificatore==true && $player->getRole()=="P"){
-										$modArr["portiere"] = $stat['vote']->getValue();
+										$modArr["portiere"][] = $stat['vote']->getValue();
 									}
 									
 									$result=$result+$vote;
@@ -997,15 +1078,15 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 										
 										if($modificatore==true && $arr["role"]=="D"){
 											if($arr["originale"] == $arr["noEdit"]){
-												$modArr["centro"] = $arr["originale"];
+												$modArr["centro"][] = $arr["originale"];
 											}else{
-												$modArr["centro"] = $arr["noEdit"];
+												$modArr["centro"][] = $arr["noEdit"];
 											}
 										}else if($modificatore==true && $arr["role"]=="P"){
 											if($arr["originale"] == $arr["noEdit"]){
-												$modArr["portiere"] = $arr["originale"];
+												$modArr["portiere"][] = $arr["originale"];
 											}else{
-												$modArr["portiere"] = $arr["noEdit"];
+												$modArr["portiere"][] = $arr["noEdit"];
 											}
 										}
 										
@@ -1019,15 +1100,52 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 						}
 						$gol=0;
 						
+						
+						
 						if(count($modArr["portiere"])>0 && count($modArr["centro"])>3){
+							
 							// OK MODIFICATORE VALE
 							
 							$punti_mod = $modArr["portiere"][0];
+														
+							$arrcen = $modArr["centro"];
 							
-							$arrcen = rsort($modArr["centro"]);
+							$new = array();
+														
+							foreach($arrcen as $ele){
+								if(count($new)>0){
+									for($i=0;$i<count($new);$i++){
+										$enter = false;
+										
+										
+										if($ele>=$new[$i]){
+											$enter = true;
+											$new_arr = array($ele);
+											if($i==0){
+												array_unshift($new, $ele);
+												break;
+											}else{
+												
+												array_splice($new, $i, 0, $new_arr);
+												break;
+											}
+										}
+										
+										
+									}
+									
+									if(!$enter){
+										$new[] = $ele;
+									}
+								}else{
+									$new[]=$ele;
+								}
+								
+							}
+							
 							
 							for($i = 0 ; $i<3 ; $i++){
-								$punti_mod = $punti_mod + $arrcen[$i];
+								$punti_mod = $punti_mod + $new[$i];
 							}
 							
 							$media = $punti_mod / 4;
@@ -1039,6 +1157,21 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 							}else if($media >= 6 && $media < 6.5){
 								$result = $result + 1;
 							}
+							
+							$tempQuery="UPDATE `tactics` SET modificatore=1 WHERE id_user=? and round=?";
+
+							if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+							    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+							}
+	
+							if (!$stmt->bind_param("ii", $id_user,$round)) {
+							    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+							}
+	
+							if (!$stmt->execute()) {
+							    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+							}
+							
 						}
 
 						
@@ -1060,6 +1193,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 						if (!$stmt->execute()) {
 						    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 						}
+						
+						
 
 
 
@@ -1079,11 +1214,15 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 						if (!$stmt->execute()) {
 						    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 						}
+						
+						
 					}
+					
+					
 
 				}
 
-
+				
 
 
 
@@ -1098,6 +1237,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		if($this->isCalcRound($round)){
 			$tempQuery="UPDATE stats SET final=NULL  WHERE round=? ";
 			$tempRemove="DELETE FROM rounds_result WHERE round=?";
+			
+			$db_users = new ConnectDatabaseUsers($this->mysqli);
+			
+			
 
 			try{
 
@@ -1124,6 +1267,21 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				if (!$stmt->execute()) {
 				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
+				
+				$users = $db_users->getUsers();
+				
+				foreach($users as $user){
+					$id_user = $user->getId();
+					
+					$team = $this->getTeam($id_user,$round);
+					
+					if($team->isRecovered()){
+						$this->deleteTeam($id_user,$round);
+					}
+				}
+				
+				
+				
 
 
 

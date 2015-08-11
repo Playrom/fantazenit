@@ -728,6 +728,14 @@ a.current-round{
 	float: right;
 	position: relative;
 	height: 50px;
+	
+	img{
+		float: left;
+	    position: left;
+	    height: auto;
+	    width: 30px;
+	    margin: 10px;
+	}
 }
 
 .info-player-link-item{
@@ -848,6 +856,9 @@ a.current-round{
 	    height: auto;
 	    width: 30px;
 	    margin-left: 5px;
+	    margin-top: 5px;
+	    margin-bottom: 5px;
+	    
 	    cursor: pointer;
     }
     

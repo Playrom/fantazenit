@@ -535,6 +535,12 @@ a.current-round {
   float: right;
   position: relative;
   height: 50px; }
+  .info-player-item img {
+    float: left;
+    position: left;
+    height: auto;
+    width: 30px;
+    margin: 10px; }
 
 .new-player {
   width: 50%;
@@ -631,6 +637,8 @@ a.current-round {
     height: auto;
     width: 30px;
     margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     cursor: pointer; }
   .search-width img:first-child {
     margin-left: 0; }

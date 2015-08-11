@@ -30,8 +30,18 @@ if($username!=null){
             if($json["error"]==true){
                 var_dump($json);
             }
+            
+            $json=$apiAccess->accessApi("/config","GET");
+
+			$config = null;
+			
+			if($json["error"]==false){
+			    $config = $json["data"];
+			}
+
+            
         }else if(isset($_POST['uncalc'])){
-	
+	        			
 	        $round=$_POST['uncalc'];
 			
 			$arr_data = array("round"=>$round , "type" => "OPEN");
@@ -43,6 +53,15 @@ if($username!=null){
             if($json["error"]==true){
                 var_dump($json);
             }
+            
+            $json=$apiAccess->accessApi("/config","GET");
+
+			$config = null;
+			
+			if($json["error"]==false){
+			    $config = $json["data"];
+			}
+
 	
 	    }else if(isset($_POST['current_round'])){
 	
@@ -58,6 +77,15 @@ if($username!=null){
             if($json["error"]==true){
                 var_dump($json);
             }
+            
+            $json=$apiAccess->accessApi("/config","GET");
+
+			$config = null;
+			
+			if($json["error"]==false){
+			    $config = $json["data"];
+			}
+
 	
 	    }else if(isset($_POST['add_round'])){
 	
@@ -72,6 +100,14 @@ if($username!=null){
             if($json["error"]==true){
                 var_dump($json);
             }
+            
+            $json=$apiAccess->accessApi("/config","GET");
+
+			$config = null;
+			
+			if($json["error"]==false){
+			    $config = $json["data"];
+			}
 	
 	    }
 	

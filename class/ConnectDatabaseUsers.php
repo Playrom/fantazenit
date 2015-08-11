@@ -218,7 +218,7 @@ function checkAuthOverride($apiKey){
     
     function getUsers(){
 
-		$query="select * , UNIX_TIMESTAMP(reg_date) as time from `users` order by username ASC";
+		$query="select * , UNIX_TIMESTAMP(reg_date) as time from `users` order by name_team ASC";
 
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
 		$data_markets=new ConnectDatabaseMarkets($this->mysqli);

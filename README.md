@@ -126,6 +126,10 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Search player with name team
 * New: Filter team in changeroster e createroster
 * Bugfix: Player removed from roster was displayed in free table also when it was not selected his role
+* Bugfix: Module display in Make Team with "-"
+* Bugfix: Modificatore Difesa
+* New: Dopo 5 Giornate non si recupera piu giornata precedente
+* New: Ora ogni volta che si cancella una giornata , se la formazione è stata recuperata essa sarà cancellata, per rendere più pulito e coerente il database
 
 # Da Fare
 --
