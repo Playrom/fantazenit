@@ -35,7 +35,7 @@
     
     <?php if($valid_messages!=null){
 	    foreach($valid_messages as $error){ ?>
-		    <div class="alert alert-danger error_display" role="alert">
+		    <div class="alert alert-success error_display" role="alert">
 				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 				<span class="sr-only"></span><?php echo $error; ?>
 			</div>
