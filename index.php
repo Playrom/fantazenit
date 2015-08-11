@@ -58,7 +58,7 @@ if($json["error"]==false && $userId!=null){
     
     <div class="row presentation motivi">
 	    <div class="col-md-12">
-		    <h1>Perché il Fanta Zenit?</h1>
+		    <!--<h1>Perché il Fanta Zenit?</h1>
 
 			<p>Chi vuole sfidare la fortuna gioca ad asta, chi vuole sfidare se stesso e le sue capacità manageriali calcistiche sceglie il Fanta Zenit</p>
 			
@@ -92,6 +92,15 @@ if($json["error"]==false && $userId!=null){
 			<p>Iscriviti e scopri tutte le novità su:<br>
 			<a href="www.fantazenit.it">www.fantazenit.it</a><br>
 			<a href="www.facebook.com/fantazenit">www.facebook.com/fantazenit</a></p>
+			
+			-->
+			
+			<div class="col-lg-4">
+				<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+				<h2>Heading</h2>
+				<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+				<p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+	        </div>
 	    </div>
     </div>
     

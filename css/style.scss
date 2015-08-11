@@ -166,14 +166,14 @@ h1,h2,h3{
 .avatar{
 	float: left;
 	position: relative;
-	margin: 10px 10px 10px 0;
 	
-	height: 80px;
-	width: 80px;
+	
+	height: 70px;
+	width: 70px;
 	background: none;
 	
 	img{
-		max-height: 80px;
+		max-height: 70px;
 		width: auto;
 	}
 }
@@ -186,10 +186,10 @@ h1,h2,h3{
 		color: $red;
 		float: left;
 		position: relative;
-		margin: 10px 5%;
-		height: 35px;
-		line-height: 35px;
-		font-size: 30px;
+		margin: 5px 5%;
+		height: 25px;
+		line-height: 25px;
+		font-size: 20px;
 		width: 90%;
 	}
 	
@@ -203,6 +203,89 @@ h1,h2,h3{
 		font-size: 26px;
 		color: black;
 	}
+	
+}
+
+ul.nav.navbar-nav{
+	.red_color{
+		color: $red;
+		*{
+			color: $red;
+		}
+	}
+}
+
+@media screen and (min-width: 930px){
+	
+	nav.navbar.navbar-default{
+		float:left;
+		width: 100%;
+		height: 100px;
+	}
+	
+	.collapse.navbar-collapse{
+		height: 100px;
+	}
+	
+	.navbar-header{
+		height: 100px;
+	}
+
+	ul.nav.navbar-nav{
+		
+		float: right;
+		height: 100px;
+		
+		> li{
+			height: 100px;
+			line-height: 100px;
+			> a{
+				height: 100px;
+				line-height: 70px;
+			}
+			
+		}
+	
+	}
+	
+}
+
+@media screen and (min-width: 768px){
+	
+	nav.navbar.navbar-default{
+		float:left;
+		width: 100%;
+		height: auto;
+	}
+	
+	.collapse.navbar-collapse{
+		height: auto;
+	}
+	
+	.navbar-header{
+		height: auto;
+	}
+
+	ul.nav.navbar-nav{
+		
+		float: right;
+		height: 100px;
+		
+		
+	
+	}
+	
+	
+}
+
+@media screen and (max-width: 767px){
+	
+	nav.navbar.navbar-default{
+		float:left;
+		width: 100%;
+		height: auto;
+	}
+	
 	
 }
 

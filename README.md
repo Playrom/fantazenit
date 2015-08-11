@@ -134,5 +134,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Bugfix: Alert Success ora ha corretta classe css
 * New: FAQ
 
+* Edit: Nuovo menu riepilogo
+
 # Da Fare
 --

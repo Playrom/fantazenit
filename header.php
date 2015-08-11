@@ -200,92 +200,110 @@ if(isset($config['current_round'])){
             </div>
             
             
-            <div class="container-fluid main-menu">
-	            
-	            <div class="row">
-		            
-		            <div class="col-md-12">
             
-		            	<?php if($userId!=null) { ?>
-				            <div class="user-menu">
-					        	
-					        	<div class="avatar">
-						        	<?php
-							        	if($user["url_avatar"]!=null){ ?>
-								        	<img <?php echo "src=\"".$user["url_avatar"]."\""; ?> />
-							        	<?php 
-								        }else{ 
-								        ?>
-								        	<img src="img/default_avatar.png" />
-							        	<?php
-								        }
+		            
+            <nav class="navbar navbar-default">
+	            
+	            <div class="container-fluid">
+		            
+		            <div class="navbar-header">
+		            	
+		            	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					        <span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+				        </button>
+    
+			            	<?php if($userId!=null) { ?>
+			            	
+			            	
+						        
+								<div class="navbar-brand" style="height: 100px;">
+									<div class="user-menu">
+						        	
+							        	<div class="avatar">
+								        	<?php
+									        	if($user["url_avatar"]!=null){ ?>
+										        	<img <?php echo "src=\"".$user["url_avatar"]."\""; ?> />
+									        	<?php 
+										        }else{ 
+										        ?>
+										        	<img src="img/default_avatar.png" />
+									        	<?php
+										        }
+									        	
+									        ?>
+							        	</div>
 							        	
-							        ?>
-					        	</div>
-					        	
-					        	<div class="user-info">
-						        	<div class="user-info-item username"><?php echo $user["username"]; ?></div>
-									<div class="user-info-item name-team"><?php echo $user["name_team"]; ?></div>
-					        	</div>
-					        	
-				            </div>
-						<?php }else{ ?>
-							 <ul class="menu not-logged">
-								 <li>
-								 	<a href="login.php">Accedi</a>
-								 </li>
+							        	<div class="user-info">
+								        	<div class="user-info-item username"><?php echo $user["username"]; ?></div>
+											<div class="user-info-item name-team"><?php echo $user["name_team"]; ?></div>
+							        	</div>
+							        	
+						            </div>
+								</div>
+								
+							<?php } ?>
+					</div>
+											            
+		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			            <ul class="nav navbar-nav">
+				            
+					            <?php if($userId==null) { ?>
+					            <li class="red_color">
+									<a href="login.php">Accedi</a>
+								</li>
 								 
-								 <li>
-								 	<a href="signup.php">Registrati</a>
-								 </li>
-							 </ul>
-						
-						
-						<?php } ?>
-				            
-			            
-			            <ul class="menu">
-				            
+								<li class="red_color">
+									<a href="signup.php">Registrati</a>
+								</li>
+					            
+							<?php } ?>
+							
 				            <li>
 								<a href="home.php">Riepilogo</a>
 							</li>
 			            
-				            <li>Info&#8595
-				        		<ul>
-					                <a href="formations.php"><li>Formazioni</li></a>
-					                <a href="teams.php"><li>Squadre</li></a>
-					                <a href="standings.php"><li>Classifiche</li></a>
+				            <li class="dropdown">
+				            	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fanta Zenit <span class="caret"></span></a>
+				        		<ul class="dropdown-menu">
+					                <li><a href="formations.php">Formazioni</a></li>
+									<li><a href="teams.php">Squadre</a></li>
+					                <li><a href="standings.php">Classifiche</a></li>
 					                
 									<?php if($userId!=null) { ?>
-										<a href="logout.php"><li>Logout</li></a>
+										<li><a href="logout.php">Logout</a></li>
 									<?php } else { ?>
-										<a href="login.php"><li>Login</li></a>
+										<li><a href="login.php">Login</a></li>
 									<?php } ?>
 				        		</ul>
 				        	</li>
 				            
 			            	<?php if($userId!=null) { ?>
 					            
-					        	<li>Squadra&#8595
-					        		<ul>
-						        		<a href="profile.php"><li>Il Mio Profilo</li></a>
-						                <a href="maketeam.php"><li>Inserisci Formazione</li></a>
-						                <a href="createroster.php"><li>Crea Rosa</li></a>
-						                <a href="changeroster.php"><li>Mercato di Riparazione</li></a>
+					        	<li class="dropdown">
+					        	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Squadra <span class="caret"></span></a>
+					        		<ul class="dropdown-menu">
+						        		<li><a href="profile.php">Il Mio Profilo</a></li>
+						                <li><a href="maketeam.php">Inserisci Formazione</a></li>
+						                <li><a href="createroster.php">Crea Rosa</a></li>
+						                <li><a href="changeroster.php">Mercato di Riparazione</a></li>
 					        		</ul>
 					        	</li>
 					        	
 					        	<?php if($userAuth==1) { ?>
 						            
-						            <li>Amministrazione&#8595
-						            	<ul class="admin-menu">
-							                <a href="gestionegiornate.php"><li>Gestione Giornate</li></a>
-							                <a href="editformations.php"><li>Modifica Formazioni</li></a>
-							                <a href="loadfile.php"><li>Carica Dati</li></a>
-							                <a href="settings.php"><li>Impostazioni</li></a>
-							                <a href="settings-competitions.php"><li>Gestisci Competizioni</li></a>
-							                <a href="settings-market.php"><li>Gestisci Mercati</li></a>
-							                <a href="settings-handicaps.php"><li>Gestisci Penalizzazioni</li></a>
+						            <li class="dropdown">
+						            	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Amministrazione <span class="caret"></span></a>
+						            	<ul class="dropdown-menu">
+							                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
+							                <li><a href="editformations.php">Modifica Formazioni</a></li>
+							                <li><a href="loadfile.php">Carica Dati</a></li>
+							                <li><a href="settings.php">Impostazioni</a></li>
+							                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
+							                <li><a href="settings-market.php">Gestisci Mercati</a></li>
+							                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
 						            	</ul>
 						            </li>
 						            
@@ -295,8 +313,9 @@ if(isset($config['current_round'])){
 			            </ul>
 		            </div>
 	            </div>
+            </nav>
 	            
-            </div>
+            
             
             
             <!-- <div id="menu-settings"></div> -->
