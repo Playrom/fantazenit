@@ -6,6 +6,7 @@
 		                <li><a href="home.php">Home</a></li>
 	                	<li><a href="lista.php">Quotazioni</a></li>
 	                	<li><a href="regolamento.php">Regolamento</a></li>
+	                	<li><a href="faq.php">Faq</a></li>
 	                	<li><a href="privacypolicy.php">Privacy Policy</a></li>
 	                </ul>
                 </div>

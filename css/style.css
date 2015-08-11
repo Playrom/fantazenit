@@ -296,7 +296,7 @@ h1, h2, h3 {
 
 .motivi {
   background: #FFFFFF; }
-  .motivi h1, .motivi h3 {
+  .motivi h1, .motivi h3, .motivi strong {
     color: #FF0000; }
   .motivi h2 {
     color: #246BB2; }

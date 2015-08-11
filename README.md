@@ -131,8 +131,8 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Dopo 5 Giornate non si recupera piu giornata precedente
 * New: Ora ogni volta che si cancella una giornata , se la formazione è stata recuperata essa sarà cancellata, per rendere più pulito e coerente il database
 * New: Aggiunte colonne "recovered" e "modificatore" in tabella "tactics"
-
 * Bugfix: Alert Success ora ha corretta classe css
+* New: FAQ
 
 # Da Fare
 --

@@ -192,6 +192,7 @@ if(isset($config['current_round'])){
 	                	<li><a href="lista.php">Quotazioni</a></li>
 	                	<li><a href="regolamento.php">Regolamento</a></li>
 	                	<li><a href="storia.php">Chi Siamo</a></li>
+	                	<li><a href="faq.php">Faq</a></li>
 	                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
 
 	                </ul>
