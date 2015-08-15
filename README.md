@@ -133,10 +133,10 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Aggiunte colonne "recovered" e "modificatore" in tabella "tactics"
 * Bugfix: Alert Success ora ha corretta classe css
 * New: FAQ
-
 * Edit: Nuovo menu riepilogo
 * Bugfix: editformations.php
 * New: minimum points per round
+* New: Immagini Bonus e Malus
 
 # Da Fare
 --

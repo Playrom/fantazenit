@@ -230,6 +230,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				
 				                                if(isset($arr_stat)){
 				                                    $stat=$arr_stat;
+				                                    
 				                                }
 				                                
 				                                ?>
@@ -240,12 +241,17 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                                        <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
 				                                        <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
 				                                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-				                                        <div class="name-player-item"><?php echo $player["player"]["name"]; ?>
-				                                            <?php if(isset($arr_stat[$real_round]) && $stat['scored']["value"]>0) {  for($i=0;$i<$stat['scored']["value"];$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
-				                                            <?php if(isset($arr_stat[$real_round]) && $stat['taken']["value"]>0) {  for($i=0;$i<$stat['taken']["value"];$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
-				                                            <?php if(isset($arr_stat[$real_round]) && $stat['autogol']["value"]>0) {  for($i=0;$i<$stat['autogol']["value"];$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
-				                                            <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']["value"]>0) {  for($i=0;$i<$stat['yellow_card']["value"];$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
-				                                            <?php if(isset($arr_stat[$real_round]) && $stat['red_card']["value"]>0) {  for($i=0;$i<$stat['red_card']["value"];$i++){ ?><img src="img/red_card.png"><?php } } ?>
+				                                        <div class="name-player-item"><?php echo $player["player"]["name"];?>
+				                                            <?php if($stat['scored']["value"]>0) {  for($i=0;$i<$stat['scored']["value"];$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
+				                                            
+				                                            <?php if($stat['free_kick_scored']["value"]>0) {  for($i=0;$i<$stat['free_kick_scored']["value"];$i++){ ?><img src="img/free_kick_scored.png"><?php } } ?>
+				                                            <?php if($stat['free_kick_missed']["value"]>0) {  for($i=0;$i<$stat['free_kick_missed']["value"];$i++){ ?><img src="img/free_kick_missed.png"><?php } } ?>
+				                                            <?php if($stat['free_kick_keeped']["value"]>0) {  for($i=0;$i<$stat['free_kick_keeped']["value"];$i++){ ?><img src="img/free_kick_keeped.png"><?php } } ?>
+				                                            <?php if($stat['assist']["value"]>0) { for($i=0;$i<$stat['assist']["value"];$i++){ ?><img src="img/assist.png"><?php } } ?>
+				                                            <?php if($stat['taken']["value"]>0) { for($i=0;$i<$stat['taken']["value"];$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
+				                                            <?php if($stat['autogol']["value"]>0) {  for($i=0;$i<$stat['autogol']["value"];$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
+				                                            <?php if($stat['yellow_card']["value"]>0) {  for($i=0;$i<$stat['yellow_card']["value"];$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
+				                                            <?php if($stat['red_card']["value"]>0) {  for($i=0;$i<$stat['red_card']["value"];$i++){ ?><img src="img/red_card.png"><?php } } ?>
 				                                        </div>
 				
 				                                <?php if(!$isCalc){ ?>
@@ -290,11 +296,16 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				                                <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  >
 				                                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
 				                                <div class="name-player-item"><?php echo $player["player"]["name"]; ?>
-				                                    <?php if(isset($arr_stat[$real_round]) && $stat['scored']["value"]>0) {  for($i=0;$i<$stat['scored']["value"];$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
-				                                    <?php if(isset($arr_stat[$real_round]) && $stat['taken']["value"]>0) {  for($i=0;$i<$stat['taken']["value"];$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
-				                                    <?php if(isset($arr_stat[$real_round]) && $stat['autogol']["value"]>0) {  for($i=0;$i<$stat['autogol']["value"];$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
-				                                    <?php if(isset($arr_stat[$real_round]) && $stat['yellow_card']["value"]>0) {  for($i=0;$i<$stat['yellow_card']["value"];$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
-				                                    <?php if(isset($arr_stat[$real_round]) && $stat['red_card']["value"]>0) {  for($i=0;$i<$stat['red_card']["value"];$i++){ ?><img src="img/red_card.png"><?php } } ?>
+				                                    <?php if($stat['scored']["value"]>0) {  for($i=0;$i<$stat['scored']["value"];$i++){ ?><img src="img/gol_ball.png"><?php } } ?>
+				                                            
+		                                            <?php if($stat['free_kick_scored']["value"]>0) {  for($i=0;$i<$stat['free_kick_scored']["value"];$i++){ ?><img src="img/free_kick_scored.png"><?php } } ?>
+		                                            <?php if($stat['free_kick_missed']["value"]>0) {  for($i=0;$i<$stat['free_kick_missed']["value"];$i++){ ?><img src="img/free_kick_missed.png"><?php } } ?>
+		                                            <?php if($stat['free_kick_keeped']["value"]>0) {  for($i=0;$i<$stat['free_kick_keeped']["value"];$i++){ ?><img src="img/free_kick_keeped.png"><?php } } ?>
+		                                            <?php if($stat['assist']["value"]>0) { for($i=0;$i<$stat['assist']["value"];$i++){ ?><img src="img/assist.png"><?php } } ?>
+		                                            <?php if($stat['taken']["value"]>0) { for($i=0;$i<$stat['taken']["value"];$i++){ ?><img src="img/gol_taken.png"><?php } } ?>
+		                                            <?php if($stat['autogol']["value"]>0) {  for($i=0;$i<$stat['autogol']["value"];$i++){ ?><img src="img/gol_auto.png"><?php } } ?>
+		                                            <?php if($stat['yellow_card']["value"]>0) {  for($i=0;$i<$stat['yellow_card']["value"];$i++){ ?><img src="img/yellow_card.png"><?php } } ?>
+		                                            <?php if($stat['red_card']["value"]>0) {  for($i=0;$i<$stat['red_card']["value"];$i++){ ?><img src="img/red_card.png"><?php } } ?>
 				                                </div>
 				
 				
