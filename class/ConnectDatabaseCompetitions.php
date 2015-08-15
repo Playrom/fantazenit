@@ -592,15 +592,14 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 					
 
 			foreach($handicaps_competitions as $handicap){
-				
-				if($handicap->getCompetition()!=null){
-				
-					if(intval($handicap->getCompetition()->getId())==intval($id_competition)){
-						$points_handicap=$handicap->getPoints();
-						$points=$points+$points_handicap;
-					}
-				}
+					$points_handicap=$handicap->getPoints();
+					$points=$points+$points_handicap;
 			}
+			
+			
+
+			
+			
 			
 			$temp['id_user']=$user["id"];
 			$temp['gol']=$gols;
@@ -610,8 +609,14 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 
 		usort($classifica, function($a, $b) { // SORT DESC ONLY BY POINTS
 			$diff=$b['points'] - $a['points'];
-		    return $diff;
+			
+			if($diff>0){
+				return true;
+			}else{
+				return false;
+			}
 		});
+		
 		return $classifica;
 
 	}

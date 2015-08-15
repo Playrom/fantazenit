@@ -241,7 +241,13 @@ Da Stabilire ad Iscrizioni Terminate
 ##Note Finali
 In caso non venga raggiunto un numero di squadre sufficienti a garantire tale formula nei numeri sopra indicati Zenit si riserva la possibilità di comunicare nelle pagine dedicate al concorso le metodologie utilizzate.
 
-L'entità dei premi sarà comunicata alla chiusura delle iscrizioni, e saranno rendicontate tutte le spese di gestione che andranno ad intaccarlo.
+Chi totalizzerà il punteggio maggiore di ogni giornata può scegliere se recarsi presso il Narciso Café e ricevere un aperitivo gratuito od, in alternativa, utilizzare 5 euro di buono presso la Goldbet di via Calabria 26, accanto all’ex Klu (buono usufruibile anche per via telematica).<br>Il secondo classificato otterrà il premio rimasto vacante
+
+Nel caso in cui due persone ottenessero il primo posto nella classifica di giornata la scelta sarà effettuata dal meglio classificato in Classifica Generale.
+
+Nel caso in cui il pari merito sia tra 3 o più giocatori, o tra 2 secondi classificati il premio non verrà assegnato.
+
+L'entità dei premi finali sarà comunicata alla chiusura delle iscrizioni, e saranno rendicontate tutte le spese di gestione che andranno ad intaccarlo.
 
 I Premi consisteranno esclusivamente in Buoni Regalo sul Sito Amazon.IT
 

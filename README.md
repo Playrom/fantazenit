@@ -135,6 +135,8 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: FAQ
 
 * Edit: Nuovo menu riepilogo
+* Bugfix: editformations.php
+* New: minimum points per round
 
 # Da Fare
 --

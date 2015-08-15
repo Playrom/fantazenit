@@ -91,21 +91,17 @@ if($username == null) {
 		
 	
 	    $roster=$user["players"];
-	
-	    $round=1;
-	    
+	    		    
 	    $num_giocatori=$config['max_por']+$config['max_def']+$config['max_cen']+$config['max_att'];
 	    
 	    if(count($roster)!=$num_giocatori){
 	
 	        $_SESSION["roster_not_completed"]=true;
-	        header("Location: createroster.php");
+	        $error_messages[] = "la rosa di ".$user["username"]." non è completa";
 	
 	    }
 	
-	    if(isset($config['current_round'])){
-	        $round=intval($config['current_round']);
-	    }
+	    
 	    
 	    	        
 	    
@@ -208,7 +204,9 @@ if($username == null) {
 	*/
 	
 	}else{
-		$round = $config["current_round"];
+		if(isset($config['current_round'])){
+	        $round=intval($config['current_round']);
+	    }
 	}
 	
 	$users = null;
@@ -253,11 +251,11 @@ if($username == null) {
     $possibleToEdit = false;
     
     if($json_round["error"]==false){
-	    $possibleToEdit = $json_round["data"]["formations_editing"];
+	    $possibleToEdit = $json_round["data"]["open"];
     }
 
 
-
+	include("error-box.php");
 
     ?>
     <div id="official_players" <?php echo "number=\"".$official_players."\""; ?> ></div>
@@ -267,7 +265,7 @@ if($username == null) {
 	        
 			<div class="row ">
 			    <div class="col-md-12">
-			        <form class="form-horizontal white-with-padding" action="editformations.php" method="post">
+			        <form class="form-horizontal white-with-padding" action="editformations.php" method="post" style="margin-top: 10px;">
 		                <div class="form-group ">
 		                    <h3 class="col-md-8 control-label left-label">Seleziona Team&nbsp;&nbsp;</h3>
 		                    
@@ -697,7 +695,7 @@ if($username == null) {
         <?php }else{ ?>
         <div class="alert alert-danger error_display" role="alert">
             <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-            <span class="sr-only"></span>Attenzione , non è piu possibile inserire la formazione
+            <span class="sr-only"></span>Attenzione , non è piu possibile inserire la formazione perchè giornata calcolata
         </div>
       <?php } ?>
     </div> <!-- container end -->

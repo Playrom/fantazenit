@@ -214,6 +214,14 @@ if(isset($config['current_round'])){
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 				        </button>
+				        
+				        <div class="visible-xs-block">
+					        <div class="navbar-brand">
+						        Menu
+					        </div>
+				        </div>
+				        
+				        <div class="hidden-xs">
     
 			            	<?php if($userId!=null) { ?>
 			            	
@@ -245,6 +253,9 @@ if(isset($config['current_round'])){
 								</div>
 								
 							<?php } ?>
+							
+				        </div>
+				        
 					</div>
 											            
 		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

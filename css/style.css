@@ -153,6 +153,9 @@ ul.nav.navbar-nav .red_color {
   ul.nav.navbar-nav .red_color * {
     color: #FF0000; }
 
+.navbar {
+  margin-bottom: 0; }
+
 @media screen and (min-width: 930px) {
   nav.navbar.navbar-default {
     float: left;

@@ -946,6 +946,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			
 			$error = null;
 			
+			$minimum = 60;
+			
+			$to_adding = array();
+			
 			if(isset($config['max_sub'])) $max_sub=$config['max_sub'];
 
 			try{
@@ -1179,6 +1183,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 						if($result>=66){
 							$gol=floor(($result-66)/6)+1;
 						}
+						
+						if($result<60){
+							$minimum = $result;
+						}
 
 						$tempQuery="REPLACE INTO `rounds_result` (`id_user`,`round`,`points`,`gol`) VALUES(?,?,?,?)";
 
@@ -1201,25 +1209,86 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 
 					}else{
-						$tempQuery="REPLACE INTO `rounds_result` (`id_user`,`round`) VALUES(?,?)";
-
-						if(!($stmt = $this->mysqli->prepare($tempQuery))) {
-						    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-						}
-
-						if (!$stmt->bind_param("ii", $id_user,$round)) {
-						    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-						}
-
-						if (!$stmt->execute()) {
-						    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-						}
+						
+						$to_adding[]=$id_user;
+						
+						
 						
 						
 					}
 					
 					
 
+				}
+				
+				
+				if(count($to_adding)>0){
+					
+					foreach($to_adding as $id){
+						
+						if($round>1){
+							$temp_team = $this->getTeam($id,$round-1);
+							
+							if($temp_team->getPlayers() != null){ // SE DIVERSO DA NULL METTI MINIMO
+								$tempQuery="REPLACE INTO `rounds_result` (`id_user`,`round`,`points`,`gol`) VALUES(?,?,?,?)";
+
+								if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+								    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+								}
+								
+								$zero = 0;
+		
+								if (!$stmt->bind_param("iiii", $id,$round,$minimum,$zero)) {
+								    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+								}
+		
+								if (!$stmt->execute()) {
+								    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+								}
+							}else{ // ALTRIMENTI METTI ZERO
+								$tempQuery="REPLACE INTO `rounds_result` (`id_user`,`round`,`points`,`gol`) VALUES(?,?,?,?)";
+
+								if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+								    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+								}
+								
+								$zero = 0;
+		
+								if (!$stmt->bind_param("iiii", $id,$round,$zero,$zero)) {
+								    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+								}
+		
+								if (!$stmt->execute()) {
+								    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+								}
+							}
+							
+						}else if($round == 1){
+							
+							$tempQuery="REPLACE INTO `rounds_result` (`id_user`,`round`,`points`,`gol`) VALUES(?,?,?,?)";
+
+							if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+							    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+							}
+							
+							$zero = 0;
+	
+							if (!$stmt->bind_param("iiii", $id,$round,$minimum,$zero)) {
+							    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+							}
+	
+							if (!$stmt->execute()) {
+							    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+							}
+							
+						}
+						
+						
+						
+						
+					}
+					
+					
 				}
 
 				
@@ -1849,7 +1918,14 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 		usort($classifica, function($a, $b) { // SORT DESC ONLY BY POINTS
 			$diff=$b['points'] - $a['points'];
-		    return $diff;
+		    
+		    
+		    if($diff>0){
+				return true;
+			}else{
+				return false;
+			}
+		    
 		});
 		return $classifica;
 

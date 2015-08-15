@@ -69,8 +69,7 @@ $app->post('/me', function () use ($app) {
 	    
 	    $current_pass = $data["current_pass"];
 	    
-	    error_log("current = ".$user->getPassword());
-	    error_log("current written = ".$current_pass);
+
 	    
 	    
 	    if($user->getPassword() == $current_pass){
@@ -79,9 +78,7 @@ $app->post('/me', function () use ($app) {
 		    $email = null;
 		    $url_fb = null;
 		    $name_team = null;
-		    
-			error_log($current_pass);
-		    
+		    		    
 		    if(isset($data["email"]) && $data["email"]!=""){
 			    $email = $data["email"];
 		    }
@@ -98,8 +95,6 @@ $app->post('/me', function () use ($app) {
 			    $pass = $data["new_pass"];
 		    }
 		    
-			error_log($current_pass);
-
 		    
 		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team,null);
 		    
@@ -313,7 +308,6 @@ $app->post('/users', function () use ($app) {
 
 $app->post('/users/:id/avatar' , function ($id) use ($app) {
 	
-	error_log("enter_edit");
 
 
 	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
@@ -326,10 +320,8 @@ $app->post('/users/:id/avatar' , function ($id) use ($app) {
     
     $response = null;
     
-    error_log($id);
     
     if(isset($data["avatar"])){
-	    error_log($data["avatar"]);
 	    
 	    $user = $db->getUserById($id);
 	    
@@ -686,9 +678,6 @@ $app->put('/competitions/:id', function ($id) use ($app) {
     $first_round  = $data["first_round"];
     $num_rounds = $data["num_rounds"];
     $users = $data["users"];
-    
-    error_log($id);
-    error_log($name);
 
     if($db_users->checkApi($apiKey) && $user!=null ){
         $response["error"] = false;
@@ -1550,7 +1539,6 @@ $app->get('/markets/:id/transfers/:user', function ($id_market,$id_user) use ($a
     $result=array();
         
     if(count($transfers) == 0){
-	    error_log("enter");
 	    $result = array();
 	    
 	    $response["error"] = false;
