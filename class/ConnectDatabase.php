@@ -200,6 +200,165 @@ class ConnectDatabase {
 
 
 	}
+	
+	
+	function getNews(){
+		$query="SELECT * FROM `news` ";
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    return null;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return null;
+			}
+
+            $res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$news=array();
+
+			while ($row = $res->fetch_assoc()) {
+				$date=DateTime::createFromFormat('d-m-Y H:i', $row["date"]);
+				$news[] = new News($row["id"],$row["title"],$row["html"],$date);
+			}
+
+			return $news;
+
+
+		}catch(exception $e) {
+			error_log("ERRORE DUMP NEWS");
+			return null;
+		}
+
+
+	}
+	
+	function getNewsById($id){
+		$query="SELECT * FROM `news` where id=".$id;
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    return null;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return null;
+			}
+
+            $res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$news=array();
+
+			while ($row = $res->fetch_assoc()) {
+				$date=DateTime::createFromFormat('d-m-Y H:i', $row["date"]);
+				return new News($row["id"],$row["title"],$row["html"],$date);
+			}
+
+			return $news;
+
+
+		}catch(exception $e) {
+			error_log("ERRORE DUMP NEWS");
+			return null;
+		}
+
+
+	}
+	
+	function setNews($title,$html){
+		$query="INSERT INTO `news` ( `title`, `html` ) VALUES (?,?) ";
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    return false;
+			}
+			
+			
+			if (!$stmt->bind_param("ss", $title,$html)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return  false;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return  false;
+			}
+			
+			return true;
+
+
+		}catch(exception $e) {
+			error_log("ERRORE CREATE NEWS");
+			return false;
+		}
+
+
+	}
+	
+	function editNews($id,$title,$html){
+		$query="UPDATE `news` SET  title=? , html=? WHERE id=? ";
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    return false;
+			}
+			
+			
+			if (!$stmt->bind_param("ssi", $title,$html ,  $id)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return  false;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return  false;
+			}
+			
+			return true;
+
+
+		}catch(exception $e) {
+			error_log("ERRORE EDIT NEWS");
+			return false;
+		}
+
+
+	}
+	
+	function deleteNews($id){
+		$query="DELETE FROM `news` WHERE id=".$id;
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    return false;
+			}
+			
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return  false;
+			}
+			
+			return true;
+
+
+		}catch(exception $e) {
+			error_log("ERRORE DELETE NEWS");
+			return false;
+		}
+
+
+	}
 
 }
 

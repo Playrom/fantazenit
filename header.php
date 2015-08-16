@@ -117,7 +117,9 @@ if(isset($config['current_round'])){
         <script src="js/footable.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js"></script>
 		<script src="js/cropper.min.js"></script>
-
+		
+		<script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>
+		<script>tinymce.init({selector:'#textmce'});</script>
         
         <script src="js/jquery.cookiesdirective.js"></script>
 
@@ -193,6 +195,7 @@ if(isset($config['current_round'])){
 	                	<li><a href="regolamento.php">Regolamento</a></li>
 	                	<li><a href="storia.php">Chi Siamo</a></li>
 	                	<li><a href="faq.php">Faq</a></li>
+	                	<li><a href="news.php?id=6">Consigli Attacco</a></li>
 	                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
 
 	                </ul>
@@ -303,18 +306,21 @@ if(isset($config['current_round'])){
 					        		</ul>
 					        	</li>
 					        	
-					        	<?php if($userAuth==1) { ?>
+					        	<?php if($userAuth>0) { ?>
 						            
 						            <li class="dropdown">
 						            	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Amministrazione <span class="caret"></span></a>
 						            	<ul class="dropdown-menu">
-							                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
-							                <li><a href="editformations.php">Modifica Formazioni</a></li>
-							                <li><a href="loadfile.php">Carica Dati</a></li>
-							                <li><a href="settings.php">Impostazioni</a></li>
-							                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
-							                <li><a href="settings-market.php">Gestisci Mercati</a></li>
-							                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
+							            	<?php if($userAuth==1) { ?>
+								                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
+								                <li><a href="editformations.php">Modifica Formazioni</a></li>
+								                <li><a href="loadfile.php">Carica Dati</a></li>
+								                <li><a href="settings.php">Impostazioni</a></li>
+								                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
+								                <li><a href="settings-market.php">Gestisci Mercati</a></li>
+								                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
+								            <?php } ?>
+								            <li><a href="settings-news.php">Notizie</a></li>
 						            	</ul>
 						            </li>
 						            

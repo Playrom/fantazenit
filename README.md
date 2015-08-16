@@ -137,6 +137,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Bugfix: editformations.php
 * New: minimum points per round
 * New: Immagini Bonus e Malus
+* Feature: Notizie
 
 # Da Fare
 --
