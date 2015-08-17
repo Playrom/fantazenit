@@ -15,12 +15,14 @@ if($json["error"]==false){
 	$players = $json["data"]["players"];
 }
 
-$json = $apiAccess->accessApi("/rounds/".($round-1),"GET");
+$json = $apiAccess->accessApi("/rounds/last","GET");
 
 $points = null;
+$id = null;
 
 if($json["error"]==false && $userId!=null){
 	$points = $json["data"]["results"][$userId]["points"];
+	$id = $json["data"]["id"];
 }
 
 include('error-box.php');
@@ -40,7 +42,7 @@ include('error-box.php');
 	                    <?php 
 		                if($config["last-round"] != 0){ ?>
 	                    
-	                    	<span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $points; ?></span> punti nella <?php echo $config['last-round']; ?>° Giornata<br>
+	                    	<span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $points; ?></span> punti nella <?php echo $id; ?>° Giornata<br>
 	                    
 	                    <?php 
 		                }
@@ -75,14 +77,14 @@ include('error-box.php');
         </div>
     </div>
     
-    <?php if($config['last-round']!=null && $config['last-round']!=0){ ?>
+    <?php if($id!=null && $id!=0){ ?>
     
     <div class="row">
         <div class="third_row_home row_home">
             <div class="col-md-6">
                 <div class="standings_last_round box_home">
-                    <div class="name_market">Classifica della <?php echo $config['last-round']; ?>° Giornata</div>
-                    <?php echo getStandingsRoundByIdUser($id_competition,-1,$userId); ?>
+                    <div class="name_market">Classifica della <?php echo $id; ?>° Giornata</div>
+                    <?php echo getStandingsRoundByIdUser($id_competition,$id,$userId); ?>
                 </div>
             </div>	
             <div class="col-md-6">

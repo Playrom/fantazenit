@@ -508,6 +508,28 @@ ul.nav.navbar-nav{
 	
 }
 
+.news {
+	float: left;
+	position: relative;
+	.motivi:nth-child(odd){
+		background: $white;
+	}
+	
+	.motivi:nth-child(even){
+		background: rgba(171, 171, 171, 0.3);
+	}
+}
+
+.excerpt-mask{
+	background: url(img/mask_excerpt.png) center bottom repeat-x;
+	height: 30px;
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	z-index: 3000;
+}
+
 
 
 .join{
@@ -1298,10 +1320,27 @@ tr:last-child {
 }
 
 .value_box{
-	width: 1080px;
+	//width: 100%;
 	/* opacity:0.5; */
 	height: 100px;
 	background: #FFFFFF;
+	//margin: 10px 0 0 0;
+	margin:10px 15px 0 15px;
+	
+	@media screen and (max-width: 991px){
+    	margin: 0;
+    	height: auto;
+    }
+	
+	
+}
+
+.votes_infos_box{
+	padding-right: 0;
+	
+	@media screen and (max-width: 991px){
+    	padding-right: 15px;
+    }
 }
 
 .value_map_box{
@@ -1310,13 +1349,19 @@ tr:last-child {
 }
 
 .value_info_box{
-	width: 1080px;
-	height: auto;
+	width: 100%;
+	height: auto;	
+	margin: 10px 0 0 0;
+	max-height: 300px;
+	
+	.canvas{
+		max-height: 300px;
+	}
 }
 
 .value_chart{
 	height:auto;
-	width: 1080px !important;
+	width: 100% !important;
 	margin: 0px 10px 0px 0px;
 	padding: 10px;
 	background: #FFFFFF;
@@ -1343,42 +1388,44 @@ tr:last-child {
 }
 
 .tables_box{
-	width: 1080px;
+	width: 100%;
 	height: auto;
 	float: left;
 	position: relative;
+	margin: 10px 0 0 0;
 
 }
 
 
 .value_info_table_box{
-	width: 535px;
+	width: 100%;
 	height: auto;
 	float: left;
 	position: relative;
 	background: #FFFFFF;
-	margin-right: 5px;
 	padding: 10px;
+	margin: 0;
+	
 
 }
 
 .vote_info_table_box{
-	margin-left: 5px;
-	margin-right: 0
+	margin: 0
 
 }
 
 .value_stat_box{
-	width: 1080px;
+	width: 100%;
 	padding: 5px;
 	background: #FFFFFF;
+	margin: 10px 0 0 0;
 }
 
 .name_box{
-	width: 25%;
+	width: 50%;
 	float: left;
 	position: relative;
-	height: 100%;
+	height: 100px;
 	padding: 10px;
 	background: #FFFFFF;
 }
@@ -1406,10 +1453,10 @@ tr:last-child {
 }
 
 .team_box{
-	width: 25%;
+	width: 50%;
 	float: left;
 	position: relative;
-	height: 100%;
+	height: 100px;
 	padding: 10px;
 	background: #FFFFFF;
 }
@@ -1431,6 +1478,12 @@ tr:last-child {
 	font-size: 26px;
 	text-align: center;
 	color:#000;
+	
+	@media screen and (max-width: 991px){
+    	float: right;
+    	margin-left: 0;
+    	margin-right: 5px;
+    }
 }
 
 
@@ -1448,7 +1501,7 @@ tr:last-child {
 .media_box{
 	float:left;
 	position:relative;
-	width: 25%;
+	width: 50%;
 	height: 50%;
 	background: #9c4c4c;
 	color:#fff;
@@ -1461,7 +1514,7 @@ tr:last-child {
 .current_value_box{
 	float:left;
 	position:relative;
-	width: 25%;
+	width: 50%;
 	height: 50%;
 	background: #5291f0;
 	color:#FFF;

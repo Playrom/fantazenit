@@ -19,178 +19,215 @@ include('header.php');
 <?php
 
 
-    if(isset($_GET['id'])){
-        $id_player=$_GET['id'];
-    }
 
-    $json=$apiAccess->accessApi("/players/$id_player","GET");
+if(isset($_GET['id'])){
+    $id_player=$_GET['id'];
+}
+
+$json=$apiAccess->accessApi("/players/$id_player","GET");
+
+if($json["data"]!=null){
+    $player = $json["data"];
+
+    $json=$apiAccess->accessApi("/players/$id_player/values","GET");
+
+    $values = null;
+    $last_round = $config["last_stat_round"];
 
     if($json["data"]!=null){
-        $player = $json["data"];
+        $values = $json["data"];
+    }
+    
 
-	    $json=$apiAccess->accessApi("/players/$id_player/values","GET");
+	$votes=array();
+	$rounds_arr=array();
+	$item=false;
+	$it=1;
 
-        $values = null;
-        $last_round = $config["last_stat_round"];
+	foreach($player["stat"] as $stat){
+		if(isset($stat['final'])){
+			$vote=$stat['final']["value"];
+			$basic=$stat['vote']["value"];
+			$r=$stat['round']["value"];
 
-        if($json["data"]!=null){
-            $values = $json["data"];
-        }
-	    
-
-		$votes=array();
-		$rounds_arr=array();
-		$item=false;
-		$it=1;
-
-		foreach($player["stat"] as $stat){
-			if(isset($stat['final'])){
-				$vote=$stat['final']["value"];
-				$basic=$stat['vote']["value"];
-				$r=$stat['round']["value"];
-
-				if($it==$r){
-					if($vote==-1) $vote=0;
-					$votes[]=array('final'=>$vote,'round'=>$r,'vote'=>$basic);
-					$item=true;
+			if($it==$r){
+				if($vote==-1) $vote=0;
+				$votes[]=array('final'=>$vote,'round'=>$r,'vote'=>$basic);
+				$item=true;
+				$it++;
+			}else{
+				$colmare=$r-$it;
+				for($i=0;$i<$colmare;$i++){
+					$votes[]=array('final'=>0,'round'=>$it,'vote'=>0);
 					$it++;
-				}else{
-					$colmare=$r-$it;
-					for($i=0;$i<$colmare;$i++){
-						$votes[]=array('final'=>0,'round'=>$it,'vote'=>0);
-						$it++;
-					}
-					$it++;
-					if($vote==-1) $vote=0;
-					$votes[]=array('final'=>$vote,'round'=>$r,'vote'=>$basic);
-					$item=true;
 				}
+				$it++;
+				if($vote==-1) $vote=0;
+				$votes[]=array('final'=>$vote,'round'=>$r,'vote'=>$basic);
+				$item=true;
 			}
 		}
+	}
 
 
-		if($it<$last_round){
-			for($i=$it;$i<$last_round;$i++){
-				$votes[]=array('final'=>0,'round'=>$i+1,'vote'=>0);
-			}
+	if($it<$last_round){
+		for($i=$it;$i<$last_round;$i++){
+			$votes[]=array('final'=>0,'round'=>$i+1,'vote'=>0);
 		}
+	}
 
-		if(!$item) $votes[]=array('final'=>0,'round'=>0,'vote'=>0);
-
-
-         ?>
-
-         <script type="text/javascript">
-
-		    var arr= <?php echo json_encode($values); ?>;
-			var dates=new Array();
-
-
-
-		    for(var i=0;i<arr.length;i++){
-		        val.push(arr[i]['value']);
-		        dates.push(arr[i]['date'])
-
-		    }
-
-		    lab=dates;
-
-		    arr= <?php echo json_encode($votes); ?>;
+	if(!$item) $votes[]=array('final'=>0,'round'=>0,'vote'=>0);
+	
+	if(count($votes)==0){
+		$error_messages[] = "Questo giocatore non ha mai ricevuto un voto";
+	}
+	
+	include('error-box.php');
 
 
 
-		    for(var i=0;i<arr.length;i++){
-		        vot.push(arr[i]['vote']);
-		        fin.push(arr[i]['final']);
-		        days.push(arr[i]['round']);
+     ?>
 
-		    }
+     <script type="text/javascript">
 
-
-
-		 </script>
+	    var arr= <?php echo json_encode($values); ?>;
+		var dates=new Array();
 
 
-        <div class="box value_box">
-	        <div class="name_box">
-				<span class="name_item"><?php echo $player["name"]; ?></span>
-		        <span class="role_item"><?php echo role($player["role"]); ?></span>
+
+	    for(var i=0;i<arr.length;i++){
+	        val.push(arr[i]['value']);
+	        dates.push(arr[i]['date'])
+
+	    }
+
+	    lab=dates;
+
+	    arr= <?php echo json_encode($votes); ?>;
+
+
+
+	    for(var i=0;i<arr.length;i++){
+	        vot.push(arr[i]['vote']);
+	        fin.push(arr[i]['final']);
+	        days.push(arr[i]['round']);
+
+	    }
+
+
+
+	 </script>
+
+<div class="container-fluid">
+	<div class="row">
+        <div class="value_box">
+	        <div class="col-md-6">
+		        <div class="name_box">
+					<span class="name_item"><?php echo $player["name"]; ?></span>
+			        <span class="role_item"><?php echo role($player["role"]); ?></span>
+		        </div>
+	
+		        <div class="team_box">
+					<img <?php echo "src=\"teamlogo/".$player["team"].".png\""; ?> />
+			        <span class="team_item"><?php echo $player["team"]; ?></span>
+		        </div>
 	        </div>
-
-	        <div class="team_box">
-				<img <?php echo "src=\"teamlogo/".$player["team"].".png\""; ?> />
-		        <span class="team_item"><?php echo $player["team"]; ?></span>
-	        </div>
-
-	        <div class="media_box"><span class="descript_item media_item">Media:</span><span class="value_item media_value_item"><?php echo round(media($player["stat"]),2); ?></span></div>
-	    	<div class="current_value_box"><span class="descript_item">Costo Attuale:</span><span class="value_item"><?php echo $player["value"]; ?></span></div>
-	        <div class="media_box presenze_box"><span class="descript_item media_item">Presenze:</span><span class="value_item media_value_item"><?php echo presenze($player["stat"]); ?></span></div>
-	        <div class="current_value_box first_value_box"><span class="descript_item">Costo Iniziale:</span><span class="value_item"><?php echo $player["first_value"]; ?></span></div>
+			
+			<div class="col-md-6 votes_infos_box">
+		        <div class="media_box"><span class="descript_item media_item">Media:</span><span class="value_item media_value_item"><?php echo round(media($player["stat"]),2); ?></span></div>
+		    	<div class="current_value_box"><span class="descript_item">Costo Attuale:</span><span class="value_item"><?php echo $player["value"]; ?></span></div>
+		        <div class="media_box presenze_box"><span class="descript_item media_item">Presenze:</span><span class="value_item media_value_item"><?php echo presenze($player["stat"]); ?></span></div>
+		        <div class="current_value_box first_value_box"><span class="descript_item">Costo Iniziale:</span><span class="value_item"><?php echo $player["first_value"]; ?></span></div>
+			</div>
         </div>
+	</div>
 
 
-
-         <div class="value_info_box box ">
-		 <canvas id="val_chart" class="value_chart" width="1080" height="300"></canvas>
-
-        </div>
-
-		<?php if(count($votes)!=0){ ?>
-
-         <div class="value_stat_box box ">
-			<table>
-				<tr class="value_tr"><th>Giornata</th><th>Voto</th><th>Segnati</th><th>Subiti</th><th>Rigori Segnati</th><th>Rigori Parati</th><th>Rigori Sbagliati</th><th>Autogol</th><th>Giallo</th><th>Rosso</th><th>Assist</th><th>Fanta Voto</th></tr>
-				<?php foreach($player["stat"] as $stat) { ?>
-					<tr class="value_tr">
-						<td><?php echo $stat['round']["value"]; ?></td>
-						<td><?php echo $stat['vote']["value"]; ?></td>
-						<td><?php echo $stat['scored']["value"]; ?></td>
-						<td><?php echo $stat['taken']["value"]; ?></td>
-						<td><?php echo $stat['free_kick_scored']["value"]; ?></td>
-						<td><?php echo $stat['free_kick_keeped']["value"]; ?></td>
-						<td><?php echo $stat['free_kick_missed']["value"]; ?></td>
-						<td><?php echo $stat['autogol']["value"]; ?></td>
-						<td><?php echo $stat['yellow_card']["value"]; ?></td>
-						<td><?php echo $stat['red_card']["value"]; ?></td>
-						<td><?php echo $stat['assist']["value"]; ?></td>
-						<td><?php echo $stat['final']["value"]; ?></td>
-					</tr>
-				<?php } ?>
-			</table>
-        </div>
-
-        <div class="value_info_box box ">
-		 <canvas id="vote_chart" class="vote_chart value_chart" width="1080" height="200"></canvas>
-        </div>
-        <div class="box tables_box">
-	        <div class="value_info_table_box">
-				<span class="name_item">Quotazioni</span>
-				<table>
-					<tr class="value_tr"><th>Giornata</th><th>Valore</th></tr>
-					<?php foreach($values as $val) { ?>
-						<tr class="value_tr"><td><?php echo $val['date']; ?></td><td><?php echo $val['value']; ?></td></tr>
-					<?php } ?>
-				</table>
-	        </div>
-	        <div class="vote_info_table_box value_info_table_box">
-				<span class="name_item">Voti</span>
-				<table>
-					<tr class="value_tr"><th>Giornata</th><th>Voto</th></tr>
-					<?php $values=array_reverse($votes); foreach($votes as $val) { ?>
-						<tr class="value_tr"><td><?php echo $val['round']; ?></td><td><?php echo $val['vote']; ?></td></tr>
-					<?php } ?>
-				</table>
+	<div class="row">
+        <div class="col-md-12">
+	         <div class="value_info_box box ">
+			 	<canvas id="val_chart" class="value_chart" width="100%" height="300"></canvas>
 	        </div>
         </div>
+	</div>
 
-        <?php }else{ ?>
-        	<div class="error_display">Questo giocatore non ha mai ricevuto un voto</div>
-        <?php } ?>
+<?php if(count($votes)!=0){ ?>
+		<div class="row">
+	        <div class="col-md-12">
+		        <div class="value_stat_box box ">
+					<table>
+						<tr class="value_tr"><th>Giornata</th><th>Voto</th><th>Segnati</th><th>Subiti</th><th>Rigori Segnati</th><th>Rigori Parati</th><th>Rigori Sbagliati</th><th>Autogol</th><th>Giallo</th><th>Rosso</th><th>Assist</th><th>Fanta Voto</th></tr>
+						<?php foreach($player["stat"] as $stat) { ?>
+							<tr class="value_tr">
+								<td><?php echo $stat['round']["value"]; ?></td>
+								<td><?php echo $stat['vote']["value"]; ?></td>
+								<td><?php echo $stat['scored']["value"]; ?></td>
+								<td><?php echo $stat['taken']["value"]; ?></td>
+								<td><?php echo $stat['free_kick_scored']["value"]; ?></td>
+								<td><?php echo $stat['free_kick_keeped']["value"]; ?></td>
+								<td><?php echo $stat['free_kick_missed']["value"]; ?></td>
+								<td><?php echo $stat['autogol']["value"]; ?></td>
+								<td><?php echo $stat['yellow_card']["value"]; ?></td>
+								<td><?php echo $stat['red_card']["value"]; ?></td>
+								<td><?php echo $stat['assist']["value"]; ?></td>
+								<td><?php echo $stat['final']["value"]; ?></td>
+							</tr>
+						<?php } ?>
+					</table>
+		        </div>
+	        </div>
+		</div>
+	
+	    <div class="row">
+	        <div class="col-md-12">
+		        <div class="value_info_box box ">
+					<canvas id="vote_chart" class="vote_chart value_chart" width="100%" height="200"></canvas>
+	    		</div>
+	        </div>
+	    </div>
+	    
+	    <div class="row">
+	    
+	        <div class="box tables_box">
+		        
+		        <div class="col-md-6">
+			        <div class="value_info_table_box">
+						<span class="name_item">Quotazioni</span>
+						<table>
+							<tr class="value_tr"><th>Giornata</th><th>Valore</th></tr>
+							<?php foreach($values as $val) { ?>
+								<tr class="value_tr"><td><?php echo $val['date']; ?></td><td><?php echo $val['value']; ?></td></tr>
+							<?php } ?>
+						</table>
+			        </div>
+		        </div>
+			        
+			    <div class="col-md-6">
+			        <div class="vote_info_table_box value_info_table_box">
+						<span class="name_item">Voti</span>
+						<table>
+							<tr class="value_tr"><th>Giornata</th><th>Voto</th></tr>
+							<?php $values=array_reverse($votes); foreach($votes as $val) { ?>
+								<tr class="value_tr"><td><?php echo $val['round']; ?></td><td><?php echo $val['vote']; ?></td></tr>
+							<?php } ?>
+						</table>
+			        </div>
+			    </div>
+	        </div>
+		        
+	    </div>
+
+	<?php 
+	}
+	?>
+</div>
 
 
-<?php } else { //FINE SE USER NON ESISTE ?>
-<div class="error_display">Errore , non esiste questo giocatore </div>
-<?php } ?>
+<?php 
+} else { //FINE SE USER NON ESISTE 
+	$error_messages[]="Errore , non esiste questo giocatore";
+	include('error-box.php');
+} ?>
 <script>
     $(document).ready(function(){
 
@@ -206,7 +243,7 @@ include('header.php');
 	    scaleGridLineWidth : 1,
 
 	    //Boolean - Whether the line is curved between points
-	    bezierCurve : false,
+	    bezierCurve : true,
 
 	    //Number - Tension of the bezier curve between points
 	    //bezierCurveTension : 0.4,
@@ -231,6 +268,10 @@ include('header.php');
 
 	    //Boolean - Whether to fill the dataset with a colour
 	    datasetFill : true,
+	    
+	    responsive : true,
+	    
+	    maintainAspectRatio: false,
 
 	    //String - A legend template
 	    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
@@ -256,7 +297,6 @@ include('header.php');
 	console.log(val);
 	console.log(lab);
 
-	var options=null;
 
 	// As options we currently only set a static size of 300x200 px. We can also omit this and use aspect ratio containers
 	// as you saw in the previous example

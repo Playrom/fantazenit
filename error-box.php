@@ -5,6 +5,11 @@
 	</div>
 	
 	-->
+	
+	<div class="alert alert-warning error_display" role="alert">
+		<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+		<span class="sr-only"></span>Mettete mi piace sulla nostra <a href="http://www.facebook.com/fantazenit">Pagina Facebook</a> per rimanere aggiornati costantemente con notizie ed approfondimenti.
+	</div>
 	                
     <?php if($userId!=null && !$json_team["valid_formation"]) { ?>
         <div class="alert alert-danger error_display" role="alert">

@@ -31,6 +31,41 @@ if(isset($_GET['id'])){
 
 	<?php
 	}
+}else{ // SE DEVO LEGGERLE TUTTE
+	$json=$apiAccess->accessApi("/news","GET");
+    $news=null;
+
+
+    if($json["error"] == false){
+        $news=$json["data"];
+    }else{
+        $error_messages[] = "Nessuna Notizia Pubblicata";
+    }
+    
+    if($news!=null && count($news)>0){ ?>
+	    <div class="container-fluid">
+		    <div class="news">
+	    
+		    <?php
+			foreach($news as $item){ ?>
+			    <div class="row presentation motivi" style="max-height: 500px; overflow: hidden;">
+					<div class="excerpt-mask"></div>
+				    <div class="col-md-12">
+					    <a href="news.php?id=<?php echo $item["id"]; ?>" ><h1><?php echo $item["title"]; ?></h1></a>
+					    <?php echo $item["html"]; ?>
+				    </div>
+			    </div>
+		    <?php
+			}
+			?>
+			
+		    </div>
+	    </div>
+	    
+	<?php
+	    
+    }
+
 }
 
 ?>

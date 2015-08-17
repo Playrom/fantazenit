@@ -203,7 +203,7 @@ class ConnectDatabase {
 	
 	
 	function getNews(){
-		$query="SELECT * FROM `news` ";
+		$query="SELECT * FROM `news` order by date DESC";
 
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {

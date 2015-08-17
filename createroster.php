@@ -37,6 +37,7 @@ if(!isset($_SESSION['username'])) {
 if($config['creation_market']==0){ 
 
     $error_messages[] = "Non è piu possibile modificare liberamente la rosa";
+    include('error-box.php');
     
 
  }else if(isset($_SESSION['username'])){

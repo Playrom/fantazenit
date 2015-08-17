@@ -1129,6 +1129,10 @@ $app->get('/rounds/:id', function ($id) use ($app) {
     $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
 
     //$id_competition=$app->request()->params('competition');
+    
+    if($id=="last"){
+	    $id = $db_rounds->getLastCalcRound();
+    }
 
 
     $result=null;
@@ -1137,6 +1141,7 @@ $app->get('/rounds/:id', function ($id) use ($app) {
         $response["error"] = false;
         $open=$db_rounds->isOpenRound($id);
         $response["data"]["open"] = $open;
+        $response["data"]["id"] = $id;
         $response["data"]["formations_editing"]=$db_rounds->isPossibleToEditFormation($id);
         if(!$open){
 	        $response["data"]["results"] = $db_rounds->getInfoRound($id);
@@ -1151,6 +1156,8 @@ $app->get('/rounds/:id', function ($id) use ($app) {
 
 
 });
+
+
 
 
 /// HANDICAPS
@@ -1804,6 +1811,23 @@ $app->get('/config', function () use ($app) {
     if($json!=null){
 	    $json["last_stat_round"] = $db_rounds->getLastStatRound();
 	    $json["seconds_to_closing_time"] = $db_rounds->secondsToClosingTime();
+	    
+	    $datetemp = date ("Y-m-d H:i:s", strtotime("2015-08-22 17:00:00"));
+		$date=new DateTime($datetemp);
+		
+		$now=new DateTime("now");
+							
+		$stamp_now=$now->getTimestamp();
+		$stamp_finish=$date->getTimestamp();
+
+		$diff=$stamp_finish-$stamp_now;  
+		        
+        if($diff>0){
+			$json["creation_market"] = 1;
+		}else{
+			$json["creation_market"] = 0;
+		}
+	    
         $response["error"] = false;
         $response["data"]=$json;
     }else {

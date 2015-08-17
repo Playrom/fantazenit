@@ -1493,15 +1493,15 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			while ($row = $res->fetch_assoc()) {
 				$datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['closetime'])));
 				$date=new DateTime($datetemp);
-
+				
 				$now=new DateTime("now");
+								
 				$date->sub(new DateInterval("PT15M"));
-
+			
 				$stamp_now=$now->getTimestamp();
 				$stamp_finish=$date->getTimestamp();
 
-				$diff=$stamp_finish-$stamp_now;
-                
+				$diff=$stamp_finish-$stamp_now;                
                 
                 if($diff>0 && !$this->isCalcRound($id_round)){
 					return true;
@@ -1545,9 +1545,9 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 			while ($row = $res->fetch_assoc()) {
 				$datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['closetime'])));
+
 				$date=new DateTime($datetemp);
 
-				$now=new DateTime("now");
 				$date->sub(new DateInterval("PT15M"));
                 
 				return $date->format("Y/m/d H:i:s");
@@ -1758,6 +1758,34 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 	
 	function getLastQuoteRound(){
 		$tempQuery="SELECT MAX(round) as max FROM players";
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			while ($row = $res->fetch_assoc()) {
+				return $row['max'];
+			}
+
+			return 0;
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return 0;
+
+		}
+	}
+	
+	function getLastCalcRound(){
+		$tempQuery="SELECT MAX(round) as max FROM rounds_result";
 
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {

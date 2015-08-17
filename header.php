@@ -119,7 +119,7 @@ if(isset($config['current_round'])){
 		<script src="js/cropper.min.js"></script>
 		
 		<script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>
-		<script>tinymce.init({selector:'#textmce'});</script>
+		<script>tinymce.init({selector:'#textmce', height : 500});</script>
         
         <script src="js/jquery.cookiesdirective.js"></script>
 
@@ -191,11 +191,13 @@ if(isset($config['current_round'])){
                 <div class="menu-top">
 	                <ul>
 		                <a href="home.php"><li>Home</li></a>
+	                	<li><a href="news.php">Notizie</a></li>
 	                	<li><a href="lista.php">Quotazioni</a></li>
 	                	<li><a href="regolamento.php">Regolamento</a></li>
 	                	<li><a href="storia.php">Chi Siamo</a></li>
 	                	<li><a href="faq.php">Faq</a></li>
 	                	<li><a href="news.php?id=6">Consigli Attacco</a></li>
+	                	<li><a href="news.php?id=7">Probabili Formazioni</a></li>
 	                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
 
 	                </ul>
