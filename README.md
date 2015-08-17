@@ -140,6 +140,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Feature: Notizie
 * New: Chiusura automatica mercato iniziale tramite api JSON
 * New: Controllo ultima giornata tramite max round_result
+* New: Modifica Rose Amministratore
 
 # Da Fare
 --

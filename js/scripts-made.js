@@ -495,6 +495,54 @@
         $(form).submit();
 
     };
+    
+     var getValuesEditRoster = function () {
+        var jsonObj = [];
+        var jsonString;
+        var table = document.getElementById("P_free");
+        for (var r = 0, n = table.getElementsByClassName("old-player").length; r < n; r++) {
+            var item = table.getElementsByClassName("old-player")[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+
+        var table = document.getElementById("D_free");
+        for (var r = 0, n = table.getElementsByClassName("old-player").length; r < n; r++) {
+            var item = table.getElementsByClassName("old-player")[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+
+        var table = document.getElementById("C_free");
+        for (var r = 0, n = table.getElementsByClassName("old-player").length; r < n; r++) {
+            var item = table.getElementsByClassName("old-player")[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+
+        var table = document.getElementById("A_free");
+        for (var r = 0, n = table.getElementsByClassName("old-player").length; r < n; r++) {
+            var item = table.getElementsByClassName("old-player")[r].getAttribute("id");
+            jsonObj.push(item);
+        };
+        
+        var id_user = document.getElementById("id_user").getAttribute("id_user");
+
+        jsonString = JSON.stringify(jsonObj);
+
+        var url = 'editroster.php';
+        var text = '<form action="' + url + '" method="post">';
+
+        for (var i = 0, n = jsonObj.length; i < n; i++) {
+            text = text + '<input type="hidden" name="ids[]" value="' + jsonObj[i] + '" />';
+        }
+        
+        text = text + '<input type="hidden" name="id_user" value="' + id_user + '" />';
+        console.log(id_user);
+        
+        var form = $(text + '</form>');
+
+        $('body').append(form); // This line is not necessary
+        $(form).submit();
+
+    };
 
     var countTo = function(date){
         $('#clock').county({ endDateTime: new Date(date), reflection: false, animation: 'scroll', theme: 'red' });

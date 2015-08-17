@@ -83,7 +83,7 @@ include('header.php');
 				                    <div class="form-group">
 					                    <label class="col-md-12">Testo</label>
 			                        	<div class="col-md-12">
-						                    <textarea class="form-control" id="textmce" type="text" name="html" <?php echo "value=\"".$html."\" "; ?>  ><?php echo $html; ?></textarea>
+						                    <textarea class="form-control" id="textmce" type="text" name="html"  ><?php echo $html; ?></textarea>
 						                </div>
 			                        </div>
 		

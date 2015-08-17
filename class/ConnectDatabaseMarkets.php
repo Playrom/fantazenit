@@ -95,9 +95,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
-			
-			error_log("end");
-			
+						
 			$res = $db_rounds->deleteTeam($id_user,$config['current_round']);
 			
 			

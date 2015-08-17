@@ -465,7 +465,8 @@ $app->post('/users/roster', function () use ($app) {
 
     $error_code=null;
 
-    if($db->checkApi($apiKey) && $user!=null && $id_user==$user->getId()){
+
+    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
         $response["error"] = false;
 
         $result = $db_markets->createRoster($id_user,$ids);

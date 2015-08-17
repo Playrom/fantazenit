@@ -20,11 +20,19 @@ $blue: #246BB2;
     src: url(../fonts/boton-medium.ttf);
 }
 
-body {
-    background: #EEEEEE !important;
+body , body.mce-content-body{
+    
     margin: 0;
     //font-family: "Open Sans", arial;
     font-family: boton-light;
+}
+
+body.mce-content-body{
+	padding: 0 15px;
+}
+
+body.standard{
+	background: #EEEEEE !important;
 }
 
 h1,h2,h3{
@@ -478,7 +486,7 @@ ul.nav.navbar-nav{
 
 /* HOME */
 
-.presentation{
+.mce-content-body , .presentation{
 	font-family: boton-light;
 	
 	
@@ -495,7 +503,7 @@ ul.nav.navbar-nav{
 	}
 }
 
-.motivi{
+.mce-content-body , .motivi{
 	background: $white;
 	
 	h1,h3,strong{

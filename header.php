@@ -118,8 +118,17 @@ if(isset($config['current_round'])){
         <script src="js/bootstrap.min.js"></script>
 		<script src="js/cropper.min.js"></script>
 		
-		<script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>
-		<script>tinymce.init({selector:'#textmce', height : 500});</script>
+		<script src="js/tinymce/tinymce.min.js"></script>
+		<script>
+			tinymce.init({
+				selector:'#textmce',
+				height : 500,
+				plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen","insertdatetime media table contextmenu paste jbimages"],
+				toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
+				relative_urls: false,
+				content_css : "/css/style.css"
+			});
+		</script>
         
         <script src="js/jquery.cookiesdirective.js"></script>
 
@@ -182,7 +191,7 @@ if(isset($config['current_round'])){
 
     </head>
 
-    <body>
+    <body class="standard">
 	<div class="centering">
         <div id="wrapper">
             <div id="header">
@@ -316,6 +325,7 @@ if(isset($config['current_round'])){
 							            	<?php if($userAuth==1) { ?>
 								                <li><a href="gestionegiornate.php">Gestione Giornate</a></li>
 								                <li><a href="editformations.php">Modifica Formazioni</a></li>
+								                <li><a href="editroster.php">Modifica Rose</a></li>
 								                <li><a href="loadfile.php">Carica Dati</a></li>
 								                <li><a href="settings.php">Impostazioni</a></li>
 								                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>

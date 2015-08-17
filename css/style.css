@@ -10,10 +10,15 @@
   font-family: boton-medium;
   src: url(../fonts/boton-medium.ttf); }
 
-body {
-  background: #EEEEEE !important;
+body, body.mce-content-body {
   margin: 0;
   font-family: boton-light; }
+
+body.mce-content-body {
+  padding: 0 15px; }
+
+body.standard {
+  background: #EEEEEE !important; }
 
 h1, h2, h3 {
   font-family: boton-regular; }
@@ -330,20 +335,20 @@ ul.nav.navbar-nav .red_color {
   border: 0; }
 
 /* HOME */
-.presentation {
+.mce-content-body, .presentation {
   font-family: boton-light; }
-  .presentation p {
+  .mce-content-body p, .presentation p {
     font-size: 25px; }
-  .presentation h1, .presentation h3 {
+  .mce-content-body h1, .mce-content-body h3, .presentation h1, .presentation h3 {
     color: #FF0000; }
-  .presentation h2 {
+  .mce-content-body h2, .presentation h2 {
     color: #246BB2; }
 
-.motivi {
+.mce-content-body, .motivi {
   background: #FFFFFF; }
-  .motivi h1, .motivi h3, .motivi strong {
+  .mce-content-body h1, .mce-content-body h3, .mce-content-body strong, .motivi h1, .motivi h3, .motivi strong {
     color: #FF0000; }
-  .motivi h2 {
+  .mce-content-body h2, .motivi h2 {
     color: #246BB2; }
 
 .news {
