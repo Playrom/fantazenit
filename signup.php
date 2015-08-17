@@ -326,7 +326,7 @@ if(isset($_SESSION['username'])) {
 
 
 <?php
-    session_destroy();
+    
 
 
 ?>
