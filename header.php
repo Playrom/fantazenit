@@ -330,7 +330,7 @@ if(isset($config['current_round'])){
 								                <li><a href="settings.php">Impostazioni</a></li>
 								                <li><a href="settings-competitions.php">Gestisci Competizioni</a></li>
 								                <li><a href="settings-market.php">Gestisci Mercati</a></li>
-								                <li><a href="settings-handicaps.php">Gestisci Penalizzazioni</a></li>
+								                <li><a href="settings-handicaps.php">Gestisci Bonus e Handicaps</a></li>
 								            <?php } ?>
 								            <li><a href="settings-news.php">Notizie</a></li>
 						            	</ul>

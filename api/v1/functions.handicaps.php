@@ -125,4 +125,68 @@ function getHandicapsCompetitionById($id_competition){
     return $result;
 }
 
+function getBonuses(){
+    //verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_handicaps = new ConnectDatabaseHandicaps($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+
+    $bonuses=$db_handicaps->getMoneyBonuses();
+
+
+    $result=null;
+
+
+
+    /*if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }*/
+
+    if($bonuses!=null){
+        for($i=0;$i<count($bonuses);$i++){
+            $result[] = $bonuses[$i]->map();
+        }
+    }
+
+    return $result;
+}
+
+function getBonusByUserId($id){
+    //verifyRequiredParams(array('round', 'competition'),$app);
+
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_handicaps = new ConnectDatabaseHandicaps($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+    
+    $user = null;
+    
+    $user = $db->getUserById($id);
+    
+    if($user!=null){
+
+    	$bonuses=$db_handicaps->getMoneyBonusesByUser($user);
+    	
+    }
+
+    $result=null;
+
+
+
+    /*if($app->request()->params('orderByRole')){
+        $orderByRole=true;
+    }*/
+
+    if($bonuses!=null){
+        for($i=0;$i<count($bonuses);$i++){
+            $result[] = $bonuses[$i]->map();
+        }
+    }
+
+    return $result;
+}
+
+
 ?>

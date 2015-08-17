@@ -222,6 +222,7 @@ function checkAuthOverride($apiKey){
 
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
 		$data_markets=new ConnectDatabaseMarkets($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 
 
 		try{
@@ -258,6 +259,7 @@ function checkAuthOverride($apiKey){
                 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
+				
 
 				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
 				$roster=new RosterList();
@@ -270,6 +272,18 @@ function checkAuthOverride($apiKey){
 
 				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
                 //$data_markets->getTransfers($us);
+                
+                $bonuses = $data_handicaps->getMoneyBonusesByUser($us);
+				
+				if($bonuses!=null){
+					foreach($bonuses as $bonus){
+						$val = intval($bonus->getPoints());
+						$balance = $balance + $val;
+					}
+				}
+				
+				$us->setBalance($balance);
+				                
                 $users[]=$us;
             }
             return $users;
@@ -289,6 +303,7 @@ function checkAuthOverride($apiKey){
 	function getUserByEmail($email){
 
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 
 		$query="select * , UNIX_TIMESTAMP(reg_date) as time from `users` where email LIKE ?";
 		try{
@@ -327,7 +342,8 @@ function checkAuthOverride($apiKey){
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
-
+				
+				
 				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
 				$roster=new RosterList();
 				while ($row2 = $res2->fetch_assoc()) {
@@ -337,7 +353,20 @@ function checkAuthOverride($apiKey){
 				}
 
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				$user = new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				
+				$bonuses = $data_handicaps->getMoneyBonusesByUser($user);
+				
+				if($bonuses!=null){
+					foreach($bonuses as $bonus){
+						$val = intval($bonus->getPoints());
+						$balance = $balance + $val;
+					}
+				}
+				
+				$user->setBalance($balance);
+				
+				return $user;
 			}
 
 
@@ -355,6 +384,7 @@ function checkAuthOverride($apiKey){
 	function getUserByUsername($username){
 
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 
 		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where username LIKE ?";
 		try{
@@ -391,6 +421,7 @@ function checkAuthOverride($apiKey){
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
+				
 
 				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
 				$roster=new RosterList();
@@ -400,7 +431,20 @@ function checkAuthOverride($apiKey){
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				$user = new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				
+				$bonuses = $data_handicaps->getMoneyBonusesByUser($user);
+				
+				if($bonuses!=null){
+					foreach($bonuses as $bonus){
+						$val = intval($bonus->getPoints());
+						$balance = $balance + $val;
+					}
+				}
+				
+				$user->setBalance($balance);
+				
+				return $user;
 			}
 
 
@@ -418,6 +462,7 @@ function checkAuthOverride($apiKey){
 		
 		
 		$data_players=new ConnectDatabasePlayers($this->mysqli);
+		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 		
 		$query="select *,UNIX_TIMESTAMP(reg_date) as time from `users` where id=? ; ";
 		try{
@@ -454,6 +499,9 @@ function checkAuthOverride($apiKey){
 
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);
+				
+				
+								
 
 				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
 				$roster=new RosterList();
@@ -463,7 +511,21 @@ function checkAuthOverride($apiKey){
 					$roster[]=new RosterPlayer($player,$cost);
 				}
 
-				return new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				$user = new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				
+				$bonuses = $data_handicaps->getMoneyBonusesByUser($user);
+				
+				if($bonuses!=null){
+					foreach($bonuses as $bonus){
+						$val = intval($bonus->getPoints());
+						$balance = $balance + $val;
+					}
+				}
+				
+				$user->setBalance($balance);
+				
+				return $user;
+
 			}
 
 
@@ -596,6 +658,8 @@ function checkAuthOverride($apiKey){
 		return false;
 
 	}
+	
+	
 	
 }
     

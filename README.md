@@ -141,6 +141,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Chiusura automatica mercato iniziale tramite api JSON
 * New: Controllo ultima giornata tramite max round_result
 * New: Modifica Rose Amministratore
+* New: Bonus e Penalizzazione Fanta Milioni
 
 # Da Fare
 --

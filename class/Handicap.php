@@ -3,7 +3,7 @@
 /**
  * Class Handicap
  */
-abstract class Handicap{
+class Handicap{
 
 	// POINTS NEGATIVI INDICANO PENALIZZAZIONE , POSITIVI INDICANO PREMIO
 

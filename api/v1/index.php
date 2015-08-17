@@ -1199,6 +1199,10 @@ $app->post('/handicaps', function () use ($app) {
 	        $id_round = $data["id_type"];
 	        $response["error"] = !$db_handicaps->setHandicapRound($id_team,$id_round,$description,$points);
 	        	        
+        }else if($type == "BONUS"){
+	        
+	        $response["error"] = !$db_handicaps->setMoneyBonus($id_team,$description,$points);
+	        	        
         }else{
 	        
 	        $response["error"] = true;
@@ -1216,6 +1220,77 @@ $app->post('/handicaps', function () use ($app) {
 
 
 });
+
+
+$app->get('/handicaps/bonuses', function () use ($app) {
+
+    $result = getBonuses();
+
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Bonuses Null";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->get('/handicaps/bonuses/:id', function ($id) use ($app) {
+
+    $result = getBonusByUserId($id);
+
+
+
+    if($result!=null){
+        $response["error"] = false;
+        $response["data"]=$result;
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Dump Bonus ID:$id Null";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
+$app->delete('/handicaps/bonuses/:id', function ($id) use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+	
+	$id = intval($id);
+
+    $db_handicaps = new ConnectDatabaseHandicaps(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+	$db_users = new ConnectDatabaseUsers($db_handicaps->mysqli);
+
+    $user = $db_users->getUserByApiKey($apiKey);
+
+    if($db_users->checkApi($apiKey) && $user!=null ){
+        $response["error"] = false;
+
+        $db_handicaps->deleteMoneyBonus($id);
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+
+    echoRespnse(200, $response);
+
+
+});
+
 
 
 
