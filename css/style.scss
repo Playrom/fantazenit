@@ -76,11 +76,15 @@ h1,h2,h3{
 }
 
 #header {
-    width: 100%;
+   
     min-height: 100px;
     background:#FFFFFF;
     float: left;
     position: relative;
+    
+     @media screen and (max-width: 768px){
+    	min-height: 50px;
+    }
     
     
 }
@@ -88,18 +92,21 @@ h1,h2,h3{
 
 
 #logo{
-    height: 100px;
-    background: url(../img/logo.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: 200px;
-    float: left;
-    position: relative;
+	
+	img{
+			
+		
+	    height: 80px;
+	    width: auto;
+	    float: left;
+	    position: relative;
+	    
+	    @media screen and (max-width: 768px){
+	    	height: 30px;
+	    }
+	    
+	}
     
-    @media screen and (max-width: 700px){
-    	width: 50%;
-    	margin: 0 25%;
-    }
 }
 
 
@@ -634,7 +641,11 @@ ul.nav.navbar-nav{
     float: left;
     width: 100%;
     background: $menu-background;
-    padding:0 0 10px 0;
+    padding:0 0 0 0;
+}
+
+.row:last-child{
+	margin-bottom: 10px;
 }
 
 #footer{
@@ -1965,6 +1976,17 @@ span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 
 /* IMAGE BOX */
 
+.user-info-item{
+	color: $red;
+	float: left;
+	position: relative;
+	margin: 5px 5%;
+	height: auto;
+	line-height: 35px;
+	font-size: 26px;
+	width: 90%;
+}
+
 .image-box{
 	img{
 		width: auto;
@@ -1973,8 +1995,68 @@ span.county-days, span.county-minutes,span.county-hours,span.county-seconds {
 		
 	}
 	
-	height:220px;
+	.inner-img{
+		background-size: contain !important;
+		float: left;
+		position: relative;
+		width: 100%;
+	}
+	
+	background: $white;	
+	height: auto;
 	border: 5px $gray solid;
 	width: 100%;
 	overflow: hidden;
+	
+	float: left;
+	position: relative;
+	
+	.user-menu{
+		
+		width: 100%;
+		padding: 5px;
+		
+		.avatar{
+			
+			height: auto;
+			width: 33%;
+			background: none;
+			
+			
+			img{
+				height: auto;
+				width: 100%;
+				max-height: none;
+				max-width: auto;
+				float: left;
+				position: relative;
+			}
+		}
+		
+		.user-info{
+			width: 66%;
+		}
+			
+		.user-info-item{
+			color: $red;
+			float: left;
+			position: relative;
+			margin: 5px 5%;
+			height: auto;
+			line-height: 35px;
+			font-size: 26px;
+			width: 90%;
+		}
+		
+		
+		.username{
+			margin-bottom: 5px;
+		}
+		
+		.name-team{
+			margin-top: 5px;
+			font-size: 26px;
+			color: black;
+		}
+	}
 }

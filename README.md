@@ -121,7 +121,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 
 * Feature: Gestione dei giocatori non piu in serie A
 
-# 1.1 -
+# 1.1 - 20 Agosto 2015
 
 * New: Search player with name team
 * New: Filter team in changeroster e createroster
@@ -142,6 +142,10 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Controllo ultima giornata tramite max round_result
 * New: Modifica Rose Amministratore
 * New: Bonus e Penalizzazione Fanta Milioni
+* New: Box Informazioni sotto error-box con vincitore ultima giornata, e ultime notizie
+* Feature: Newsletter
+* New: Main Navbar Edited
+* Bugfix: Content Bottom Padding
 
 # Da Fare
---
+* Handicap Round Compaiono in Classifiche anche se giocatori non inclusi

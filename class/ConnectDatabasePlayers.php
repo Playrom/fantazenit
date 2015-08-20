@@ -36,7 +36,7 @@ class ConnectDatabasePlayers extends ConnectDatabase{
 
         }
 
-        $tempQuery=$tempQuery." order by name";
+        $tempQuery=$tempQuery." order by role DESC, name ASC";
 
 
 		$res=$this->mysqli->query($tempQuery);

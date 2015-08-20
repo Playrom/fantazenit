@@ -309,6 +309,62 @@ $app->post('/users', function () use ($app) {
 
 });
 
+$app->post('/newsletters', function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    $text = $data["text"];
+    $title = $data["title"];
+    
+    $user = $db_users->getUserByApiKey($apiKey);
+    
+        
+    if($db_users->checkApi($apiKey) && $user!=null && $user->getAuth()>0){
+	    
+        $ret=$db_users->getUsers();     
+		
+        if($ret!=null){
+	        
+	        foreach($ret as $item){
+		        
+		        
+		        $email = $item->getEmail();
+		        		        
+		        $headers = "From: info@associazionezenit.it \r\n";
+				$headers .= "Reply-To: info@associazionezenit.it \r\n";
+				$headers .= "MIME-Version: 1.0\r\n";
+				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+				
+				$message = $text;
+		        
+		        mail($email, $title, $message , $headers);
+		    }
+	        
+	        
+        }else{
+	        $response['error'] = true;
+			$response['message'] = "Error No Users";
+        }
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Auth Not Valid";
+    }
+    
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->post('/users/:id/avatar' , function ($id) use ($app) {
 	
 
@@ -930,14 +986,19 @@ $app->get('/competitions/:id/standings', function ($id_competition) use ($app) {
             }
         }
     }*/
+    
+    $standings_by_user = array();
 
     for($i=0 ; $i<count($standings) ; $i++){
-        $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
+	    $temp_user = $db->getUserById(intval($standings[$i]["id_user"]));
+        $standings[$i]["team_info"]=$temp_user->mapBasic();
+        $standings_by_user[$temp_user->getId()] = $i+1; 
     }
 
     if($standings!=null){
         $response["error"] = false;
         $response["data"]["standings"]=$standings;
+        $response["data"]["standings_by_user"]=$standings_by_user;
         $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
         $response["data"]["competition"] = getCompetition($id_competition);
     }else {
@@ -968,10 +1029,16 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
     $result=null;
 
     $competition=getCompetition($id_competition);
+    
+    if($round=="last"){
+	    $round = $db_rounds->getLastCalcRound();
+    }
 
     $standings=$db_rounds->getRoundStandings($id_competition,$round);
 
     $orderByRole=false;
+    
+    
 
     /*if($app->request()->params('orderByRole')){
         $orderByRole=true;
@@ -992,10 +1059,16 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
 
 
     if($standings!=null){
+	    
+	    $standings_by_user = array();
 
 	    for($i=0 ; $i<count($standings) ; $i++){
-	        $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
+		   	$temp_user = $db->getUserById(intval($standings[$i]["id_user"]));
+	        $standings[$i]["team_info"]=$temp_user->mapBasic();
+	        $standings_by_user[$temp_user->getId()] = $i+1; 
 	    }
+	    
+
 	    
 	    $teams=$db_competitions->getUsersInCompetition($id_competition);
 
@@ -1004,6 +1077,8 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
         $response["data"]["handicaps"]=getHandicapsRoundByRoundId($round);
         $response["data"]["competition"] =$competition;
         $response["data"]["teams"] = $teams;
+        $response["data"]["standings_by_user"] = $standings_by_user;
+        $response["data"]["round"] = $round;
         
         $ids = array();
         foreach($teams as $team){
@@ -1018,6 +1093,7 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
         $response['error'] = true;
         $response['message'] = "Giornata Non Calcolata";
         $response["error_data"] = $competition;
+        $response["error_data"]["round"] = $round;
     }else{
 	    $response["error"] = true;
 	    $response["message"] = "Competition Not Found";

@@ -194,25 +194,51 @@ if(isset($config['current_round'])){
     <body class="standard">
 	<div class="centering">
         <div id="wrapper">
-            <div id="header">
+	        
+	        <nav class="navbar navbar-default" id="header">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			    	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+					</button>
+					
+					<div class="navbar-brand" id="logo">
+						<img alt="Brand" src="/img/logo.png">
+				      
+					</div>
+				    
+			    </div>
+			    
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+			        <li><a href="home.php">Home</a></li>
+                	<li><a href="lista.php">Quotazioni</a></li>
+                	<li><a href="regolamento.php">Regolamento</a></li>
+                	<li><a href="storia.php">Chi Siamo</a></li>
+                	
+                	<li class="dropdown">
+		            	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notizie <span class="caret"></span></a>
+		        		<ul class="dropdown-menu">
+							<li><a href="news.php">Notizie</a></li>
+		                	<li><a href="faq.php">Faq</a></li>
+		                	<li><a href="news.php?id=6">Consigli Attacco</a></li>
+		                	<li><a href="news.php?id=7">Probabili Formazioni</a></li>
+		        		</ul>
+                	</li>
+                	
+                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
 
-                <a href="index.php"><div id="logo"></div></a>
-                <div class="menu-top">
-	                <ul>
-		                <a href="home.php"><li>Home</li></a>
-	                	<li><a href="news.php">Notizie</a></li>
-	                	<li><a href="lista.php">Quotazioni</a></li>
-	                	<li><a href="regolamento.php">Regolamento</a></li>
-	                	<li><a href="storia.php">Chi Siamo</a></li>
-	                	<li><a href="faq.php">Faq</a></li>
-	                	<li><a href="news.php?id=6">Consigli Attacco</a></li>
-	                	<li><a href="news.php?id=7">Probabili Formazioni</a></li>
-	                	<li><a href="http://www.facebook.com/fantazenit"><img src="img/facebook.png"></li></a>
-
-	                </ul>
-                </div>
-            </div>
-            
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+	        
+                       
             
             
 		            
@@ -222,7 +248,7 @@ if(isset($config['current_round'])){
 		            
 		            <div class="navbar-header">
 		            	
-		            	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		            	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2" aria-expanded="false">
 					        <span class="sr-only">Toggle navigation</span>
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
@@ -231,7 +257,7 @@ if(isset($config['current_round'])){
 				        
 				        <div class="visible-xs-block">
 					        <div class="navbar-brand">
-						        Menu
+						        Menu Gestionale
 					        </div>
 				        </div>
 				        
@@ -272,7 +298,7 @@ if(isset($config['current_round'])){
 				        
 					</div>
 											            
-		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 			            <ul class="nav navbar-nav">
 				            
 					            <?php if($userId==null) { ?>
@@ -333,6 +359,7 @@ if(isset($config['current_round'])){
 								                <li><a href="settings-handicaps.php">Gestisci Bonus e Handicaps</a></li>
 								            <?php } ?>
 								            <li><a href="settings-news.php">Notizie</a></li>
+								            <li><a href="settings-newsletter.php">Invia Newsletter</a></li>
 						            	</ul>
 						            </li>
 						            

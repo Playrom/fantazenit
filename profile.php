@@ -97,8 +97,8 @@ if($username != null){
         <div class="row">
             <div class="col-md-12">
                 <div id="team-info">
-                    <div class="name-team"><?php echo $arr["name_team"];?></div>
-                    <div class="balance"><?php echo $arr["name"]." ".$arr["surname"]; ?></div>
+                    <div class="name-team"><?php echo $user["name_team"];?></div>
+                    <div class="balance"><?php echo $user["name"]." ".$user["surname"]; ?></div>
                 </div>
             </div>
         </div>

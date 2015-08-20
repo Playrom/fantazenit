@@ -13,7 +13,7 @@ if($username != null){
             $json=$apiAccess->accessApi("/handicaps/rounds/$id_handicap","DELETE");
             
             if($json["error"]==true){
-	            var_dump($json);
+                $error_json[]=$json;
             }
             
         }
@@ -24,7 +24,7 @@ if($username != null){
             $json=$apiAccess->accessApi("/handicaps/competitions/$id_handicap","DELETE");
             
             if($json["error"]==true){
-	            var_dump($json);
+                $error_json[]=$json;
             }
             
             
@@ -37,7 +37,7 @@ if($username != null){
             $json=$apiAccess->accessApi("/handicaps/bonuses/$id","DELETE");
             
             if($json["error"]==true){
-	            var_dump($json);
+                $error_json[]=$json;
             }
             
             
@@ -57,7 +57,7 @@ if($username != null){
             $json=$apiAccess->accessApi("/handicaps","POST",$params);
                         
             if($json["error"]==true){
-                var_dump($json);
+                $error_json[]=$json;
             }
 
 
@@ -77,7 +77,7 @@ if($username != null){
             $json=$apiAccess->accessApi("/handicaps","POST",$params);
                         
             if($json["error"]==true){
-                var_dump($json);
+                $error_json[]=$json;
             }
         }
         
@@ -93,7 +93,7 @@ if($username != null){
             $json=$apiAccess->accessApi("/handicaps","POST",$params);
                         
             if($json["error"]==true){
-                var_dump($json);
+                $error_json[]=$json;
             }
 
 
@@ -103,10 +103,10 @@ if($username != null){
         ?>
         
         <?php 
-	            
+	    include('error-box.php');
         $json=$apiAccess->accessApi("/handicaps/bonuses","GET");
-            
         if($json["error"]==false){
+	        
 	    ?>
 	    
 	        <div class="container-fluid">

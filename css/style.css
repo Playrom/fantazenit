@@ -55,24 +55,22 @@ h1, h2, h3 {
       margin: 0; } }
 
 #header {
-  width: 100%;
   min-height: 100px;
   background: #FFFFFF;
   float: left;
   position: relative; }
+  @media screen and (max-width: 768px) {
+    #header {
+      min-height: 50px; } }
 
-#logo {
-  height: 100px;
-  background: url(../img/logo.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 200px;
+#logo img {
+  height: 80px;
+  width: auto;
   float: left;
   position: relative; }
-  @media screen and (max-width: 700px) {
-    #logo {
-      width: 50%;
-      margin: 0 25%; } }
+  @media screen and (max-width: 768px) {
+    #logo img {
+      height: 30px; } }
 
 .menu-top {
   float: right;
@@ -437,7 +435,10 @@ ul.nav.navbar-nav .red_color {
   float: left;
   width: 100%;
   background: #ededed;
-  padding: 0 0 10px 0; }
+  padding: 0 0 0 0; }
+
+.row:last-child {
+  margin-bottom: 10px; }
 
 #footer {
   float: left;
@@ -1476,11 +1477,60 @@ span.county-days, span.county-minutes, span.county-hours, span.county-seconds {
   padding: 10px; }
 
 /* IMAGE BOX */
+.user-info-item {
+  color: #FF0000;
+  float: left;
+  position: relative;
+  margin: 5px 5%;
+  height: auto;
+  line-height: 35px;
+  font-size: 26px;
+  width: 90%; }
+
 .image-box {
-  height: 220px;
+  background: #FFFFFF;
+  height: auto;
   border: 5px #AAAAAA solid;
   width: 100%;
-  overflow: hidden; }
+  overflow: hidden;
+  float: left;
+  position: relative; }
   .image-box img {
     width: auto;
     height: 220px; }
+  .image-box .inner-img {
+    background-size: contain !important;
+    float: left;
+    position: relative;
+    width: 100%; }
+  .image-box .user-menu {
+    width: 100%;
+    padding: 5px; }
+    .image-box .user-menu .avatar {
+      height: auto;
+      width: 33%;
+      background: none; }
+      .image-box .user-menu .avatar img {
+        height: auto;
+        width: 100%;
+        max-height: none;
+        max-width: auto;
+        float: left;
+        position: relative; }
+    .image-box .user-menu .user-info {
+      width: 66%; }
+    .image-box .user-menu .user-info-item {
+      color: #FF0000;
+      float: left;
+      position: relative;
+      margin: 5px 5%;
+      height: auto;
+      line-height: 35px;
+      font-size: 26px;
+      width: 90%; }
+    .image-box .user-menu .username {
+      margin-bottom: 5px; }
+    .image-box .user-menu .name-team {
+      margin-top: 5px;
+      font-size: 26px;
+      color: black; }

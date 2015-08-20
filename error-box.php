@@ -57,4 +57,5 @@
 </div>
 
 <?php
+include('infobox.php');
 	?>

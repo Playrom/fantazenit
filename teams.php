@@ -20,7 +20,7 @@ include('header.php');
             $roster=$arr["players"];
             $transfers=$arr["transfers"];
         }
-
+		include('error-box.php');
     ?>
         <div class="container-fluid">
             <div class="row">
@@ -179,7 +179,8 @@ include('header.php');
 
     <?php
     }else{
-
+		include('error-box.php');
+		
          ?>
 
        <div class="container-fluid">

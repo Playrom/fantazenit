@@ -2,7 +2,7 @@
 $title = "Chi Siamo";
 
 include('header.php');
-include('infobox.php');
+include('error-box.php');
 
 ?>
 
