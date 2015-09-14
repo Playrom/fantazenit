@@ -35,7 +35,7 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 						$children=$col->item(0)->childNodes;
 						foreach($children as $child){
 							if(strpos($child->ownerDocument->saveXML($child),"VOTI") == true){
-								if(strpos($child->ownerDocument->saveXML($child),"2014") == false){
+								if(strpos($child->ownerDocument->saveXML($child),"2016") == false){
 									$not_same_year = true;
 								}
 							}
@@ -155,7 +155,7 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 						$children=$col->item(0)->childNodes;
 						foreach($children as $child){
 							if(strpos($child->ownerDocument->saveXML($child),"QUOTAZIONI") == true){
-								if(strpos($child->ownerDocument->saveXML($child),"2014") == false){
+								if(strpos($child->ownerDocument->saveXML($child),"2016") == false){
 									$not_same_year = true;
 								}
 							}
@@ -211,7 +211,7 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 					}
 
 
-					$query="REPLACE INTO `players` (`id`,`role`,`name`,`team`,`value`,`first_value`,`diff`,`round`) VALUES(?,?,?,?,?,?,?,?)"; //14
+					$query="REPLACE INTO `players` (`id`,`role`,`name`,`team`) VALUES(?,?,?,?)"; //14
 
 
 					try{
@@ -219,7 +219,26 @@ class ConnectDatabaseFiles extends ConnectDatabase{
 						    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 						}
 
-						if (!$stmt->bind_param("isssiiis",$arr[0],$arr[1],$arr[2],$arr[3],$arr[4],$arr[5],$arr[6],$round)){
+						if (!$stmt->bind_param("isss",$arr[0],$arr[1],$arr[2],$arr[3])){
+						    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+						}
+
+						if (!$stmt->execute()) {
+						    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+						}
+					}catch(exception $e) {
+						echo "ex: ".$e;
+						return false;
+					}
+					
+					$query="REPLACE INTO `quote` (`id`,`round`,`value`,`first_value`,`diff`) VALUES(?,?,?,?,?)"; //14
+
+					try{
+						if (!($stmt = $this->mysqli->prepare($query))) {
+						    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+						}
+
+						if (!$stmt->bind_param("iiiii",$arr[0],$round,$arr[4],$arr[5],$arr[6])){
 						    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 						}
 

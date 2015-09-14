@@ -27,6 +27,10 @@ body , body.mce-content-body{
     font-family: boton-light;
 }
 
+strong,b{
+	color:$red;
+}
+
 body.mce-content-body{
 	padding: 0 15px;
 }
@@ -206,6 +210,10 @@ h1,h2,h3{
 		line-height: 25px;
 		font-size: 20px;
 		width: 90%;
+		
+		a{
+			color: $red;
+		}
 	}
 	
 	
@@ -493,7 +501,7 @@ ul.nav.navbar-nav{
 
 /* HOME */
 
-.mce-content-body , .presentation{
+.mce-content-body , .presentation , .motivi{
 	font-family: boton-light;
 	
 	
@@ -627,6 +635,11 @@ ul.nav.navbar-nav{
     background: #FFF;
     float: left;
     position: relative;
+    
+    .form-group{
+	    float:left;
+		width: 100%;
+    }
 }
 
 .half_size{
@@ -813,8 +826,15 @@ a.current-round{
     width: 100%;
     cursor: pointer;
     
+    nth-last-child(0){
+	    border-bottom: none;
+    }
+    
     
 }
+
+
+
 
 .role-icon{
 	float: left;
@@ -822,6 +842,8 @@ a.current-round{
 	width: auto;
 	margin:5px;
 	height: 40px;
+	
+	font-family: boton-regular;
 	
 	span{
 		padding: 5px 10px;
@@ -837,6 +859,18 @@ a.current-round{
 	position: relative;
 	height: 40px;
 	line-height: 40px;
+	
+	a{
+		text-decoration: none;
+		color: black;
+	}
+	
+	
+	img{
+		height: 30px;
+		width: auto;
+		line-height: 40px;
+	}
 }
 
 .team-player-item{
@@ -923,16 +957,16 @@ a.current-round{
     display: none;
 }
 .p-but {
-    background: #f8081f;
+    background: #cc0000;
 }
 .d-but {
-    background: #1df84a;
+    background: #008000;
 }
 .c-but {
-    background: #f8d300
+    background: #ddae36;
 }
 .a-but {
-    background: #0006f8
+    background: #003366;
 }
 
 .role-icon {
@@ -1145,6 +1179,8 @@ table.roster-item {
 
 .dots{
     text-align: center;
+    line-height: 40px;
+    font-size: 30px;
 }
 
 .old-player.finalvote{
@@ -1224,7 +1260,7 @@ tr:last-child {
 
 .complete-standing{
 	width: 100%;
-	line-height: 30px;
+	line-height: 40px;
 }
 
 .value_player{
@@ -1260,6 +1296,7 @@ tr:last-child {
 				width: 100%;
 				margin: 0;
 				line-height: 40px;
+				
 			}
 		}
 	}
@@ -1878,7 +1915,7 @@ input[type=checkbox] {
 }
 
 .punti_highlight{
-    color: rgba(81,81,81,1);
+    //color: rgba(81,81,81,1);
 }
 
 .minor{
@@ -1914,21 +1951,14 @@ input[type=checkbox] {
     //margin: 0 1% 0 0;
 }
 
-.standings_last_round{
-    //width: 49.5% !important;
+.standings_last_round , .standings_general{
     padding: 10px;
-    //margin: 0;
+    
+    .old-player:nth-last-child(2){
+    	border-bottom: none;
+    }
 }
 
-.standings_general{
-    //width: 49.5% !important;
-    padding: 10px;
-    //margin: 0;
-}
-
-.standings_general tr:nth-last-child(2){
-    border-bottom: none;
-}
 
 #clock{
     width: 100% !important;

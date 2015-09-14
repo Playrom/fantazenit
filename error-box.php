@@ -18,12 +18,12 @@
 		</div>
     <?php } ?>
     
-    <?php if($userId!=null) { ?>
-        <div class="alert alert-warning error_display" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-			<span class="sr-only"></span>Fanta Manager, a causa di funzionalità future vi chiediamo per favore di inserire un Avatar per il vostro profilo. Potete farlo nella pagina "Il Mio Profilo".
+    <!--<?php if($userId!=null) { ?>
+        <div class="alert alert-success error_display" role="alert">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			<span class="sr-only"></span>Il Primo Mercato di Riparazione è aperto
 		</div>
-    <?php } ?>
+    <?php } ?>-->
     
     <?php if($error_json!=null){
 	    foreach($error_json as $error){ ?>

@@ -54,7 +54,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             if (isset($_SESSION['old_url'])) {
                 header("Location:" . $_SESSION['old_url']);
             } else {
-                header("Location:home.php");
+                header("Location:index.php");
             }
         }
 
@@ -62,7 +62,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 }else if(isset($_SESSION['username'])) {
 
-     header("Location: home.php");
+     header("Location: index.php");
 
 }
 

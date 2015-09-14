@@ -1,4 +1,3 @@
-#La Storia del Fanta Zenit
 ##Mettere in gioco la propria passione nel Fanta Zenit
 
 Un sabato sera come tanti altri, tutto tranquillo fino a quando partono le imprecazioni per la solita **sfiga al fantacalcio**. Come puoi aver subito 45 gol in 20 giornate e ritrovarti penultimo nonostante la migliore somma punti? Forse è giunto il momento di sperimentare nuove strade che conducono al premio delle proprie capacità fanta manageriali.

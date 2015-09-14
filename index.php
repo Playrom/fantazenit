@@ -15,109 +15,101 @@ if($json["error"]==false){
 	$players = $json["data"]["players"];
 }
 
-$json = $apiAccess->accessApi("/rounds/".($round-1),"GET");
+$json = $apiAccess->accessApi("/rounds/last","GET");
 
 $points = null;
+$id = null;
 
-if($json["error"]==false && $userId!=null){
-	$points = $json["data"]["results"][$userId]["points"];
+if($json["error"]==false){
+	
+	if($userId!=null){
+		$points = $json["data"]["results"][$userId]["points"];
+	}
+	
+	$id = $json["data"]["id"];
 }
+
+$id_user_stand = -1;
+
+if($userId!=null){
+	$id_user_stand = $userId;
+}
+
+include('error-box.php');
 
 ?>
 
-<div class="container-fluid">
+<div class="home_page container-fluid">
     <div class="row">
-        <ul class="slide">
-		  <li><img src="slides/slide2.jpg" alt=""></li>
-		  <!-- <li><img src="slides/2.jpg" alt=""></li>
-		  <li><img src="slides/3.jpg" alt=""></li> -->
-		</ul>
+        <div class="first_row_home">
+            <div class="col-md-8">
+            <?php if($userId!=null){ ?>
+            	<div class="box_home">
+	                <div class="welcome three_quarter" <?php if($players==null) echo "onclick=\"javascript:location.href='maketeam.php'\""; ?> >
+	                    
+	                    Benvenuto <?php echo $username; ?><br>
+	                    
+	                    <?php 
+		                if($config["last-round"] != 0){ ?>
+	                    
+	                    	<span class="minor">Hai totalizzato <span class="punti_highlight"><?php echo $points; ?></span> punti nella <?php echo $id; ?>° Giornata<br>
+	                    
+	                    <?php 
+		                }
+		                
+		                if($players!=null){ ?>
+	                        
+	                        Hai già inserito la Formazione per la <?php echo $config['current_round'] ?>° Giornata
+	                    
+	                    <?php }else{ ?>
+	                        
+	                        Devi inserire la Formazione per la <?php echo $config['current_round'] ?>° Giornata
+	                    
+	                    <?php } ?>
+	                    
+	                    </span>
+	                </div>
+	            </div>
+            <?php }else{ //if non loggato ?>
+                <div class="welcome not_logged three_quarter box_home" > <!-- onclick="javascript:location.href='signup.php'" -->
+                    Benvenuto sul sito del Fanta Zenit<!--<br><span class="click_to_reg">Clicca qui per farlo!</span>-->
+                </div>
+            <?php } ?>
+            </div>
+            <div class="col-md-4 margin-10-when-resize">
+	            <div class="box_home">
+	                <div class="count_closing_time one_quarter">
+	                    <div class="name_market">Termine Inserimento Formazioni</div>
+	                    <div id="clock"></div>
+	                </div>
+	            </div>
+            </div>
+        </div>
     </div>
     
-    <div class="row presentation join">
-	    <div class="col-md-12">
-		    <?php if($userId!=null){ ?>
-			    <a href="home.php">ACCEDI</a>
-			<?php }else{ ?>
-				<a href="signup.php">ISCRIVITI</a>
-			<?php } ?>
-	    </div>
-    </div>
+    <?php if($id!=null && $id!=0){ ?>
     
-    <div class="row presentation">
-	    <div class="col-md-12">
-		    <h1>Ecco il nuovo Fanta Zenit</h1>
-		    
-		    <p>Benvenuto nella piattaforma di gioco Fanta Zenit!</p>
-
-			<p>Partecipa con noi e tanti altri ragazzi di Messina e di tutti Italia alla quinta edizione 2015-2016.</p>
-			
-			<p>Concorri alla vittoria finale dei fantastici premi in palio o alle conquiste settimanali o mensili.</p>
-	    </div>
+    <div class="row">
+        <div class="third_row_home row_home">
+            <div class="col-md-6">
+                <div class="standings_last_round box_home">
+                    <div class="name_market">Classifica della <?php echo $id; ?>° Giornata</div>
+                    <?php echo getStandingsRoundByIdUser($id_competition,$id,$id_user_stand); ?>
+                </div>
+            </div>	
+            <div class="col-md-6">
+                <div class="standings_general box_home">
+                    <div class="name_market">Classifica Generale del Fanta Zenit</div>
+                    <?php echo getStandingsByIdUser($id_competition,$id_user_stand); ?>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div class="row presentation motivi">
-	    <div class="col-md-12">
-		    <h1>Perché il Fanta Zenit?</h1>
-
-			<p>Chi vuole sfidare la fortuna gioca ad asta, chi vuole sfidare se stesso e le sue capacità manageriali calcistiche sceglie il Fanta Zenit</p>
-			
-			<p>7 motivi:</p>
-						
-			<ol>
-			
-	            <li><p>Crei la tua rosa con 250 milioni. Ogni 5 giornate il mercato di riparazione esalta le tua capacità e crei plusvalenze per migliorare la tua squadra.</p></li>
-	
-	            <li><p>Doppia sfida: Somma punti e scontri diretti con diversi campionati e coppe con retrocessioni e promozioni.</p></li>
-	
-	            <li><p>Iscriviti gioca e gestisci la tua rosa Online su PC, Smartphone e Tablet.</p></li>
-	
-	            <li><p>Anticipazioni voti ogni domenica sera.</p></li>
-	
-	            <li><p>Il focus MANAGER of the WEEK ogni giornata sui social network.</p></li>
-	
-	            <li><p>Tutte le news sulla serie A, i consigli mercato, le probabili formazioni e l’avatar personale in cui mostrare le proprie vittorie. Tutto sulla nostra piattaforma.</p></li>
-	
-	            <li><p>Premi settimanali e mensili + Super premi finali con premiazione conclusiva.</p></li>
-	
-	        </ol>
-
-			<p>Vuoi vincere l’iscrizione?</p>
-			
-			<p>Semplicissimo. Manda un tuo selfie (foto o video) in cui ci racconti la tua passione per il fantacalcio con un episodio divertente. (es. manda un selfie con una figurina del tuo giocatore acquistato a 1 per completare la rosa poi rivelatosi decisivo).</p>
-			
-			
-			<p>Con l'iscrizone di 30€ diventi Membro Sostenitore dell'Associazione Culturale Zenit, e potrai sostenerci nelle nostre attività</p>
-			
-			<p>Iscriviti e scopri tutte le novità su:<br>
-			<a href="www.fantazenit.it">www.fantazenit.it</a><br>
-			<a href="www.facebook.com/fantazenit">www.facebook.com/fantazenit</a></p>
-			
-			
-			
-			<!--
-			<div class="col-lg-4">
-				<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-				<h2>Heading</h2>
-				<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-				<p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-	        </div>
-	        -->
-	    </div>
-    </div>
-    
+    <?php } ?>
 </div>
 
 <script>
     <?php echo "countTo(\"".$seconds."\");"; ?>
-</script>
-
-<script src="responsiveslides.min.js"></script>
-
-<script>
-  $(function() {
-    $(".slide").responsiveSlides();
-  });
 </script>
 
 <?php include('footer.php'); ?>

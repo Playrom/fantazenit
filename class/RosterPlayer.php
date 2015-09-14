@@ -12,7 +12,7 @@ class RosterPlayer{
 
 	function __construct($player,$cost){
 		$this->player=$player;
-		$this->cost=$cost;
+		$this->cost=intval($cost);
 	}
 
 

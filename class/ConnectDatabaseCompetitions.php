@@ -108,9 +108,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	}
 
 	function createCompetition($name,$first_round,$num_rounds,$type){
-		
-		error_log($type);
-		
+				
 		try{
 			$tempQuery="INSERT INTO `competitions` (`name`,`first_round`,`num_rounds` , `type`) VALUES (?,?,?,?)";
 
@@ -194,8 +192,6 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 			is_num($first_round);
 			is_num($num_rounds);
 			
-			error_log($id);
-			error_log($name);
 
 			$this->mysqli->autocommit(FALSE);
 
@@ -348,7 +344,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	}
 
 	function getUsersInCompetition($id_competition){
-		$tempQuery="SELECT users_in_competitions.* ,users.* FROM users_in_competitions LEFT OUTER JOIN users ON users.id = users_in_competitions.id_user WHERE id_competition=?";
+		$tempQuery="SELECT users_in_competitions.* ,users.* FROM users_in_competitions LEFT OUTER JOIN users ON users.id = users_in_competitions.id_user WHERE id_competition=? order by users.name_team ASC";
 
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
@@ -779,10 +775,6 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	
 	function getMatchesByGroup($id_competition,$id_phase , $id_group){
 		
-		error_log($id_competition);
-		error_log($id_phase);
-		error_log($id_group);
-		
 		
 		$comp = $this->getCompetition($id_competition);
 		
@@ -837,6 +829,51 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 			
 			
 		}
+	}
+	
+	function getMatchesByRound($round){
+		
+		
+			
+		
+		$tempQuery="SELECT * FROM matches WHERE round=?";
+		
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("i", $round)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+			
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$matchess = array();
+			
+			while ($row = $res->fetch_assoc()) {
+				
+				$matches[] = new Match($row["id_phase"] , $row["id_match"] , $row["id_competition"] , $row["id_one"] ,$row["id_two"] , $row["round"] , $row["result"] , $row["id_group"]);				
+				
+			}
+			
+			return $matches;
+
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return true;
+
+		}
+			
+			
 	}
 	
 	function getMatch($id_match){

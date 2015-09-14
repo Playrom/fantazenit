@@ -14,6 +14,9 @@ body, body.mce-content-body {
   margin: 0;
   font-family: boton-light; }
 
+strong, b {
+  color: #FF0000; }
+
 body.mce-content-body {
   padding: 0 15px; }
 
@@ -144,6 +147,8 @@ h1, h2, h3 {
     line-height: 25px;
     font-size: 20px;
     width: 90%; }
+    .user-info .user-info-item a {
+      color: #FF0000; }
   .user-info .username {
     margin-bottom: 5px; }
   .user-info .name-team {
@@ -333,13 +338,13 @@ ul.nav.navbar-nav .red_color {
   border: 0; }
 
 /* HOME */
-.mce-content-body, .presentation {
+.mce-content-body, .presentation, .motivi {
   font-family: boton-light; }
-  .mce-content-body p, .presentation p {
+  .mce-content-body p, .presentation p, .motivi p {
     font-size: 25px; }
-  .mce-content-body h1, .mce-content-body h3, .presentation h1, .presentation h3 {
+  .mce-content-body h1, .mce-content-body h3, .presentation h1, .presentation h3, .motivi h1, .motivi h3 {
     color: #FF0000; }
-  .mce-content-body h2, .presentation h2 {
+  .mce-content-body h2, .presentation h2, .motivi h2 {
     color: #246BB2; }
 
 .mce-content-body, .motivi {
@@ -423,6 +428,9 @@ ul.nav.navbar-nav .red_color {
   background: #FFF;
   float: left;
   position: relative; }
+  .main .form-group {
+    float: left;
+    width: 100%; }
 
 .half_size {
   width: 50% !important;
@@ -569,13 +577,16 @@ a.current-round {
   position: relative;
   width: 100%;
   cursor: pointer; }
+  .old-player nth-last-child(0), .new-player nth-last-child(0) {
+    border-bottom: none; }
 
 .role-icon {
   float: left;
   position: relative;
   width: auto;
   margin: 5px;
-  height: 40px; }
+  height: 40px;
+  font-family: boton-regular; }
   .role-icon span {
     padding: 5px 10px;
     height: 40px;
@@ -588,6 +599,13 @@ a.current-round {
   position: relative;
   height: 40px;
   line-height: 40px; }
+  .name-player-item a {
+    text-decoration: none;
+    color: black; }
+  .name-player-item img {
+    height: 30px;
+    width: auto;
+    line-height: 40px; }
 
 .team-player-item {
   color: #FF0000; }
@@ -654,16 +672,16 @@ a.current-round {
   display: none; }
 
 .p-but {
-  background: #f8081f; }
+  background: #cc0000; }
 
 .d-but {
-  background: #1df84a; }
+  background: #008000; }
 
 .c-but {
-  background: #f8d300; }
+  background: #ddae36; }
 
 .a-but {
-  background: #0006f8; }
+  background: #003366; }
 
 .role-icon {
   color: #FFF;
@@ -837,7 +855,9 @@ table.roster-item {
   color: #FFF; }
 
 .dots {
-  text-align: center; }
+  text-align: center;
+  line-height: 40px;
+  font-size: 30px; }
 
 .old-player.finalvote, .finalvote.new-player {
   text-align: right;
@@ -903,7 +923,7 @@ tr:last-child {
 
 .complete-standing {
   width: 100%;
-  line-height: 30px; }
+  line-height: 40px; }
 
 .value_player {
   text-align: center; }
@@ -1410,9 +1430,6 @@ input[type=checkbox] {
   font-size: 35px;
   min-height: 170px; }
 
-.punti_highlight {
-  color: #515151; }
-
 .minor {
   font-size: 28px; }
 
@@ -1435,14 +1452,10 @@ input[type=checkbox] {
 .recap_last_round, .recap_standings {
   padding: 10px; }
 
-.standings_last_round {
+.standings_last_round, .standings_general {
   padding: 10px; }
-
-.standings_general {
-  padding: 10px; }
-
-.standings_general tr:nth-last-child(2) {
-  border-bottom: none; }
+  .standings_last_round .old-player:nth-last-child(2), .standings_last_round .new-player:nth-last-child(2), .standings_general .old-player:nth-last-child(2), .standings_general .new-player:nth-last-child(2) {
+    border-bottom: none; }
 
 #clock {
   width: 100% !important;

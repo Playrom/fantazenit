@@ -106,6 +106,10 @@ class User{
         
         $this->apiKey=$apiKey;
         $this->url_avatar=$url_avatar;
+        
+        if($this->url_avatar == null){
+	        $this->url_avatar = "http://www.fantazenit.it/img/default_avatar.png";
+        }
     }
 
     /**

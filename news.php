@@ -18,13 +18,15 @@ if(isset($_GET['id'])){
     
     
 	include('error-box.php');
-	
+		
 	if($news!=null){ ?>
 		<div class="container-fluid">    
-		    <div class="row presentation motivi">
+		    <div class="row presentation">
 			    <div class="col-md-12">
-				    <h1><?php echo $news["title"]; ?></h1>
-				    <?php echo $news["html"]; ?>
+				    <div class="white-with-padding" style="margin-top: 10px;">
+					    <h1 style="margin-top: 0;"><?php echo $news["title"]; ?></h1>
+					    <?php echo $news["html"]; ?>
+			    	</div>
 			    </div>
 		    </div>
 		</div>

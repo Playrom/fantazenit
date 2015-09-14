@@ -76,9 +76,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
     function insertTeam($id_user,$ids,$reserves,$round,$tactic,$recovered=false){
 	    
-	    error_log($recovered);
-	    error_log($round);
-	   
+	    
     	$data_players=new ConnectDatabasePlayers($this->mysqli);
 
 		try{
@@ -109,11 +107,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 				}
 
-				$pla=$players[$id["id"]];
 				$position = $id["position"];
 				$zero=0;
 				
-				$id_pla = $pla->getId();
+				$id_pla = $id["id"];
 
 				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$position)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -131,12 +128,11 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 				}
 
-				$pla=$players[$id["id"]];
+				$id_pla = $id["id"];
 				$position = $id["position"];
 
 				$uno=1;
 				
-				$id_pla = $pla->getId();
 
 				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$position)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -447,7 +443,10 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     
     function closeRound($round){
 		try{
-
+			
+			$db_competitions = new ConnectDatabaseCompetitions($this->mysqli);
+			$db_users = new ConnectDatabaseUsers($this->mysqli);
+			
 			$settings=$this->dumpConfig();
 
 			$available=$settings['available-round'];
@@ -469,8 +468,6 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				}
 			}
 			
-			error_log("precalc");
-
 			$this->calcRound($round);
 
 			$this->calcRoundUser($round);
@@ -536,6 +533,42 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			if (!$stmt->execute()) {
 			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
+									
+			$standings = $this->getRoundStandings($settings["default_competition"],$round);
+			
+			$standing = $standings[0];
+										
+			$id_user = $standing["id_user"];
+		
+			$points_lead = $standing["points"];
+			
+			$competition_standings = $db_competitions->getStandings($settings["default_competition"]);
+			
+			
+			$standings_by_user = array();
+			
+			for($i=0 ; $i<count($competition_standings) ; $i++){
+			    $temp_user = $db_users->getUserById(intval($competition_standings[$i]["id_user"]));
+		        $standings_by_user[$temp_user->getId()] = $i+1; 
+		    }
+		    			
+			$position = $standings_by_user[$id_user];
+			
+			$tempQuery="REPLACE INTO `recaps` (`winner`,`round`,`points`,`position`) VALUES(?,?,?,?) ";
+
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("iidi", $id_user,$round,$points_lead,$position)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+		
+
 
 		}catch(exception $e) {
 			echo "\nERRORE CHIUSURA ROUND: ".$e;
@@ -801,10 +834,13 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     function calcRound($round){
 
     	$data_players=new ConnectDatabasePlayers($this->mysqli);
-
+    	
 		$players=$data_players->dumpSingoliToList(null,null);
-		$tempQuery="SELECT stats.* , pla.role  FROM stats LEFT OUTER JOIN (  SELECT *  FROM (SELECT id as t, MAX(round) AS time FROM players GROUP BY t ) l JOIN players b
-					ON b.id = l.t AND b.round = l.time GROUP BY b.round, b.id  ) as pla ON pla.id=stats.id_player WHERE stats.round=?";
+		$tempQuery="SELECT stats.* , players.role  
+					FROM stats 
+					LEFT OUTER JOIN players
+					ON players.id=stats.id_player 
+					WHERE stats.round=?";
 
 		try{
 
@@ -1290,6 +1326,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 					
 					
 				}
+				
+				$this->calcMatches($round);
 
 				
 
@@ -1300,6 +1338,91 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				return false;
 
 		}
+	}
+	
+	function calcMatches($round){
+
+		$results = $this->getInfoRound($round);
+		$db_competitions = new ConnectDatabaseCompetitions($this->mysqli);
+		
+		$db_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
+		
+		$matches = $db_competitions->getMatchesByRound($round);
+		
+		$tempQuery="UPDATE `matches` SET result=? where id_match=?";
+		
+		
+		foreach($matches as $match){
+			
+			$result = "X";
+			
+			$id_match = $match->getId();
+			
+			$points_one = intval($results[$match->getIdOne()]["points"]);
+			$points_two = intval($results[$match->getIdTwo()]["points"]);
+			
+			$gol_one = 0;
+			$gol_two = 0;
+			
+			$handicaps=$db_handicaps->getHandicapsRoundsByUserIdAndRound($match->getIdOne(),$round);
+
+        	foreach($handicaps as $handicap){
+				$round_handicap=$handicap->getPoints();
+				$points_one=$points_one+$round_handicap;
+			}
+			
+			$handicaps=$db_handicaps->getHandicapsRoundsByUserIdAndRound($match->getIdTwo(),$round);
+
+        	foreach($handicaps as $handicap){
+				$round_handicap=$handicap->getPoints();
+				$points_two=$points_two+$round_handicap;
+			}
+			
+			if($points_one>=66){
+				$gol_one=floor(($points_one-66)/6)+1;
+			}
+			
+			if($points_two>=66){
+				$gol_two=floor(($points_two-66)/6)+1;
+			}
+			
+			if($gol_one > $gol_two){
+				$result = "1";
+			}else if($gol_two > $gol_one){
+				$result = "2";
+			}
+
+
+			
+			try{
+			
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    return false;
+				}
+	
+				if (!$stmt->bind_param("si",  $result , $id_match)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}	
+		
+		
+			}catch(exception $e) {
+					echo "ex: ".$e;
+					return false;
+	
+			}
+		}
+		
+		return true;
+		
+		
+		
 	}
 
 	function unCalcRound($round){
@@ -1349,11 +1472,54 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 					}
 				}
 				
+				$tempQuery="DELETE FROM `recaps` WHERE round=? ";
+
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+	
+				if (!$stmt->bind_param("i", $round)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
 				
 				
+				return $this->unCalcMatches($round);
 
+			}catch(exception $e) {
+				echo "ex: ".$e;
+				return false;
+			}
+		}
 
+		return false;
+	}
+	
+	function unCalcMatches($round){
+		if($this->isCalcRound($round)){
+			$tempRemove="UPDATE `matches` SET result=NULL where round=?";			
+			
 
+			try{
+
+				if(!($stmt = $this->mysqli->prepare($tempRemove))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    return false;
+				}
+
+				if (!$stmt->bind_param("i", $round)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    return false;
+				}
+				
 				return true;
 			}catch(exception $e) {
 				echo "ex: ".$e;
@@ -1391,6 +1557,45 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				$points=$row['points'];
 
 				$arr[$id_user]=array('gol' => $gol, 'points' => $points);
+			}
+
+			return $arr;
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return false;
+
+		}
+	}
+	
+	function getRecap($round){
+		$tempQuery="SELECT * FROM recaps  WHERE round=? ";
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("i", $round)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$arr=null;
+
+			while ($row = $res->fetch_assoc()) {
+				$id_user=$row['winner'];
+				$points=$row['points'];
+				$position=$row['position'];
+				$round = $row["round"];
+
+				$arr=array( 'points' => $points,'position' => $position,'id_user'=>$id_user,'round'=>$round);
 			}
 
 			return $arr;
@@ -1757,7 +1962,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 	}
 	
 	function getLastQuoteRound(){
-		$tempQuery="SELECT MAX(round) as max FROM players";
+		$tempQuery="SELECT MAX(round) as max FROM quote";
 
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {

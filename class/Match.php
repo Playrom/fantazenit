@@ -179,6 +179,48 @@ class Match{
 	    $this->groups = $value;
 	}
 	
+	/**
+     * @return int
+     */
+    public function getIdOne(){
+		return $this->id_one;
+	}
+
+    /**
+     * @param int
+     */
+    public function setIdOne($id){
+		$this->id_one = $id;
+	}
+	
+	
+	/**
+     * @return int
+     */
+    public function getIdTwo(){
+		return $this->id_two;
+	}
+
+    /**
+     * @param int
+     */
+    public function setIdTwo($id){
+		$this->id_two = $id;
+	}
+	
+	/**
+     * @return int
+     */
+    public function getId(){
+		return $this->id_match;
+	}
+
+    /**
+     * @param int
+     */
+    public function setId($id){
+		$this->id_match = $id;
+	}
 
 
 }

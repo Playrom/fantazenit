@@ -203,7 +203,7 @@ class ConnectDatabase {
 	
 	
 	function getNews(){
-		$query="SELECT * FROM `news` order by date DESC";
+		$query="SELECT * FROM `news` WHERE page=0 order by date DESC";
 
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
@@ -231,6 +231,41 @@ class ConnectDatabase {
 
 		}catch(exception $e) {
 			error_log("ERRORE DUMP NEWS");
+			return null;
+		}
+
+
+	}
+	
+	function getNewsToEdit(){
+		$query="SELECT * FROM `news` order by date DESC";
+
+		try{
+			if (!($stmt = $this->mysqli->prepare($query))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    return null;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    return null;
+			}
+
+            $res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$news=array();
+
+			while ($row = $res->fetch_assoc()) {
+				$date=DateTime::createFromFormat('d-m-Y H:i', $row["date"]);
+				$news[] = new News($row["id"],$row["title"],$row["html"],$date);
+			}
+
+			return $news;
+
+
+		}catch(exception $e) {
+			error_log("ERRORE DUMP NEWS TO EDIT");
 			return null;
 		}
 

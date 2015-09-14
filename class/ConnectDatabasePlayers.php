@@ -20,23 +20,22 @@ class ConnectDatabasePlayers extends ConnectDatabase{
 		
 		$last_round = $db_rounds->getLastQuoteRound();
 
-		$tempQuery="SELECT * FROM (SELECT id, MAX(round) AS round FROM players GROUP BY id ) l JOIN players b
-   					ON b.id = l.id AND b.round = l.round GROUP BY b.round, b.id";
+		$tempQuery="SELECT *  FROM quote JOIN players ON players.id = quote.id WHERE quote.round = ( SELECT MAX(round) FROM quote )";
 		$another=0;
-        if($name_str!=null || $team_str!=null) $tempQuery=$tempQuery."where ";
+        if($name_str!=null || $team_str!=null) $tempQuery=$tempQuery."and ";
 
         if($name_str!=null) {
-            $tempQuery=$tempQuery."name LIKE \'".$name_str."\'";
+            $tempQuery=$tempQuery."players.name LIKE \'".$name_str."\'";
             $another++;
         }
 
         if($team_str!=null){
             if($another!=0)  $tempQuery=$tempQuery." and ";
-            $tempQuery=$tempQuery."team LIKE \'".$team_str."\'";
+            $tempQuery=$tempQuery."players.team LIKE \'".$team_str."\'";
 
         }
 
-        $tempQuery=$tempQuery." order by role DESC, name ASC";
+        $tempQuery=$tempQuery." order by players.role DESC, players.name ASC";
 
 
 		$res=$this->mysqli->query($tempQuery);
@@ -119,7 +118,7 @@ function updatePlayers(PlayersList $players){
 
 
 	function dumpPlayerById($id){
-		$query="select * from `players` where id=? ORDER BY round DESC LIMIT 1";
+		$query="SELECT *  FROM quote JOIN players ON players.id = quote.id WHERE quote.round = ( SELECT MAX(round) FROM quote WHERE quote.id=? ) and quote.id=?";
 		
 		$db_rounds = new ConnectDatabaseRounds($this->mysqli);
 		
@@ -130,7 +129,7 @@ function updatePlayers(PlayersList $players){
 				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 				}
 
-				if (!$stmt->bind_param("i", $id)) {
+				if (!$stmt->bind_param("ii", $id, $id)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 				}
 
@@ -168,7 +167,7 @@ function updatePlayers(PlayersList $players){
 	}
 
 	function dumpPlayerByName($name){
-		$query="select * from `players` where name=? ORDER BY round DESC LIMIT 1";
+		$query="SELECT *  FROM quote JOIN players ON players.id = quote.id WHERE quote.round = ( SELECT MAX(round) FROM quote  ) and players.name=?";
 		
 		$db_rounds = new ConnectDatabaseRounds($this->mysqli);
 		
@@ -336,7 +335,7 @@ function updatePlayers(PlayersList $players){
 
 
 function getValuesOfPlayer($id_player){
-		$tempQuery="SELECT * FROM players  WHERE id=? ORDER BY round ASC ";
+		$tempQuery="SELECT *  FROM quote JOIN players ON players.id = quote.id WHERE players.id=? ORDER BY quote.round ASC ";
 
 		try{
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {

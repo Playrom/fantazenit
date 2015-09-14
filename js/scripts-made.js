@@ -1,10 +1,13 @@
     var resSlide;
     var list;
     var list2;
-
+    
+	
     $(document).ready(function () {
         disable_but(true);
-
+		
+		
+		
         $("#range_1").ionRangeSlider({
             min: 1,
             max: 50,
@@ -192,7 +195,6 @@
 
     var select_role_create = function (role, obj) {
                 
-        console.log(role);
         
         if(role==""){
 	        
@@ -226,10 +228,12 @@
 	            element[i].style.display = "none";
 	            element[i].parentNode.setAttribute("onmouseout", "stophover(this)");
 	        }
-	
-	        element = obj.getElementsByClassName('but-over');
-	        obj.removeAttribute("onmouseout");
-	        element[0].style.display = "block";
+			
+			if(obj != null){
+		        element = obj.getElementsByClassName('but-over');
+		        obj.removeAttribute("onmouseout");
+		        element[0].style.display = "block";
+		    }
 	
 	
 	        var free_table = document.getElementById("free-table");
@@ -238,8 +242,7 @@
 	        for (i = 0; i < arr.length; i++) {
 	            var element = arr[i];
 	            if (element.getAttribute("role").toLowerCase() != role.toLowerCase()) {
-	                element.style.display = "none";
-	
+	                element.style.display = "none";	
 	            } else {
 	                if (element.getAttribute("in-roster") == "yes") {
 	                    element.style.display = "none";
@@ -260,12 +263,14 @@
         list.filter();
         list.search();
 
-
-        /*var free_table = document.getElementById("free-table");
+        var free_table = document.getElementById("free-table");
         var arr = free_table.getElementsByClassName("new-player");
+        
         console.log(arr);
+				
         for (i = 0; i < arr.length; i++) {
             var element = arr[i];
+            
             if (element.getAttribute("role").toLowerCase() != role.toLowerCase()) {
                 element.style.display = "none";
 
@@ -276,7 +281,7 @@
                     element.style.display = "block";
                 }
             }
-        };*/
+        };
 
 
         resetSlide();
@@ -332,7 +337,8 @@
             var table_new = document.getElementById("free-table");
             table_new.style.display = "block";
             document.getElementById("market-new").innerHTML = "";
-            select_role_market(obj.getAttribute("role"));
+            console.log(obj);
+            select_role_create(obj.getAttribute("role"),null);
         } else if (id == "market-new") {
 
         }

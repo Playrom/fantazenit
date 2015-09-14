@@ -114,7 +114,7 @@
 						
 						            $ret.="<div class=\"old-player\" id=\"".$team["team_info"]["id"]."\" >";
 						            $ret.="<div class=\"role-icon\"><span class=\"p-but\" >".$pos."</span></div>";
-						            $ret.="<div class=\"name-player-item\">".$team["team_info"]["name_team"]."</div>";
+						            $ret.="<div class=\"name-player-item\"><a href=\"teams.php?id=".$team["team_info"]["id"]."\" >".$team["team_info"]["name_team"]."</a></div>";
 						            $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">".$team["points"]."</div>";
 						            $ret.="<div class=\"finalvote vote value-player-item\">".$team["gol"]."</div></div>";
 						            $ret.="</div>";

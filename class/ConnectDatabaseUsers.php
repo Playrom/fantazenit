@@ -47,7 +47,6 @@ class ConnectDatabaseUsers extends ConnectDatabase{
 		
 			if (!$stmt->bind_param("sssssisss", $name,$surname, $username, $password ,$email , $balance , $name_team , $telephone , $url_fb)) {
 			    //echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-			    error_log("error");
 			    return false;
 			}
 
@@ -261,16 +260,10 @@ function checkAuthOverride($apiKey){
 				$date=new DateTime($datetemp);
 				
 
-				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
-				$roster=new RosterList();
-				while ($row2 = $res2->fetch_assoc()) {
-					$cost=$row2['cost'];
-					$player=$data_players->dumpPlayer(intval($row2['id_player']));
-					$roster[]=new RosterPlayer($player,$cost);
-				}
+				
 
 
-				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
+				$us=new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,null,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
                 //$data_markets->getTransfers($us);
                 
                 $bonuses = $data_handicaps->getMoneyBonusesByUser($us);
@@ -429,8 +422,7 @@ function checkAuthOverride($apiKey){
 					$cost=$row2['cost'];
 					$player=$data_players->dumpPlayer(intval($row2['id_player']));
 					$roster[]=new RosterPlayer($player,$cost);
-				}
-
+				}				
 				$user = new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
 				
 				$bonuses = $data_handicaps->getMoneyBonusesByUser($user);

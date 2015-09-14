@@ -7,7 +7,7 @@ include('header.php');
 <?php
 
 if(isset($_SESSION['username'])) {
-     header("Location:home.php");
+     header("Location:index.php");
 
 }else if(isset($_POST['user']) && isset($_POST['pass1']) && isset($_POST['pass2']) && isset($_POST['email']) && isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['name_team']) &&      isset($_POST['telephone'])){
     
@@ -137,9 +137,10 @@ if(isset($_SESSION['username'])) {
      } ?>
      
     <?php
+	    $error_messages[] ="Le registrazioni sono chiuse";
 	     include('error-box.php');
-	?>
-	
+	/* ?>
+
 	<div class="form-horizontal signup_form">
 		<h3>Registrazione al Fanta Zenit</h3>
 		<div class="form-group">
@@ -320,7 +321,7 @@ if(isset($_SESSION['username'])) {
         
     </form>
     
-    
+
     
 <script src="js/crop_signup.js"></script>
 
@@ -336,4 +337,4 @@ if(isset($_SESSION['username'])) {
     $("body").on('change', 'input', buttonSignup);
 </script>
 
-<?php include('footer.php'); ?>
+<?php */  include('footer.php'); ?>

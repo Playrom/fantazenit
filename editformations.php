@@ -63,6 +63,10 @@ if($username == null) {
 	
 	$selected = false;
 	
+	$temp = null;
+	$team = null;
+	$result = null ;
+	
 	if(isset($_POST["id_user"]) && isset($_POST["round"])){
 		
 		$selected = true;
@@ -91,8 +95,11 @@ if($username == null) {
 		
 	
 	    $roster=$user["players"];
+	    
+	    
 	    		    
 	    $num_giocatori=$config['max_por']+$config['max_def']+$config['max_cen']+$config['max_att'];
+	    
 	    
 	    if(count($roster)!=$num_giocatori){
 	
@@ -116,9 +123,7 @@ if($username == null) {
 		
 		//$username=$temp['username'];
 		
-		$temp = null;
-		$team = null;
-		$result = null ;
+		
 		
 		if(!$json_team["error"]){
 		
@@ -225,7 +230,7 @@ if($username == null) {
     $max_def=4;
     $max_cen=4;
     $max_att=2;
-
+    
     if($team!=null){
         $max_def=$result["def"];
         $max_cen=$result["cen"];
@@ -330,15 +335,18 @@ if($username == null) {
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
                             <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -355,16 +363,19 @@ if($username == null) {
                             <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
-                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?> 
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -381,16 +392,19 @@ if($username == null) {
                             <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
-                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -408,15 +422,18 @@ if($username == null) {
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
                             <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -424,8 +441,9 @@ if($username == null) {
                 </div> <!-- side roster end -->
 
                 <div class="side-element col-md-8">
+	                <div id="save" onclick="getValuesEditFormation();">Salva Formazione</div>
                     <div id="utility-row">
-                        <select name="module" id="module" <?php echo "id_user=\"".$userId."\"  round=\"".$round."\""; ?> onchange="changemodule(this)">
+                        <select name="module" id="module" <?php echo "round=\"".$round."\""; ?>  <?php echo "id_user=\"".$userId."\""; ?> onchange="changemodule(this)">
                               <?php
                               if(isset($config["available-tactics"])){
                                 $modules=explode(";",$config["available-tactics"]);
@@ -433,15 +451,15 @@ if($username == null) {
                               foreach($modules as $module){
                                 if(strtolower($tactic)==strtolower($module)){
                               ?>
-                                <option selected="selected" <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
+                                <option selected="selected" <?php echo "value=\"".$module."\""; ?> ><?php echo $module[0]."-".$module[1]."-".$module[2];?></option>
                               <?php } else { ?>
-                                <option <?php echo "value=\"".$module."\""; ?> ><?php echo $module;?></option>
+                                <option <?php echo "value=\"".$module."\""; ?> ><?php echo $module[0]."-".$module[1]."-".$module[2];?></option>
                               <?php } } ?>
                         </select>
                         <?php if($rescued_team) { ?><span class="rescued">Formazione Recuperata dal Turno Precedente</span><?php } ?>
                     </div>
 
-                    <div id="save" onclick="getValuesEditFormation();">Salva Formazione</div>
+                    
 
                     <div class="team campo-verde">
 
@@ -465,7 +483,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="P"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 		                                    </div>
 	                            <?php   }
@@ -479,7 +500,7 @@ if($username == null) {
 
                         <div class="roster-item " id="D_table" <?php echo "max=\"".$max_def."\""; ?>>
                             
-                            <div class="old-player d-but"><div class="name-role">Difensori</div></div>
+                            <!-- <div class="old-player d-but"><div class="name-role">Difensori</div></div> -->
 
                             <?php 
                             if(isset($result["players"])){
@@ -496,7 +517,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="D"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -508,7 +532,7 @@ if($username == null) {
 
                         <div class="roster-item " id="C_table" <?php echo "max=\"".$max_cen."\""; ?>>
                             
-                            <div class="old-player c-but"><div class="name-role">Centrocampisti</div></div>
+                            <!-- <div class="old-player c-but"><div class="name-role">Centrocampisti</div></div> -->
 
                             <?php 
                             if(isset($result["players"])){
@@ -525,7 +549,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="C"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -537,7 +564,7 @@ if($username == null) {
 
                         <div class="roster-item " id="A_table" <?php echo "max=\"".$max_att."\""; ?>>
                             
-                            <div class="old-player a-but"><div class="name-role">Attaccanti</div></div>
+                            <!--  <div class="old-player a-but"><div class="name-role">Attaccanti</div></div> -->
 
                             <?php 
                             if(isset($result["players"])){
@@ -554,7 +581,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="A"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -569,7 +599,7 @@ if($username == null) {
                     <div id="reserve_team">
                         <div class="type_name">Panchina</div>
 
-                        <div class="roster-item " id="P_reserve" <?php echo "max=\"".$max_role_reserve."\""; ?>>
+                        <div class="roster-item " id="P_reserve" <?php echo "max=\"1\""; ?>>
                             
                             <div class="old-player p-but"><div class="name-role">Portieri</div></div>
 
@@ -588,7 +618,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="P"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -618,7 +651,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="D"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -647,7 +683,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="C"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -676,7 +715,10 @@ if($username == null) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="A"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -713,6 +755,7 @@ if($username == null) {
 <script src="js/jquery-1.11.0.min.js"></script>
 <script src="js/ion.rangeSlider.min.js"></script>
 <script>
+	$.noConflict();
 	
 	var getCol = function(num){
 
@@ -729,12 +772,6 @@ if($username == null) {
 				return 12;
 		}
 	}
-
-
-    var disable_but=function(bo){
-        var mod_button=document.getElementById("mod-button");
-        mod_button.disabled=bo;
-    };
 
     var changemodule=function(mo){
 
@@ -892,6 +929,11 @@ if($username == null) {
             namecell.innerHTML = obj.getAttribute("name");
             namecell.className = "name-player-item";
             
+            var imagecell = document.createElement('img');
+			imagecell.src = "/teamlogo/small/" + obj.getAttribute("team") + ".png";
+            
+            namecell.appendChild(imagecell);
+            
             var wrapper = document.createElement('div');
                         
             wrapper.className = "player_column col-md-" + getCol(max_team);
@@ -929,6 +971,11 @@ if($username == null) {
                 var namecell = document.createElement('div');
                 namecell.innerHTML = obj.getAttribute("name");
                 namecell.className = "name-player-item";
+                
+                var imagecell = document.createElement('img');
+				imagecell.src = "/teamlogo/small/" + obj.getAttribute("team") + ".png";
+	            
+	            namecell.appendChild(imagecell);
                 
                 row.appendChild(namecell);
                 
@@ -1057,6 +1104,7 @@ if($username == null) {
            var round=tactic_form.getAttribute("round");
            text=text+'<input type="hidden" name="round" value="'+round+'" />';
            text=text+'<input type="hidden" name="tactic" value="'+tactic+'" />';
+           
 
             var form = $(text + '</form>');
             

@@ -268,16 +268,19 @@ if(!isset($_SESSION['username'])) {
                             <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
-                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -295,15 +298,18 @@ if(!isset($_SESSION['username'])) {
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
                             <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -320,16 +326,19 @@ if(!isset($_SESSION['username'])) {
                             <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
-                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?> 
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+	                        <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -346,16 +355,19 @@ if(!isset($_SESSION['username'])) {
                             <?php echo "id=\"".$player["player"]["id"]."\" "; ?>
                             <?php echo "data-value=\"".$player["player"]["value"]."\" "; ?>
                             <?php echo "role=\"".$player["player"]["role"]."\" "; ?>
-                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?>  
+                            <?php echo "name=\"".$player["player"]["name"]."\" "; ?> 
+	                        <?php echo "team=\"".$player["player"]["team"]."\" "; ?>  
                             <?php if(isset($result["players"])) {  if(isset($result["players"][$player["player"]["id"]])) { echo "style=\"display:none;\" "; } } ?>
                         >
 
-                              <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
-                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
-                              <div class="info-player-item">
-                                <!--<div class="value-player-item"><?php echo $player["player"]["value"]; ?></div> -->
-                            </div>
-                          </div>
+                            <div class="role-icon"><span <?php echo "class=\"".strtolower($player["player"]["role"])."-but\" "; ?> ><?php echo strtoupper($player["player"]["role"]); ?></span></div>
+                            <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
+                            <div class="info-player-item">
+        						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
+								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
+    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    						</div>
+                        </div>
                        <?php }
                         } ?>
 
@@ -363,6 +375,7 @@ if(!isset($_SESSION['username'])) {
                 </div> <!-- side roster end -->
 
                 <div class="side-element col-md-8">
+	                <div id="save" onclick="getValues();">Salva Formazione</div>
                     <div id="utility-row">
                         <select name="module" id="module" <?php echo "round=\"".$round."\""; ?> onchange="changemodule(this)">
                               <?php
@@ -380,7 +393,7 @@ if(!isset($_SESSION['username'])) {
                         <?php if($rescued_team) { ?><span class="rescued">Formazione Recuperata dal Turno Precedente</span><?php } ?>
                     </div>
 
-                    <div id="save" onclick="getValues();">Salva Formazione</div>
+                    
 
                     <div class="team campo-verde">
 
@@ -404,7 +417,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="P"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 		                                    </div>
 	                            <?php   }
@@ -435,7 +451,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="D"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -464,7 +483,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="C"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -493,7 +515,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="A"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -527,7 +552,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="P"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -557,7 +585,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="D"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -586,7 +617,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="C"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -615,7 +649,10 @@ if(!isset($_SESSION['username'])) {
 		                                            <?php echo "name=\"".$player["name"]."\" "; ?> 
 		                                            role="A"
 		                                            <?php echo "id_player=\"".$player["id"]."\" "; ?> >
-		                                            <div class="name-player-item"><?php echo $player["name"]; ?></div>
+		                                            <div class="name-player-item">
+			                                            <?php echo $player["name"]; ?>
+														<img <?php echo "src=\"teamlogo/small/".$player["team"].".png\""; ?> class="team_logo_small" >
+													</div>
 		                                        </div>
 											</div>
 	                            <?php   }
@@ -643,6 +680,7 @@ if(!isset($_SESSION['username'])) {
 <script src="js/jquery-1.11.0.min.js"></script>
 <script src="js/ion.rangeSlider.min.js"></script>
 <script>
+	$.noConflict();
 	
 	var getCol = function(num){
 
@@ -661,10 +699,6 @@ if(!isset($_SESSION['username'])) {
 	}
 
 
-    var disable_but=function(bo){
-        var mod_button=document.getElementById("mod-button");
-        mod_button.disabled=bo;
-    };
 
     var changemodule=function(mo){
 
@@ -822,6 +856,11 @@ if(!isset($_SESSION['username'])) {
             namecell.innerHTML = obj.getAttribute("name");
             namecell.className = "name-player-item";
             
+            var imagecell = document.createElement('img');
+			imagecell.src = "/teamlogo/small/" + obj.getAttribute("team") + ".png";
+            
+            namecell.appendChild(imagecell);
+            
             var wrapper = document.createElement('div');
                         
             wrapper.className = "player_column col-md-" + getCol(max_team);
@@ -859,6 +898,11 @@ if(!isset($_SESSION['username'])) {
                 var namecell = document.createElement('div');
                 namecell.innerHTML = obj.getAttribute("name");
                 namecell.className = "name-player-item";
+                
+                var imagecell = document.createElement('img');
+				imagecell.src = "/teamlogo/small/" + obj.getAttribute("team") + ".png";
+	            
+	            namecell.appendChild(imagecell);
                 
                 row.appendChild(namecell);
                 

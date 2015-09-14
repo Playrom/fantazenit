@@ -338,7 +338,6 @@ $app->post('/newsletters', function () use ($app) {
 		        $email = $item->getEmail();
 		        		        
 		        $headers = "From: info@associazionezenit.it \r\n";
-				$headers .= "Reply-To: info@associazionezenit.it \r\n";
 				$headers .= "MIME-Version: 1.0\r\n";
 				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 				
@@ -411,8 +410,6 @@ $app->get('/users', function () use ($app) {
 
 
     $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-
-    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
 
     $users = $db->getUsers();
 
@@ -849,8 +846,10 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
 
     $result=null;
     
-
     $competition = getCompetition($id_competition);
+    
+    
+	
     
 
 
@@ -1197,6 +1196,41 @@ $app->get('/rounds', function () use ($app) {
 
 });
 
+$app->get('/rounds/recap', function () use ($app) {
+
+	// Round is Real Round
+
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
+    $db_competitions = new ConnectDatabaseCompetitions($db->mysqli);
+
+    //$id_competition=$app->request()->params('competition');
+    
+	$id = $db_rounds->getLastCalcRound();
+
+
+    $result=null;
+
+    if($db_rounds->roundExist($id)){
+        $response["error"] = false;
+        $open=$db_rounds->isOpenRound($id);
+        $response["data"]["open"] = $open;
+        $response["data"]["id"] = $id;
+        $response["data"]["formations_editing"]=$db_rounds->isPossibleToEditFormation($id);
+        if(!$open){
+	        $response["data"]["recap"] = $db_rounds->getRecap($id);
+	    }
+    }else{
+	    $response["error"] = true;
+	    $response["message"] = "Round Not Found";
+    }
+
+
+    echoRespnse(200, $response);
+
+
+});
+
 $app->get('/rounds/:id', function ($id) use ($app) {
 
 	// Round is Real Round
@@ -1222,6 +1256,7 @@ $app->get('/rounds/:id', function ($id) use ($app) {
         $response["data"]["formations_editing"]=$db_rounds->isPossibleToEditFormation($id);
         if(!$open){
 	        $response["data"]["results"] = $db_rounds->getInfoRound($id);
+	        $response["data"]["recap"] = $db_rounds->getRecap($id);
 	    }
     }else{
 	    $response["error"] = true;
@@ -1233,6 +1268,7 @@ $app->get('/rounds/:id', function ($id) use ($app) {
 
 
 });
+
 
 
 
@@ -1759,6 +1795,8 @@ $app->post('/markets/transfers', function () use ($app) {
 
 
     $data = json_decode($json, true); // parse the JSON into an assoc. array
+    
+    error_log(print_r($data,true));
 
     $id_user = $data["id_user"];
     $id_new  = $data["id_new"];
@@ -1769,10 +1807,13 @@ $app->post('/markets/transfers', function () use ($app) {
     $user = $db->getUserByApiKey($apiKey);
 
     $error_code=null;
+    
 
-    if($db->checkApi($apiKey) && $user!=null && $id_user==$user->getId()){
+    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey)) ){
         $response["error"] = false;
 
+        $user = $db->getUserById($id_user);
+        
         $roster = $user->getPlayers();
 
 
@@ -1811,9 +1852,18 @@ $app->get('/news', function () use ($app) {
 
     $db = new ConnectDatabase(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
-    $news = $db->getNews();
+    $news = null;    
+    $json = $app->request->getBody();
 
-    
+	$data = json_decode($json,true);
+	
+	
+	if($data!=null && isset($data["toEdit"])){
+		$news = $db->getNewsToEdit();
+	}else{
+		$news = $db->getNews();
+	}
+	    
     if($news!=null){
 	    $arr = array();
 	    foreach($news as $item){
@@ -1964,6 +2014,7 @@ $app->get('/config', function () use ($app) {
 	    $json["last_stat_round"] = $db_rounds->getLastStatRound();
 	    $json["seconds_to_closing_time"] = $db_rounds->secondsToClosingTime();
 	    
+	    
 	    $datetemp = date ("Y-m-d H:i:s", strtotime("2015-08-22 17:00:00"));
 		$date=new DateTime($datetemp);
 		
@@ -1979,7 +2030,12 @@ $app->get('/config', function () use ($app) {
 		}else{
 			$json["creation_market"] = 0;
 		}
-	    
+		
+	    $json["color_p"] = "#cc0000";
+	    $json["color_d"] = "#008000";
+	    $json["color_c"] = "#ddae36";
+	    $json["color_a"] = "#003366";
+
         $response["error"] = false;
         $response["data"]=$json;
     }else {

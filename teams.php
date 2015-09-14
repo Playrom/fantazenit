@@ -39,7 +39,7 @@ include('header.php');
 	                
 	                <div id="side-roster">
 	                    <div class="roster-item" id="P_free"  >
-	                    <div class="old-player info_player"><div class="role-icon">*</div><div class="name-player-item">Nome</div><div class="info-player-item"><div class="vote value-player-item">Valore</div><div class="finalvote vote value-player-item">Iniziale</div></div></div>
+	                    <div class="old-player info_player"><div class="role-icon">*</div><div class="name-player-item">Nome</div><div class="info-player-item"><div class="vote value-player-item">Valore</div><div class="finalvote vote value-player-item">Acquisto</div></div></div>
 	                        <?php foreach($roster as $player){
 	                            if(strtolower($player["player"]["role"])=="p"){
 	
@@ -51,7 +51,7 @@ include('header.php');
 	                              <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
 	                              <div class="info-player-item">
 	                                <div class="vote value-player-item"><?php echo $player["player"]["value"]; ?></div>
-	                                <div class="finalvote vote value-player-item"><?php echo $player["player"]["first_value"]; ?></div>
+	                                <div class="finalvote vote value-player-item"><?php echo $player["cost"]; ?></div>
 	                              </div>
 	                          </div>
 	                       <?php }
@@ -73,7 +73,7 @@ include('header.php');
 	                                <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
 	                                <div class="info-player-item">
 	                                    <div class="vote value-player-item"><?php echo $player["player"]["value"]; ?></div>
-	                                    <div class="finalvote vote value-player-item"><?php echo $player["player"]["first_value"]; ?></div>
+	                                    <div class="finalvote vote value-player-item"><?php echo $player["cost"]; ?></div>
 	                                </div>
 	                            </div>
 	                       <?php }
@@ -95,7 +95,7 @@ include('header.php');
 	                                <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
 	                                <div class="info-player-item">
 	                                    <div class="vote value-player-item"><?php echo $player["player"]["value"]; ?></div>
-	                                    <div class="finalvote vote value-player-item"><?php echo $player["player"]["first_value"]; ?></div>
+	                                    <div class="finalvote vote value-player-item"><?php echo $player["cost"]; ?></div>
 	                                </div>
 	                            </div>
 	                       <?php }
@@ -117,7 +117,7 @@ include('header.php');
 	                                <div class="name-player-item"><?php echo $player["player"]["name"]; ?></div>
 	                                <div class="info-player-item">
 	                                    <div class="vote value-player-item"><?php echo $player["player"]["value"]; ?></div>
-	                                    <div class="finalvote vote value-player-item"><?php echo $player["player"]["first_value"]; ?></div>
+	                                    <div class="finalvote vote value-player-item"><?php echo $player["cost"]; ?></div>
 	                                </div>
 	                            </div>
 	                       <?php }

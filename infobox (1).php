@@ -2,7 +2,7 @@
 	
 $image = getImage(basename($_SERVER['PHP_SELF']));
 
-$json = $apiAccess->accessApi("/rounds/recap","GET");
+$json = $apiAccess->accessApi("/competitions/".$config["default_competition"]."/standings/last","GET");
 
 $points_lead = null;
 $id_user = null;
@@ -11,17 +11,17 @@ $id_round = null;
 $position = null;
 
 if($json["error"]==false){
-	$data = $json["data"]["recap"];
+	$id_round = $json["data"]["round"];
 	
-	$position = $data["position"];
-	$points_lead = $data["points"];
-	$id_round = $data["round"];
-	$id_user = $data["id_user"];
-		
+	$te = $json["data"]["standings"][0];
+	
+	$user_temp = $te["team_info"];
+
+	$points_lead = $te["points"];
 			
-	$json = $apiAccess->accessApi("/users/".$id_user,"GET");
+	$json = $apiAccess->accessApi("/competitions/".$config["default_competition"]."/standings","GET");
 	if($json["error"]==false){
-		$user_temp = $json["data"];
+		$position = $json["data"]["standings_by_user"][$user_temp["id"]];
 	}
 }
 
@@ -45,13 +45,11 @@ if($user_temp!=null){
 				<div class="image-box white-with-padding" style="height: 100%;">
 						<div class="user-info-item name-team" style="text-align: center;">Le Ultime Notizie</div>
 					<?php
-					for($i = 0;$i<5 ; $i++){ $item = $news_info[$i]; ?>
-					
+					foreach($news_info as $item){ ?>
 						<div class="user-info-item"><a href="/news.php?id=<?php echo $item["id"]; ?>"><?php echo $item["title"]; ?></a></div>
 					<?php
 					}
 					?>
-					<div class="user-info-item name-team" style="text-align: right;">Altre Notizie &#8594</div>
 				</div>
 				
 			</div>

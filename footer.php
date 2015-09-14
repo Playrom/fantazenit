@@ -3,7 +3,7 @@
 	           
 	           <div class="menu-top">
 	                <ul>
-		                <li><a href="home.php">Home</a></li>
+		                <li><a href="index.php">Home</a></li>
 	                	<li><a href="lista.php">Quotazioni</a></li>
 	                	<li><a href="regolamento.php">Regolamento</a></li>
 	                	<li><a href="faq.php">Faq</a></li>
@@ -21,7 +21,7 @@
     
     <script type="text/javascript">
 	    $(document).ready(function() {
-		    
+
 		    function cookieController(){
 			    $.cookiesDirective.loadScript({
 	                uri:'js/google.js',

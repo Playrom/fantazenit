@@ -105,7 +105,9 @@ if(isset($config['current_round'])){
         <link href="css/style.css" rel="stylesheet" />
         
 		<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-        <script src="js/jquery-1.11.0.min.js"></script>
+        <script src="js/jquery-1.11.0.min.js">
+
+        </script>
         <script src="js/scripts-made.js"></script>
         <script src="js/scripts-validation-forms.js"></script>
         <script src="js/jquery.datetimepicker.js"></script>
@@ -120,6 +122,8 @@ if(isset($config['current_round'])){
 		
 		<script src="js/tinymce/tinymce.min.js"></script>
 		<script>
+			
+			
 			tinymce.init({
 				selector:'#textmce',
 				height : 500,
@@ -216,18 +220,18 @@ if(isset($config['current_round'])){
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
-			        <li><a href="home.php">Home</a></li>
+			        <li><a href="index.php">Home</a></li>
                 	<li><a href="lista.php">Quotazioni</a></li>
-                	<li><a href="regolamento.php">Regolamento</a></li>
-                	<li><a href="storia.php">Chi Siamo</a></li>
+                	<li><a href="/news.php?id=12">Regolamento</a></li>
+                	<li><a href="/news.php?id=13">Chi Siamo</a></li>
                 	
                 	<li class="dropdown">
 		            	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notizie <span class="caret"></span></a>
 		        		<ul class="dropdown-menu">
 							<li><a href="news.php">Notizie</a></li>
-		                	<li><a href="faq.php">Faq</a></li>
-		                	<li><a href="news.php?id=6">Consigli Attacco</a></li>
-		                	<li><a href="news.php?id=7">Probabili Formazioni</a></li>
+		                	<li><a href="/news.php?id=14">Faq</a></li>
+		                	<li><a href="/news.php?id=6">Consigli Attacco</a></li>
+		                	<li><a href="/news.php?id=7">Probabili Formazioni</a></li>
 		        		</ul>
                 	</li>
                 	
@@ -313,7 +317,7 @@ if(isset($config['current_round'])){
 							<?php } ?>
 							
 				            <li>
-								<a href="home.php">Riepilogo</a>
+								<a href="index.php">Riepilogo</a>
 							</li>
 			            
 				            <li class="dropdown">

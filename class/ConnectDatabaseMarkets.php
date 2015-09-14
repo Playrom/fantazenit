@@ -68,7 +68,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				}
 				
 				$player_id = $players[$id]->getId();
-				$player_value = $players[$id]->getValue();
+				$player_value = intval($players[$id]->getValue());
 
 				if (!$stmt->bind_param("iii", $id_user,$player_id,$player_value)) {
 				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -186,8 +186,12 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			$new_balance=$old_player->getValue()-$new_player->getValue();
 			
 			$id_new = $new_player->getId();
+			
+			$new_val = intval($new_player->getValue());
+			
+			error_log($new_val);
 
-			if (!$stmt->bind_param("iii", $id_user,$id_new,$new_balance)) {
+			if (!$stmt->bind_param("iii", $id_user,$id_new,$new_val)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -263,7 +267,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
         
 
 		try{
-			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=?";
+			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=? order by date ASC";
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -284,8 +288,8 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 				$id=$row['id_transfer'];
 				$old_cost=$row['old_player_cost'];
 				$new_cost=$row['new_player_cost'];
-				$old_player=new RosterPlayer($players[intval($row['id_old_player'])],$old_cost);
-				$new_player=new RosterPlayer($players[intval($row['id_new_player'])],$new_cost);
+				$old_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_old_player'])),$old_cost);
+				$new_player=new RosterPlayer($db_players->dumpPlayerById(intval($row['id_new_player'])),$new_cost);
 				$datetemp = date ("Y-m-d H:i:s", $row['time']);
 				$date=new DateTime($datetemp);;
 				$id_market=$row['id_market'];
@@ -314,7 +318,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 		
 		
 		try{
-			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=? and id_market=?";
+			$tempQuery="Select * , UNIX_TIMESTAMP(date) as time from `transfers` where id_user=? and id_market=? order by date ASC";
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;

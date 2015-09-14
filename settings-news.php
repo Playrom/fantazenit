@@ -128,7 +128,9 @@ include('header.php');
 		        
 			    }
 			    
-		        $json=$apiAccess->accessApi("/news","GET");
+			    $params = array("postParams" => array("toEdit" => true));
+			    
+		        $json=$apiAccess->accessApi("/news","GET",$params);
 		        
 		        $news= null;
 		        $error = null;
@@ -157,7 +159,7 @@ include('header.php');
 							        foreach($news as $item){ ?>
 						                   <!--  <div class="setting_item_descript"></div> -->
 						                    <div class="form-group">
-						                        <h3 class="col-md-8 control-label left-label"><?php echo $item["title"]; ?></h3>
+						                        <h3 class="col-md-8 control-label left-label"><a href="/news.php?id=<?php echo $item["id"];?>"><?php echo $item["title"]; ?></a></h3>
 						
 						                        <form class="form-horizontal" action="settings-news.php" method="get">
 						

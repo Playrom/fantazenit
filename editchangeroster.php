@@ -1,20 +1,20 @@
 <?php
-$title="Mercato di Riparazione";
+$title="Mercato di Riparazione Admin";
 include('header.php');
 
 $error_code=0;
 $error_message = null;
 
-if($username != null && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['old']) && isset($_POST['new'])){
+if($username!= null && $userAuth == 1 && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['id_user']) && isset($_POST['old']) && isset($_POST['new'])){
+		
 	
-	
-	
+	$userId = $_POST["id_user"];
 
     $data["id_old"]=$_POST['old'];
     $data["id_new"]=$_POST['new'];
     $data["id_market"]=$_POST['id_market'];
     
-    $data["id_user"] = $userId;
+    $data["id_user"] = $_POST['id_user'];
     
     $params = array('postParams' => $data);
     
@@ -41,156 +41,169 @@ if($username == null) {
     $_SESSION['old_url']=$_SERVER['REQUEST_URI'];
     header("Location:login.php");
 }else if($username != null){
-
-    $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
-    $user = $team["data"] ; 
-    $roster=null;
+	
+	$json=$apiAccess->accessApi("/users","GET");
     
-    $players = null;
+    $users = null;
     
-    $json = $apiAccess->accessApi("/players","GET");
-    
-    
-    
-    if($json["error"]==false){
-	    $players = $json["data"];
-    }else{
-	    $error_json[] = $json;
-    }
-        
-    
-    if(isset($team["data"])){
-        $arr=$team["data"];
-		
-        $roster=$arr["players"];
-    }
-    
-    $markets=null;
-
-
-    $json=$apiAccess->accessApi("/markets/open","GET");
-
-    if($json["error"]==false){
-	    $markets = $json["data"];
-    }else{
+    if($json["error"] == false){
+		$users = $json["data"];
+	}else{
 	    $error_json[] = $json;
     }
     
-    $json = $apiAccess->accessApi("/seriea/teams","GET");
-    
-    $seriea = array();
-    
-    if($json["error"]==false){
-	    $seriea = $json["data"];
-    }else{
-	    $error_json[] = $json;
-    }
+    if(isset($_POST["id_user"])){
+	    
+	    $userId = $_POST["id_user"];
 
-    $market=null;
-    $now_max=null;
-    $selected=false;
-    $finish=false;
-    
-
-    if(isset($_GET['market']) || count($markets)==1 || isset($market_pre)){
-
-        $id_market=0;
-        $market=null;
-
-        if(isset($_GET['market'])){
-
-            $id_market=$_GET['market'];
-            
-            $json=$apiAccess->accessApi("/markets/$id_market","GET");
-    
-		    if($json["error"]==false){
-			    $market = $json["data"];
-		    }else{
-			    $error_json[] = $json;
-		    }
-
-        }else if(count($markets)==1){
-
-            $market=$markets[0];
-            $id_market=$market["id"];
-
-
-        }else{
-
-            $id_market=$market_pre;
-            $json=$apiAccess->accessApi("/markets/$id_market","GET");
-    
-		    if($json["error"]==false){
-			    $market = $json["data"];
-		    }else{
-			    $error_json[] = $json;
-		    }
-
-        }
-        
-        $selected=true;
-        
-        $json=$apiAccess->accessApi("/markets/$id_market/transfers/$userId","GET");
-            
-		$trans = null;
-		
+	    $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
+	    $user = $team["data"] ; 
+	    $roster=null;
+	    
+	    $players = null;
+	    
+	    $json = $apiAccess->accessApi("/players","GET");
+	    
+	    
+	    
 	    if($json["error"]==false){
-		    $trans = $json["data"];
+		    $players = $json["data"];
+	    }else{
+		    $error_json[] = $json;
+	    }
+	        
+	    
+	    if(isset($team["data"])){
+	        $arr=$team["data"];
+			
+	        $roster=$arr["players"];
+	    }
+	    
+	    $markets=null;
+	
+	
+	    $json=$apiAccess->accessApi("/markets/open","GET");
+	
+	    if($json["error"]==false){
+		    $markets = $json["data"];
 	    }else{
 		    $error_json[] = $json;
 	    }
 	    
-	    $already_transfer = 0;
-	    $now_max = $markets[0]["max_change"];
+	    $json = $apiAccess->accessApi("/seriea/teams","GET");
 	    
-        if($trans!=null){
-	        foreach($trans as $tran){
-		        if(!$tran["free"]) $already_transfer++;
-	        }
-        
-	        $now_max=intval($markets[0]["max_change"])-$already_transfer;
+	    $seriea = array();
+	    
+	    if($json["error"]==false){
+		    $seriea = $json["data"];
+	    }else{
+		    $error_json[] = $json;
+	    }
 	
-	        if($now_max==0){
-	            $finish=true;
-	        }
-        }
-        
-
-    }else{
-        $selected=false;
-    }
-    
-	if($error_message!=null){ 
-		$error_messages[] = $error_message;
+	    $market=null;
+	    $now_max=null;
+	    $selected=false;
+	    $finish=false;
+	    
 	
-	}
-
-	if($error_code==-1){  
-		$error_messages[] = "Attenzione , Errore Cambio Non Valido";
-		 
-    	}
-    ?>
-
-    <?php if(count($markets)==0){ 
-	    $error_messages[] = "Attenzione , nessuna sessione di mercato aperta";
-    } ?>
-
-    <?php if($finish){ 
-
-        $error_messages[] = "Hai Terminato i cambi a tua disposizione per questa sessione di mercato";
-
-    } ?>
-   
-   <?php
-	   include("error-box.php");
-	?>
-    	
-    
-    <div class="container-fluid">
+	    if(isset($_GET['market']) || count($markets)==1 || isset($market_pre)){
+	
+	        $id_market=0;
+	        $market=null;
+	
+	        if(isset($_GET['market'])){
+	
+	            $id_market=$_GET['market'];
+	            
+	            $json=$apiAccess->accessApi("/markets/$id_market","GET");
+	    
+			    if($json["error"]==false){
+				    $market = $json["data"];
+			    }else{
+				    $error_json[] = $json;
+			    }
+	
+	        }else if(count($markets)==1){
+	
+	            $market=$markets[0];
+	            $id_market=$market["id"];
+	
+	
+	        }else{
+	
+	            $id_market=$market_pre;
+	            $json=$apiAccess->accessApi("/markets/$id_market","GET");
+	    
+			    if($json["error"]==false){
+				    $market = $json["data"];
+			    }else{
+				    $error_json[] = $json;
+			    }
+	
+	        }
+	        
+	        $selected=true;
+	        
+	        $json=$apiAccess->accessApi("/markets/$id_market/transfers/$userId","GET");
+	            
+			$trans = null;
+			
+		    if($json["error"]==false){
+			    $trans = $json["data"];
+		    }else{
+			    $error_json[] = $json;
+		    }
+		    
+		    $already_transfer = 0;
+		    $now_max = $markets[0]["max_change"];
+		    
+	        if($trans!=null){
+		        foreach($trans as $tran){
+			        if(!$tran["free"]) $already_transfer++;
+		        }
+	        
+		        $now_max=intval($markets[0]["max_change"])-$already_transfer;
+		
+		        if($now_max==0){
+		            $finish=true;
+		        }
+	        }
+	        
+	
+	    }else{
+	        $selected=false;
+	    }
+	    
+		if($error_message!=null){ 
+			$error_messages[] = $error_message;
+		
+		}
+	
+		if($error_code==-1){  
+			$error_messages[] = "Attenzione , Errore Cambio Non Valido";
+			 
+	    	}
+	    ?>
+	
+	    <?php if(count($markets)==0){ 
+		    $error_messages[] = "Attenzione , nessuna sessione di mercato aperta";
+	    } ?>
+	
+	    <?php if($finish){ 
+	
+	        $error_messages[] = "Hai Terminato i cambi a tua disposizione per questa sessione di mercato";
+	
+	    } ?>
+	    
+	    <div class="container-fluid">
 
     <?php if($finish){ ?>
+    
 
     <?php }else if($selected){ ?>
+    	     
+	    
+		
 
         <div class="row">
             <div class="col-md-12">
@@ -208,7 +221,7 @@ if($username == null) {
         <div class="row">
             <div class="col-md-12">
                 <div id="team-info">
-                    <form class="form-inline" action="changeroster.php" method="get">
+                    <form class="form-inline" action="editchangeroster.php" method="get">
                         <div class="form-group">Sono in corso <?php echo count($markets); ?> Mercati</div>
                         <div class="form-group" style="float:right;">
                             <select name="market" class="form-control">
@@ -276,10 +289,11 @@ if($username == null) {
                     <div id="market">
                         <div class="market-player" id="market-old"></div>
                         <div class="market-player" id="market-new"></div>
-                        <form id="mod-form" action="changeroster.php" method="post">
+                        <form id="mod-form" action="editchangeroster.php" method="post">
                             <div id="market-cost">Milioni dopo lo scambio:<span id="market-cost-value" <?php echo "data-value=\"".$user["balance"]."\" "; ?>><?php echo $user["balance"]; ?></span></div>
                             <input type="hidden" id="old-form" name="old" value="">
                             <input type="hidden" id="new-form" name="new" value="">
+                            <input type="hidden" id="id_user" name="id_user" value="<?php echo $userId; ?>">
                             <input type="hidden" id="market-id-form" name="id_market" <?php echo "value=\"".$market["id"]."\" "; ?> >
                             <input id="mod-button" type="submit" name="Modifica" value="Salva">
                         </form>
@@ -341,6 +355,46 @@ if($username == null) {
     <?php } ?>
 
     </div><!-- end container-->
+    
+    
+	<?php
+			    
+	}else{ ?>
+		<div class="row ">
+		    <div class="col-md-12">
+		        <form class="form-horizontal white-with-padding" action="editchangeroster.php" method="post" style="margin-top: 10px;">
+	                <div class="form-group ">
+	                    <h3 class="col-md-8 control-label left-label">Seleziona Team&nbsp;&nbsp;</h3>
+	                    
+	                    <div class="col-md-4">
+	                        <select class="form-control"  name="id_user" id="id_user" id_user="<?php echo $userId; ?>" >
+	                            <?php foreach($users as $user_temp){ ?>
+	                                <option <?php echo "value=\"".$user_temp["id"]."\""; if($userId!=null && $user_temp["id"]==$userId) echo " selected"; ?> ><?php echo $user_temp["name_team"]; ?></option> 
+	                            <?php }  ?>
+                    		</select>
+                    	</div>
+                    	
+                	</div>
+                	
+                	<div class="form-group">
+		                <div class="col-md-12">
+		                    <button type="submit" class="btn btn-default col-md-12">Seleziona</button>
+		                </div>
+		            </div>
+
+				</form>
+			</div>
+		</div>	
+	<?php
+	}
+	
+	
+	include("error-box.php");
+	?>
+    	
+    
+    
+    
 
 <?php
 }

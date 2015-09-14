@@ -336,6 +336,7 @@ if($username!= null && $userAuth == 1 ){
 <script src="js/ion.rangeSlider.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
 <script>
+	$.noConflict();
 
     $("body").on('click', '.old-player', remove_roster);
 

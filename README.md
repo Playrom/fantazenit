@@ -147,5 +147,14 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Main Navbar Edited
 * Bugfix: Content Bottom Padding
 
+# 1.2 - 
+
+* Edit: Nuovi Colori Ruolo
+* Edit: Squadre con loghi in modifica formazione
+* Bugfix : Home Page Standings and points last round
+* Edit: Home Page moved back to index.php
+* New : Pages are now News, editable
+* New : Mercato da parte dell'admin
+
 # Da Fare
 * Handicap Round Compaiono in Classifiche anche se giocatori non inclusi
