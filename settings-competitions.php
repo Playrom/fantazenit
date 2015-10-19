@@ -46,6 +46,14 @@ include('header.php');
             $first_round=$_POST['first_round'];
             $num_rounds=$_POST['num_rounds'];
             $type = $_POST['type'];
+            
+            if($type=="DIRECT"){
+	            $_SESSION["first_round"]  = $first_round;
+	            $_SESSION["name"] = $name;
+	            $_SESSION["new"] = true;
+	            
+	            header("Location: settings-create-direct.php");
+            }
         }
 
 

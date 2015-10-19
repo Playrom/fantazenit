@@ -316,6 +316,78 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		}
     }
     
+    function isValidFormationOfAnotherRound($id_user,$round,$formation_round){
+	    
+	    $conf=$this->dumpConfig();
+		$current_round=$conf['current_round'];
+        
+        try{
+	        
+	        
+		        
+		        $tempQuery="SELECT * from `tactics` where id_user=? and round=?;";
+
+				if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+	
+				if (!$stmt->bind_param("ii", $id_user,$formation_round)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+	
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+	
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+				
+				
+				while ($row = $res->fetch_assoc()) {
+					
+					
+					
+					
+	                
+	                $datetemp = date ("Y-m-d H:i:s", strtotime(str_replace('-','/', $row['date'])));
+					$date_tactic=new DateTime($datetemp);
+						
+					$date_last_change=$this->getDateLastChange($id_user);
+	                
+	                if($date_last_change!=null){
+	                    $stamp_tactic=$date_tactic->getTimestamp();
+	                    $stamp_change=$date_last_change->getTimestamp();
+	
+	                    $diff=$stamp_tactic-$stamp_change;
+	                
+	               
+	                    
+	                    if($diff<=0){
+	                        return false;
+	                    }else{
+	                        return true;
+	                    }
+	                }else{
+		                return true;
+	                }
+				}
+				
+				return true;
+				
+				
+	        
+	        
+            
+			
+			
+
+
+		}catch(exception $e) {
+			echo "\nERRORE CHECK VALIDITA FORMAZIONE: ".$e;
+			return false;
+		}
+    }
+    
     function getTeam($id_user,$round){
 
     	$data_players=new ConnectDatabasePlayers($this->mysqli);
@@ -982,7 +1054,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			
 			$error = null;
 			
-			$minimum = 60;
+			$minimum = floatval(60);
 			
 			$to_adding = array();
 			
@@ -1040,15 +1112,17 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			            
 			            $destroy_team = true;
 			            
-			            if($round>5){ // Check Se formazione non messa per 5 giornate
+			            if($round>5 && $this->isValidFormationOfAnotherRound($id_user,$round,$round-1)){ // Check Se formazione non messa per 5 giornate
 				            for($i=$round-1;$i>$round-5;$i--){
 					            $checking_team = $this->getTeam($id_user,$i); // Prelevo il team
 					            if(!$checking_team->isRecovered()){
 						            $destroy_team=false;
 					            }
 				            }
-			            }else{
+			            }else if($round > 1 && $this->isValidFormationOfAnotherRound($id_user,$round,$round-1)){
 				            $destroy_team = false;
+			            }else{
+				            $destroy_team = true;
 			            }
 			            
 			            if(!$destroy_team){ // SE NELLE SCORSE 5 GIORNATE il team almeno una volta non è stato recuperato recuperalo
@@ -1220,9 +1294,12 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 							$gol=floor(($result-66)/6)+1;
 						}
 						
-						if($result<60){
-							$minimum = $result;
+						
+						
+						if($result<60 && floatval($result)<floatval($minimum)){
+							$minimum = floatval($result);
 						}
+						
 
 						$tempQuery="REPLACE INTO `rounds_result` (`id_user`,`round`,`points`,`gol`) VALUES(?,?,?,?)";
 
@@ -1246,9 +1323,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 					}else{
 						
-						$to_adding[]=$id_user;
-						
-						
+						$to_adding[]=$id_user;						
 						
 						
 					}
@@ -1259,7 +1334,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 				
 				
 				if(count($to_adding)>0){
-					
+										
 					foreach($to_adding as $id){
 						
 						if($round>1){
@@ -1274,7 +1349,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 								
 								$zero = 0;
 		
-								if (!$stmt->bind_param("iiii", $id,$round,$minimum,$zero)) {
+								if (!$stmt->bind_param("iidi", $id,$round,$minimum,$zero)) {
 								    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 								}
 		
@@ -1290,7 +1365,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 								
 								$zero = 0;
 		
-								if (!$stmt->bind_param("iiii", $id,$round,$zero,$zero)) {
+								if (!$stmt->bind_param("iidi", $id,$round,$zero,$zero)) {
 								    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 								}
 		
@@ -1309,7 +1384,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 							
 							$zero = 0;
 	
-							if (!$stmt->bind_param("iiii", $id,$round,$minimum,$zero)) {
+							if (!$stmt->bind_param("iidi", $id,$round,$minimum,$zero)) {
 							    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 							}
 	
@@ -1353,6 +1428,8 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		
 		
 		foreach($matches as $match){
+			
+			error_log("match");
 			
 			$result = "X";
 			
@@ -1567,6 +1644,60 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 		}
 	}
+	
+	function getInfoRoundUser($round,$id_user){
+		$tempQuery="SELECT * FROM rounds_result  WHERE round=? and id_user=?";
+		
+		$db_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
+
+		try{
+			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
+			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			}
+
+			if (!$stmt->bind_param("ii", $round,$id_user)) {
+			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			if (!$stmt->execute()) {
+			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			}
+
+			$res=$stmt->get_result();
+			$res->data_seek(0);
+
+			$arr=null;
+			
+			
+
+			while ($row = $res->fetch_assoc()) {
+				$id_user=$row['id_user'];
+				$gol=$row['gol'];
+				$points=$row['points'];
+				
+				$handicaps=$db_handicaps->getHandicapsRoundsByUserIdAndRound($id_user,$round);
+
+	        	foreach($handicaps as $handicap){
+					$round_handicap=$handicap->getPoints();
+					$points=$points+$round_handicap;
+				}
+				
+				if($points>=66){
+					$gol=floor(($points-66)/6)+1;
+				}
+
+				$arr=array('gol' => $gol, 'points' => $points);
+			}
+
+			return $arr;
+
+		}catch(exception $e) {
+			echo "ex: ".$e;
+			return false;
+
+		}
+	}
+	
 	
 	function getRecap($round){
 		$tempQuery="SELECT * FROM recaps  WHERE round=? ";
@@ -1804,13 +1935,13 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     
     function getRoundCompetitionByRealRound($round,$id_competition){
 		try{
-            $thisRound="SELECT * FROM competitions_in_rounds WHERE round=?";
+            $thisRound="SELECT * FROM competitions_in_rounds WHERE round=? and id_competition=?";
             
             if(!($stmt = $this->mysqli->prepare($thisRound))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $round)) {
+			if (!$stmt->bind_param("ii", $round,$id_competition)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -1838,13 +1969,13 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     
     function getRealRoundByRoundCompetition($round,$id_competition){
 		try{
-            $thisRound="SELECT * FROM competitions_in_rounds WHERE round_competition=?";
+            $thisRound="SELECT * FROM competitions_in_rounds WHERE round_competition=? and id_competition=?";
             
             if(!($stmt = $this->mysqli->prepare($thisRound))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("i", $round)) {
+			if (!$stmt->bind_param("ii", $round,$id_competition)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -2068,8 +2199,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 		$data_handicaps = new ConnectDatabaseHandicaps($this->mysqli);
 		
 		$id_round=$this->getRealRoundByRoundCompetition($id_round,$id_competition);
-
-
+		
         $tempQuery="SELECT * FROM rounds_result  WHERE round=? ";
 
         try{

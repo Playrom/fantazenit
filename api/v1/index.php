@@ -672,7 +672,7 @@ $app->delete('/team/:id_team/:round', function ($id,$round) use ($app) {
 
 });
 
-$app->post('/competitions/:id', function ($id) use ($app) {
+$app->post('/competitions', function () use ($app) {
 
 	$apiKey = $app->request->headers->get('Token');
 
@@ -686,29 +686,65 @@ $app->post('/competitions/:id', function ($id) use ($app) {
     $data = json_decode($json, true); // parse the JSON into an assoc. array	
 
     //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
-
-    $name = $data["name"];
-    $first_round  = $data["first_round"];
-    $num_rounds = $data["num_rounds"];
+    
     $type = $data["type"];
     
-    if($db_users->checkApi($apiKey) && $user!=null ){
-        $response["error"] = false;
+	if($type == "DIRECT"){
 		
-        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds,$type);
-        
-        if($ret != null){
-	        $response["data"] = $ret;
-        }else{
-	        $response["error"] = true;
-	        $response["message"] = "Errore Creazione";
-        }
+		$name = $data["name"];
+		$phase = $data["phase"];
+	
+		$name_phase = $phase["name"];
+		$users_in_competition = $data["users"];
+		$name_groups = $phase["name_groups"];
 
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Authentication Token is Wrong";
-    }
+		$rounds = $phase["rounds"];
+		
+		
+			    
+	    if($db_users->checkApi($apiKey) && $user!=null ){
+	        $response["error"] = false;
+			
+	        $ret = $db_competitions->createCompetition($name,null,null,$type);
+	        $db_competitions->setUsersInCompetition($ret,$users_in_competition);
+	        
+	        if($ret != null){
+		        $db_competitions->addPhase($name_phase,$ret,0,"ROUND_ROBIN",$users_in_competition,$name_groups,$rounds);
+	        }else{
+		        $response["error"] = true;
+		        $response["message"] = "Errore Creazione";
+	        }
+	
+	    }else {
+	        // unknown error occurred
+	        $response['error'] = true;
+	        $response['message'] = "Authentication Token is Wrong";
+	    }
+		
+	}else{
+		$name = $data["name"];
+	    $first_round  = $data["first_round"];
+	    $num_rounds = $data["num_rounds"];
+	    
+	    if($db_users->checkApi($apiKey) && $user!=null ){
+	        $response["error"] = false;
+			
+	        $ret = $db_competitions->createCompetition($name,$first_round,$num_rounds,$type);
+	        
+	        if($ret != null){
+		        $response["data"] = $ret;
+	        }else{
+		        $response["error"] = true;
+		        $response["message"] = "Errore Creazione";
+	        }
+	
+	    }else {
+	        // unknown error occurred
+	        $response['error'] = true;
+	        $response['message'] = "Authentication Token is Wrong";
+	    }
+	}
+    
 
     echoRespnse(200, $response);
     
@@ -845,29 +881,23 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
 
 
     $result=null;
-    
+
     $competition = getCompetition($id_competition);
     
-    
-	
-    
-
-
     $teams=$db_competitions->getUsersInCompetition($id_competition);
-    
 
     $standings=$db_competitions->getStandings($id_competition);
-    
 
     for($i=0 ; $i<count($standings) ; $i++){
         $standings[$i]["team_info"]=$db->getUserById(intval($standings[$i]["id_user"]))->mapBasic();
     }
-    
+
 
     if($competition!=null){
         $response["error"] = false;
         $response["data"]["standings"]=$standings;
         $response["data"]["handicaps"]=getHandicapsCompetitionById($id_competition);
+
         $response["data"]["competition"] =$competition;
         $response["data"]["teams"]=$teams;
         
@@ -877,9 +907,17 @@ $app->get('/competitions/:id', function ($id_competition) use ($app) {
 	    }
 	    
 	    if($competition["type"] == "DIRECT"){
+
 		   $phases = $db_competitions->getPhases($id_competition);
+
 		   foreach($phases as $phase){
 		   		$response["data"]["phases"][] = $phase->map();
+
+		   		foreach($phase->getGroups() as $group){
+			   		foreach($group->getMatches() as $match){
+				   		
+			   		}
+		   		}
 		   }
 	    }
 	    
@@ -916,9 +954,11 @@ $app->get('/competitions/:id/teams', function ($id_competition) use ($app) {
     $orderByRole=false;
     
     $ids = array();
+    $users = array();
             
     foreach($teams as $team){
 	    $ids[]  = $team["id"];
+	    $users[intval($team["id"])] = $db->getUserById(intval($team["id"]))->mapBasic();
     }
 
     /*if($app->request()->params('orderByRole')){
@@ -940,7 +980,8 @@ $app->get('/competitions/:id/teams', function ($id_competition) use ($app) {
     if($teams!=null){
         $response["error"] = false;
         $response["data"]["teams"]=$teams;
-        $response["data"]["ids"]=$ids;
+        $response["data"]["ids"] = $ids;
+        $response["data"]["users"] = $users;
     }else {
         // unknown error occurred
         $response['error'] = true;
@@ -1032,6 +1073,7 @@ $app->get('/competitions/:id/standings/:round', function ($id_competition,$round
     if($round=="last"){
 	    $round = $db_rounds->getLastCalcRound();
     }
+    
 
     $standings=$db_rounds->getRoundStandings($id_competition,$round);
 
@@ -1244,11 +1286,32 @@ $app->get('/rounds/:id', function ($id) use ($app) {
     if($id=="last"){
 	    $id = $db_rounds->getLastCalcRound();
     }
+    
+    $id_user=null;
+
+    if($app->request()->params('user')!=null){
+        $id_user = intval($app->request()->params('user'));
+    }
 
 
     $result=null;
-
-    if($db_rounds->roundExist($id)){
+	if($db_rounds->roundExist($id) && $id_user!=null){
+        $response["error"] = false;
+        $open=$db_rounds->isOpenRound($id);
+        
+        if(!$open){
+	        $res = $db_rounds->getInfoRoundUser($id,$id_user);
+	        if($res!=null){
+		        $response["data"]["results"] = $res;
+	        }else{
+		        $response["error"] = true;
+		        $response["message"] = "Results Not Found";
+	        }
+	    }else{
+		    $response["error"] = true;
+		    $response["message"] = "Round Not Calc";
+	    }
+    }else if($db_rounds->roundExist($id)){
         $response["error"] = false;
         $open=$db_rounds->isOpenRound($id);
         $response["data"]["open"] = $open;

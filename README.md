@@ -147,7 +147,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New: Main Navbar Edited
 * Bugfix: Content Bottom Padding
 
-# 1.2 - 
+# 1.2 - 19 Ottobre 2015
 
 * Edit: Nuovi Colori Ruolo
 * Edit: Squadre con loghi in modifica formazione
@@ -155,6 +155,7 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Edit: Home Page moved back to index.php
 * New : Pages are now News, editable
 * New : Mercato da parte dell'admin
+* Feature : Competizioni a Scontri Diretti , first release
 
 # Da Fare
 * Handicap Round Compaiono in Classifiche anche se giocatori non inclusi

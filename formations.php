@@ -18,6 +18,16 @@ if(isset($_GET['competition'])){
     $competitionID=$config['default_competition'];
 }
 
+$teams_get = null;
+
+if(isset($_GET["teams"])){
+	$teams_get = array();
+	$pieces = explode(",", $_GET["teams"]);
+	foreach($pieces as $t){
+		$teams_get[] = intval($t);
+	}
+}
+
 $apiPath = "/competitions";
 
 $json=$apiAccess->accessApi($apiPath,"GET");
@@ -85,14 +95,25 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 				$possibleToEdit=$json_round["data"]["formations_editing"];
 				
 				if(!$possibleToEdit || ($userId!=null && $userAuth == 1)){
-				
-				
 					
-					$apiPath = "/competitions/$competitionID/teams";
+					if($teams_get == null){
 					
-					$json=$apiAccess->accessApi($apiPath,"GET");
-					
-					$teams=$json["data"]["teams"];
+						$apiPath = "/competitions/$competitionID/teams";
+						
+						$json=$apiAccess->accessApi($apiPath,"GET");
+						
+						$teams=$json["data"]["teams"];
+						
+					}else{
+						
+						foreach($teams_get as $t){
+							$apiPath = "/users/$t";
+							
+							$json=$apiAccess->accessApi($apiPath,"GET");
+							
+							$teams[]=$json["data"];
+						}
+					}
 					
 				}else if($userId!=null){
 					$json_user = $apiAccess->accessApi("/users/$userId","GET");

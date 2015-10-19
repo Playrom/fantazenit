@@ -165,6 +165,55 @@ function updatePlayers(PlayersList $players){
 
 			return null;
 	}
+	
+	function dumpPlayerByIdNoStats($id){
+		$query="SELECT *  FROM quote JOIN players ON players.id = quote.id WHERE quote.round = ( SELECT MAX(round) FROM quote WHERE quote.id=? ) and quote.id=?";
+		
+		$db_rounds = new ConnectDatabaseRounds($this->mysqli);
+		
+		$last_round = $db_rounds->getLastQuoteRound();
+		
+			try{
+				if (!($stmt = $this->mysqli->prepare($query))) {
+				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				}
+
+				if (!$stmt->bind_param("ii", $id, $id)) {
+				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				if (!$stmt->execute()) {
+				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				}
+
+				$res=$stmt->get_result();
+				$res->data_seek(0);
+				while ($row = $res->fetch_assoc()) {
+					$name=$row['name'];
+					$team=$row['team'];
+					$role=$row['role'];
+					$value=$row['value'];
+					$first_value=$row['first_value'];
+					$diff=$row['diff'];
+					$stats=null;
+					
+					$gone = false;
+		    
+				    if($last_round>$row["round"]){
+					    $gone = true;
+				    }
+					
+					$pla=new Player($id,$name,$team,$role,$value,$first_value,$diff,$stats , $gone);
+					return $pla;
+				}
+
+			}catch(exception $e) {
+				echo "\nERRORE DUMP PLAYER BY ID: ".$e;
+				return null;
+			}
+
+			return null;
+	}
 
 	function dumpPlayerByName($name){
 		$query="SELECT *  FROM quote JOIN players ON players.id = quote.id WHERE quote.round = ( SELECT MAX(round) FROM quote  ) and players.name=?";

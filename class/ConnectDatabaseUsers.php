@@ -496,17 +496,19 @@ function checkAuthOverride($apiKey){
 								
 
 				$res2=$this->mysqli->query("select * from `rosters` where id_user=".$id);
+
 				$roster=new RosterList();
 				while ($row2 = $res2->fetch_assoc()) {
 					$cost=$row2['cost'];
-					$player=$data_players->dumpPlayer(intval($row2['id_player']));
+					$player=$data_players->dumpPlayerByIdNoStats(intval($row2['id_player']));
 					$roster[]=new RosterPlayer($player,$cost);
 				}
+				
 
 				$user = new User($id,$username,$name,$surname,$password,$email,$date,$auth,$balance,$roster,array(),$name_team,$telephone,$url_fb,$apiKey,$url_avatar);
 				
 				$bonuses = $data_handicaps->getMoneyBonusesByUser($user);
-				
+								
 				if($bonuses!=null){
 					foreach($bonuses as $bonus){
 						$val = intval($bonus->getPoints());

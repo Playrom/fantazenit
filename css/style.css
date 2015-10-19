@@ -954,6 +954,11 @@ tr:last-child {
         margin: 0;
         line-height: 40px; }
 
+.match .name-player-item {
+  text-align: center;
+  width: 100%;
+  margin-right: 0; }
+
 .username_title {
   float: left;
   position: relative; }

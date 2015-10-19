@@ -42,6 +42,13 @@ class Match{
      * @var int $id_group
      */
     private $id_group;
+    
+    /**
+     * @var int $id_group
+     */
+    public $gol_one = " - " ;
+    
+    public $gol_two = " - ";
 	
 	
     /**
@@ -83,7 +90,10 @@ class Match{
         $arr["round"] = $this->round;
         $arr["result"] = $this->result;
         $arr["id_group"] = $this->id_group;
-
+        
+        $arr["gol_one"] = $this->gol_one;
+        $arr["gol_two"] = $this->gol_two;
+        
         return $arr;
 
      }
@@ -163,20 +173,8 @@ class Match{
 	    $this->type = $value;
 	}
 
-/**
-     * @return Groups[]
-     */
-    public function getGroups(){
-	    return $this->groups;
-	}
-
-
-    
-    /**
-     * @param $value Groups[]
-     */
-    public function setType($value){
-	    $this->groups = $value;
+	public function getResult(){
+		return $this->result;
 	}
 	
 	/**
@@ -220,6 +218,20 @@ class Match{
      */
     public function setId($id){
 		$this->id_match = $id;
+	}
+	
+	/**
+     * @return int
+     */
+    public function getRound(){
+		return $this->round;
+	}
+
+    /**
+     * @param int
+     */
+    public function setRound($round){
+		$this->round = $round;
 	}
 
 

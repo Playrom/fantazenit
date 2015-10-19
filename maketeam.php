@@ -55,7 +55,9 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
 	    
 	    if($json["error"]==true){
 		    $error_json[] = $json;
-	        
+	    }else{ ?>
+		    <script>alert("Formazione Inserita Correttamente");</script>
+	    <?php
 	    }
 	        
     }

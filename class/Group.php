@@ -42,6 +42,10 @@ class Group{
 		$this->name=$name;
 		$this->id_group = $id_group;
 		$this->matches = $matches;
+		
+		if($matches==null){
+			$this->matches = array();
+		}
                 
 	}
 
@@ -66,6 +70,11 @@ class Group{
         }else{
 	        $arr["matches"] = null;
         }
+		
+		$db = new ConnectDatabaseCompetitions(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+
+		$arr["standings"] = $db->getStandingsGroup($this->id_group);
+
 		
         return $arr;
 
@@ -130,6 +139,9 @@ class Group{
 		$this->id_group=$id_group;
 	}
 	
+	public function getMatches(){
+		return $this->matches;
+	}
 
 
 }

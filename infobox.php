@@ -45,11 +45,11 @@ if($user_temp!=null){
 				<div class="image-box white-with-padding" style="height: 100%;">
 						<div class="user-info-item name-team" style="text-align: center;">Le Ultime Notizie</div>
 					<?php
-					for($i = 0;$i<5 ; $i++){ $item = $news_info[$i]; ?>
+					for($i = 0;$i<5 ; $i++){  if(isset($news_info[$i])) { $item = $news_info[$i]; ?>
 					
 						<div class="user-info-item"><a href="/news.php?id=<?php echo $item["id"]; ?>"><?php echo $item["title"]; ?></a></div>
 					<?php
-					}
+					} }
 					?>
 					<div class="user-info-item name-team" style="text-align: right;">Altre Notizie &#8594</div>
 				</div>

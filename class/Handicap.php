@@ -34,7 +34,7 @@ class Handicap{
 		$this->id=$id;
 		$this->user=$user;
 		$this->description=$description;
-		$this->points=$points;
+		$this->points=floatval($points);
 	}
 
     /**

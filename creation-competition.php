@@ -10,7 +10,6 @@ if($username!=null){
         $name="";
         $first_round=0;
         $num_rounds=0;
-        $id=-1;
 
         if(isset($_POST['created']) && isset($_POST['users'])){
             $users=$_POST['users'];
@@ -24,7 +23,7 @@ if($username!=null){
                      
 			$params = array('postParams' => $arr_data);
             
-            $json=$apiAccess->accessApi("/competitions/$id","POST",$params);
+            $json=$apiAccess->accessApi("/competitions","POST",$params);
             
             $id = null;
             

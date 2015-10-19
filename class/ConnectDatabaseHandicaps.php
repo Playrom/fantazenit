@@ -587,7 +587,7 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("iisi", $id_user,$id_round,$description,$points)) {
+			if (!$stmt->bind_param("iisd", $id_user,$id_round,$description,$points)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 
@@ -615,7 +615,7 @@ class ConnectDatabaseHandicaps extends ConnectDatabase {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
 			}
 
-			if (!$stmt->bind_param("iisi", $id_user,$id_competition,$description,$points)) {
+			if (!$stmt->bind_param("iisd", $id_user,$id_competition,$description,$points)) {
 			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 			}
 

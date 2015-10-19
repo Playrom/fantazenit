@@ -325,7 +325,7 @@ if(isset($config['current_round'])){
 				        		<ul class="dropdown-menu">
 					                <li><a href="formations.php">Formazioni</a></li>
 									<li><a href="teams.php">Squadre</a></li>
-					                <li><a href="standings.php">Classifiche</a></li>
+					                <li><a href="standings.php">Competizioni & Classifiche</a></li>
 					                
 									<?php if($userId!=null) { ?>
 										<li><a href="logout.php">Logout</a></li>
