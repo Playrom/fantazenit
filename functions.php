@@ -235,7 +235,7 @@ function calc($stat,$role){
     $scored=3*$stat['scored']["value"];
     $taken=1*$stat['taken']["value"];
     $free_keep=3*$stat['free_kick_keeped']["value"];
-    $free_miss=1*$stat['free_kick_missed']["value"];
+    $free_miss=3*$stat['free_kick_missed']["value"];
     $free_score=3*$stat['free_kick_scored']["value"];
     $auto=2*$stat['autogol']["value"];
     $yellow=0.5*$stat['yellow_card']["value"];

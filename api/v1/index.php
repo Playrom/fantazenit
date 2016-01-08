@@ -575,7 +575,15 @@ $app->post('/teams', function () use ($app) {
 	    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
 	        $response["error"] = false;
 
-	        $ret=$db_rounds->insertTeam($id_user,$ids,$reserves,$round,$tactic);
+	        $db_rounds->insertTeam($id_user,$ids,$reserves,$round,$tactic);
+	        
+	        $ret=$db_rounds->isValidFormation($id_user,$round);
+	        
+	        $response['error'] = !$ret;
+	        
+	        if(!$ret){
+		        $response['message'] = "Formazione non inserita correttamente, riprovare";
+	        }
 
 	    }else {
 	        // unknown error occurred
@@ -693,12 +701,18 @@ $app->post('/competitions', function () use ($app) {
 		
 		$name = $data["name"];
 		$phase = $data["phase"];
+		
+		error_log(print_r($phase,true));
 	
 		$name_phase = $phase["name"];
 		$users_in_competition = $data["users"];
 		$name_groups = $phase["name_groups"];
+		$type_phase = $phase["type_phase"];
 
 		$rounds = $phase["rounds"];
+		
+		error_log($type_phase);
+		error_log(print_r($users_in_competition,true));
 		
 		
 			    
@@ -706,10 +720,25 @@ $app->post('/competitions', function () use ($app) {
 	        $response["error"] = false;
 			
 	        $ret = $db_competitions->createCompetition($name,null,null,$type);
-	        $db_competitions->setUsersInCompetition($ret,$users_in_competition);
+	        
+	        $ss = array();
+	        
+	        if($type_phase == "ROUND_ROBIN"){
+		        
+		        $ss = $users_in_competition;
+		        
+	        }else if($type_phase == "ROUND_ROBIN_SEEDED"){
+		        
+		        foreach($users_in_competition as $tt){
+			        $ss = array_merge($ss,$tt);
+		        }
+		        
+	        }
+	        
+	        $db_competitions->setUsersInCompetition($ret,$ss);
 	        
 	        if($ret != null){
-		        $db_competitions->addPhase($name_phase,$ret,0,"ROUND_ROBIN",$users_in_competition,$name_groups,$rounds);
+		        $db_competitions->addPhase($name_phase,$ret,0,$type_phase,$users_in_competition,$name_groups,$rounds);
 	        }else{
 		        $response["error"] = true;
 		        $response["message"] = "Errore Creazione";

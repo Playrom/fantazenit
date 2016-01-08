@@ -60,16 +60,7 @@ include('header.php');
         if(isset($_SESSION['new'])){
             $name = $_SESSION["name"];
             
-            $users = null;
-            
-            $json=$apiAccess->accessApi("/users","GET");
-                
-            if($json["error"]==true){
-	            $error_json[] = $json;
-            }else{
-	            $users = $json["data"];
-            }
-                        
+                                    
             unset($_SESSION["new"]);
             
             include('error-box.php');
@@ -80,7 +71,6 @@ include('header.php');
 					<div class="col-md-12">
 			            <form action="settings-create-direct.php" method="post" class="form-horizontal">
 			                <div class="main">
-			                    <input type="hidden" name="id" <?php echo "value=\"".$competition["id"]."\" "; ?> >
 			
 			                   
 			
@@ -92,11 +82,19 @@ include('header.php');
 			                    </div>
 			                    
 			                    <div class="form-group">
-			                        <label class="col-md-4">Nome Fase a Gironi</label>
+			                        <label class="col-md-4">Nome Fase</label>
 			                        <div class=" col-md-8">
 			                            <input class="form-control" type="text" name="name_phase" >
 			                        </div>
 			                    </div>
+			                    
+			                    <div class="form-group">
+				                    <label class="col-md-4">Tipo Fase</label>
+					                <select class="form-control selection_round" name="type_phase">
+					                    <option value="ROUND_ROBIN">Gironi</option>
+					                    <option value="ROUND_ROBIN_SEEDED">Gironi con Fasce da Championship</option>
+					                </select>
+				                </div>
 			
 			                    <!--<input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$competition["first_round"]."\" "; ?> >
 			                    <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$competition["num_rounds"]."\" "; ?> > -->
@@ -104,6 +102,75 @@ include('header.php');
 			                </div>
 			
 			                <div class="main competition_creation">
+			                        <div class="form-group">
+			                        	<div class="form-group col-md-12  input-lg">
+						                    <button type="submit" name="step-selection-phase" class="btn btn-default col-md-12">Avanti</button>
+						                </div>
+			                        </div>
+			                    </div>    
+			                </div>
+			            </form>
+			            </div>
+			        </div>
+			    </div>
+
+        <?php
+	    
+	    }else if(isset($_POST['step-selection-phase'])){
+		    $name = $_SESSION["name"];
+		    $name_phase = $_POST["name_phase"];
+		    $type_phase = $_POST["type_phase"];
+		    $_SESSION["type_phase"] = $type_phase;
+		    
+		    
+		
+		?>    
+		    <div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+			            <form action="settings-create-direct.php" method="post" class="form-horizontal">
+			                <div class="main">
+			
+			                   
+			
+			                    <div class="form-group">
+			                        <label class="col-md-4">Nome Competizione</label>
+			                        <input class="form-control" type="text" name="name"  <?php echo "value=\"".$name."\" "; ?> >
+			                    </div>
+			                    
+			                    <div class="form-group">
+			                        <label class="col-md-4">Nome Fase</label>
+			                        <div class=" col-md-8">
+			                            <input class="form-control" type="text" name="name_phase" <?php echo "value=\"".$name_phase."\" "; ?>>
+			                        </div>
+			                    </div>
+			                    
+			                    <div class="form-group">
+				                    <label class="col-md-4">Tipo Fase</label>
+					                <input class="form-control" type="text" name="type_phase"  <?php echo "value=\"".$type_phase."\" "; ?> readonly="true" >
+				                </div>
+			
+			                    <!--<input class="setting_item_input" type="hidden" name="first_round" class="market-select" <?php echo "value=\"".$competition["first_round"]."\" "; ?> >
+			                    <input class="setting_item_input" type="hidden" name="num_rounds" class="market-select" <?php echo "value=\"".$competition["num_rounds"]."\" "; ?> > -->
+			                    
+			                </div>
+			
+			                <div class="main competition_creation">
+				                
+				                <?php
+					                if($type_phase == "ROUND_ROBIN"){
+						                
+						                $users = null;
+            
+							            $json=$apiAccess->accessApi("/users","GET");
+							                
+							            if($json["error"]==true){
+								            $error_json[] = $json;
+							            }else{
+								            $users = $json["data"];
+							            }
+
+						        ?>
 			                    
 			                    <div class="form-group">
 			                        <label class="col-md-4">Partecipanti</label>
@@ -146,14 +213,58 @@ include('header.php');
 						                    <button type="submit" name="new-step-2" class="btn btn-default col-md-12">Avanti</button>
 						                </div>
 			                        </div>
-			                    </div>    
+			                    </div>  
+			                    
+			                   	<?php 
+				                   	}else if($type_phase == "ROUND_ROBIN_SEEDED"){
+					                   	
+					                   $json=$apiAccess->accessApi("/competitions","GET");
+                
+									   if($json["error"]==true){
+									      $error_json[] = $json;
+							           }else{
+									      $competitions = $json["data"];
+							           }
+					            ?>
+					            
+					            	<div class="form-group">
+					                    <label class="col-md-4">Competizione Fonte</label>
+						                <select class="form-control selection_round" name="init_competition">
+							                <?php
+								                foreach($competitions as $compe){ ?>
+									                <option value="<?php echo $compe["id"]; ?>"><?php echo $compe["name"]; ?></option>
+								            <?php } ?>
+								            						                    
+						                </select>
+					                </div>
+					                
+					                <div class="form-group">
+					                    <label class="col-md-4">Numero Seed Group</label>
+						                <input class="form-control" type="text" name="seed" >
+					                </div>
+					                
+					                <div class="form-group">
+					                    <label class="col-md-4">Numero Utenti</label>
+						                <input class="form-control" type="text" name="usersnum" >
+					                </div>
+					                
+					                <div class="form-group">
+			                        	<div class="form-group col-md-12  input-lg">
+						                    <button type="submit" name="new-step-2" class="btn btn-default col-md-12">Avanti</button>
+						                </div>
+			                        </div>
+			                    </div>  
+					            <?php
+				                   	}
+				                ?>  
 			                </div>
 			            </form>
 			            </div>
 			        </div>
 			    </div>
-
-        <?php
+   
+	    	
+	    <?php 
         }else if(isset($_POST['new-step-2'])){
 	        
 	        
@@ -161,15 +272,25 @@ include('header.php');
             $name=$_POST['name'];
             $users_in_competition=null;
             $name_phase = $_POST["name_phase"];
+            $type_phase = $_SESSION["type_phase"];
             
             $number = 0;
+            
+            if($type_phase == "ROUND_ROBIN"){
+	            if(isset($_POST['users'])){
 
-            if(isset($_POST['users'])){
-
-                $users_in_competition=$_POST['users'];
-                $number = count($users_in_competition);
-                                
+	                $users_in_competition=$_POST['users'];
+	                $number = count($users_in_competition);
+	                                
+	            }
+            }else if($type_phase == "ROUND_ROBIN_SEEDED"){
+	            
+	            $users_in_competition = $_POST["seed"] * $_POST["usersnum"];
+	            $number = intval($users_in_competition);
+	            $init_competition = $_POST["init_competition"];
             }
+
+            
 
 	        include('error-box.php');
         ?>
@@ -213,9 +334,37 @@ include('header.php');
 			                    </select>
 			                    
 			                    <?php 
-				                foreach($users_in_competition as $team){ ?>
-                                    <input type="hidden" name="users[]"  value="<?php echo $team; ?>">
-                                <?php } ?>
+				                    
+				                if($type_phase == "ROUND_ROBIN"){
+					                foreach($users_in_competition as $team){ ?>
+	                                    <input type="hidden" name="users[]"  value="<?php echo $team; ?>">
+	                            <?php 
+		                            } 
+		                        }else if($type_phase == "ROUND_ROBIN_SEEDED"){
+			                    	$json=$apiAccess->accessApi("/competitions/".$init_competition."/standings","GET");
+                
+									if($json["error"]==true){
+										$error_json[] = $json;
+						           	}else{
+								    	$standings = $json["data"];
+						           	}
+						           	
+						           	$start = 0;
+						           	$seednum = 0;
+						           	
+						           	foreach($standings["standings"] as $team){
+							           	if($start >= $_POST["usersnum"]) { $start = 0; $seednum++; }
+							           	if($seednum >= $_POST["seed"]) break;
+							           	
+						           	?>
+	                                    <input type="hidden" name="users[<?php echo $seednum;?>][]"  value="<?php echo $team["id_user"]; ?>">
+	                            <?php 
+		                            	$start++;
+		                            } 
+
+			                        
+			                    }    
+		                        ?>
 
 											
 			                
@@ -258,15 +407,28 @@ include('header.php');
             $name=$_POST['name'];
             $users_in_competition=null;
             $name_phase = $_POST["name_phase"];
+            $type_phase = $_SESSION["type_phase"];
             
             
             $number = 0;
 
-            if(isset($_POST['users'])){
+            if($type_phase=="ROUND_ROBIN"){
+	            if(isset($_POST['users'])){
 
-                $users_in_competition=$_POST['users'];
-                $number = count($users_in_competition);
+                	$users_in_competition=$_POST['users'];
+                	$number = count($users_in_competition);
                                 
+            	}
+            }else if($type_phase=="ROUND_ROBIN_SEEDED"){
+	            if(isset($_POST['users'])){
+
+	                $users_in_competition=$_POST['users'];
+	                foreach($users_in_competition as $ss){
+		                $number = $number + count($ss);
+	                }
+	                
+	                                
+	            }
             }
             
             $num_groups = intval($_POST["num_groups"]);
@@ -291,15 +453,27 @@ include('header.php');
 			
 			                    <input type="hidden" name="name"  <?php echo "value=\"".$name."\""; ?>  >
 			                    <input type="hidden" name="name_phase"  <?php echo "value=\"".$name_phase."\""; ?>  >
+			                    <input type="hidden" name="type_phase"  <?php echo "value=\"".$type_phase."\""; ?>  >
 			                    <input type="hidden" name="num_groups"  <?php echo "value=\"".$num_groups."\""; ?>  >
 			                    <input type="hidden" name="ar"  <?php echo "value=\"".$ar."\""; ?>  >
 			                    
 			                    <?php 
-				                foreach($users_in_competition as $team){ ?>
-                                    <input type="hidden" name="users[]" value="<?php echo $team; ?>">
-                                <?php } ?>
-			                    			
-			                <?php 
+				                    
+				                if($type_phase == "ROUND_ROBIN"){
+					                foreach($users_in_competition as $team){ ?>
+	                                    <input type="hidden" name="users[]" value="<?php echo $team; ?>">
+	                                <?php } 
+	                            }else if($type_phase == "ROUND_ROBIN_SEEDED"){
+		                            $start = 0;
+					                foreach($users_in_competition as $ss){
+						                foreach($ss as $team){ ?>
+
+	                                    <input type="hidden" name="users[<?php echo $start; ?>][]" value="<?php echo $team; ?>">
+	                                <?php }
+		                                $start++;
+		                            } 
+		                        }
+		                        
 				                for($i=0;$i<$num_match_for_group;$i++){
 					        ?>
 					        <div class="form-group col-md-12">
@@ -342,6 +516,7 @@ include('header.php');
             $name=$_POST['name'];
             $users_in_competition=null;
             $name_phase = $_POST["name_phase"];
+			$type_phase = $_POST["type_phase"];
             
             
             $number = 0;
@@ -361,10 +536,10 @@ include('header.php');
             
             
             
-            $arr_data = array( "name" => $name , "type"=>"DIRECT" , "users" => $users_in_competition , "phase" => array("name" => $name_phase , "num_groups" => $num_groups , "rounds" => $rounds , "name_groups" => $name_groups));
+            $arr_data = array( "name" => $name , "type"=>"DIRECT" , "users" => $users_in_competition , "phase" => array("name" => $name_phase , "num_groups" => $num_groups , "rounds" => $rounds , "name_groups" => $name_groups , "type_phase" => $type_phase));
                  
 			$params = array('postParams' => $arr_data);
-            
+			            
             $json=$apiAccess->accessApi("/competitions","POST",$params);
             
             if($json["error"]==true){

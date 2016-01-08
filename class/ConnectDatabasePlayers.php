@@ -25,18 +25,18 @@ class ConnectDatabasePlayers extends ConnectDatabase{
         if($name_str!=null || $team_str!=null) $tempQuery=$tempQuery."and ";
 
         if($name_str!=null) {
-            $tempQuery=$tempQuery."players.name LIKE \'".$name_str."\'";
+            $tempQuery=$tempQuery."players.name LIKE '".$name_str."'";
             $another++;
         }
 
         if($team_str!=null){
             if($another!=0)  $tempQuery=$tempQuery." and ";
-            $tempQuery=$tempQuery."players.team LIKE \'".$team_str."\'";
+            $tempQuery=$tempQuery."players.team LIKE '".$team_str."'";
 
         }
 
         $tempQuery=$tempQuery." order by players.role DESC, players.name ASC";
-
+        
 
 		$res=$this->mysqli->query($tempQuery);
 

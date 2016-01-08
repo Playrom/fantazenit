@@ -157,5 +157,11 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * New : Mercato da parte dell'admin
 * Feature : Competizioni a Scontri Diretti , first release
 
+# 1.3 - 
+
+* Sperimental: Player situation on the next round
+* Feature: Competizioni a Scontri Diretti, prelevamento giocatori da altre competizioni a somma punti
+* New: Log dei salvataggi delle formazioni, controllo corretto inserimento
+
 # Da Fare
 * Handicap Round Compaiono in Classifiche anche se giocatori non inclusi

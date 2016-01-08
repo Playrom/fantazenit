@@ -269,7 +269,7 @@ if($id_competition!=-1){
 						        	$pos=1;
 		
 								    $ret="<div class=\"roster-item\"><div class=\"old-player info_player\"><div class=\"role-icon\">*</div><div class=\"name-player-item\">Nome Squadra</div>";
-								    $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">Punti</div><div class=\"finalvote vote value-player-item\">Gol</div></div></div>";
+								    $ret.="<div class=\"info-player-item\"><div class=\"vote value-player-item\">Punti</div></div></div>";
 								
 								    
 							        foreach($standings as $team){

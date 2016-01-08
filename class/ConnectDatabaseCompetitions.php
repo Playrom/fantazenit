@@ -709,8 +709,8 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 					$type = $row["type"];
 					
 					$groups = null;
-					
-					if($type == "ROUND_ROBIN"){
+										
+					if($type == "ROUND_ROBIN" || $type == "ROUND_ROBIN_SEEDED"){
 						 $groups = $this->getGroups($id_competition,$id_phase);
 					}
 					
@@ -733,7 +733,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	
 	function addPhase($name_phase,$id_competition,$id_phase,$type,$users_in_competition,$name_groups,$rounds){
 		try{
-			
+						
 			$tempQuery="INSERT INTO `phases` (`name`,`id_phase`,`id_competition`, `type`) VALUES (?,?,?,?)";
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
@@ -749,7 +749,9 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 			}
 						
 			if($type == "ROUND_ROBIN"){
-				$groups = $this->generateGroups($id_phase,$id_competition,$users_in_competition,$name_groups,$rounds);
+				$groups = $this->generateGroups($id_phase,$id_competition,$users_in_competition,$name_groups,$rounds,false);
+			}else if($type == "ROUND_ROBIN_SEEDED"){
+				$groups = $this->generateGroups($id_phase,$id_competition,$users_in_competition,$name_groups,$rounds,true);
 			}
 			
 
@@ -760,27 +762,57 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 		}
 	}
 	
-	private function generateGroups($id_phase,$id_competition,$users_in_competition,$name_groups,$rounds){
+	private function generateGroups($id_phase,$id_competition,$users_in_competition,$name_groups,$rounds,$seeds){
 		$num_groups = count($name_groups);
-		$num_users = count($users_in_competition);
-		$gen_rounds=range(0,$num_users-1);
-		
-		shuffle($users_in_competition);
-
-		$num_rounds = count($rounds);
-		
-		
-		$ar = floor($num_rounds / ( ceil(intval($num_users) / $num_groups )  - 1 ));
-		
-		error_log($ar);
-		
-		
 		$groups = array_fill(0, $num_groups, array("users" => array()));
-
-		for($i=0;$i<$num_users;$i++){
-			$key = $i % $num_groups;
-			$groups[$key]["users"][] = $users_in_competition[$i];
+		
+		if($seeds == false){
+			$num_users = count($users_in_competition);
+			$gen_rounds=range(0,$num_users-1);
+			
+			shuffle($users_in_competition);
+	
+			$num_rounds = count($rounds);
+			
+			
+			$ar = floor($num_rounds / ( ceil(intval($num_users) / $num_groups )  - 1 ));
+						
+			for($i=0;$i<$num_users;$i++){
+				$key = $i % $num_groups;
+				$groups[$key]["users"][] = $users_in_competition[$i];
+			}
+			
+		}else{
+			
+			$num_users = 0;
+			
+			
+			for($i = 0 ; $i<count($users_in_competition); $i++){
+				$num_users = $num_users + count($users_in_competition[$i]);
+				shuffle($users_in_competition[$i]);
+			}
+			
+			
+			$gen_rounds=range(0,$num_users-1);
+			
+			$num_rounds = count($rounds);
+			
+			$ar = floor($num_rounds / ( ceil(intval($num_users) / $num_groups )  - 1 ));
+			
+			for($k=0;$k<count($users_in_competition);$k++){
+				for($i = 0 ; $i<count($users_in_competition[$k]) ; $i++){
+					$groups[$i]["users"][] = $users_in_competition[$k][$i];
+				}
+			}
+						
 		}
+		
+		
+		
+		
+		
+
+		
 		
 		
 		for($i=0 ; $i<$num_groups;$i++){
@@ -812,7 +844,7 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 				$id_group = $this->mysqli->insert_id;
 								
 				$giornate = $this->combinations($group["users"], 0);
-				
+								
 				foreach($group["users"] as $us){
 					$us = intval($us);
 					
@@ -959,14 +991,16 @@ class ConnectDatabaseCompetitions extends ConnectDatabase {
 	 
 	        /* sposta in avanti gli elementi di "trasferta" inserendo 
 	           all'inizio l'elemento casa[1] e salva l'elemento uscente in "riporto" */
-	        array_unshift($trasferta, $casa[1]);
-	        $riporto = array_pop($trasferta);
-	               
-	 
-	        /* sposta a sinistra gli elementi di "casa" inserendo all'ultimo 
-	           posto l'elemento "riporto" */
-	        array_shift($casa);
-	        array_push($casa, $riporto);
+			if(count($casa)>1){
+		        array_unshift($trasferta, $casa[1]);
+		        $riporto = array_pop($trasferta);
+		               
+		 
+		        /* sposta a sinistra gli elementi di "casa" inserendo all'ultimo 
+		           posto l'elemento "riporto" */
+		        array_shift($casa);
+		        array_push($casa, $riporto);
+		    }
 	 
 	        // ripristina l'elemento fisso
 	        $casa[0] = $pivot ;

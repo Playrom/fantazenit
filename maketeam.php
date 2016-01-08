@@ -5,14 +5,16 @@ include('header.php');
 
 if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids']) && isset($_POST['reserves']) && isset($_POST['ids_position']) && isset($_POST['reserves_position'])){
 
-
+	
 	
 	$team=$apiAccess->accessApi("/users/".$userId,"GET");
 	
 	$user = null;
 	if($team["error"] == false){
 		$user = $team["data"];
-	
+		
+		date_default_timezone_set('CET');
+		error_log("\n".date("j F Y H:i")." - ".$user["username"]." ha inserito una formazione", 3, "formations.log");
 	
 		$data = array();
 		
@@ -70,6 +72,39 @@ if(!isset($_SESSION['username'])) {
     header("Location:login.php");
 
 }else if(isset($_SESSION['username'])){
+	
+	$probFormazioniApi=new ApiAccess("http://balsick.eu:8080/api/public/fantaplayers");
+	
+	$json = $probFormazioniApi->accessApi("/","GET");
+	
+	$probFormazioni = null;
+	
+	
+	if($json["error"] == false){
+		$probFormazioni = $json["result"];
+	}
+	
+	function printStatusPlayer($array,$name){
+		if($array != null){
+			$up = strtoupper($name);
+			$value = $array[$up];
+			if($value!= null){
+				$status = $value["status"];
+				if($status == "bench") return "Panchina";
+				if($status == "playing") return "Titolare";
+				if($status == "unavailable") return "Non Disponibile";
+				if($status == "disqualified") return "Squalificato";
+				
+			}else{
+				return "No Info";
+			}
+			
+			
+		}else{
+			return "No Info";
+		}
+	}
+	
 	
 	$json=$apiAccess->accessApi("/users/".$userId,"GET");
 
@@ -264,6 +299,8 @@ if(!isset($_SESSION['username'])) {
 
                         <?php foreach($roster as $player){
                             if(strtolower($player["player"]["role"])=="p"){
+	                            
+	                            
 
                         ?>
                         <div class="old-player in-roster-player" 
@@ -280,7 +317,7 @@ if(!isset($_SESSION['username'])) {
                             <div class="info-player-item">
         						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
 								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    							<div class="info-player-link-item"><?php echo printStatusPlayer($probFormazioni,$player["player"]["name"]);?></div>
     						</div>
                         </div>
                        <?php }
@@ -309,7 +346,7 @@ if(!isset($_SESSION['username'])) {
                             <div class="info-player-item">
         						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
 								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    							<div class="info-player-link-item"><?php echo printStatusPlayer($probFormazioni,$player["player"]["name"]);?></div>
     						</div>
                         </div>
                        <?php }
@@ -338,7 +375,7 @@ if(!isset($_SESSION['username'])) {
                             <div class="info-player-item">
         						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
 								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    							<div class="info-player-link-item"><?php echo printStatusPlayer($probFormazioni,$player["player"]["name"]);?></div>
     						</div>
                         </div>
                        <?php }
@@ -367,7 +404,7 @@ if(!isset($_SESSION['username'])) {
                             <div class="info-player-item">
         						<img <?php echo "src=\"teamlogo/small/".$player["player"]["team"].".png\""; ?> class="team_logo_small" >
 								<div class="team-player-item team_for_list"><?php echo $player["player"]["team"]; ?></div>
-    							<div class="info-player-link-item"><a href="playersinfo.php?id=<?php echo $player["player"]["id"];?>">i</a></div>
+    							<div class="info-player-link-item"><?php echo printStatusPlayer($probFormazioni,$player["player"]["name"]);?></div>
     						</div>
                         </div>
                        <?php }

@@ -913,8 +913,63 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 					LEFT OUTER JOIN players
 					ON players.id=stats.id_player 
 					WHERE stats.round=?";
+					
+		
 
 		try{
+			
+			/*$sassuolo = $data_players->dumpSingoliToList(null,"SASSUOLO");
+			
+			$sassuolo = array_values($sassuolo);
+			
+			for($i=0 ; $i<count($sassuolo) ; $i++){
+				$pla = $sassuolo[$i];
+								
+				if($pla->getName() != "BERARDI"){
+					$qr="REPLACE INTO `stats` (`id_player`,`round`,`vote`,`scored`,`taken`,`free_kick_keeped`,`free_kick_missed`,`free_kick_scored`,`autogol`,`yellow_card`,`red_card`,`assist`,`stop_assist`,`gdv`,`gdp`) VALUES(?,?,6,0,0,0,0,0,0,0,0,0,0,0,0)"; //14
+					
+					if(!($stmt = $this->mysqli->prepare($qr))) {
+					    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
+					}
+					
+					$id = intval($pla->getId());
+		
+					if (!$stmt->bind_param("ii", $id,$round)) {
+					    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
+					}
+		
+					if (!$stmt->execute()) {
+					    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+					}
+				}
+			}
+			
+			$torino = $data_players->dumpSingoliToList(null,"TORINO");
+			
+			$torino = array_values($torino);
+			
+			for($i=0 ; $i<count($torino) ; $i++){
+				$pla = $torino[$i];
+				
+				
+				if($pla->getId() != 546){
+					$qr="REPLACE INTO `stats` (`id_player`,`round`,`vote`,`scored`,`taken`,`free_kick_keeped`,`free_kick_missed`,`free_kick_scored`,`autogol`,`yellow_card`,`red_card`,`assist`,`stop_assist`,`gdv`,`gdp`) VALUES(?,?,6,0,0,0,0,0,0,0,0,0,0,0,0)"; //14
+					
+					if(!($stmt = $this->mysqli->prepare($qr))) {
+					    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
+					}
+					
+					$id = intval($pla->getId());
+		
+					if (!$stmt->bind_param("ii", $id,$round)) {
+					    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
+					}
+		
+					if (!$stmt->execute()) {
+					    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+					}
+				}
+			}*/
 
 			if(!($stmt = $this->mysqli->prepare($tempQuery))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -2153,7 +2208,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
             $scored=3*$stat['scored']->getValue();
             $taken=1*$stat['taken']->getValue();
             $free_keep=3*$stat['free_kick_keeped']->getValue();
-            $free_miss=1*$stat['free_kick_missed']->getValue();
+            $free_miss=3*$stat['free_kick_missed']->getValue();
             $free_score=3*$stat['free_kick_scored']->getValue();
             $auto=2*$stat['autogol']->getValue();
             $yellow=0.5*$stat['yellow_card']->getValue();

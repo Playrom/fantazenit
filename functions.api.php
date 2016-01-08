@@ -58,6 +58,11 @@ class ApiAccess{
                 $headerParams[]='Content-Length: ' . strlen($json);
             }
         }
+        
+        if(strpos($endpoint, "balsick") !== false){
+	        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,4); 
+			curl_setopt($ch, CURLOPT_TIMEOUT, 4); //timeout in seconds
+        }
 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $type);
 
