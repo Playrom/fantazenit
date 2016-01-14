@@ -7,6 +7,6 @@
 	define("DATABASE_PORT", 3306);
 	define("API_PATH", "http://localhost/api/v1");
 	
-	define("PATH_UPLOADS", "/Volumes/Data HD/Google Drive/dev/PHP/fantazenit git/fantazenit/uploads"); // /var/www/zenit/fantazenit/uploads/
+	define("PATH_UPLOADS", "uploads"); // /var/www/zenit/fantazenit/uploads/
 	
 ?>

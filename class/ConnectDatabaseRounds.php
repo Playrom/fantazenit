@@ -413,17 +413,21 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 
 			$players_team=null;
 			$enter=true;
+			
 			while ($row = $res->fetch_assoc()) {
 				if($enter){
 					$players_team=new TeamPlayerList();
 					$enter=false;
 				}
+				
 
 				$id=$row['id_player'];
 				$pos=$row['position'];
                 $pla=$data_players->dumpPlayerById($id);
+                $stats = $data_players->dumpStatsByRound($id,$round);
+                
 
-				$players_team[]=new TeamPlayerRound($pla,$pos);
+				$players_team[]=new TeamPlayerRound($pla,$pos,$stats);
 			}
 
 

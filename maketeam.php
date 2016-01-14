@@ -87,26 +87,25 @@ if(!isset($_SESSION['username'])) {
 	function printStatusPlayer($array,$name){
 		if($array != null){
 			$up = strtoupper($name);
-			$value = $array[$up];
-			if($value!= null){
-				$status = $value["status"];
-				if($status == "bench") return "Panchina";
-				if($status == "playing") return "Titolare";
-				if($status == "unavailable") return "Non Disponibile";
-				if($status == "disqualified") return "Squalificato";
-				
-			}else{
-				return "No Info";
+			if(isset($array[$up])){
+				$value = $array[$up];
+				if($value!= null){
+					$status = $value["status"];
+					if($status == "bench") return "Panchina";
+					if($status == "playing") return "Titolare";
+					if($status == "unavailable") return "Non Disponibile";
+					if($status == "disqualified") return "Squalificato";
+					
+				}
 			}
 			
-			
-		}else{
-			return "No Info";
 		}
+		
+		return "No Info";
 	}
 	
 	
-	$json=$apiAccess->accessApi("/users/".$userId,"GET");
+	$json=$apiAccess->accessApi("/users/$userId?fields=roster","GET");
 
     $user = null;
 	if($json["error"] == false){
@@ -114,18 +113,6 @@ if(!isset($_SESSION['username'])) {
 	}else{
 		$error_json[] = $json;
 	}
-		
-	$json=$apiAccess->accessApi("/players","GET");
-	
-	$players = null;
-	
-	if($json["error"] == false){
-		$players=$json["data"];
-	}else{
-		$error_json[] = $json;
-	}
-	
-	
 	
 
     $roster=$user["players"];
@@ -154,16 +141,11 @@ if(!isset($_SESSION['username'])) {
     }else{
 		$error_json[] = $json_round;
 	}
-        
+
     
-    
-    
-    
-    $apiPath = "/team/$userId/$round?orderById=true";
+    $apiPath = "/users/$userId/teams/$round?orderById=true";
 				
 	$json_team=$apiAccess->accessApi($apiPath,"GET");
-	
-	
 	
 	//$username=$temp['username'];
 	
@@ -197,7 +179,7 @@ if(!isset($_SESSION['username'])) {
 	
 	if($team==null && $round>1){
 	
-	    $json_team=$apiAccess->accessApi("/team/$userId/$round?orderById=true","GET");
+	    $json_team=$apiAccess->accessApi("/users/$userId/teams/$round?orderById=true","GET");
 	
 	    $team = null;
 	    $result = null;
@@ -217,7 +199,7 @@ if(!isset($_SESSION['username'])) {
 	        
 	        if($json_team["valid_formation"]){
 	
-	            $json_team=$apiAccess->accessApi("/team/$userId/$r?orderById=true","GET");
+	            $json_team=$apiAccess->accessApi("/users/$userId/teams/$r?orderById=true","GET");
 	            
 	
 	            if(!$json_team["error"]){
@@ -279,7 +261,7 @@ if(!isset($_SESSION['username'])) {
     include("error-box.php");
 
     if($json_round["data"]["formations_editing"]){
-
+	    
     ?>
     <div id="official_players" <?php echo "number=\"".$official_players."\""; ?> ></div>
 

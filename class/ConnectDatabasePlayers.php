@@ -146,7 +146,7 @@ function updatePlayers(PlayersList $players){
 					$value=$row['value'];
 					$first_value=$row['first_value'];
 					$diff=$row['diff'];
-					$stats=$this->dumpStats($id);
+					$stats=null;
 					
 					$gone = false;
 		    
@@ -244,7 +244,7 @@ function updatePlayers(PlayersList $players){
 				$value=$row['value'];
 				$first_value=$row['first_value'];
 				$diff=$row['diff'];
-				$stats=$this->dumpStats($id);
+				$stats=null;
 				
 				$gone = false;
 		    
@@ -267,9 +267,9 @@ function updatePlayers(PlayersList $players){
 
 
 	function dumpStats($id){
-		$query="select * from `stats` where id_player=?";
+		$query="select * from `stats` where id_player=? order by round ASC";
 		$stats=array();
-
+				
 		try{
 			if (!($stmt = $this->mysqli->prepare($query))) {
 			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
@@ -287,33 +287,18 @@ function updatePlayers(PlayersList $players){
 			$res->data_seek(0);
 			while ($row = $res->fetch_assoc()) {
 				$round=$row['round'];
+
 				$stats_coll=new StatisticsCollection();
 				$stats_coll->setRound($round);
 				$fields = array_keys($row);
-				$query="select * from `stats` where id_player=? and round=?";
-
-				if (!($st2 = $this->mysqli->prepare($query))) {
-				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-				}
-
-				if (!$st2->bind_param("ii", $id,$round)) {
-				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-				}
-
-				if (!$st2->execute()) {
-				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-				}
-
-				$res2=$st2->get_result();
-				$res2->data_seek(0);
-
-				$row_num = $res2->fetch_array(MYSQLI_NUM);
-				for($i=0;$i<count($fields);$i++){
-
-					if(isset($fields[$i]) && isset($row_num[$i])){
-						$stats_coll[$fields[$i]]=new Statistic($fields[$i],$row_num[$i]);
+				
+				foreach($fields as $key){
+					error_log($key);
+					if(isset($row[$key])){
+						$stats_coll[$key] = new Statistic($key,$row[$key]);
 					}
 				}
+				
 
 				$stats[$round]=$stats_coll;
 
@@ -321,7 +306,7 @@ function updatePlayers(PlayersList $players){
 			}
 
 		}catch(exception $e) {
-			echo "\nERRORE DUMP STATS: ".$e;
+			error_log("\nERRORE DUMP STATS: ".$e);
 		}
 
 

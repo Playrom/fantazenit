@@ -9,10 +9,17 @@ class TeamPlayerRound{
      * @var Int $position
      */
 	private $position;
+	
+	/**
+	* @var StatisticsCollection $stats
+	**/
+	
+	private $stats;
 
-	public function __construct($player,$position){
+	public function __construct($player,$position,$stats){
 		$this->player=$player;
 		$this->position=$position;
+		$this->stats = $stats;
 
  	}
 
@@ -25,6 +32,11 @@ class TeamPlayerRound{
 
         $arr["player"]=$this->player->map();
         $arr["position"]=$this->position;
+        if($this->stats != null){
+	        $arr["stats"] = $this->stats->map();
+	    }else{
+		    $arr["stats"] = null;
+	    }
 
         return $arr;
     }
@@ -38,6 +50,12 @@ class TeamPlayerRound{
 
         $arr["player"]=$this->player->mapByRound($round);
         $arr["position"]=$this->position;
+        
+        if($this->stats != null){
+	        $arr["stats"] = $this->stats->map();
+	    }else{
+		    $arr["stats"] = null;
+	    }
 
         return $arr;
     }

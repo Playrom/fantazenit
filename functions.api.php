@@ -37,44 +37,61 @@ class ApiAccess{
      * @return String
      */
     public function accessApi($endpoint,$type,$data=null){
-        $ch=curl_init($this->apiPath.$endpoint);
-
-        $headerParams=array();
-        $dataPost=null;
-
-        if($data!=null){
-            if(isset($data['headerParams'])){
-                $headerParams=$data['headerParams'];
-            }
-
-            if(isset($data['postParams'])){
-                $dataPost=$data['postParams'];
-
-                $json=json_encode($dataPost,true);
-                                
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-
-                $headerParams[]='Content-Type: application/json';
-                $headerParams[]='Content-Length: ' . strlen($json);
-            }
-        }
-        
-        if(strpos($endpoint, "balsick") !== false){
-	        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,4); 
-			curl_setopt($ch, CURLOPT_TIMEOUT, 4); //timeout in seconds
-        }
-
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $type);
-
-        if($this->token!=null){
-            $headerParams[] = 'Token:'.$this->token;
-        }
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headerParams);
-
-        $json=curl_exec($ch);
+	    	    
+	    /*$filename = 'json/'.str_replace("/", "--", $endpoint).'.json';
+	    
+	    $fp = fopen($filename, 'r');
+	    
+	    if(is_file($filename) && $type == "GET"){
+		    $json = fread($fp, filesize($filename));
+			fclose($fp);
+	    }else{*/
+		
+	    
+	        $ch=curl_init($this->apiPath.$endpoint);
+	
+	        $headerParams=array();
+	        $dataPost=null;
+	
+	        if($data!=null){
+	            if(isset($data['headerParams'])){
+	                $headerParams=$data['headerParams'];
+	            }
+	
+	            if(isset($data['postParams'])){
+	                $dataPost=$data['postParams'];
+	
+	                $json=json_encode($dataPost,true);
+	                                
+	                curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+	
+	                $headerParams[]='Content-Type: application/json';
+	                $headerParams[]='Content-Length: ' . strlen($json);
+	            }
+	        }
+	        
+	        if(strpos($endpoint, "balsick") !== false){
+		        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,4); 
+				curl_setopt($ch, CURLOPT_TIMEOUT, 4); //timeout in seconds
+	        }
+	
+	        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $type);
+	
+	        if($this->token!=null){
+	            $headerParams[] = 'Token:'.$this->token;
+	        }
+	
+	        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	
+	        curl_setopt($ch, CURLOPT_HTTPHEADER, $headerParams);
+	
+	        $json=curl_exec($ch);
+	        
+	        /*$fp = fopen('json/'.str_replace("/", "--", $endpoint).'.json', 'w');
+			fwrite($fp, $json);
+			fclose($fp);
+			
+		}*/
 
         return json_decode($json,true);
     }

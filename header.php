@@ -76,7 +76,7 @@ $json_team = null;
 
 if(isset($config['current_round'])){
     $round=intval($config['current_round']);
-    $json_team = $apiAccess->accessApi("/team/$userId/$round","GET");
+    $json_team = $apiAccess->accessApi("/users/$userId/teams/$round","GET");
 }
 
 ?>

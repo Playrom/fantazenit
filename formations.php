@@ -2,6 +2,7 @@
 $title="Formazioni";
 include('header.php');
 
+$eni = 0;
 
 $round;
 $competitionID;
@@ -27,6 +28,8 @@ if(isset($_GET["teams"])){
 		$teams_get[] = intval($t);
 	}
 }
+
+$ini = microtime(true);
 
 $apiPath = "/competitions";
 
@@ -83,10 +86,6 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 		
 		$json_round=$apiAccess->accessApi("/rounds/$real_round","GET");
 		
-		
-		
-		
-		
 		if($json_round["error"]==false){ // SE ROUND NON ESISTE NON PRINT NULLA
 		
 			if(intval($config['current_round']) - intval($real_round) >= 0){  // OK ROUND COMINCIATO
@@ -117,6 +116,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					
 				}else if($userId!=null){
 					$json_user = $apiAccess->accessApi("/users/$userId","GET");
+					
 					$teams=array();
 					if($json_user["error"]==false){
 						$teams[] = array("id"=>$userId , "name_team"=>$json_user["data"]["name_team"] , "name"=>$json_user["data"]["name"] , "surname" => $json_user["data"]["surname"]);
@@ -133,7 +133,11 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					    $sum=0;
 					    $conteggio=0;
 					
-					    foreach($teams as $temporary){
+					    for($n = 0 ; $n<=count($teams) ; $n++){
+						    						    
+						    $temporary = $teams[$n];
+						    
+						    $in = microtime(true);
 					
 					        $id_user=$temporary['id'];
 					        $name_team=$temporary['name_team'];
@@ -141,9 +145,11 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					        $surname = $temporary["surname"];
 					
 					
-					        $apiPath = "/team/$id_user/$real_round?orderByRole=true";
+					        $apiPath = "/users/$id_user/teams/$real_round?orderByRole=true";
 					
 					        $json_team=$apiAccess->accessApi($apiPath,"GET");
+					        
+					        $st = microtime(true) - $in;
 					
 					        //$username=$temp['username'];
 					
@@ -175,7 +181,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					
 					        if($roster==null && !$possibleToEdit && $real_round>1 && !$isCalc){
 					
-					            $json_team=$apiAccess->accessApi("/team/$id_user/$real_round?orderByRole=true","GET");
+					            $json_team=$apiAccess->accessApi("/users/$id_user/teams/$real_round?orderByRole=true","GET");
 					
 					            $team = null;
 					            $roster = null;
@@ -194,7 +200,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					                
 					                if($json_team["valid_formation"]){
 					
-						                $json_team=$apiAccess->accessApi("/team/$id_user/".$r."?orderByRole=true&stat=$real_round","GET");
+						                $json_team=$apiAccess->accessApi("/users/$id_user/teams/".$r."?orderByRole=true&stat=$real_round","GET");
 						
 						                if(!$json_team["error"]){
 						
@@ -260,7 +266,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 						                        
 					                                foreach($start as $player){
 					
-					                                $arr_stat=$player["player"]["stat"];
+					                                $arr_stat=$player["stats"];
 					                                
 					                                $stat = null;
 					
@@ -316,7 +322,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					                            
 					                            <?php foreach($back as $player){
 					
-					                                $arr_stat=$player["player"]["stat"];
+					                                $arr_stat=$player["stats"];
 					                                
 					                                $stat = null;
 					
@@ -444,9 +450,10 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					                    </div>
 					                </div>
 					            </div>
-					    <?php if($conteggio %2==0) { echo "</div>"; } ?>
-					    
-					<?php } // FINE FORMATION ?>
+					    <?php if($conteggio %2==0) { echo "</div>"; } ?>	
+					    	
+					<?php 
+						} // FINE FORMATION ?>
 					
 				<?php
 					if(count($teams)==0){ // SE POSSIBILE EDITARE FORMAZIONI ?>
@@ -489,6 +496,8 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 		</div>
 <?php
 	} // FINE ELSE ERROR COMPETITION EXISTS
+	
+	
 ?>
 
 

@@ -162,6 +162,8 @@ Contestualmente si è provveduto ad una pulizia generale del codice
 * Sperimental: Player situation on the next round
 * Feature: Competizioni a Scontri Diretti, prelevamento giocatori da altre competizioni a somma punti
 * New: Log dei salvataggi delle formazioni, controllo corretto inserimento
+* New: Cache Formazioni
+* New: New Route for Rosters, Transfers, Statistics
 
 # Da Fare
 * Handicap Round Compaiono in Classifiche anche se giocatori non inclusi

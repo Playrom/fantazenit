@@ -122,7 +122,6 @@ class User{
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
         $arr['password']=  $this->password;
-        $arr['email']=  $this->email;
         $arr['auth'] = $this->auth;
         $arr['balance'] = $this->balance;
         $arr['players'] = $this->players->map();
@@ -140,7 +139,6 @@ class User{
         $arr['telephone'] = $this->telephone;
         $arr['url_fb'] = $this->url_fb;
         
-        $arr['apiKey'] = $this->apiKey;
         $arr['url_avatar'] = $this->url_avatar;
 
 
@@ -162,7 +160,6 @@ class User{
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
         //$arr['password']=  $this->password;
-        $arr['email']=  $this->email;
         $arr['auth'] = $this->auth;
         $arr['balance'] = $this->balance;
 
@@ -170,7 +167,6 @@ class User{
         //$arr['telephone'] = $this->telephone;
         $arr['url_fb'] = $this->url_fb;
 
-        $arr['apiKey'] = $this->apiKey;
         $arr['url_avatar'] = $this->url_avatar;
 
 
@@ -186,22 +182,31 @@ class User{
         $arr=array();
 
         $arr['balance'] = $this->balance;
-        $arr['players'] = $this->players->map();
-
-        $transferArray=array();
-
-        foreach($this->transfers as $transfer){
-            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+        
+        if($this->players != null){
+	        $arr['players'] = $this->players->map();
         }
+        
+
+        if($this->transfers != null){
+	        
+        	$transferArray=array();
+
+	        foreach($this->transfers as $transfer){
+	            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+	        }
+	        
+	        $arr['transfers'] = $transferArray;
+	        
+	    }
 
 
         $arr['id']=$this->id;
-        $arr['transfers'] = $transferArray;
+        
         $arr['name_team'] = $this->name_team;
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
         $arr['username']=$this->username;
-        $arr['email']=  $this->email;
         $arr['url_fb'] = $this->url_fb;
         $arr['url_avatar'] = $this->url_avatar;
 
@@ -230,7 +235,6 @@ class User{
         $arr['name_team'] = $this->name_team;
         $arr['name']=$this->name;
         $arr['surname']=$this->surname;
-        $arr['email']=  $this->email;
         $arr['url_fb'] = $this->url_fb;
         $arr['url_avatar'] = $this->url_avatar;
 

@@ -73,7 +73,7 @@ if($username != null){
 
     
     $id=$userId;
-    $team=$apiAccess->accessApi("/users/".$id,"GET");
+    $team=$apiAccess->accessApi("/users/$id?fields=roster,transfers","GET");
     $roster=null;
 
 

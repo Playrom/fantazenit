@@ -76,28 +76,15 @@ if($username == null) {
 		
 		
 		
-		$json=$apiAccess->accessApi("/users/".$userId,"GET");
+		$json=$apiAccess->accessApi("/users/$userId?fields=roster","GET");
 	
 	    $user = null;
 		if($json["error"] == false){
 			$user = $json["data"];
 		}
-			
-		$json=$apiAccess->accessApi("/players","GET");
-		
-		$players = null;
-		
-		if($json["error"] == false){
-			$players=$json["data"];
-		}
-		
-		
-		
 	
 	    $roster=$user["players"];
 	    
-	    
-	    		    
 	    $num_giocatori=$config['max_por']+$config['max_def']+$config['max_cen']+$config['max_att'];
 	    
 	    
@@ -108,14 +95,8 @@ if($username == null) {
 	
 	    }
 	
-	    
-	    
-	    	        
-	    
-	    
-	    
-	    
-	    $apiPath = "/team/$userId/$round?orderById=true";
+	    	    
+	    $apiPath = "/users/$userId/teams/$round?orderById=true";
 					
 		$json_team=$apiAccess->accessApi($apiPath,"GET");
 		
@@ -151,7 +132,7 @@ if($username == null) {
 		
 		if($team==null && $round>1){
 		
-		    $json_team=$apiAccess->accessApi("/team/$userId/$round?orderById=true","GET");
+		    $json_team=$apiAccess->accessApi("/users/$userId/teams/$round?orderById=true","GET");
 		
 		    $team = null;
 		    $result = null;
@@ -171,7 +152,7 @@ if($username == null) {
 		        
 		        if($json_team["valid_formation"]){
 		
-		            $json_team=$apiAccess->accessApi("/team/$userId/$r?orderById=true","GET");
+		            $json_team=$apiAccess->accessApi("/users/$userId/teams/$r?orderById=true","GET");
 		            
 		
 		            if(!$json_team["error"]){

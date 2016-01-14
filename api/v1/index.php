@@ -39,504 +39,26 @@ require '../../functions.php';
 require 'functions.handicaps.php';
 require 'functions.competitions.php';
 
+
+
 require_once('../../config.php');
+
+
+function is_field($stringa,$array){
+	if(count(preg_grep( "/".$stringa."/i",$array)) > 0){
+		return true;
+	}
+	
+	return false;
+}
 
 
 $app = new \Slim\Slim(array(
     'debug' => true
 ));
 
-
-$app->get('/hello/:name', function ($name) {
-    $response["message"]="Hello, $name";
-    echoRespnse(200, $response);
-});
-
-
-$app->post('/me', function () use ($app) {
-
-	$apiKey = $app->request->headers->get('Token');
-
-	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    
-    $json = $app->request->getBody();
-
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-
-    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
-    
-    $response = null;
-    
-    if(isset($data["current_pass"])){
-	    $user = $db_users->getUserByApiKey($apiKey);
-	    
-	    $current_pass = $data["current_pass"];
-	    
-
-	    
-	    
-	    if($user->getPassword() == $current_pass){
-		    
-		    $pass = null;
-		    $email = null;
-		    $url_fb = null;
-		    $name_team = null;
-		    		    
-		    if(isset($data["email"]) && $data["email"]!=""){
-			    $email = $data["email"];
-		    }
-		    
-		    if(isset($data["name_team"]) && $data["name_team"]!=""){
-			    $name_team = $data["name_team"];
-		    }
-		    
-		    if(isset($data["url_fb"]) && $data["url_fb"] != ""){
-			    $url_fb = $data["url_fb"];
-		    }
-		    
-		    if(isset($data["new_pass"]) && $data["new_pass"] != ""){
-			    $pass = $data["new_pass"];
-		    }
-		    
-		    
-		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team,null);
-		    
-		    
-	    }
-    
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Old Password Not Correct";
-    }
-    
-
-    echoRespnse(200, $response);
-
-
-});
-
-
-$app->post('/me/avatar' , function () use ($app) {
-
-	$apiKey = $app->request->headers->get('Token');
-
-	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    
-    $json = $app->request->getBody();
-
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-
-    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
-    
-    $response = null;
-    
-    if(isset($data["avatar"])){
-	    $user = $db->getUserByApiKey($apiKey);
-	    
-	    $url = $data["avatar"];
-	    
-	    if($db->checkApi($apiKey) && $user!=null){
-		    $result = $db->editUser($user->getId(),null,null,null,null,$url);
-		    
-		    $response["error"] = !$result;
-	    }
-    
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Old Password Not Correct";
-    }
-    
-
-    echoRespnse(200, $response);
-
-
-});
-
-
-
-
-$app->get('/me', function () use ($app) {
-
-    $apiKey = $app->request->headers->get('Token');
-
-    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-
-    if($db->checkApi($apiKey)){
-        $response["error"] = false;
-
-        $user=$db->getUserById($db->getUserByApiKey($apiKey))->map();
-
-        $response["data"]=$user->map();
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Authentication Token is Wrong";
-    }
-
-    echoRespnse(200, $response);
-
-
-});
-
-$app->get('/me/basic', function () use ($app) {
-
-    $apiKey = $app->request->headers->get('Token');
-
-    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-
-    if($db->checkApi($apiKey)){
-        $response["error"] = false;
-        $response["data"]=$db->getUserByApiKey($apiKey)->mapBasic();
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Authentication Token is Wrong";
-    }
-
-    echoRespnse(200, $response);
-
-
-});
-
-
-
-$app->post('/users', function () use ($app) {
-
-	$apiKey = $app->request->headers->get('Token');
-
-	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    
-    $json = $app->request->getBody();
-
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-
-    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
-    
-    $original_password = $data["password"];
-    
-    $username = $data["username"];
-    $name = $data["name"];
-    $surname = $data["surname"];
-    $password = md5($data["password"]);
-    $email = $data["email"];
-    $balance = $data["balance"];
-    $name_team = $data["name_team"];
-    $telephone = $data["telephone"];
-    $url_fb = $data["url_fb"];
-    
-    /*$username = "u";
-    $name = "u";
-    $surname = "u";
-    $password = "u";
-    $email = "u";
-    $balance = "u";
-    $name_team = "u";
-    $telephone = "u";
-    $url_fb = NULL;*/
-    
-    
-    $response = null ;
-
-    
-    if($db_users->getUserByEmail($email) == null || $db_users->getUserByUsername($username) == null ){
-
-        $ret=$db_users->signupUser(new User(-1,$username,$name,$surname,$password,$email,NULL,0,$balance,NULL,NULL,$name_team,$telephone,$url_fb,NULL));        
-		
-        if($ret){
-	        $response["error"] = false;
-	        
-	        $headers = "From: info@associazionezenit.it \r\n";
-			$headers .= "Reply-To: info@associazionezenit.it \r\n";
-			$headers .= "MIME-Version: 1.0\r\n";
-			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-			
-			$message = "<h1>Iscrizione Fanta Zenit</h1>
-
-						<p>Ciao $name,</p>
-						
-						<p>Ti ringraziamo per esserti iscritto al <strong>Fanta Zenit 2015/16</strong>, ora puoi creare la tua squadra, inserire la formazione, e cominciare questo fantastico campionato.</p>
-						
-						
-						
-						<p>Per completare la tua iscrizione contatta uno degli nostri amministratori, a <a href=\"mailto:info@associazionezenit.it\">info@associazionezenit.it</a> , oppure attraverso la nostra <a href=\"http://www.facebook.com/fantazenit\">Pagina Facebook</a>, oppure puoi consegnare i soldi dell'iscrizione presso<br>Narciso Cafè, Piazza Santa Caterina , Messina<br>Goldbet , Via Calabria 26, Messina , Tra Discoteca Koko e Ristorante Porta Messina , pressi Stazione Marittima</p>
-						
-						<p>I Tuoi dati di accesso sono:</p>
-						
-						<table>
-						<tbody>
-						<tr>
-							<td>Username</td>
-							<td>$username</td>
-						</tr>
-						
-						<tr>
-							<td>Password</td>
-							<td>$original_password</td>
-						</tr>
-						</tbody>
-						</table>
-						";
-	        
-	        mail($email, "Iscrizione Fanta Zenit 2015/16", $message , $headers);
-	        
-	        $us = $db_users->getUserByEmail($email);
-	        
-	        if($us!=null){
-		        $response["data"]["id"] = $us->getId();
-		        $response["error"] = false;
-	        }else{
-		        $response["error"] = true;
-		        $response["message"] = "Non Ritorna Utente con quella email";
-	        }
-	        
-	        
-        }else{
-	        $response['error'] = true;
-			$response['message'] = "Error Creating";
-        }
-
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Username or Password Already Used";
-    }
-    
-
-    echoRespnse(200, $response);
-
-
-});
-
-$app->post('/newsletters', function () use ($app) {
-
-	$apiKey = $app->request->headers->get('Token');
-
-	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    
-    $json = $app->request->getBody();
-
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-
-    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
-    $text = $data["text"];
-    $title = $data["title"];
-    
-    $user = $db_users->getUserByApiKey($apiKey);
-    
-        
-    if($db_users->checkApi($apiKey) && $user!=null && $user->getAuth()>0){
-	    
-        $ret=$db_users->getUsers();     
-		
-        if($ret!=null){
-	        
-	        foreach($ret as $item){
-		        
-		        
-		        $email = $item->getEmail();
-		        		        
-		        $headers = "From: info@associazionezenit.it \r\n";
-				$headers .= "MIME-Version: 1.0\r\n";
-				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-				
-				$message = $text;
-		        
-		        mail($email, $title, $message , $headers);
-		    }
-	        
-	        
-        }else{
-	        $response['error'] = true;
-			$response['message'] = "Error No Users";
-        }
-
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Auth Not Valid";
-    }
-    
-
-    echoRespnse(200, $response);
-
-
-});
-
-$app->post('/users/:id/avatar' , function ($id) use ($app) {
-	
-
-
-	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    
-    $json = $app->request->getBody();
-
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-
-    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
-    
-    $response = null;
-    
-    
-    if(isset($data["avatar"])){
-	    
-	    $user = $db->getUserById($id);
-	    
-	    $url = $data["avatar"];
-	    
-	    if( $user!=null){
-		    $result = $db->editUser($user->getId(),null,null,null,null,$url);
-		    
-		    $response["error"] = !$result;
-		    $response["message"] = "Avatar Non Caricato Correttamente";
-	    }
-    
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Old Password Not Correct";
-    }
-    
-
-    echoRespnse(200, $response);
-
-
-});
-
-
-
-$app->get('/users', function () use ($app) {
-
-
-    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-
-    $users = $db->getUsers();
-
-    $result=array();
-
-    foreach($users as $user){
-        //$transfers=$db_markets->getTransfers($user);
-        //$user->setTransfers($transfers);
-        $temp=$user->mapBasic();
-        $result[]=$temp;
-
-    }
-
-    if($result!=null){
-        $response["error"] = false;
-        $response["data"]=$result;
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Dump Teams Error";
-    }
-
-    echoRespnse(200, $response);
-
-
-});
-
-$app->get('/users/:id', function ($id) use ($app) {
-
-
-    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
-
-    $user = null;
-
-    $orderByRole=false;
-
-    if($app->request()->params('orderByRole')){
-        $orderByRole=true;
-    }
-
-    if(intval($id)!=0){
-
-    	$user = $db->getUserById($id);
-
-	}else{
-		$user = $db->getUserByUsername($id);
-	}
-
-    $result=null;
-
-    if($user!=null){
-        $transfers=$db_markets->getTransfers($user->getId());
-        $user->setTransfers($transfers);
-        $temp = null;
-
-        if($orderByRole){
-	        $temp=$user->mapTeamOrderedByRole();
-        }else{
-        	$temp=$user->mapTeam();
-        }
-
-        $result=$temp;
-    }
-
-    $json=$result;
-
-    if($json!=null){
-        $response["error"] = false;
-        $response["data"]=$json;
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Dump Team ID:".$id." Error";
-    }
-
-    echoRespnse(200, $response);
-
-
-});
-
-
-$app->post('/users/roster', function () use ($app) {
-
-
-    $apiKey = $app->request->headers->get('Token');
-
-    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    $db_players = new ConnectDatabasePlayers($db->mysqli);
-    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
-
-
-
-	$json = $app->request->getBody();
-
-	$data = json_decode($json,true);
-
-	//var_dump($data);
-
-	//verifyRequiredParams(array("ids","id_user"),$app);
-
-    $id_user = $data["id_user"];
-    $ids = $data["ids"];
-
-    $user = $db->getUserByApiKey($apiKey);
-
-    $error_code=null;
-
-
-    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
-        $response["error"] = false;
-
-        $result = $db_markets->createRoster($id_user,$ids);
-
-		//$response["error"] = !$result;
-
-
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Authentication Token is Wrong";
-    }
-
-    echoRespnse(200, $response);
-
-
-});
+require 'api.users.php';
+require 'api.account.php';
 
 $app->post('/teams', function () use ($app) {
 
@@ -583,6 +105,14 @@ $app->post('/teams', function () use ($app) {
 	        
 	        if(!$ret){
 		        $response['message'] = "Formazione non inserita correttamente, riprovare";
+	        }else{
+		        $filename = "cache/users/".$id_user."/teams/*".$round."*";
+
+		        foreach (glob($filename) as $file) {
+				    error_log("$file size " . filesize($file));
+				    unlink($file);
+				}
+				
 	        }
 
 	    }else {
@@ -600,63 +130,6 @@ $app->post('/teams', function () use ($app) {
 
 
 
-
-$app->get('/team/:id_team/:round', function ($id,$round) use ($app) {
-
-    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
-    $db_rounds = new ConnectDatabaseRounds($db->mysqli);
-
-    $orderByRole=false;
-    $orderById = false;
-
-    if($app->request()->params('orderByRole')){
-        $orderByRole=true;
-    }else if($app->request()->params('orderById')){
-        $orderById=true;
-    }
-
-    $stat = $round;
-
-    if($app->request()->params('stat')!=null){
-        $stat=$app->request()->params('stat');
-    }
-
-    $result=null;
-
-    $team=$db_rounds->getTeam($id,$round);
-
-    $valid=$db_rounds->isValidFormation($id,$round);
-
-    $response["valid_formation"]=$valid;
-
-    if($team!=null && $team->getPlayers()!=null){
-        if($orderByRole) {
-            $temp = $team->mapOrderedByRole($stat);
-        }else if($orderById){
-	        $temp = $team->mapOrderById($stat);
-	    }else{
-            $temp=$team->map($stat);
-        }
-
-        $result=$temp;
-    }else{
-        $result=null;
-    }
-
-
-    if($result!=null && $db_rounds->isValidFormation($id,$round)){
-        $response["error"] = false;
-        $response["data"]=$result;
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Dump Team ID USER:".$id." and ROUND:".$round." Error";
-    }
-
-    echoRespnse(200, $response);
-
-
-});
 
 $app->delete('/team/:id_team/:round', function ($id,$round) use ($app) {
 
@@ -1026,6 +499,7 @@ $app->get('/competitions/:id/teams', function ($id_competition) use ($app) {
 $app->get('/competitions/:id/standings', function ($id_competition) use ($app) {
 
     //verifyRequiredParams(array('round', 'competition'),$app);
+    
 
     $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
     $db_rounds = new ConnectDatabaseRounds($db->mysqli);
@@ -1059,8 +533,11 @@ $app->get('/competitions/:id/standings', function ($id_competition) use ($app) {
     $standings_by_user = array();
 
     for($i=0 ; $i<count($standings) ; $i++){
+	    
 	    $temp_user = $db->getUserById(intval($standings[$i]["id_user"]));
+	    
         $standings[$i]["team_info"]=$temp_user->mapBasic();
+		
         $standings_by_user[$temp_user->getId()] = $i+1; 
     }
 
@@ -1075,7 +552,8 @@ $app->get('/competitions/:id/standings', function ($id_competition) use ($app) {
         $response['error'] = true;
         $response['message'] = "Dump Classifica ID COMP:".$id_competition." Error";
     }
-
+	
+	
 
     echoRespnse(200, $response);
 
@@ -1217,10 +695,25 @@ $app->post('/rounds', function () use ($app) {
         }else if($type == "OPEN"){
 	        
             $response["error"] = !$db_rounds->openRound($round);
+            
+            $filename = "cache/users/**/teams/*".$round."*";
+
+	        foreach (glob($filename) as $file) {
+			    error_log("$file size " . filesize($file));
+			    unlink($file);
+			}
+
 	        	        
         }else if($type == "CLOSE"){
 	        	        
             $response["error"] = !$db_rounds->closeRound($round);
+            $filename = "cache/users/**/teams/*".$round."*";
+
+	        foreach (glob($filename) as $file) {
+			    error_log("$file size " . filesize($file));
+			    unlink($file);
+			}
+            
 	        	        
         }else{
 	        
@@ -2212,6 +1705,9 @@ $app->get('/players/:id', function ($id) use ($app) {
     $db = new ConnectDatabasePlayers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
     $player = $db->dumpPlayerById($id);
+    $stats = $db->dumpStats($id);
+
+    $player->setStat($stats);
 
     $result=null;
 
@@ -2354,6 +1850,61 @@ $app->post('/login', function() use ($app) {
 
 });
 
+$app->post('/newsletters', function () use ($app) {
+
+	$apiKey = $app->request->headers->get('Token');
+
+	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    $text = $data["text"];
+    $title = $data["title"];
+    
+    $user = $db_users->getUserByApiKey($apiKey);
+    
+        
+    if($db_users->checkApi($apiKey) && $user!=null && $user->getAuth()>0){
+	    
+        $ret=$db_users->getUsers();     
+		
+        if($ret!=null){
+	        
+	        foreach($ret as $item){
+		        
+		        
+		        $email = $item->getEmail();
+		        		        
+		        $headers = "From: info@associazionezenit.it \r\n";
+				$headers .= "MIME-Version: 1.0\r\n";
+				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+				
+				$message = $text;
+		        
+		        mail($email, $title, $message , $headers);
+		    }
+	        
+	        
+        }else{
+	        $response['error'] = true;
+			$response['message'] = "Error No Users";
+        }
+
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Auth Not Valid";
+    }
+    
+
+    echoRespnse(200, $response);
+
+
+});
+
 function echoRespnse($status_code, $response) {
     $app = \Slim\Slim::getInstance();
     // Http response code
@@ -2362,7 +1913,7 @@ function echoRespnse($status_code, $response) {
     // setting response content type to json
     $app->contentType('application/json');
 
-    echo json_encode($response);
+    echo json_encode($response,JSON_PRETTY_PRINT);
 }
 
 function direct($status_code, $response) {

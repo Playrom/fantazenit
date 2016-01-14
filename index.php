@@ -9,7 +9,7 @@ $seconds=$config["seconds_to_closing_time"];
 
 $players = null;
 $round = $config['current_round'];
-$json = $apiAccess->accessApi("/team/$userId/$round","GET");
+$json = $apiAccess->accessApi("/users/$userId/teams/$round","GET");
 
 if($json["error"]==false){
 	$players = $json["data"]["players"];

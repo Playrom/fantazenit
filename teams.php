@@ -10,7 +10,7 @@ include('header.php');
     
     if(isset($_GET['id'])){
         $id=$_GET['id']; 
-        $team=$apiAccess->accessApi("/users/".$id,"GET");
+        $team=$apiAccess->accessApi("/users/$id?fields=roster,transfers","GET");
         $roster=null;
 
 
