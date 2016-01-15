@@ -481,12 +481,10 @@ function deleteDir($dirPath){
 	    
 	    $files = glob($dirPath . '*', GLOB_MARK);
 	    foreach ($files as $file) {
-		    error_log("$file size " . filesize($file));
 	        if (is_dir($file)) {
 	            if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
 			        $dirPath .= '/';
 			    }
-			    error_log("recursive");
 				deleteDir($file);
 	        }else{
 	            unlink($file);

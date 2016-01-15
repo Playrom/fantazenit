@@ -3,6 +3,9 @@
 $title="Inserisci Formazione";
 include('header.php');
 
+$noformation = false;
+
+
 if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['ids']) && isset($_POST['reserves']) && isset($_POST['ids_position']) && isset($_POST['reserves_position'])){
 
 	
@@ -54,7 +57,6 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
 	    
 	    $json=$apiAccess->accessApi("/teams","POST",$params);
 	    
-	    $noformation = false;
 	    
 	    
 	    if($json["error"]==true){
