@@ -358,6 +358,74 @@ $app->get('/users/:id_team/teams/:round', function ($id,$round) use ($app) {
 
 });
 
+$app->post('/teams', function () use ($app) {
+
+    $apiKey = $app->request->headers->get('Token');
+
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    $db_players = new ConnectDatabasePlayers($db->mysqli);
+    $db_markets = new ConnectDatabaseMarkets($db->mysqli);
+    $db_rounds  = new ConnectDatabaseRounds($db->mysqli);
+
+
+	$json = $app->request->getBody();
+
+	$data = json_decode($json,true);
+
+
+	//verifyRequiredParams(array("id_user","ids","reserves","round","tactic"),$app);
+
+    $id_user = $data["id_user"];
+    $ids  = $data["ids"];
+    $reserves  = $data["reserves"];
+    
+    
+    $round = $data["round"];
+    $tactic = $data["tactic"];
+
+    $user = $db->getUserByApiKey($apiKey);
+
+	if($user==null){
+		$response['error'] = true;
+        $response['message'] = "Authentication Token is not a Valid Token";
+	}else{
+
+	    $error_code=null;
+
+	    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
+	        $response["error"] = false;
+
+	        $db_rounds->insertTeam($id_user,$ids,$reserves,$round,$tactic);
+	        
+	        $ret=$db_rounds->isValidFormation($id_user,$round);
+	        
+	        $response['error'] = !$ret;
+	        
+	        if(!$ret){
+		        $response['message'] = "Formazione non inserita correttamente, riprovare";
+	        }else{
+		        $filename = "cache/users/".$id_user."/teams/*".$round."*";
+
+		        foreach (glob($filename) as $file) {
+				    error_log("$file size " . filesize($file));
+				    unlink($file);
+				}
+				
+	        }
+
+	    }else {
+	        // unknown error occurred
+	        $response['error'] = true;
+	        $response['message'] = "Authentication Token for this user is Wrong";
+	    }
+
+	}
+
+    echoRespnse(200, $response);
+
+
+});
+
 
 
 

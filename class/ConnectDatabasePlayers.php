@@ -293,7 +293,6 @@ function updatePlayers(PlayersList $players){
 				$fields = array_keys($row);
 				
 				foreach($fields as $key){
-					error_log($key);
 					if(isset($row[$key])){
 						$stats_coll[$key] = new Statistic($key,$row[$key]);
 					}

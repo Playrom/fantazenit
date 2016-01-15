@@ -133,12 +133,8 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					    $sum=0;
 					    $conteggio=0;
 					
-					    for($n = 0 ; $n<=count($teams) ; $n++){
+					    foreach($teams as $temporary){
 						    						    
-						    $temporary = $teams[$n];
-						    
-						    $in = microtime(true);
-					
 					        $id_user=$temporary['id'];
 					        $name_team=$temporary['name_team'];
 					        $name = $temporary["name"];
@@ -148,9 +144,7 @@ if($json["error"]==false && isset($json["data"][$competitionID])){
 					        $apiPath = "/users/$id_user/teams/$real_round?orderByRole=true";
 					
 					        $json_team=$apiAccess->accessApi($apiPath,"GET");
-					        
-					        $st = microtime(true) - $in;
-					
+					        					
 					        //$username=$temp['username'];
 					
 					        $temp = null;

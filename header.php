@@ -5,9 +5,16 @@ function __autoload($class_name) {
 }
 
 ob_start();
-session_set_cookie_params(3600*24*3,"/");
+session_save_path('tmp');
+ini_set('session.gc_maxlifetime', 48*60*60); // 48 hours
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 100);
+ini_set('session.cookie_secure', false);
+ini_set('session.use_only_cookies', true);
 session_start();
+
 setlocale(LC_ALL, 'it_IT.UTF-8'); 
+
 require_once('config.php');
 
 
