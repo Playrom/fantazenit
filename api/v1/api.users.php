@@ -136,6 +136,10 @@ $app->post('/users/:id/avatar' , function ($id) use ($app) {
 		    
 		    $response["error"] = !$result;
 		    $response["message"] = "Avatar Non Caricato Correttamente";
+		    
+		    $filename = getcwd()."/cache/users/".$user->getId()."**";
+
+	        deleteDir($filename);
 	    }
     
     }else {
@@ -195,59 +199,101 @@ $app->get('/users/:id', function ($id) use ($app) {
     if($app->request()->params('orderByRole')){
         $orderByRole=true;
     }
-
-    if(intval($id)!=0){
-
-    	$user = $db->getUserById($id);
-
-	}else{
-		$user = $db->getUserByUsername($id);
-	}
+    
+    // Get request object
+	$req = $app->request;
 	
-    $result=null;
+	//Get resource URI
+	$resourceUri = $req->getResourceUri();
+    
+    $filename = "cache/".preg_replace('/[^A-Za-z0-9_\/\\\-]/', '_', $resourceUri);
+    
+    if($_SERVER['QUERY_STRING'] != null && $_SERVER['QUERY_STRING'] != ""){
+	    $filename = $filename."-".preg_replace('/[^A-Za-z0-9_\/\\\-]/', '_', $_SERVER['QUERY_STRING']);
+    }
+    
+    $filename = $filename.".json";
+    
+    $response = null;
+    
+    if(is_file($filename) > 0){
+	    
+	    $fp = fopen($filename, "r");
+	    $response = json_decode(fread($fp, filesize($filename)));
+	    fclose($fp);
+	    
+    }else{
+	    
+	    if(intval($id)!=0){
 
-    if($user!=null){
-	    
-	    
-	    if($app->request()->params('fields')){
-	        
-	        $fields = explode(",",$app->request()->params('fields'));
-	        
-	        if(is_field("roster",$fields)){
+	    	$user = $db->getUserById($id);
+	
+		}else{
+			$user = $db->getUserByUsername($id);
+		}
+		
+	    $result=null;
+	
+	    if($user!=null){
+		    
+		    
+		    if($app->request()->params('fields')){
 		        
-		        $user->setPlayers($db->getUserRosterById($user->getId()));
+		        $fields = explode(",",$app->request()->params('fields'));
 		        
+		        if(is_field("roster",$fields)){
+			        
+			        $user->setPlayers($db->getUserRosterById($user->getId()));
+			        
+		        }
+		        
+		        if(is_field("transfers",$fields)){
+			        
+			        $transfers=$db_markets->getTransfers($user->getId());
+			        $user->setTransfers($transfers);
+			        		        
+		        }
+		        
+		        
+		    }
+	
+	        if($orderByRole){
+		        $temp=$user->mapTeamOrderedByRole();
+	        }else{
+	        	$temp=$user->mapTeam();
 	        }
-	        
-	        if(is_field("transfers",$fields)){
-		        
-		        $transfers=$db_markets->getTransfers($user->getId());
-		        $user->setTransfers($transfers);
-		        		        
-	        }
-	        
-	        
+	
+	        $result=$temp;
 	    }
-
-        if($orderByRole){
-	        $temp=$user->mapTeamOrderedByRole();
-        }else{
-        	$temp=$user->mapTeam();
-        }
-
-        $result=$temp;
+	
+	    $json=$result;
+	
+	    if($json!=null){
+	        $response["error"] = false;
+	        $response["data"]=$json;
+	    }else {
+	        // unknown error occurred
+	        $response['error'] = true;
+	        $response['message'] = "Dump Team ID:".$id." Error";
+	    }
+	    
+	    try{
+	    
+		    $dirname = dirname($filename);
+			if(!is_dir($dirname)){
+			    mkdir($dirname, 0755, true);
+			}
+		    
+		    $fp = fopen($filename, "w");
+		    fwrite($fp, json_encode($response,JSON_PRETTY_PRINT));
+		    fclose($fp);
+		    
+		}catch(exception $e){
+			error_log($resourceUri." - ".$e);
+		}
     }
 
-    $json=$result;
-
-    if($json!=null){
-        $response["error"] = false;
-        $response["data"]=$json;
-    }else {
-        // unknown error occurred
-        $response['error'] = true;
-        $response['message'] = "Dump Team ID:".$id." Error";
-    }
+    
 
     echoRespnse(200, $response);
 
@@ -262,18 +308,18 @@ $app->get('/users/:id_team/teams/:round', function ($id,$round) use ($app) {
     $orderByRole=false;
     $orderById = false;
     
-    
-    // Get request object
-	$req = $app->request;
-	
-	//Get resource URI
-	$resourceUri = $req->getResourceUri();
 	    
     if($app->request()->params('orderByRole')){
         $orderByRole=true;
     }else if($app->request()->params('orderById')){
         $orderById=true;
     }
+    
+    // Get request object
+	$req = $app->request;
+	
+	//Get resource URI
+	$resourceUri = $req->getResourceUri();
     
     $filename = "cache/".preg_replace('/[^A-Za-z0-9_\/\\\-]/', '_', $resourceUri);
     
@@ -343,7 +389,7 @@ $app->get('/users/:id_team/teams/:round', function ($id,$round) use ($app) {
 		    fclose($fp);
 		    
 		}catch(exception $e){
-			error_log($resouceUri." - ".$e);
+			error_log($resourceUri." - ".$e);
 		}
 
 	}
@@ -395,23 +441,27 @@ $app->post('/teams', function () use ($app) {
 	    if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey) ) ){
 	        $response["error"] = false;
 
-	        $db_rounds->insertTeam($id_user,$ids,$reserves,$round,$tactic);
+	        $inse = $db_rounds->insertTeam($id_user,$ids,$reserves,$round,$tactic);
 	        
-	        $ret=$db_rounds->isValidFormation($id_user,$round);
-	        
-	        $response['error'] = !$ret;
-	        
-	        if(!$ret){
-		        $response['message'] = "Formazione non inserita correttamente, riprovare";
+	        if(!$inse){
+		        $response['error'] = true;
+			    $response['message'] = "Formazione non inserita correttamente, riprovare";
 	        }else{
-		        $filename = "cache/users/".$id_user."/teams/*".$round."*";
-
-		        foreach (glob($filename) as $file) {
-				    error_log("$file size " . filesize($file));
-				    unlink($file);
-				}
-				
-	        }
+	        
+		        $ret=$db_rounds->isValidFormation($id_user,$round);
+		        
+		        $response['error'] = !$ret;
+		        
+		        if(!$ret){
+			        $response['message'] = "Formazione non inserita correttamente, riprovare";
+		        }else{
+			        $filename = getcwd()."/cache/users/".$id_user."/teams/*".$round."*";
+	
+			        deleteDir($filename);
+						
+		        }
+		        
+		    }
 
 	    }else {
 	        // unknown error occurred
@@ -426,7 +476,26 @@ $app->post('/teams', function () use ($app) {
 
 });
 
-
+function deleteDir($dirPath){
+	try{
+	    
+	    $files = glob($dirPath . '*', GLOB_MARK);
+	    foreach ($files as $file) {
+		    error_log("$file size " . filesize($file));
+	        if (is_dir($file)) {
+	            if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+			        $dirPath .= '/';
+			    }
+			    error_log("recursive");
+				deleteDir($file);
+	        }else{
+	            unlink($file);
+	        }
+	    }
+	}catch(exception $e){
+		error_log($e);
+	}
+}
 
 
 $app->post('/users/roster', function () use ($app) {
@@ -460,12 +529,17 @@ $app->post('/users/roster', function () use ($app) {
         $response["error"] = false;
 
         $result = $db_markets->createRoster($id_user,$ids);
-
+                
+		$filename = getcwd()."/cache/users/".$user->getId()."**";
+        
+        deleteDir($filename);
+        
 		//$response["error"] = !$result;
 
 
     }else {
         // unknown error occurred
+        error_log("token");
         $response['error'] = true;
         $response['message'] = "Authentication Token is Wrong";
     }
@@ -473,6 +547,127 @@ $app->post('/users/roster', function () use ($app) {
     echoRespnse(200, $response);
 
 
+});
+
+$app->post('/me', function () use ($app) {
+	$apiKey = $app->request->headers->get('Token');
+	$db_users = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    
+    $response = null;
+    
+    if(isset($data["current_pass"])){
+	    $user = $db_users->getUserByApiKey($apiKey);
+	    
+	    $current_pass = $data["current_pass"];
+	    
+	    
+	    
+	    if($user->getPassword() == $current_pass){
+		    
+		    $pass = null;
+		    $email = null;
+		    $url_fb = null;
+		    $name_team = null;
+		    		    
+		    if(isset($data["email"]) && $data["email"]!=""){
+			    $email = $data["email"];
+		    }
+		    
+		    if(isset($data["name_team"]) && $data["name_team"]!=""){
+			    $name_team = $data["name_team"];
+		    }
+		    
+		    if(isset($data["url_fb"]) && $data["url_fb"] != ""){
+			    $url_fb = $data["url_fb"];
+		    }
+		    
+		    if(isset($data["new_pass"]) && $data["new_pass"] != ""){
+			    $pass = $data["new_pass"];
+		    }
+		    
+		    
+		    $response["error"] = !$db_users->editUser($user->getId(),$pass,$email,$url_fb,$name_team,null);
+		    
+		    $filename = getcwd()."/cache/users/".$user->getId()."**";
+		    deleteDir($filename);
+
+		    
+		    
+	    }
+    
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Old Password Not Correct";
+    }
+    
+    echoRespnse(200, $response);
+});
+
+$app->post('/me/avatar' , function () use ($app) {
+	$apiKey = $app->request->headers->get('Token');
+	$db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    
+    $json = $app->request->getBody();
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    //verifyRequiredParams(array("id","name","first_round","num_rounds","users"),$app);
+    
+    $response = null;
+    
+    if(isset($data["avatar"])){
+	    $user = $db->getUserByApiKey($apiKey);
+	    
+	    $url = $data["avatar"];
+	    
+	    if($db->checkApi($apiKey) && $user!=null){
+		    $result = $db->editUser($user->getId(),null,null,null,null,$url);
+		    
+		    $filename = getcwd()."/cache/users/".$user->getId()."**";
+			deleteDir($filename);
+		    
+		    $response["error"] = !$result;
+	    }
+    
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Old Password Not Correct";
+    }
+    
+    echoRespnse(200, $response);
+});
+
+$app->get('/me', function () use ($app) {
+    $apiKey = $app->request->headers->get('Token');
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    if($db->checkApi($apiKey)){
+        $response["error"] = false;
+        $user=$db->getUserById($db->getUserByApiKey($apiKey))->map();
+        $response["data"]=$user->map();
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+    echoRespnse(200, $response);
+});
+
+$app->get('/me/basic', function () use ($app) {
+    $apiKey = $app->request->headers->get('Token');
+    $db = new ConnectDatabaseUsers(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
+    if($db->checkApi($apiKey)){
+        $response["error"] = false;
+        $response["data"]=$db->getUserByApiKey($apiKey)->mapBasic();
+    }else {
+        // unknown error occurred
+        $response['error'] = true;
+        $response['message'] = "Authentication Token is Wrong";
+    }
+    echoRespnse(200, $response);
 });
 
 ?>

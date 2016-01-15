@@ -77,69 +77,84 @@ class ConnectDatabaseRounds extends ConnectDatabase{
     function insertTeam($id_user,$ids,$reserves,$round,$tactic,$recovered=false){
 	    
 	    
-    	$data_players=new ConnectDatabasePlayers($this->mysqli);
+    	$data_users=new ConnectDatabaseUsers($this->mysqli);
+    	$roster = $data_users->getUserRosterById($id_user);
 
 		try{
 			
 			
-			$players=$data_players->dumpSingoliToList(null,null);
 			
 
 			$query="DELETE from `teams` where id_user=? and round=?;";
 
 			if (!($stmt = $this->mysqli->prepare($query))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
 			}
 
 			if (!$stmt->bind_param("ii", $id_user,$round)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 
 			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
                         
 			foreach($ids as $id){
 				
-				$prepQuery="INSERT INTO `teams` ( `id_user`, `id_player`, `round` , `position`) VALUES (?,?,?,?);";
-
-				if(!($stmt = $this->mysqli->prepare($prepQuery))) {
-				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-				}
-
+				
 				$position = $id["position"];
 				$zero=0;
 				
 				$id_pla = $id["id"];
+				
+				if($roster->searchPlayer($id_pla) == null){
+					error_log("search");
+					throw new Exception("Giocatore Non Valido");
+				}
+				
+				$prepQuery="INSERT INTO `teams` ( `id_user`, `id_player`, `round` , `position`) VALUES (?,?,?,?);";
+
+				if(!($stmt = $this->mysqli->prepare($prepQuery))) {
+				    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
+				}
+
 
 				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$position)) {
-				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 				}
 
 				if (!$stmt->execute()) {
-				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 				}
 			}
 
 			foreach($reserves as $id){
-				$prepQuery="INSERT INTO `teams` ( `id_user`, `id_player`, `round` , `position`) VALUES (?,?,?,?);";
-
-				if (!($stmt = $this->mysqli->prepare($prepQuery))) {
-				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
-				}
-
+				
 				$id_pla = $id["id"];
 				$position = $id["position"];
 
 				$uno=1;
+
 				
+				if($roster->searchPlayer($id_pla) == null){
+					error_log("search");
+					throw new Exception("Giocatore Non Valido");
+				}
+				
+				$prepQuery="INSERT INTO `teams` ( `id_user`, `id_player`, `round` , `position`) VALUES (?,?,?,?);";
+
+				if (!($stmt = $this->mysqli->prepare($prepQuery))) {
+				    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
+				}
+
+								
 
 				if (!$stmt->bind_param("iiii", $id_user,$id_pla,$round,$position)) {
-				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 				}
 
 				if (!$stmt->execute()) {
-				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 				}
 			}
 			
@@ -153,21 +168,22 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 			}
 
 			if(!($stmt = $this->mysqli->prepare($tacticQuery))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
 			}
 
 			if (!$stmt->bind_param("isii", $id_user,$tactic,$round,$val)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 
 			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 
 			return true;
 
 		}catch(exception $e) {
-			echo "\nERRORE INSERIMENTO FORMAZIONE: ".$e;
+			error_log("\nERRORE INSERIMENTO FORMAZIONE: ".$e);
+			$this->deleteTeam($id_user,$round);
 			return false;
 		}
 	}
@@ -249,7 +265,7 @@ class ConnectDatabaseRounds extends ConnectDatabase{
 	    
 	    $conf=$this->dumpConfig();
 		$current_round=$conf['current_round'];
-        
+		        
         try{
 	        
 	        if($round==$current_round){

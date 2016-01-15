@@ -221,13 +221,23 @@ class User{
         $arr=array();
 
         $arr['balance'] = $this->balance;
-        $arr['players'] = $this->players->mapOrderedByRole();
-
-        $transferArray=array();
-
-        foreach($this->transfers as $transfer){
-            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+        
+        if($this->players != null){
+	        $arr['players'] = $this->players->mapOrderedByRole();
         }
+        
+
+        if($this->transfers != null){
+	        
+        	$transferArray=array();
+
+	        foreach($this->transfers as $transfer){
+	            $transferArray[$transfer->getIdTransfer()]=$transfer->map();
+	        }
+	        
+	        $arr['transfers'] = $transferArray;
+	        
+	    }
 
 
         $arr['id']=$this->id;

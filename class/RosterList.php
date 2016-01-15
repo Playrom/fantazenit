@@ -75,7 +75,10 @@ class RosterList extends ArrayObject{
      *
      * @return int|RosterPlayer
      */
-
+	 
+	 
+	/*
+		
     public function mapOrderedByRole(){
         $arr=array();
         foreach($this->orderByRole() as $item){
@@ -86,5 +89,7 @@ class RosterList extends ArrayObject{
 
         return $arr;
     }
+    
+    */
 
 }

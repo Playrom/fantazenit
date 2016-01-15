@@ -304,6 +304,34 @@ function presenze($statistics){
 }
 
 
+function orderByRole($players){
+	$arr=array();
+	foreach($players as $element){
+		if(strtolower($element["player"]["role"])==strtolower("p")){
+			$arr[]=$element;
+		}
+	}
+
+	foreach($players as $element){
+		if(strtolower($element["player"]["role"])==strtolower("d")){
+			$arr[]=$element;
+		}
+	}
+
+	foreach($players as $element){
+		if(strtolower($element["player"]["role"])==strtolower("c")){
+			$arr[]=$element;
+		}
+	}
+
+	foreach($players as $element){
+		if(strtolower($element["player"]["role"])==strtolower("a")){
+			$arr[]=$element;
+		}
+	}
+
+	return $arr;
+}
 
 
 

@@ -43,14 +43,14 @@ if($config['creation_market']==0){
  }else if(isset($_SESSION['username'])){
 
     
-    $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
+    $team=$apiAccess->accessApi("/users/".$userId."?fields=roster","GET");
     $user = null;
     
     $roster = null;
     
     if($team["error"] == false){
 	    $user = $team["data"];
-	    $roster=$user["players"];
+	    $roster=orderByRole($user["players"]);
     }else{
 	    $error_json[] = $team;
     }
@@ -256,7 +256,7 @@ if($config['creation_market']==0){
 									<?php echo "team=\"".$player["team"]."\" "; ?>
 	        	                    <?php echo "role=\"".$player["role"]."\" "; ?>
 	        	                    <?php echo "name=\"".$player["name"]."\" "; ?>
-	        	                    <?php if(isset($roster[$player["id"]])){ ?> style="display:none;" in-roster="yes" <?php } ?>
+	        	                    <?php if(array_search($player["id"], array_column(array_column($roster, "player"), "id"))){ ?> style="display:none;" in-roster="yes" <?php } ?>
 	        	                >
 	        		                <div class="role-icon"><span <?php echo "class=\"".strtolower($player["role"])."-but\" "; ?> ><?php echo strtoupper($player["role"]); ?></span></div>
 	        		                <div class="name-player-item nam"><?php echo $player["name"]; ?></div>

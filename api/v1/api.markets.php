@@ -277,11 +277,10 @@ $app->post('/markets/transfers', function () use ($app) {
 
     if($db->checkApi($apiKey) && $user!=null && ( $id_user==$user->getId() || $db->checkAuthOverride($apiKey)) ){
         $response["error"] = false;
-
-        $user = $db->getUserById($id_user);
         
-        $roster = $user->getPlayers();
+        $user = $db->getUserById($id_user);
 
+        $roster = $db->getUserRosterById($id_user);
 
         $old_player = $roster->searchPlayer($id_old);
         $new_player = $db_players->dumpPlayerById($id_new);
@@ -293,6 +292,10 @@ $app->post('/markets/transfers', function () use ($app) {
 		    $response["error"] = true;
 		    $response["message"] = "Errore Old Player or Balance";
 	    }
+	    
+	    $filename = getcwd()."/cache/users/".$id_user."**";
+		deleteDir($filename);
+
 
 	    /*if($error_code!=null){
 		    $response["error"] = true;

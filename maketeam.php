@@ -54,9 +54,12 @@ if(isset($_SESSION['username']) && $_SERVER['REQUEST_METHOD']=='POST' && isset($
 	    
 	    $json=$apiAccess->accessApi("/teams","POST",$params);
 	    
+	    $noformation = false;
+	    
 	    
 	    if($json["error"]==true){
 		    $error_json[] = $json;
+		    ?> <script>alert("Formazione Non Inserita , ricrearla da zero");</script> <?php $noformation = true;
 	    }else{ ?>
 		    <script>alert("Formazione Inserita Correttamente");</script>
 	    <?php
@@ -163,7 +166,7 @@ if(!isset($_SESSION['username'])) {
 	
 	$findBySistem=false;
 	
-	if($result!=null) {
+	if($result!=null && !$noformation) {
 	    if (isset($result["players"])) {
 	        $team = $result["players"];
 	    }
@@ -177,7 +180,7 @@ if(!isset($_SESSION['username'])) {
 	
 	$rescued_team = false;
 	
-	if($team==null && $round>1){
+	if($team==null && $round>1 && !$noformation){
 	
 	    $json_team=$apiAccess->accessApi("/users/$userId/teams/$round?orderById=true","GET");
 	

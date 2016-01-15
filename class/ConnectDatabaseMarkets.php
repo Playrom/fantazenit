@@ -17,19 +17,18 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			$tempQuery="SELECT * from `rosters` where id_user=?;";
 
 			if (!($stmt = $this->mysqli->prepare($tempQuery))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
 			}
 
 			if (!$stmt->bind_param("i", $id_user)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 
 			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 						
 			$user = $db_users->getUserById(intval($id_user));
-			$players = $db_players->dumpSingoliToList(null,null);
 
 
 			$roster=new RosterList();
@@ -39,22 +38,22 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 			$res->data_seek(0);
 			while ($row = $res->fetch_assoc()) {
 				$id=$row['id_player'];
-				$new_balance=$new_balance+$players[$id]->getValue();
+				$new_balance=$new_balance+intval($db_players->dumpPlayerById($id)->getValue());
 			}
 
 
 			$tempQuery="DELETE from `rosters` where id_user=?;";
 
 			if (!($stmt = $this->mysqli->prepare($tempQuery))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
 			}
 
 			if (!$stmt->bind_param("i", $id_user)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 
 			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 
 
@@ -64,36 +63,37 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 
 
 				if (!($stmt = $this->mysqli->prepare($tempQuery))) {
-				    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+				    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
 				}
 				
-				$player_id = $players[$id]->getId();
-				$player_value = intval($players[$id]->getValue());
+				$play = $db_players->dumpPlayerById($id);
+				$player_id = $id;
+				$player_value = intval($play->getValue());
 
 				if (!$stmt->bind_param("iii", $id_user,$player_id,$player_value)) {
-				    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+				    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 				}
 
 				if (!$stmt->execute()) {
-				    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+				    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 				}
 
-				$roster[]=new RosterPlayer($players[$id],$players[$id]->getValue());
-				$new_balance=$new_balance-$players[$id]->getValue();
+				$roster[]=new RosterPlayer($play,$play->getValue());
+				$new_balance=$new_balance-intval($play->getValue());
 			}
 
 			$modUser="UPDATE users SET balance=? where id=?";
 
 			if (!($stmt = $this->mysqli->prepare($modUser))) {
-			    echo "Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+			    error_log("Prepare failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error);
 			}
-
+			
 			if (!$stmt->bind_param("ii", $new_balance,$id_user)) {
-			    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
-
+			
 			if (!$stmt->execute()) {
-			    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+			    error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
 			}
 						
 			$res = $db_rounds->deleteTeam($id_user,$config['current_round']);
@@ -108,7 +108,7 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 
 
 		}catch(exception $e) {
-			echo "\nERRORE CREATION ROSTER: ".$e;
+			error_log("\nERRORE CREATION ROSTER: ".$e);
 			return false;
 		}
 
@@ -122,8 +122,12 @@ class ConnectDatabaseMarkets extends ConnectDatabase{
 	function changePlayer($old_player,$new_player,$user,$id_market){
 		try{
 			
-			$num_pla=count($user->getPlayers()->getByRole($new_player->getRole()));
-			$old_num_pla=count($user->getPlayers()->getByRole($old_player->getRole()));
+			$db = new ConnectDatabaseUsers($this->mysqli);
+			
+			$roster = $db->getUserRosterById($user->getId());
+			
+			$num_pla=count($roster->getByRole($new_player->getRole()));
+			$old_num_pla=count($roster->getByRole($old_player->getRole()));
 			
 			$config=$this->dumpConfig(); 
 			

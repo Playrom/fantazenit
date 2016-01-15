@@ -42,7 +42,7 @@ if($username == null) {
     header("Location:login.php");
 }else if($username != null){
 
-    $team=$apiAccess->accessApi("/users/".$userId."?orderByRole=true","GET");
+    $team=$apiAccess->accessApi("/users/".$userId."?fields=roster,transfers","GET");
     $user = $team["data"] ; 
     $roster=null;
     
@@ -62,7 +62,7 @@ if($username == null) {
     if(isset($team["data"])){
         $arr=$team["data"];
 		
-        $roster=$arr["players"];
+        $roster=orderByRole($arr["players"]);
     }
     
     $markets=null;

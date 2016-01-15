@@ -5,7 +5,6 @@ function __autoload($class_name) {
 }
 
 ob_start();
-session_save_path('tmp');
 ini_set('session.gc_maxlifetime', 48*60*60); // 48 hours
 ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 100);
